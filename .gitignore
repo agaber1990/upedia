@@ -1,0 +1,51 @@
+# Node modules
+/node_modules
+
+# Laravel storage and debug files
+/storage/*
+/storage/app
+/storage/app
+
+/storage/framework
+/storage/logs
+
+# Specific storage subdirectories to exclude
+storage/debugbar/
+storage/app/uploads
+/storage/debugbar/*.json
+# Public storage links
+
+/hot
+/storage/framework
+/storage/logs/
+/storage/framework/cache/
+
+# Vendor and environment files
+/vendor
+.env
+.env.backup
+
+# PHPUnit and static analysis files
+.phpunit.result.cache
+phpcs.xml
+
+# Homestead and Docker
+Homestead.json
+Homestead.yaml
+docker-compose.override.yml
+
+# Logs and temp files
+npm-debug.log
+yarn-error.log
+.DS_Store
+
+# IDE and editor specific files
+/.idea
+/.vscode
+/nbproject/private/
+
+# Temporary or custom files
+/uploads
+/update
+copy.php
+change-list.txt
