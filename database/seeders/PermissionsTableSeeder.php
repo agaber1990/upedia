@@ -235,7 +235,7 @@ class PermissionsTableSeeder extends Seeder
                 'section_id' => 1,
                 'parent_id' => 0,
                 'name' => 'slotemployee',
-                'route' => 'slotemployee',
+                'route' => 'slotemployee.index',
                 'parent_route' => 'human_resource',
                 'type' => 2,
                 'lang_name' => 'hr.slotemployee',

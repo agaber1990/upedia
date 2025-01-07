@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\EmAcademyType;
+use App\Models\StaffSlot;
 use App\Models\TeacherEvaluation;
 use Illuminate\Support\Facades\Auth;
 use App\Scopes\ActiveStatusSchoolScope;
@@ -23,7 +24,10 @@ class SmStaff extends Model
     {
         return $this->belongsTo(EmAcademyType::class, 'pricing_plan');
     }
-
+    public function slots()
+    {
+        return $this->hasMany(StaffSlot::class);
+    }
     protected static function boot()
     {
         parent::boot();

@@ -445,8 +445,9 @@ class SmStaffController extends Controller
             $staff_type = EmAcademyType::all();
             $slots_emp = SlotEmp::all();
             $specialization = Specilization::all();
+            $selectedSlots = StaffSlot::where('staff_id', $id)->pluck('slot_id')->toArray();
 
-            return view('backEnd.humanResource.editStaff', compact('specialization', 'slots_emp', 'staff_type', 'editData', 'roles', 'departments', 'designations', 'marital_ststus', 'max_staff_no', 'genders', 'custom_fields', 'custom_filed_values', 'student', 'is_required', 'has_permission'));
+            return view('backEnd.humanResource.editStaff', compact('selectedSlots','specialization', 'slots_emp', 'staff_type', 'editData', 'roles', 'departments', 'designations', 'marital_ststus', 'max_staff_no', 'genders', 'custom_fields', 'custom_filed_values', 'student', 'is_required', 'has_permission'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -577,9 +578,7 @@ class SmStaffController extends Controller
             if ($request->filled('specialization_id')) {
                 $staff->specialization_id = $request->specialization_id;
             }
-            if ($request->filled('slots_emp_id')) {
-                $staff->slots_emp_id = $request->slots_emp_id;
-            }
+        
             if ($request->filled('basic_salary')) {
                 $basic_salary = !empty($request->basic_salary) ? $request->basic_salary : 0;
             }
@@ -703,6 +702,23 @@ class SmStaffController extends Controller
             if ($request->filled('staff_bio')) {
                 $staff->staff_bio = $request->staff_bio;
             }
+
+  
+
+             // Save selected slots for the staff member
+            if ($request->has('selected_slots') && is_array($request->selected_slots)) {
+                // Clear existing slots for the staff member
+                StaffSlot::where('staff_id', $staff->id)->delete();
+
+                // Insert the new selected slots
+                foreach ($request->selected_slots as $slotId) {
+                    $staffSlot = new StaffSlot();
+                    $staffSlot->staff_id = $staff->id;
+                    $staffSlot->slot_id = $slotId;
+                    $staffSlot->save();
+                }
+            }
+
 
 
             //Custom Field Start
