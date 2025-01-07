@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Hr;
 use App\Models\EmAcademyType;
 use App\Models\SlotEmp;
 use App\Models\Specilization;
+use App\Models\StaffSlot;
 use App\User;
 use App\SmStaff;
 use App\SmSchool;
@@ -214,7 +215,7 @@ class SmStaffController extends Controller
 
     public function staffStore(staffRequest $request)
     {
-        // return $request->all();
+        //  dd($request->all());
         try {
             DB::beginTransaction();
             try {
@@ -238,7 +239,6 @@ class SmStaffController extends Controller
                 $staff = new SmStaff();
                 $staff->emp_type_id = $request->staff_type;
                 $staff->specialization_id = $request->specilization;
-                $staff->slots_emp_id = $request->slots_emp;
 
                 $staff->staff_no = $request->staff_no;
                 $staff->role_id = $request->role_id;
@@ -338,6 +338,18 @@ class SmStaffController extends Controller
                     }
                 }
 
+
+                 // Save selected slots for the staff member
+                if ($request->has('selected_slots') && is_array($request->selected_slots)) {
+                    $selectedSlots = $request->selected_slots;
+
+                    foreach ($selectedSlots as $slotId) {
+                        $staffSlot = new StaffSlot();
+                        $staffSlot->staff_id = $staff->id; 
+                        $staffSlot->slot_id = $slotId;    
+                        $staffSlot->save();
+                    }
+                }
 
                 DB::commit();
                 //Expert Staff Start

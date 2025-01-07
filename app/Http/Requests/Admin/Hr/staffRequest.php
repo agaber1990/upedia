@@ -79,10 +79,13 @@ class staffRequest extends FormRequest
                         return in_array('specilization', $field);
                     })
                 ],
-                'slots_emp_id' => [
+                'slots_staff' => [
                     Rule::requiredIf(function () use ($field) {
-                        return in_array('slots_emp', $field);
-                    })
+                        return in_array('slots_staff', $field);
+                    }),
+                    'nullable','array', 'min:1', 
+                ],
+                'slots_staff.*' => ['integer', Rule::exists('slots', 'id')->where('school_id', $school_id), 
                 ],
 
 

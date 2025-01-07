@@ -60,10 +60,7 @@
                                 <a class="nav-link active" href="#basic_info" role="tab"
                                     data-toggle="tab">@lang('hr.basic_info')</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#more_info" role="tab"
-                                    data-toggle="tab">@lang('hr.more_info')</a>
-                            </li>
+                       
 
                             <li class="nav-item">
                                 <a class="nav-link" href="#payroll_details" role="tab"
@@ -88,6 +85,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#custom_field" role="tab"
                                     data-toggle="tab">@lang('hr.custom_field')</a>
+                            </li>
+                             <li class="nav-item">
+                                <a class="nav-link" href="#slots" role="tab"
+                                    data-toggle="tab">@lang('hr.slots')</a>
                             </li>
 
                             <li class="nav-item flex-grow-1 text-right">
@@ -802,49 +803,65 @@
                                     </div>
 
 
-                                    <div role="tabpanel" class="tab-pane fade" id="more_info">
+                      
+
+                                    <div role="tabpanel" class="tab-pane fade" id="slots">
                                         <div class="row pt-4 row-gap-24">
                                             <div class="col-lg-12 p-0">
                                                 <div class="form-section">
                                                     <div class="row mb-20">
-                                                            <label class="primary_input_label" for="">@lang('hr.staff_type')
-                                                                <span class="text-danger"> *</span></label>
-                                                            <select
-                                                                class="primary_select form-control {{ $errors->has('staff_type') ? ' is-invalid' : '' }}"
-                                                                id="select_types" name="staff_type">
-                                                                @foreach ($staff_type as $type)
-                                                                    <option value="{{ $type->id }}"
-                                                                        {{ $type->id  }}>
-                                                                        {{ $type->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <label class="primary_input_label" for="">@lang('hr.slots_emp')
-                                                                <span class="text-danger"> *</span></label>
-                                                            <select
-                                                                class="primary_select form-control {{ $errors->has('slots_emp') ? ' is-invalid' : '' }}"
-                                                                id="select_types" name="slots_emp">
-                                                                @foreach ($slots_emp as $type)
-                                                                    <option value="{{ $type->id }}"
-                                                                        {{ $type->id  }}>
-                                                                        {{ $type->slot_name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <label class="primary_input_label" for="">@lang('hr.specilization')
-                                                                <span class="text-danger"> *</span></label>
-                                                            <select
-                                                                class="primary_select form-control {{ $errors->has('specilization') ? ' is-invalid' : '' }}"
-                                                                id="select_types" name="specilization">
-                                                                @foreach ($specilization as $type)
-                                                                    <option value="{{ $type->id }}"
-                                                                        {{ $type->id  }}>
-                                                                        {{ $type->title }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
+                                                        <label class="primary_input_label" for="slots_table" style="font-size: 1.2rem; font-weight: bold;">
+                                                            @lang('hr.slots_emp')
+                                                            <span class="text-danger"> *</span>
+                                                        </label>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-bordered table-hover" id="slots_table">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th>@lang('hr.day')</th>
+                                                                        <th>@lang('hr.times')</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @php
+                                                                        $groupedSlots = $slots_emp->groupBy('slot_day');
+                                                                    @endphp
+                                                                    @foreach ($groupedSlots as $day => $slots)
+                                                                        <tr>
+                                                                            <td class="align-middle text-center">
+                                                                                <strong>{{ $day }}</strong>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex flex-column gap-2">
+                                                                                    @foreach ($slots as $slot)
+                                                                                        <div class="d-flex align-items-center gap-2">
+                                                                                            <!-- Start Time with Checkbox -->
+                                                                                            <div>
+                                                                                                <input class="form-check-input" type="checkbox" 
+                                                                                                       name="selected_slots[]" 
+                                                                                                       value="{{ $slot->id }}" 
+                                                                                                       id="slot_start_{{ $slot->id }}">
+                                                                                                <label class="form-check-label px-2 " 
+                                                                                                       for="slot_start_{{ $slot->id }}">
+                                                                                                    {{ $slot->slot_start }}
+                                                                                                </label>
+                                                                                            </div>
+                                                                                            <!-- End Time as Badge -->
+                                                                                            <span class="px-2">
+                                                                                                {{ $slot->slot_end }}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    @endforeach
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
