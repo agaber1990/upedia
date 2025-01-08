@@ -149,8 +149,8 @@
                                                                     for="">@lang('common.role_types')
                                                                 </label>
                                                                 <select
-                                                                    class="primary_select  form-control{{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
-                                                                    name="cat_id" id="cat_id">
+                                                                    class="primary_select  form-control{{ $errors->has('role_type') ? ' is-invalid' : '' }}"
+                                                                    name="role_type" id="role_type">
                                                                     <option data-display="@lang('common.role_types') *"
                                                                         value="">@lang('common.role_types')
                                                                         *</option>
@@ -161,10 +161,10 @@
                                                                     @endforeach
                                                                 </select>
 
-                                                                @if ($errors->has('branch_id'))
+                                                                @if ($errors->has('role_type'))
                                                                     <span class="text-danger invalid-select"
                                                                         role="alert">
-                                                                        {{ $errors->first('branch_id') }}
+                                                                        {{ $errors->first('role_type') }}
                                                                     </span>
                                                                 @endif
                                                             </div>
@@ -1076,8 +1076,8 @@
                                                                     for="">@lang('academics.track_types')
                                                                 </label>
                                                                 <select
-                                                                    class="primary_select  form-control{{ $errors->has('track_id') ? ' is-invalid' : '' }}"
-                                                                    name="track_id" id="track_id">
+                                                                    class="primary_select  form-control{{ $errors->has('track_type_id') ? ' is-invalid' : '' }}"
+                                                                    name="track_type_id" id="track_type_id">
                                                                     <option data-display="@lang('academics.track_types') *"
                                                                         value="">@lang('academics.track_types')
                                                                         *</option>
@@ -1087,10 +1087,10 @@
                                                                     @endforeach
                                                                 </select>
 
-                                                                @if ($errors->has('branch_id'))
+                                                                @if ($errors->has('track_type_id'))
                                                                     <span class="text-danger invalid-select"
                                                                         role="alert">
-                                                                        {{ $errors->first('branch_id') }}
+                                                                        {{ $errors->first('track_type_id') }}
                                                                     </span>
                                                                 @endif
                                                             </div>
@@ -1129,7 +1129,7 @@
                                                                 </label>
                                                                 <select
                                                                     class="primary_select form-control{{ $errors->has('track_level') ? ' is-invalid' : '' }}"
-                                                                    name="track_level" id="track_level">
+                                                                    name="track_id" id="track_level">
                                                                     <option data-display="@lang('academics.tracks') *"
                                                                         value="">
                                                                         @lang('academics.tracks') *

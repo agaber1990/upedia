@@ -6,7 +6,6 @@ use App\Models\EmType;
 use App\Models\Track;
 use App\Models\TrackType;
 use App\Models\SlotEmp;
-use App\Models\Specilization;
 use App\Models\StaffSlot;
 use App\Models\Category;
 use App\User;
@@ -42,6 +41,7 @@ use Modules\MultiBranch\Entities\Branch;
 use CreateSmStaffRegistrationFieldsTable;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Admin\Hr\staffRequest;
+use App\Models\StaffSepcialization;
 use App\SmLeaveDefine;
 use Illuminate\Validation\ValidationException;
 use Modules\RolePermission\Entities\InfixRole;
@@ -165,16 +165,15 @@ class SmStaffController extends Controller
             $tracks = Track::all();
             $role_types = EmType::all();
             $categories = Category::all();
-            
+
             $slots_emp = SlotEmp::all();
-            $specilization = Specilization::all();
 
             $custom_fields = SmCustomField::where('form_name', 'staff_registration')->get();
             $is_required = SmStaffRegistrationField::where('school_id', auth()->user()->school_id)->where('is_required', 1)->pluck('field_name')->toArray();
 
             session()->forget('staff_photo');
 
-            return view('backEnd.humanResource.addStaff', compact('role_types','tracks','specilization', 'slots_emp','categories', 'track_types', 'roles', 'departments', 'designations', 'marital_ststus', 'max_staff_no', 'genders', 'custom_fields', 'is_required'));
+            return view('backEnd.humanResource.addStaff', compact('role_types', 'tracks', 'slots_emp', 'categories', 'track_types', 'roles', 'departments', 'designations', 'marital_ststus', 'max_staff_no', 'genders', 'custom_fields', 'is_required'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -222,7 +221,6 @@ class SmStaffController extends Controller
 
     public function staffStore(staffRequest $request)
     {
-        //  dd($request->all());
         try {
             DB::beginTransaction();
             try {
@@ -244,9 +242,7 @@ class SmStaffController extends Controller
                 $basic_salary = !empty($request->basic_salary) ? $request->basic_salary : 0;
 
                 $staff = new SmStaff();
-                $staff->emp_type_id = $request->staff_type;
-                $staff->specialization_id = $request->specilization;
-
+                $staff->role_type = $request->role_type;
                 $staff->staff_no = $request->staff_no;
                 $staff->role_id = $request->role_id;
                 $staff->department_id = $request->department_id;
@@ -314,6 +310,16 @@ class SmStaffController extends Controller
                 $results = $staff->save();
                 $staff->toArray();
 
+          
+                $StaffSepcialization = new StaffSepcialization();
+                $StaffSepcialization->track_id = $request->track_id;
+                $StaffSepcialization->track_type_id = $request->track_type_id;
+                $StaffSepcialization->levels = implode(',', $request->levels); 
+                $StaffSepcialization->cat_id = $request->cat_id;
+                $StaffSepcialization->staff_id = $staff->id;
+
+                $StaffSepcialization->save();
+
                 $st_role_id = $request->role_id;
                 $school_id = Auth::user()->school_id;
                 $academic_id = getAcademicId();
@@ -346,17 +352,22 @@ class SmStaffController extends Controller
                 }
 
 
-                 // Save selected slots for the staff member
+                // Save selected slots for the staff member
                 if ($request->has('selected_slots') && is_array($request->selected_slots)) {
                     $selectedSlots = $request->selected_slots;
 
                     foreach ($selectedSlots as $slotId) {
                         $staffSlot = new StaffSlot();
-                        $staffSlot->staff_id = $staff->id; 
-                        $staffSlot->slot_id = $slotId;    
+                        $staffSlot->staff_id = $staff->id;
+                        $staffSlot->slot_id = $slotId;
                         $staffSlot->save();
                     }
                 }
+
+
+
+
+
 
                 DB::commit();
                 //Expert Staff Start
@@ -451,10 +462,9 @@ class SmStaffController extends Controller
 
             $staff_type = TrackType::all();
             $slots_emp = SlotEmp::all();
-            $specialization = Specilization::all();
             $selectedSlots = StaffSlot::where('staff_id', $id)->pluck('slot_id')->toArray();
 
-            return view('backEnd.humanResource.editStaff', compact('selectedSlots','specialization', 'slots_emp', 'staff_type', 'editData', 'roles', 'departments', 'designations', 'marital_ststus', 'max_staff_no', 'genders', 'custom_fields', 'custom_filed_values', 'student', 'is_required', 'has_permission'));
+            return view('backEnd.humanResource.editStaff', compact('selectedSlots', 'slots_emp', 'staff_type', 'editData', 'roles', 'departments', 'designations', 'marital_ststus', 'max_staff_no', 'genders', 'custom_fields', 'custom_filed_values', 'student', 'is_required', 'has_permission'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -579,13 +589,11 @@ class SmStaffController extends Controller
 
 
             $staff = SmStaff::withOutGlobalScopes()->where('school_id', auth()->user()->school_id)->find($request->staff_id);
-            if ($request->filled('emp_type_id')) {
-                $staff->emp_type_id = $request->emp_type_id;
+            if ($request->filled('role_type')) {
+                $staff->role_type = $request->role_type;
             }
-            if ($request->filled('specialization_id')) {
-                $staff->specialization_id = $request->specialization_id;
-            }
-        
+
+
             if ($request->filled('basic_salary')) {
                 $basic_salary = !empty($request->basic_salary) ? $request->basic_salary : 0;
             }
@@ -710,9 +718,9 @@ class SmStaffController extends Controller
                 $staff->staff_bio = $request->staff_bio;
             }
 
-  
 
-             // Save selected slots for the staff member
+
+            // Save selected slots for the staff member
             if ($request->has('selected_slots') && is_array($request->selected_slots)) {
                 // Clear existing slots for the staff member
                 StaffSlot::where('staff_id', $staff->id)->delete();

@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -11,9 +12,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('sm_staffs', function (Blueprint $table) {
-            $table->integer('emp_type_id')->nullable()->unsigned()->after('is_saas');
-            $table->integer('specialization_id')->nullable()->unsigned()->after('emp_type_id');
-            $table->integer('slots_emp_id')->nullable()->unsigned()->after('specialization_id');
+            $table->integer('role_type')->nullable()->unsigned()->after('is_saas');
+            $table->integer('hourly_rate')->nullable()->unsigned()->after('is_saas');
         });
     }
 
@@ -23,9 +23,9 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('sm_staffs', function (Blueprint $table) {
-            $table->dropColumn('emp_type_id');
-            $table->dropColumn('specialization_id');
-            $table->dropColumn('slots_emp_id');
+            $table->dropColumn('role_type');
+            $table->dropColumn('hourly_rate');
+
         });
     }
 
