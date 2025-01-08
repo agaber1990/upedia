@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Academics;
 
-use App\Models\{Track, Level, EmAcademyType};
+use App\Models\{Track, Level, TrackType};
 use App\tableList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,7 +19,7 @@ class TrackController extends Controller
         try {
             $tracks = Track::get();
             $levels = Level::all();
-            $valid_for = EmAcademyType::all();
+            $valid_for = TrackType::all();
             
             return view('backEnd.academics.tracks', compact('tracks','levels','valid_for' ));
         } catch (\Exception $e) {
@@ -67,7 +67,7 @@ class TrackController extends Controller
         $tracks = Track::get();
         $track = Track::find($id);
         $levels = Level::all();
-        $valid_for = EmAcademyType::all();
+        $valid_for = TrackType::all();
         
         return view('backEnd.academics.tracks', compact('tracks','levels','valid_for','track'));
     }

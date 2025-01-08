@@ -982,11 +982,11 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
 
 
         // employee academy types Routes
-        Route::get('employee_academy_type', 'Admin\Academics\EmAcademyTypeController@index')->name('employee_academy_type')->middleware('userRolePermission:employee_academy_type');
-        Route::post('employee_academy_type', 'Admin\Academics\EmAcademyTypeController@store')->name('employee_academy_type-store')->middleware('userRolePermission:employee_academy_type-store');
-        Route::get('employee_academy_type/{id}', 'Admin\Academics\EmAcademyTypeController@show')->name('employee_academy_type-edit')->middleware('userRolePermission:employee_academy_type-edit');
-        Route::put('employee_academy_type/{id}', 'Admin\Academics\EmAcademyTypeController@update')->name('employee_academy_type-update')->middleware('userRolePermission:employee_academy_type-edit');
-        Route::delete('employee_academy_type/{id}', 'Admin\Academics\EmAcademyTypeController@destroy')->name('employee_academy_type-delete')->middleware('userRolePermission:employee_academy_type-delete');
+        Route::get('track_types', 'Admin\Academics\TrackTypeController@index')->name('track_types')->middleware('userRolePermission:track_types');
+        Route::post('track_types', 'Admin\Academics\TrackTypeController@store')->name('track_types_store')->middleware('userRolePermission:track_types_store');
+        Route::get('track_types/{id}', 'Admin\Academics\TrackTypeController@show')->name('track_types_edit')->middleware('userRolePermission:track_types_edit');
+        Route::put('track_types/{id}', 'Admin\Academics\TrackTypeController@update')->name('track_types-update')->middleware('userRolePermission:track_types_edit');
+        Route::delete('track_types/{id}', 'Admin\Academics\TrackTypeController@destroy')->name('track_types_delete')->middleware('userRolePermission:track_types_delete');
 
 
 

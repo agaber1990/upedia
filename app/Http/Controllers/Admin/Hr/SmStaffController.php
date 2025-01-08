@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Hr;
 
-use App\Models\EmAcademyType;
+use App\Models\EmType;
+use App\Models\Track;
+use App\Models\TrackType;
 use App\Models\SlotEmp;
 use App\Models\Specilization;
 use App\Models\StaffSlot;
+use App\Models\Category;
 use App\User;
 use App\SmStaff;
 use App\SmSchool;
@@ -158,7 +161,11 @@ class SmStaffController extends Controller
                 ->where('school_id', auth()->user()->school_id)
                 ->get(['id', 'base_setup_name']);
 
-            $staff_type = EmAcademyType::all();
+            $track_types = TrackType::all();
+            $tracks = Track::all();
+            $role_types = EmType::all();
+            $categories = Category::all();
+            
             $slots_emp = SlotEmp::all();
             $specilization = Specilization::all();
 
@@ -167,7 +174,7 @@ class SmStaffController extends Controller
 
             session()->forget('staff_photo');
 
-            return view('backEnd.humanResource.addStaff', compact('specilization', 'slots_emp', 'staff_type', 'roles', 'departments', 'designations', 'marital_ststus', 'max_staff_no', 'genders', 'custom_fields', 'is_required'));
+            return view('backEnd.humanResource.addStaff', compact('role_types','tracks','specilization', 'slots_emp','categories', 'track_types', 'roles', 'departments', 'designations', 'marital_ststus', 'max_staff_no', 'genders', 'custom_fields', 'is_required'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -442,7 +449,7 @@ class SmStaffController extends Controller
             $is_required = SmStaffRegistrationField::where('school_id', auth()->user()->school_id)->where('is_required', 1)->pluck('field_name')->toArray();
 
 
-            $staff_type = EmAcademyType::all();
+            $staff_type = TrackType::all();
             $slots_emp = SlotEmp::all();
             $specialization = Specilization::all();
             $selectedSlots = StaffSlot::where('staff_id', $id)->pluck('slot_id')->toArray();

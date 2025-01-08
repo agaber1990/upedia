@@ -1,27 +1,27 @@
 @extends('backEnd.master')
 @section('title')
-    @lang('academics.employee_academy_type')
+    @lang('academics.track_types')
 @endsection
 @section('mainContent')
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
-                <h1>@lang('academics.employee_academy_type')</h1>
+                <h1>@lang('academics.track_types')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
                     <a href="#">@lang('academics.academics')</a>
-                    <a href="#">@lang('academics.employee_academy_type')</a>
+                    <a href="#">@lang('academics.track_types')</a>
                 </div>
             </div>
         </div>
     </section>
     <section class="admin-visitor-area up_admin_visitor up_st_admin_visitor pl_22">
         <div class="container-fluid p-0">
-            @if (isset($employee_academy_type))
-                @if (userPermission('employee_academy_type-store'))
+            @if (isset($track_types))
+                @if (userPermission('track_types_store'))
                     <div class="row">
                         <div class="offset-lg-10 col-lg-2 text-right col-md-12 mb-20">
-                            <a href="{{ route('employee_academy_type') }}" class="primary-btn small fix-gr-bg">
+                            <a href="{{ route('track_types') }}" class="primary-btn small fix-gr-bg">
                                 <span class="ti-plus pr-2"></span>
                                 @lang('common.add')
                             </a>
@@ -35,14 +35,14 @@
                 <div class="col-lg-3">
                     <div class="row">
                         <div class="col-lg-12">
-                            @if (isset($employee_academy_type))
-                                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['employee_academy_type-update', $employee_academy_type->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
+                            @if (isset($track_type))
+                                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['track_types-update', $track_type->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                             @else
-                                @if (userPermission('employee_academy_type-store'))
+                                @if (userPermission('track_types_store'))
                                     {{ Form::open([
                                         'class' => 'form-horizontal',
                                         'files' => true,
-                                        'route' => 'employee_academy_type-store',
+                                        'route' => 'track_types_store',
                                         'method' => 'POST',
                                         'enctype' => 'multipart/form-data',
                                     ]) }}
@@ -51,10 +51,10 @@
                             <div class="white-box">
                                 <div class="main-title">
                                     <h3 class="mb-15">
-                                        @if (isset($employee_academy_type))
-                                            @lang('academics.edit_employee_academy_type')
+                                        @if (isset($track_type))
+                                            @lang('academics.edit_track_types')
                                         @else
-                                            @lang('academics.add_employee_academy_type')
+                                            @lang('academics.add_track_types')
                                         @endif
                                     </h3>
                                 </div>
@@ -62,14 +62,14 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
-                                                <label class="primary_input_label" for="">@lang('academics.employee_academy_type_name')
+                                                <label class="primary_input_label" for="">@lang('academics.track_types_name')
                                                     <span class="text-danger"> *</span></label>
                                                 <input
                                                     class="primary_input_field form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
                                                     type="text" name="name" autocomplete="off"
-                                                    value="{{ isset($employee_academy_type) ? $employee_academy_type->name : Request::old('name') }}">
+                                                    value="{{ isset($track_type) ? $track_type->name : Request::old('name') }}">
                                                 <input type="hidden" name="id"
-                                                    value="{{ isset($employee_academy_type) ? $employee_academy_type->id : '' }}">
+                                                    value="{{ isset($track_type) ? $track_type->id : '' }}">
 
                                                 @if ($errors->has('name'))
                                                     <span class="text-danger">
@@ -81,11 +81,11 @@
                                     </div>
                                     @php
                                         $tooltip = '';
-                                        if (userPermission('employee_academy_type-store')) {
+                                        if (userPermission('track_types_store')) {
                                             $tooltip = '';
                                         } elseif (
-                                            isset($employee_academy_type) &&
-                                            userPermission('employee_academy_type-edit')
+                                            isset($track_types) &&
+                                            userPermission('track_types_edit')
                                         ) {
                                             $tooltip = '';
                                         } else {
@@ -97,10 +97,10 @@
                                             <button class="primary-btn fix-gr-bg" data-toggle="tooltip"
                                                 title="{{ $tooltip }}">
                                                 <span class="ti-check"></span>
-                                                @isset($employee_academy_type)
-                                                    @lang('academics.update_employee_academy_type')
+                                                @isset($track_types)
+                                                    @lang('academics.update_track_types')
                                                 @else
-                                                    @lang('academics.save_employee_academy_type')
+                                                    @lang('academics.save_track_types')
                                                 @endisset
                                             </button>
                                         </div>
@@ -117,7 +117,7 @@
                         <div class="row">
                             <div class="col-lg-4 no-gutters">
                                 <div class="main-title">
-                                    <h3 class="mb-15">@lang('academics.employee_academy_type_list')</h3>
+                                    <h3 class="mb-15">@lang('academics.track_types_list')</h3>
                                 </div>
                             </div>
                         </div>
@@ -130,35 +130,35 @@
                                         <thead>
 
                                             <tr>
-                                                <th>@lang('academics.employee_academy_type')</th>
+                                                <th>@lang('academics.track_types')</th>
                                                 <th>@lang('common.action')</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            @foreach ($employee_academy_types as $employee_academy_type)
+                                            @foreach ($track_types as $track_type)
                                                 <tr>
-                                                    <td>{{ $employee_academy_type->name }}</td>
+                                                    <td>{{ $track_type->name }}</td>
                                                     <td>
                                                         <x-drop-down>
-                                                            @if (userPermission('employee_academy_type-edit'))
+                                                            @if (userPermission('track_types_edit'))
                                                                 <a class="dropdown-item"
-                                                                    href="{{ route('employee_academy_type-edit', [$employee_academy_type->id]) }}">@lang('common.edit')</a>
+                                                                    href="{{ route('track_types_edit', [$track_type->id]) }}">@lang('common.edit')</a>
                                                             @endif
-                                                            @if (userPermission('employee_academy_type-delete'))
+                                                            @if (userPermission('track_types_delete'))
                                                                 <a class="dropdown-item" data-toggle="modal"
-                                                                    data-target="#deleteemployee_academy_typeModal{{ $employee_academy_type->id }}"
+                                                                    data-target="#deletetrack_typesModal{{ $track_type->id }}"
                                                                     href="#">@lang('common.delete')</a>
                                                             @endif
                                                         </x-drop-down>
                                                     </td>
                                                 </tr>
                                                 <div class="modal fade admin-query"
-                                                    id="deleteemployee_academy_typeModal{{ $employee_academy_type->id }}">
+                                                    id="deletetrack_typesModal{{ $track_type->id }}">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h4 class="modal-title">@lang('academics.delete_employee_academy_type')</h4>
+                                                                <h4 class="modal-title">@lang('academics.delete_track_types')</h4>
                                                                 <button type="button" class="close"
                                                                     data-dismiss="modal">&times;</button>
                                                             </div>
@@ -171,7 +171,7 @@
                                                                 <div class="mt-40 d-flex justify-content-between">
                                                                     <button type="button" class="primary-btn tr-bg"
                                                                         data-dismiss="modal">@lang('common.cancel')</button>
-                                                                    {{ Form::open(['route' => ['employee_academy_type-delete', $employee_academy_type->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                    {{ Form::open(['route' => ['track_types_delete', $track_type->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
                                                                     <button class="primary-btn fix-gr-bg"
                                                                         type="submit">@lang('common.delete')</button>
                                                                     {{ Form::close() }}

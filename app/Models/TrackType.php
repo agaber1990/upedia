@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EmAcademyType extends Model
+class TrackType extends Model
 {
     use HasFactory;
 
-    protected $table = 'em_academy_types';
+    protected $table = 'track_types';
 
     protected $fillable = ['name'];
 

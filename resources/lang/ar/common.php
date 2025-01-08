@@ -665,7 +665,7 @@ return [
     'enable_all' => 'Enable All',
     'disable_all' => 'Disable All',
     'role_based_sidebar' => 'Role Based Sidebar',
-    "em_academy_type" => "Emplyee Academy Type",
+    "track_types" => "Emplyee Academy Type",
     "pricing_plan_type" => "Pricing Plan Type",
     'pricing_plan' => 'Pricing Plan',
     'categories' => 'Categories',

@@ -60,7 +60,7 @@
                                 <a class="nav-link active" href="#basic_info" role="tab"
                                     data-toggle="tab">@lang('hr.basic_info')</a>
                             </li>
-                       
+
 
                             <li class="nav-item">
                                 <a class="nav-link" href="#payroll_details" role="tab"
@@ -86,9 +86,12 @@
                                 <a class="nav-link" href="#custom_field" role="tab"
                                     data-toggle="tab">@lang('hr.custom_field')</a>
                             </li>
-                             <li class="nav-item">
-                                <a class="nav-link" href="#slots" role="tab"
-                                    data-toggle="tab">@lang('hr.slots')</a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#slots" role="tab" data-toggle="tab">@lang('hr.slots')</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#specilization" role="tab"
+                                    data-toggle="tab">@lang('hr.specilization')</a>
                             </li>
 
                             <li class="nav-item flex-grow-1 text-right">
@@ -140,7 +143,33 @@
                                                         </div>
                                                     @endif
                                                     <div class="row">
-                                                        <div class="col-lg-6 col-xl-3 mb-20">
+                                                        <div class="col-lg-6 col-xl-2 mb-20">
+                                                            <div class="primary_input">
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('common.role_types')
+                                                                </label>
+                                                                <select
+                                                                    class="primary_select  form-control{{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
+                                                                    name="cat_id" id="cat_id">
+                                                                    <option data-display="@lang('common.role_types') *"
+                                                                        value="">@lang('common.role_types')
+                                                                        *</option>
+                                                                    @foreach ($role_types as $item)
+                                                                        <option value="{{ $item->id }}">
+                                                                            {{ $item->title }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+
+                                                                @if ($errors->has('branch_id'))
+                                                                    <span class="text-danger invalid-select"
+                                                                        role="alert">
+                                                                        {{ $errors->first('branch_id') }}
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-xl-2 mb-20">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label"
                                                                     for="">@lang('hr.staff_no')
@@ -191,7 +220,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-lg-6 col-xl-3 mb-20">
+                                                        <div class="col-lg-6 col-xl-2 mb-20">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label"
                                                                     for="">@lang('hr.department')
@@ -572,7 +601,9 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <img class="d-none previewImageSize" src="" alt="" id="staffImageShow" height="100%" width="100%">
+                                                            <img class="d-none previewImageSize" src=""
+                                                                alt="" id="staffImageShow" height="100%"
+                                                                width="100%">
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -746,56 +777,64 @@
                                                     <div class="row mb-20">
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('hr.bank_account_name')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('hr.bank_account_name')
                                                                     {{ in_array('bank_account_name', $is_required) ? '*' : '' }}</label>
                                                                 <input
                                                                     class="primary_input_field form-control{{ $errors->has('bank_account_name') ? ' is-invalid' : '' }}"
-                                                                    type="text" name="bank_account_name" value="{{ old('bank_account_name') }}">
-                            
-                            
-                            
+                                                                    type="text" name="bank_account_name"
+                                                                    value="{{ old('bank_account_name') }}">
+
+
+
                                                             </div>
                                                         </div>
-                            
+
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('accounts.account_no')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('accounts.account_no')
                                                                     {{ in_array('bank_account_no', $is_required) ? '*' : '' }}</label>
-                            
+
                                                                 <input onkeyup="numberCheck(this)"
                                                                     class="primary_input_field form-control{{ $errors->has('bank_account_no') ? ' is-invalid' : '' }}"
-                                                                    type="text" name="bank_account_no" value="{{ old('bank_account_no') }}">
-                            
-                            
+                                                                    type="text" name="bank_account_no"
+                                                                    value="{{ old('bank_account_no') }}">
+
+
                                                             </div>
                                                         </div>
-                            
+
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('accounts.bank_name')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('accounts.bank_name')
                                                                     {{ in_array('bank_name', $is_required) ? '*' : '' }}</label>
                                                                 <input
                                                                     class="primary_input_field form-control{{ $errors->has('bank_name') ? ' is-invalid' : '' }}"
-                                                                    type="text" name="bank_name" value="{{ old('bank_name') }}">
-                            
-                            
-                            
+                                                                    type="text" name="bank_name"
+                                                                    value="{{ old('bank_name') }}">
+
+
+
                                                             </div>
                                                         </div>
-                            
+
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('accounts.branch_name')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('accounts.branch_name')
                                                                     {{ in_array('bank_brach', $is_required) ? '*' : '' }}</label>
                                                                 <input
                                                                     class="primary_input_field form-control{{ $errors->has('bank_brach') ? ' is-invalid' : '' }}"
-                                                                    type="text" name="bank_brach" value="{{ old('bank_brach') }}">
-                            
-                            
-                            
+                                                                    type="text" name="bank_brach"
+                                                                    value="{{ old('bank_brach') }}">
+
+
+
                                                             </div>
                                                         </div>
-                            
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -803,71 +842,66 @@
                                     </div>
 
 
-                      
+
 
                                     <div role="tabpanel" class="tab-pane fade" id="slots">
                                         <div class="row pt-4 row-gap-24">
                                             <div class="col-lg-12 p-0">
                                                 <div class="form-section">
                                                     <div class="row mb-20">
-                                                        <label class="primary_input_label" for="slots_table" style="font-size: 1.2rem; font-weight: bold;">
-                                                            @lang('hr.slots_emp')
-                                                            <span class="text-danger"> *</span>
-                                                        </label>
-                                                        <div class="table-responsive">
-                                                            <table class="table table-bordered table-hover" id="slots_table">
-                                                                <thead class="thead-light">
+                                                        <table class="table" id="slots_table">
+                                                            <thead class="thead-light">
+                                                                <tr>
+                                                                    <th>@lang('hr.slot_day')</th>
+                                                                    <th>@lang('hr.slotemployee') <i class="fa fa-clock"></i></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @php
+                                                                    $groupedSlots = $slots_emp->groupBy('slot_day');
+                                                                @endphp
+                                                                @foreach ($groupedSlots as $day => $slots)
                                                                     <tr>
-                                                                        <th>@lang('hr.day')</th>
-                                                                        <th>@lang('hr.times')</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @php
-                                                                        $groupedSlots = $slots_emp->groupBy('slot_day');
-                                                                    @endphp
-                                                                    @foreach ($groupedSlots as $day => $slots)
-                                                                        <tr>
-                                                                            <td class="align-middle text-center">
-                                                                                <strong>{{ $day }}</strong>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="d-flex flex-column gap-2">
-                                                                                    @foreach ($slots as $slot)
-                                                                                        <div class="d-flex align-items-center gap-2">
-                                                                                            <!-- Start Time with Checkbox -->
-                                                                                            <div>
-                                                                                                <input class="form-check-input" type="checkbox" 
-                                                                                                       name="selected_slots[]" 
-                                                                                                       value="{{ $slot->id }}" 
-                                                                                                       id="slot_start_{{ $slot->id }}">
-                                                                                                <label class="form-check-label px-2 " 
-                                                                                                       for="slot_start_{{ $slot->id }}">
-                                                                                                    {{ $slot->slot_start }}
-                                                                                                </label>
-                                                                                            </div>
-                                                                                            <!-- End Time as Badge -->
-                                                                                            <span class="px-2">
-                                                                                                {{ $slot->slot_end }}
-                                                                                            </span>
+                                                                        <td class="p-4">
+                                                                            {{ $day }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="d-flex flex-column gap-2">
+                                                                                @foreach ($slots as $slot)
+                                                                                    <div
+                                                                                        class="d-flex align-items-center gap-2">
+                                                                                        <!-- Start Time with Checkbox -->
+                                                                                        <div>
+                                                                                            <input class="form-check-input"
+                                                                                                type="checkbox"
+                                                                                                name="selected_slots[]"
+                                                                                                value="{{ $slot->id }}"
+                                                                                                id="slot_start_{{ $slot->id }}">
+
+                                                                                            <label
+                                                                                                class="form-check-label px-2 "
+                                                                                                for="slot_start_{{ $slot->id }}">
+                                                                                                {{ $slot->slot_start }}
+                                                                                            </label>
                                                                                         </div>
-                                                                                    @endforeach
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
+                                                                                        <i class="fa fa-angle-right"></i>
+                                                                                        <span class="px-2">
+                                                                                            {{ $slot->slot_end }}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
-
-
-
 
 
                                     <div role="tabpanel" class="tab-pane fade" id="social_link_details">
@@ -877,56 +911,64 @@
                                                     <div class="row mb-20">
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('hr.facebook_url')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('hr.facebook_url')
                                                                     {{ in_array('facebook', $is_required) ? '*' : '' }}</label>
                                                                 <input
                                                                     class="primary_input_field form-control{{ $errors->has('facebook_url') ? ' is-invalid' : '' }}"
-                                                                    type="text" name="facebook_url" value={{ old('facebook_url') }}>
-                            
-                            
-                            
+                                                                    type="text" name="facebook_url"
+                                                                    value={{ old('facebook_url') }}>
+
+
+
                                                             </div>
                                                         </div>
-                            
+
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('hr.twitter_url')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('hr.twitter_url')
                                                                     {{ in_array('twitter', $is_required) ? '*' : '' }}</label>
                                                                 <input
                                                                     class="primary_input_field form-control{{ $errors->has('twiteer_url') ? ' is-invalid' : '' }}"
-                                                                    type="text" name="twiteer_url" value="{{ old('twiteer_url') }}">
-                            
-                            
-                            
+                                                                    type="text" name="twiteer_url"
+                                                                    value="{{ old('twiteer_url') }}">
+
+
+
                                                             </div>
                                                         </div>
-                            
+
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('hr.linkedin_url')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('hr.linkedin_url')
                                                                     {{ in_array('linkedin', $is_required) ? '*' : '' }}</label>
                                                                 <input
                                                                     class="primary_input_field form-control{{ $errors->has('linkedin_url') ? ' is-invalid' : '' }}"
-                                                                    type="text" name="linkedin_url" value="{{ old('linkedin_url') }}">
-                            
-                            
-                            
+                                                                    type="text" name="linkedin_url"
+                                                                    value="{{ old('linkedin_url') }}">
+
+
+
                                                             </div>
                                                         </div>
-                            
+
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('hr.instragram_url')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('hr.instragram_url')
                                                                     {{ in_array('instragram', $is_required) ? '*' : '' }}</label>
                                                                 <input
                                                                     class="primary_input_field form-control{{ $errors->has('instragram_url') ? ' is-invalid' : '' }}"
-                                                                    type="text" name="instragram_url" value="{{ old('instragram_url') }}">
-                            
-                            
-                            
+                                                                    type="text" name="instragram_url"
+                                                                    value="{{ old('instragram_url') }}">
+
+
+
                                                             </div>
                                                         </div>
-                            
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -938,50 +980,57 @@
                                                 <div class="form-section">
                                                     <div class="row mb-20">
                                                         <div class="col-lg-4">
-                            
+
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('hr.resume')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('hr.resume')
                                                                     {{ in_array('resume', $is_required) ? '*' : '' }}</label>
                                                                 <div class="primary_file_uploader">
-                                                                    <input class="primary_input_field" type="text" id="placeholderResume"
+                                                                    <input class="primary_input_field" type="text"
+                                                                        id="placeholderResume"
                                                                         placeholder="@lang('hr.resume')" readonly>
                                                                     <button class="" type="button">
                                                                         <label class="primary-btn small fix-gr-bg"
                                                                             for="resume">{{ __('common.browse') }}</label>
-                                                                        <input type="file" class="d-none" name="resume" id="resume">
+                                                                        <input type="file" class="d-none"
+                                                                            name="resume" id="resume">
                                                                     </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-4">
-                            
+
                                                             <div class="primary_input">
-                                                                <label class="primary_input_label" for="">@lang('hr.joining_letter')
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('hr.joining_letter')
                                                                     {{ in_array('joining_letter', $is_required) ? '*' : '' }}</label>
                                                                 <div class="primary_file_uploader">
-                                                                    <input class="primary_input_field" type="text" id="placeholderJoiningLetter"
+                                                                    <input class="primary_input_field" type="text"
+                                                                        id="placeholderJoiningLetter"
                                                                         placeholder="@lang('hr.joining_letter')" readonly>
                                                                     <button class="" type="button">
                                                                         <label class="primary-btn small fix-gr-bg"
                                                                             for="joining_letter">{{ __('common.browse') }}</label>
-                                                                        <input type="file" class="d-none" name="joining_letter"
-                                                                            id="joining_letter">
+                                                                        <input type="file" class="d-none"
+                                                                            name="joining_letter" id="joining_letter">
                                                                     </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-4">
-                                                            <label class="primary_input_label" for="">@lang('hr.other_documents')
+                                                            <label class="primary_input_label"
+                                                                for="">@lang('hr.other_documents')
                                                                 {{ in_array('other_documents', $is_required) ? '*' : '' }}</label>
                                                             <div class="primary_input">
                                                                 <div class="primary_file_uploader">
-                                                                    <input class="primary_input_field" type="text" id="placeholderOthersDocument"
+                                                                    <input class="primary_input_field" type="text"
+                                                                        id="placeholderOthersDocument"
                                                                         placeholder="@lang('hr.other_documents')" readonly>
                                                                     <button class="" type="button">
                                                                         <label class="primary-btn small fix-gr-bg"
                                                                             for="other_document">{{ __('common.browse') }}</label>
-                                                                        <input type="file" class="d-none" name="other_document"
-                                                                            id="other_document">
+                                                                        <input type="file" class="d-none"
+                                                                            name="other_document" id="other_document">
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -996,22 +1045,121 @@
                                             <div class="col-lg-12 p-0">
                                                 <div class="form-section">
                                                     @if (isset($custom_fields) && $custom_fields->count())
-                                                    {{-- Custom Field Start --}}
-                                                    <div class="row mt-40">
-                                                        <div class="col-lg-12">
-                                                            <div class="main-title">
-                                                                <h4>@lang('hr.custom_field')</h4>
+                                                        {{-- Custom Field Start --}}
+                                                        <div class="row mt-40">
+                                                            <div class="col-lg-12">
+                                                                <div class="main-title">
+                                                                    <h4>@lang('hr.custom_field')</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <hr>
+                                                            </div>
+                                                        </div>
+                                                        @include('backEnd.studentInformation._custom_field')
+                                                        {{-- Custom Field End --}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="specilization">
+                                        <div class="row pt-4 row-gap-24">
+                                            <div class="col-lg-12 p-0">
+                                                <div class="form-section">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-xl-3 mb-20">
+                                                            <div class="primary_input">
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('academics.track_types')
+                                                                </label>
+                                                                <select
+                                                                    class="primary_select  form-control{{ $errors->has('track_id') ? ' is-invalid' : '' }}"
+                                                                    name="track_id" id="track_id">
+                                                                    <option data-display="@lang('academics.track_types') *"
+                                                                        value="">@lang('academics.track_types')
+                                                                        *</option>
+                                                                    @foreach ($track_types as $tack)
+                                                                        <option value="{{ $tack->id }}">
+                                                                            {{ $tack->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+
+                                                                @if ($errors->has('branch_id'))
+                                                                    <span class="text-danger invalid-select"
+                                                                        role="alert">
+                                                                        {{ $errors->first('branch_id') }}
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                       
+                                                        <div class="col-lg-6 col-xl-3 mb-20">
+                                                            <div class="primary_input">
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('common.categories')
+                                                                </label>
+                                                                <select
+                                                                    class="primary_select  form-control{{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
+                                                                    name="cat_id" id="cat_id">
+                                                                    <option data-display="@lang('common.categories') *"
+                                                                        value="">@lang('common.categories')
+                                                                        *</option>
+                                                                    @foreach ($categories as $item)
+                                                                        <option value="{{ $item->id }}">
+                                                                            {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+
+                                                                @if ($errors->has('branch_id'))
+                                                                    <span class="text-danger invalid-select"
+                                                                        role="alert">
+                                                                        {{ $errors->first('branch_id') }}
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-xl-3 mb-20">
+                                                            <div class="primary_input">
+                                                                <label class="primary_input_label" for="">
+                                                                    @lang('academics.tracks')
+                                                                </label>
+                                                                <select
+                                                                    class="primary_select form-control{{ $errors->has('track_level') ? ' is-invalid' : '' }}"
+                                                                    name="track_level" id="track_level">
+                                                                    <option data-display="@lang('academics.tracks') *"
+                                                                        value="">
+                                                                        @lang('academics.tracks') *
+                                                                    </option>
+                                                                    @foreach ($tracks as $item)
+                                                                        <option value="{{ $item->id }}"
+                                                                            data-level="{{ $item->level_number }}">
+                                                                            {{ app()->getLocale() == 'en' ? $item->track_name_en : $item->track_name_ar }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+
+                                                                @if ($errors->has('branch_id'))
+                                                                    <span class="text-danger invalid-select"
+                                                                        role="alert">
+                                                                        {{ $errors->first('branch_id') }}
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Container for dynamically generated checkboxes -->
+                                                        <div id="checkbox-container"
+                                                            class="col-lg-12 mt-20 border rounded p-3 bg-light">
+                                                            <h5 class="text-primary">@lang('academics.levels')</h5>
+                                                            <div class="row g-2" id="checkbox-row">
+                                                                <!-- Checkboxes will be added here -->
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <hr>
-                                                        </div>
-                                                    </div>
-                                                    @include('backEnd.studentInformation._custom_field')
-                                                    {{-- Custom Field End --}}
-                                                @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -1084,4 +1232,34 @@
             imageChangeWithFile($(this)[0], '#staffImageShow');
         });
     </script>
+
+<script>
+    $(document).ready(function () {
+        $('#track_level').on('change', function () {
+            const selectedOption = $(this).find(':selected'); // Get the selected option
+            const levelNumber = selectedOption.data('level'); // Get the data-level attribute
+            const $checkboxContainer = $('#checkbox-row'); // Target the checkbox row
+
+            // Clear existing checkboxes
+            $checkboxContainer.empty();
+
+            // Generate checkboxes if levelNumber exists
+            if (levelNumber) {
+                for (let i = 1; i <= levelNumber; i++) {
+                    const checkboxHTML = `
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="level${i}" name="levels[]" value="${i}">
+                                <label class="form-check-label text-dark fw-bold" for="level${i}">
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i> Level ${i}
+                                </label>
+                            </div>
+                        </div>`;
+                    $checkboxContainer.append(checkboxHTML); // Append checkbox to the container
+                }
+            }
+        });
+    });
+</script>
+    
 @endsection

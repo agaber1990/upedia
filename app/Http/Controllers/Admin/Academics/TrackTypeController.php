@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin\Academics;
 use App\Http\Controllers\Controller;
 
 use App\ApiBaseMethod;
-use App\Http\Requests\EmAcademyTypeRequest;
-use App\Models\EmAcademyType;
+use App\Http\Requests\Admin\Academics\TrackTypeRequest;
+use App\Models\TrackType;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 
-class EmAcademyTypeController extends Controller
+class TrackTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,11 +21,11 @@ class EmAcademyTypeController extends Controller
     public function index(Request $request)
     {
         try {
-            $employee_academy_types = EmAcademyType::get();
+            $track_types = TrackType::get();
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
-                return ApiBaseMethod::sendResponse($employee_academy_types, null);
+                return ApiBaseMethod::sendResponse($track_types, null);
             }
-            return view('backEnd.academics.employee_academy_type.employee_academy_type', compact('employee_academy_types'));
+            return view('backEnd.academics.track_types.index', compact('track_types'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -43,17 +43,17 @@ class EmAcademyTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(EmAcademyTypeRequest $request)
+    public function store(TrackTypeRequest $request)
     {
 
         try {
-            $employee_academy_type = new EmAcademyType();
-            $employee_academy_type->name = $request->name;
-            $result = $employee_academy_type->save();
+            $track_types = new TrackType();
+            $track_types->name = $request->name;
+            $result = $track_types->save();
 
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 if ($result) {
-                    return ApiBaseMethod::sendResponse(null, 'employee_academy_type has been created successfully');
+                    return ApiBaseMethod::sendResponse(null, 'track_types has been created successfully');
                 } else {
                     return ApiBaseMethod::sendError('Something went wrong, please try again.');
                 }
@@ -74,15 +74,15 @@ class EmAcademyTypeController extends Controller
     {
 
         try {
-            $employee_academy_type = EmAcademyType::find($id);
-            $employee_academy_types = EmAcademyType::get();
+            $track_type = TrackType::find($id);
+            $track_types = TrackType::get();
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 $data = [];
-                $data['employee_academy_type'] = $employee_academy_type->toArray();
-                $data['employee_academy_types'] = $employee_academy_types->toArray();
+                $data['track_type'] = $track_type->toArray();
+                $data['track_types'] = $track_types->toArray();
                 return ApiBaseMethod::sendResponse($data, null);
             }
-            return view('backEnd.academics.employee_academy_type.employee_academy_type', compact('employee_academy_type', 'employee_academy_types'));
+            return view('backEnd.academics.track_types.index', compact('track_type', 'track_types'));
 
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -102,22 +102,22 @@ class EmAcademyTypeController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(EmAcademyTypeRequest $request, $id)
+    public function update(TrackTypeRequest $request, $id)
     {
         try {
-            $employee_academy_type = EmAcademyType::find($request->id);
-            $employee_academy_type->name = $request->name;
-            $result = $employee_academy_type->save();
+            $track_types = TrackType::find($request->id);
+            $track_types->name = $request->name;
+            $result = $track_types->save();
 
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 if ($result) {
-                    return ApiBaseMethod::sendResponse(null, 'employee_academy_type has been updated successfully');
+                    return ApiBaseMethod::sendResponse(null, 'track_types has been updated successfully');
                 } else {
                     return ApiBaseMethod::sendError('Something went wrong, please try again.');
                 }
             }
             Toastr::success('Operation successful', 'Success');
-            return redirect('employee_academy_type');
+            return redirect('track_types');
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -131,15 +131,15 @@ class EmAcademyTypeController extends Controller
     {
 
         try {
-            $tables = \App\tableList::getTableList('employee_academy_type_id', $id);
+            $tables = \App\tableList::getTableList('track_types_id', $id);
             // return $tables;
             try {
                 if ($tables == null) {
 
-                    $employee_academy_type = EmAcademyType::destroy($id);
-                    if ($employee_academy_type) {
+                    $track_types = TrackType::destroy($id);
+                    if ($track_types) {
                         if (ApiBaseMethod::checkUrl($request->fullUrl())) {
-                            if ($employee_academy_type) {
+                            if ($track_types) {
                                 return ApiBaseMethod::sendResponse(null, 'Deleted successfully');
                             } else {
                                 return ApiBaseMethod::sendError('Something went wrong, please try again');

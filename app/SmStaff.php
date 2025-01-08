@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Models\EmAcademyType;
+use App\Models\TrackType;
 use App\Models\StaffSlot;
 use App\Models\TeacherEvaluation;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +22,7 @@ class SmStaff extends Model
 
     public function emp_type_id()
     {
-        return $this->belongsTo(EmAcademyType::class, 'pricing_plan');
+        return $this->belongsTo(TrackType::class, 'pricing_plan');
     }
     public function slots()
     {

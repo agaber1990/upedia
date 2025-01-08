@@ -111,7 +111,7 @@ class SlotEmpController extends Controller
 
             $result = $slotemployee->save();
             Toastr::success('Operation successful', 'Success');
-            return redirect('slotemployee.index');
+            return redirect('slotemployee');
 
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');

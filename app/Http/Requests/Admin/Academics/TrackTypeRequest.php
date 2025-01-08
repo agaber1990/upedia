@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin\Academics;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TrackTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
@@ -17,12 +20,12 @@ class TrackTypeRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'max:200', Rule::unique('track_types')]
         ];
     }
 }
