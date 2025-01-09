@@ -755,6 +755,9 @@ class SmStaffController extends Controller
             $SpecializationsStaff->cat_id = $request->cat_id;
             $SpecializationsStaff->staff_id = $staff->id;
 
+            // dd($SpecializationsStaff);
+            $SpecializationsStaff->save();
+
 
             //Custom Field Start
             if ($request->customF) {

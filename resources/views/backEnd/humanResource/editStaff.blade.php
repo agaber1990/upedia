@@ -1205,7 +1205,7 @@
                                                             <div class="col-lg-4 mb-3">
                                                                 <label for="track_level"
                                                                     class="form-label">@lang('academics.tracks')</label>
-                                                                <select class="primary_select form-select " name="track_level" id="track_level"
+                                                                <select class="primary_select form-select " name="track_id" id="track_level"
                                                                     class="form-select @error('track_level') is-invalid @enderror">
                                                                     <option value="">@lang('Select Track')</option>
                                                                     @foreach ($tracks as $item)

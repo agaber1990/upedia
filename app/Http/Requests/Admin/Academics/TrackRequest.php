@@ -21,7 +21,7 @@ class TrackRequest extends FormRequest
             'session' => 'required|integer|min:1|max:20',
             'schedule' => 'required|in:once,weekly,twice',
             'valid_for' => 'required|array',
-            'valid_for.*' => 'exists:track_typess,id', // Assuming there is a table for valid_for
+            'valid_for.*' => 'exists:track_types,id', // Assuming there is a table for valid_for
         ];
     }
 
