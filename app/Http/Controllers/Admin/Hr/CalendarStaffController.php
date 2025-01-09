@@ -123,14 +123,31 @@ class CalendarStaffController extends Controller
             ->select("id", "slot_day", "slot_start", "slot_end")
             ->get()
             ->map(function ($slot) use ($staff_id, $date) {
-                // Check the status for the specific date and slot
+                // Get the scheduled event based on slot_id and staff_id
                 $scheduled = StaffScheduled::where('slot_id', $slot->id)
                     ->where('staff_id', $staff_id)
-                    ->where('date', $date) // Filter by slot and date
+                    ->whereDate('fromDate', '<=', $date) // Check if date is after or on fromDate
+                    ->whereDate('toDate', '>=', $date) // Check if date is before or on toDate
                     ->first();
     
-                $slot->status = $scheduled ? $scheduled->status : 'available'; // Default status is 'available'
-                $slot->date = $date; // Include the date for frontend reference
+                // Determine the status based on the schedule
+                if ($scheduled) {
+                    // Slot has a scheduled event
+                    if ($date == $scheduled->fromDate) {
+                        $slot->status = 'started'; // The event is just starting
+                    } elseif ($date >= $scheduled->fromDate && $date <= $scheduled->toDate) {
+                        $slot->status = 'scheduled'; // The event is ongoing
+                    } elseif ($date == $scheduled->toDate) {
+                        $slot->status = 'ended'; // The event has ended
+                    }
+                } else {
+                    // Slot is available if no schedule matches
+                    $slot->status = 'available';
+                }
+    
+                // Attach the date to the slot for frontend reference
+                $slot->date = $date;
+    
                 return $slot;
             });
     
@@ -140,25 +157,29 @@ class CalendarStaffController extends Controller
         ]);
     }
     
+
+
     public function scheduleStaffEvent(Request $request)
     {
         // Validate incoming data
         $validated = $request->validate([
             'slot_id' => 'required', // Assuming staff_slots table has slots
             'staff_id' => 'required', // Assuming staff_slots table has slots
-            'date' => 'required',
+            'fromDate' => 'required',
+            'toDate' => 'required',
             'status' => 'required',
         ]);
         $scheduledEvent = StaffScheduled::create([
             'slot_id' => $validated['slot_id'],
             'staff_id' => $validated['staff_id'],
-            'date' => $validated['date'],
+            'fromDate' => $validated['fromDate'],
+            'toDate' => $validated['toDate'],
             'status' => $validated['status'],
         ]);
 
         return response()->json(['success' => true, 'data' => $scheduledEvent], 200);
     }
-    
+
 
 
 

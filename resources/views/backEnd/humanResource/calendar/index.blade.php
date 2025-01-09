@@ -168,6 +168,7 @@
         });
 
         // Handle the event click for scheduling
+        // Handle the event click for scheduling
         function handleEventClick(info) {
             const event = info.event;
 
@@ -181,41 +182,81 @@
             Swal.fire({
                 title: 'Are you sure?',
                 html: `
-                <p style="margin-bottom: 14px;">Do you want to schedule: <strong>${eventTitle}</strong></p>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                    <label style="font-size:14px">Select a date</label>
-                    <input type="text" id="scheduleDate" class="form-control" placeholder="Select a date" />
+            <p style="margin-bottom: 14px;">Do you want to schedule: <strong>${eventTitle}</strong></p>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label style="font-size:14px">Select a From date</label>
+                    <input type="text" id="fromDate" class="form-control" placeholder="From date" />
                 </div>
-                  <div class="form-group col-md-6">
-                    <label style="font-size:14px">Select a date</label>
-                    <input type="text" id="scheduleDate" class="form-control" placeholder="Select a date" />
+                <div class="form-group col-md-6">
+                    <label style="font-size:14px">Select a To date</label>
+                    <input type="text" id="toDate" class="form-control" placeholder="To date" />
                 </div>
-                    </div>`,
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label style="font-size:14px">Select status</label>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <input type="radio" name="status" value="available" id="statusAvailable" checked>
+                            <label for="statusAvailable" class="btn btn-success btn-sm">Available</label>
+                        </li>
+                        <li class="list-inline-item">
+                            <input type="radio" name="status" value="scheduled" id="statusScheduled">
+                            <label for="statusScheduled" class="btn btn-primary btn-sm">Scheduled</label>
+                        </li>
+                        <li class="list-inline-item">
+                            <input type="radio" name="status" value="reserved" id="statusReserved">
+                            <label for="statusReserved" class="btn btn-info btn-sm">Reserved</label>
+                        </li>
+                        <li class="list-inline-item">
+                            <input type="radio" name="status" value="started" id="statusStarted">
+                            <label for="statusStarted" class="btn btn-warning btn-sm">Started</label>
+                        </li>
+                        <li class="list-inline-item">
+                            <input type="radio" name="status" value="ended" id="statusEnded">
+                            <label for="statusEnded" class="btn btn-danger btn-sm">Ended</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>`,
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, schedule it!',
                 cancelButtonText: 'No, cancel',
                 reverseButtons: true,
                 didOpen: () => {
-                    // Initialize the date picker
-                    flatpickr('#scheduleDate', {
+                    // Initialize the date pickers for both "From" and "To" dates
+                    flatpickr('#fromDate', {
+                        dateFormat: 'Y-m-d', // Set the format (YYYY-MM-DD)
+                        minDate: 'today', // Disable past dates
+                        defaultDate: new Date().toISOString().split('T')[0], // Default to today's date
+                    });
+                    flatpickr('#toDate', {
                         dateFormat: 'Y-m-d', // Set the format (YYYY-MM-DD)
                         minDate: 'today', // Disable past dates
                         defaultDate: new Date().toISOString().split('T')[0], // Default to today's date
                     });
                 }
             }).then((result) => {
-                const selectedDate = document.getElementById('scheduleDate').value; // Get selected date
+                const fromDate = document.getElementById('fromDate').value; // Get "From" date
+                const toDate = document.getElementById('toDate').value; // Get "To" date
+                const status = document.querySelector('input[name="status"]:checked')?.value; // Get selected status
 
-                if (result.isConfirmed && selectedDate) {
-                    // If confirmed and date is selected, call the save function
-                    saveScheduledEvent(slot_id, staff_id, selectedDate);
-                } else if (!selectedDate) {
-                    // If no date is selected, show an error message
+                // Check if both dates and status are selected
+                if (result.isConfirmed && fromDate && toDate && status) {
+                    // If confirmed and all required fields are selected, call the save function
+                    saveScheduledEvent(fromDate, toDate, status, slot_id, staff_id);
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "You clicked the button!",
+                            icon: "success"
+                        });
+                } else if (!fromDate || !toDate || !status) {
+                    // If any field is not selected, show an error message
                     Swal.fire(
                         'Error',
-                        'Please select a valid date to schedule the event.',
+                        'Please select both From and To dates, and a status to schedule the event.',
                         'error'
                     );
                 } else {
@@ -229,14 +270,16 @@
             });
         }
 
+
+
         // Save the scheduled event to the database
-        function saveScheduledEvent(slot_id, staff_id, date) {
-            const status = 'scheduled'; // Default status can be 'scheduled', you can add more if needed.
+        function saveScheduledEvent(fromDate, toDate, status, slot_id, staff_id) {
 
             const eventData = {
                 slot_id: slot_id,
                 staff_id: staff_id,
-                date: date,
+                fromDate: fromDate,
+                toDate: toDate,
                 status: status,
             };
             console.log(eventData);
