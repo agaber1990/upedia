@@ -100,13 +100,15 @@ class CalendarStaffController extends Controller
     }
     public function getSlotsByStaff(Request $request)
     {
-        // Validate staff_id
+        // Validate staff_id and optional date
         $validated = $request->validate([
             'staff_id' => 'required|integer',
+            'date' => 'nullable|date', // Optional date filter
         ]);
     
-        // Get the staff_id from the request
         $staff_id = $request->staff_id;
+        $date = $request->date ?? now()->toDateString(); // Default to today's date if not provided
+    
         $staff = SmStaff::where('id', $staff_id)->first();
     
         if (!$staff) {
@@ -114,34 +116,42 @@ class CalendarStaffController extends Controller
         }
     
         // Fetch the slot_ids associated with the staff_id
-        $slots = StaffSlot::where('staff_id', $staff_id)
-            ->pluck('slot_id'); // Get only the slot IDs
+        $slots = StaffSlot::where('staff_id', $staff_id)->pluck('slot_id');
     
-        // Fetch the details of the slots
+        // Fetch slot details and include their statuses for the specific date
         $slotDetails = SlotEmp::whereIn('id', $slots)
             ->select("id", "slot_day", "slot_start", "slot_end")
-            ->get(); // Get all slots associated with the staff
+            ->get()
+            ->map(function ($slot) use ($staff_id, $date) {
+                // Check the status for the specific date and slot
+                $scheduled = StaffScheduled::where('slot_id', $slot->id)
+                    ->where('staff_id', $staff_id)
+                    ->where('date', $date) // Filter by slot and date
+                    ->first();
     
-        // Prepare response data with staff and slot details
-        $responseData = [
+                $slot->status = $scheduled ? $scheduled->status : 'available'; // Default status is 'available'
+                $slot->date = $date; // Include the date for frontend reference
+                return $slot;
+            });
+    
+        return response()->json([
             'staff' => $staff,
             'slots' => $slotDetails,
-        ];
-    
-        // Return the slot details and staff data as JSON
-        return response()->json($responseData);
+        ]);
     }
+    
     public function scheduleStaffEvent(Request $request)
     {
         // Validate incoming data
         $validated = $request->validate([
-            'staff_slots_id' => 'required', // Assuming staff_slots table has slots
+            'slot_id' => 'required', // Assuming staff_slots table has slots
+            'staff_id' => 'required', // Assuming staff_slots table has slots
             'date' => 'required',
             'status' => 'required',
         ]);
-
         $scheduledEvent = StaffScheduled::create([
-            'staff_slots_id' => $validated['staff_slots_id'],
+            'slot_id' => $validated['slot_id'],
+            'staff_id' => $validated['staff_id'],
             'date' => $validated['date'],
             'status' => $validated['status'],
         ]);

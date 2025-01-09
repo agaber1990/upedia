@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('staff_scheduleds', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('staff_slots_id'); // Reference to staff_slots table
+            $table->unsignedBigInteger('slot_id'); // Reference to staff_slots table
+            $table->unsignedBigInteger('staff_id'); // Reference to staff_slots table
             $table->string('date');
             $table->string('status'); // Can be 'scheduled', 'confirmed', etc.
             $table->timestamps();

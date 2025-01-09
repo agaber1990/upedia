@@ -125,9 +125,12 @@
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Include FullCalendar -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
         // Declare calendar globally
@@ -170,33 +173,69 @@
 
             // Extract event details
             const eventTitle = event.title; // Available time title
+            const slot_id = event.extendedProps.slot_id; // Slot ID
+            const staff_id = $('#staff_id').val(); // Staff ID (from the input field)
+            console.log(slot_id, staff_id);
 
+            // Use SweetAlert2 to prompt user for confirmation and date selection
+            Swal.fire({
+                title: 'Are you sure?',
+                html: `
+                <p style="margin-bottom: 14px;">Do you want to schedule: <strong>${eventTitle}</strong></p>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                    <label style="font-size:14px">Select a date</label>
+                    <input type="text" id="scheduleDate" class="form-control" placeholder="Select a date" />
+                </div>
+                  <div class="form-group col-md-6">
+                    <label style="font-size:14px">Select a date</label>
+                    <input type="text" id="scheduleDate" class="form-control" placeholder="Select a date" />
+                </div>
+                    </div>`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, schedule it!',
+                cancelButtonText: 'No, cancel',
+                reverseButtons: true,
+                didOpen: () => {
+                    // Initialize the date picker
+                    flatpickr('#scheduleDate', {
+                        dateFormat: 'Y-m-d', // Set the format (YYYY-MM-DD)
+                        minDate: 'today', // Disable past dates
+                        defaultDate: new Date().toISOString().split('T')[0], // Default to today's date
+                    });
+                }
+            }).then((result) => {
+                const selectedDate = document.getElementById('scheduleDate').value; // Get selected date
 
-            const eventDescription = event.extendedProps.description; // Description (staff details, time)
-            const staffSlotsId = event.extendedProps.staff_id;
-            console.log(staffSlotsId);
-
-            // Get today's date in YYYY-MM-DD format
-            const currentDate = new Date();
-            const formattedDate = currentDate.toISOString().split('T')[0]; // "YYYY-MM-DD"
-
-            // Prompt user with a dialog or form to confirm the scheduling
-            const confirmation = confirm(
-                `Do you want to schedule: ${eventTitle} on ${formattedDate}? \nDescription: ${eventDescription}`
-            );
-
-            if (confirmation) {
-                // Call the save function
-                saveScheduledEvent(staffSlotsId, formattedDate);
-            }
+                if (result.isConfirmed && selectedDate) {
+                    // If confirmed and date is selected, call the save function
+                    saveScheduledEvent(slot_id, staff_id, selectedDate);
+                } else if (!selectedDate) {
+                    // If no date is selected, show an error message
+                    Swal.fire(
+                        'Error',
+                        'Please select a valid date to schedule the event.',
+                        'error'
+                    );
+                } else {
+                    // If canceled, show a message or take another action
+                    Swal.fire(
+                        'Cancelled',
+                        'The event was not scheduled.',
+                        'error'
+                    );
+                }
+            });
         }
 
         // Save the scheduled event to the database
-        function saveScheduledEvent(staffSlotsId, date) {
+        function saveScheduledEvent(slot_id, staff_id, date) {
             const status = 'scheduled'; // Default status can be 'scheduled', you can add more if needed.
 
             const eventData = {
-                staff_slots_id: staffSlotsId,
+                slot_id: slot_id,
+                staff_id: staff_id,
                 date: date,
                 status: status,
             };
@@ -262,6 +301,7 @@
                     if (calendar) {
                         // Clear existing events in the calendar
                         calendar.removeAllEvents();
+                        console.log(response.staff.id);
 
                         // Add the fetched events (slots) to the calendar
                         response.slots.forEach(function(slot) {
@@ -277,8 +317,8 @@
 
                             // Add event to the calendar
                             calendar.addEvent({
-                                staff_id: `${slot.staff_id}`,
-                                title: `Available ${formattedStart} - ${formattedEnd}`,
+                                slot_id: `${slot.id}`,
+                                title: `${slot.status} Slot in ${formattedStart} - ${formattedEnd}`,
                                 start: startTime, // Slot start time in 24-hour format for calendar
                                 end: endTime, // Slot end time in 24-hour format for calendar
                                 daysOfWeek: [dow],
@@ -287,7 +327,7 @@
                                 // editable: true,
                                 display: true,
                                 extendedProps: {
-                                    staff_id: slot.staff_id // Add staff_id here
+                                    staff_id: response.staff.id // Add staff_id here
                                 }
                             });
                         });
