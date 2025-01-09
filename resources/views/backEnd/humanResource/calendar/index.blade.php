@@ -119,6 +119,43 @@
         font-size: 14px;
         font-weight: 500;
     }
+
+    /* Scheduled events */
+    .fc-daygrid-event.event-scheduled {
+        background-color: #4CAF50;
+        /* Green */
+        border-color: #4CAF50;
+    }
+
+    /* Started events */
+    .fc-daygrid-event.event-started {
+        background-color: #FF9800;
+        /* Orange */
+        border-color: #FF9800;
+    }
+
+    /* Ended events */
+    .fc-daygrid-event.event-ended {
+        background-color: #F44336;
+        /* Red */
+        border-color: #F44336;
+    }
+
+    /* Available events */
+    .fc-daygrid-event.event-available {
+        background-color: #2196F3;
+        /* Blue */
+        border-color: #2196F3;
+    }
+
+    /* For events when hovering over */
+    .fc-daygrid-event.event-scheduled:hover,
+    .fc-daygrid-event.event-started:hover,
+    .fc-daygrid-event.event-ended:hover,
+    .fc-daygrid-event.event-available:hover {
+        opacity: 0.8;
+        /* Slightly transparent when hovered */
+    }
 </style>
 @push('scripts')
     <!-- Include jQuery -->
@@ -247,11 +284,11 @@
                 if (result.isConfirmed && fromDate && toDate && status) {
                     // If confirmed and all required fields are selected, call the save function
                     saveScheduledEvent(fromDate, toDate, status, slot_id, staff_id);
-                        Swal.fire({
-                            title: "Good job!",
-                            text: "You clicked the button!",
-                            icon: "success"
-                        });
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "You clicked the button!",
+                        icon: "success"
+                    });
                 } else if (!fromDate || !toDate || !status) {
                     // If any field is not selected, show an error message
                     Swal.fire(
@@ -358,6 +395,9 @@
                             let formattedStart = formatTo12HourTime(slot.slot_start);
                             let formattedEnd = formatTo12HourTime(slot.slot_end);
 
+                            // Determine event color based on slot status
+                            let eventColor = getStatusColor(slot.status);
+
                             // Add event to the calendar
                             calendar.addEvent({
                                 slot_id: `${slot.id}`,
@@ -367,11 +407,13 @@
                                 daysOfWeek: [dow],
                                 description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
                                 overlap: true,
-                                // editable: true,
                                 display: true,
                                 extendedProps: {
                                     staff_id: response.staff.id // Add staff_id here
-                                }
+                                },
+                                backgroundColor: eventColor, // Set background color based on status
+                                borderColor: eventColor, // Set border color based on status
+                                textColor: '#fff', // Text color for better contrast
                             });
                         });
                     } else {
@@ -383,6 +425,43 @@
                 }
             });
         }
+
+        // Function to get color based on event status
+        function getStatusColor(status) {
+            switch (status) {
+                case 'available':
+                    return '#080'; // Blue
+                case 'scheduled':
+                    return '#4CAF50'; // Green
+                case 'started':
+                    return '#FF9800'; // Orange
+                case 'ended':
+                    return '#F44336'; // Red
+                case 'reserved':
+                    return '#00BCD4'; // Cyan
+                default:
+                    return '#9E9E9E'; // Grey for unknown statuses
+            }
+        }
+
+        // Example of formatTimeForCalendar function to convert time to FullCalendar format
+        function formatTimeForCalendar(time, dayOfWeek) {
+            // Implement your logic to convert the time to FullCalendar's format (e.g., HH:mm)
+            return `${dayOfWeek}T${time}`;
+        }
+
+        // Example of function to format to 12-hour time with AM/PM
+        function formatTo12HourTime(time) {
+            let date = new Date(`1970-01-01T${time}:00`);
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            let suffix = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            return `${hours}:${minutes} ${suffix}`;
+        }
+
 
         function getTrackId(trackID) {
             var track_type_id = $('#track_type_id').val(); // Get the selected track type ID

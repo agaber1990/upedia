@@ -133,17 +133,22 @@ class CalendarStaffController extends Controller
                 // Determine the status based on the schedule
                 if ($scheduled) {
                     // Slot has a scheduled event
-                    if ($date == $scheduled->fromDate) {
-                        $slot->status = 'started'; // The event is just starting
-                    } elseif ($date >= $scheduled->fromDate && $date <= $scheduled->toDate) {
-                        $slot->status = 'scheduled'; // The event is ongoing
+                    if ($date < $scheduled->fromDate) {
+                        $slot->status = 'available'; // The event has not started yet, slot is available
+                    } elseif ($date == $scheduled->fromDate) {
+                        $slot->status = 'started'; // The event is just starting today
+                    } elseif ($date > $scheduled->fromDate && $date < $scheduled->toDate) {
+                        $slot->status = 'scheduled'; // The event is ongoing between fromDate and toDate
                     } elseif ($date == $scheduled->toDate) {
-                        $slot->status = 'ended'; // The event has ended
+                        $slot->status = 'ended'; // The event is ending today
+                    } elseif ($date > $scheduled->toDate) {
+                        $slot->status = 'available'; // The event has ended, slot is available
                     }
                 } else {
-                    // Slot is available if no schedule matches
+                    // No schedule exists, slot is available
                     $slot->status = 'available';
                 }
+                
     
                 // Attach the date to the slot for frontend reference
                 $slot->date = $date;
