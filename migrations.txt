@@ -1,2 +1,3 @@
 php artisan migrate:refresh --path=database/migrations/2025_01_04_201742_create_slot_emps_table.php
-php artisan migrate:refresh --path=database/migrations/2025_01_08_142725_create_staff_sepcializations_table.php
+php artisan migrate:refresh --path=database/migrations/2025_01_08_222438_create_specializations_staff_table.php
+php artisan migrate:refresh --path=database/migrations/2025_01_09_024116_create_staff_scheduleds_table.php

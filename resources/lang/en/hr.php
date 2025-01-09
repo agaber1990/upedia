@@ -115,6 +115,13 @@ return [
     'emtype_title' => 'Role Type Title',
     'save_emtype' => 'Save Role Type',
     'emtype' => 'Role Types',
+    'calendar' => 'Calendar',
+    'calendar_staff' => 'Calendar Staff',
+    'available' => 'Available',
+    'scheduled' => 'Scheduled',
+    'reserved' => 'Reserved',
+    'started' => 'Started',
+    'ended' => 'Ended',
 
     'add_slotemployee' => 'Add Slot Time',
     'edit_slotemployee' => 'Edit Slot Time',

@@ -41,7 +41,7 @@ use Modules\MultiBranch\Entities\Branch;
 use CreateSmStaffRegistrationFieldsTable;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Admin\Hr\staffRequest;
-use App\Models\StaffSepcialization;
+use App\Models\SpecializationsStaff;
 use App\SmLeaveDefine;
 use Illuminate\Validation\ValidationException;
 use Modules\RolePermission\Entities\InfixRole;
@@ -311,14 +311,14 @@ class SmStaffController extends Controller
                 $staff->toArray();
 
           
-                $StaffSepcialization = new StaffSepcialization();
-                $StaffSepcialization->track_id = $request->track_id;
-                $StaffSepcialization->track_type_id = $request->track_type_id;
-                $StaffSepcialization->levels = implode(',', $request->levels); 
-                $StaffSepcialization->cat_id = $request->cat_id;
-                $StaffSepcialization->staff_id = $staff->id;
+                $SpecializationsStaff = new SpecializationsStaff();
+                $SpecializationsStaff->track_id = $request->track_id;
+                $SpecializationsStaff->track_type_id = $request->track_type_id;
+                $SpecializationsStaff->levels = implode(',', $request->levels); 
+                $SpecializationsStaff->cat_id = $request->cat_id;
+                $SpecializationsStaff->staff_id = $staff->id;
 
-                $StaffSepcialization->save();
+                $SpecializationsStaff->save();
 
                 $st_role_id = $request->role_id;
                 $school_id = Auth::user()->school_id;
@@ -460,11 +460,22 @@ class SmStaffController extends Controller
             $is_required = SmStaffRegistrationField::where('school_id', auth()->user()->school_id)->where('is_required', 1)->pluck('field_name')->toArray();
 
 
-            $staff_type = TrackType::all();
             $slots_emp = SlotEmp::all();
             $selectedSlots = StaffSlot::where('staff_id', $id)->pluck('slot_id')->toArray();
 
-            return view('backEnd.humanResource.editStaff', compact('selectedSlots', 'slots_emp', 'staff_type', 'editData', 'roles', 'departments', 'designations', 'marital_ststus', 'max_staff_no', 'genders', 'custom_fields', 'custom_filed_values', 'student', 'is_required', 'has_permission'));
+            $track_types = TrackType::all();
+            $tracks = Track::all();
+            $role_types = EmType::all();
+            $categories = Category::all();
+            $specializations_staff = SpecializationsStaff::where('staff_id', $id)->get();
+
+            return view('backEnd.humanResource.editStaff', compact(
+                'specializations_staff',
+                'tracks','categories',
+                'role_types','selectedSlots', 'slots_emp', 
+                'track_types', 'editData', 'roles', 'departments', 
+                'designations', 'marital_ststus', 'max_staff_no', 'genders',
+                 'custom_fields', 'custom_filed_values', 'student', 'is_required', 'has_permission'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -734,6 +745,15 @@ class SmStaffController extends Controller
                 }
             }
 
+
+
+
+            $SpecializationsStaff =  SpecializationsStaff::where('staff_id', $request->staff_id)->first();
+            $SpecializationsStaff->track_id = $request->track_id;
+            $SpecializationsStaff->track_type_id = $request->track_type_id;
+            $SpecializationsStaff->levels = implode(',', $request->levels); 
+            $SpecializationsStaff->cat_id = $request->cat_id;
+            $SpecializationsStaff->staff_id = $staff->id;
 
 
             //Custom Field Start

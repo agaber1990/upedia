@@ -54,7 +54,7 @@
                                         <a class="nav-link active" href="#basic_info" role="tab"
                                             data-toggle="tab">@lang('hr.basic_info')</a>
                                     </li>
-                                  
+
 
                                     <li class="nav-item">
                                         <a class="nav-link" href="#payroll_details" role="tab"
@@ -84,15 +84,18 @@
                                         <a class="nav-link" href="#slots" role="tab"
                                             data-toggle="tab">@lang('hr.slots')</a>
                                     </li>
-
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#specilization" role="tab"
+                                            data-toggle="tab">@lang('hr.specilization')</a>
+                                    </li>
                                     <li class="nav-item flex-grow-1 text-right">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="row">
                                                     <div class="col-lg-12 text-end">
                                                         @if (Illuminate\Support\Facades\Config::get('app.app_sync'))
-                                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                                                                title="Disabled For Demo ">
+                                                            <span class="d-inline-block" tabindex="0"
+                                                                data-toggle="tooltip" title="Disabled For Demo ">
                                                                 <button class="primary-btn small fix-gr-bg  demo_view"
                                                                     style="pointer-events: none;" type="button">
                                                                     @lang('hr.update_staff')</button></span>
@@ -102,7 +105,7 @@
                                                                 @lang('hr.update_staff')
                                                             </button>
                                                         @endif
-                    
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -120,6 +123,33 @@
                                                         <div class="row">
                                                             <input type="hidden" name="staff_id"
                                                                 value="{{ @$editData->id }}" id="_id">
+
+                                                                <div class="col-lg-6 col-xl-2 mb-20">
+                                                                    <div class="primary_input">
+                                                                        <label class="primary_input_label"
+                                                                            for="">@lang('common.role_types')
+                                                                        </label>
+                                                                        <select
+                                                                            class="primary_select  form-control{{ $errors->has('role_type') ? ' is-invalid' : '' }}"
+                                                                            name="role_type" id="role_type">
+                                                                            <option data-display="@lang('common.role_types') *"
+                                                                                value="">@lang('common.role_types')
+                                                                                *</option>
+                                                                            @foreach ($role_types as $item)
+                                                                                <option value="{{ $item->id }}" {{$item->id == $editData->role_type ? 'selected' : '' }}>
+                                                                                    {{ $item->title }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+        
+                                                                        @if ($errors->has('role_type'))
+                                                                            <span class="text-danger invalid-select"
+                                                                                role="alert">
+                                                                                {{ $errors->first('role_type') }}
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                             @if (in_array('staff_no', $has_permission))
                                                                 <div class="col-lg-6 col-xl-3 mb-20">
                                                                     <div class="primary_input">
@@ -559,8 +589,9 @@
                                                                         @endif
                                                                     </div>
                                                                     <img class="previewImageSize my-2 {{ @$editData->staff_photo ? '' : 'd-none' }}"
-                                                                src="{{ @$editData->staff_photo ? asset($editData->staff_photo) : '' }}"
-                                                                alt="" id="staffImageShow" height="100%" width="100%">
+                                                                        src="{{ @$editData->staff_photo ? asset($editData->staff_photo) : '' }}"
+                                                                        alt="" id="staffImageShow" height="100%"
+                                                                        width="100%">
                                                                 </div>
                                                             @endif
                                                             <div class="col-lg-6 mb-20">
@@ -594,7 +625,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                            </div> -->
+                                                                        </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
@@ -705,111 +736,49 @@
                                         </div>
 
 
-{{-- 
                                         <div role="tabpanel" class="tab-pane fade" id="slots">
                                             <div class="row pt-4 row-gap-24">
                                                 <div class="col-lg-12 p-0">
                                                     <div class="form-section">
                                                         <div class="row mb-20">
-                                                            <label class="primary_input_label" for="slots_table" style="font-size: 1.2rem; font-weight: bold;">
-                                                                @lang('hr.slots_emp')
-                                                                <span class="text-danger"> *</span>
-                                                            </label>
+                                                          
                                                             <div class="table-responsive">
-                                                                <table class="table table-bordered table-hover" id="slots_table">
+                                                                <table class="table "
+                                                                    id="slots_table">
                                                                     <thead class="thead-light">
                                                                         <tr>
-                                                                            <th>@lang('hr.day')</th>
-                                                                            <th>@lang('hr.times')</th>
+                                                                            <th>@lang('hr.slot_day')</th>
+                                                                            <th>@lang('hr.slotemployee') <i class="fa fa-clock"></i></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         @php
-                                                                            $groupedSlots = $slots_emp->groupBy('slot_day');
+                                                                            $groupedSlots = $slots_emp->groupBy(
+                                                                                'slot_day',
+                                                                            );
                                                                         @endphp
                                                                         @foreach ($groupedSlots as $day => $slots)
                                                                             <tr>
-                                                                                <td class="align-middle text-center">
-                                                                                    <strong>{{ $day }}</strong>
+                                                                                <td class="p-4">
+                                                                                    {{ $day }}
                                                                                 </td>
                                                                                 <td>
                                                                                     <div class="d-flex flex-column gap-2">
                                                                                         @foreach ($slots as $slot)
-                                                                                            <div class="d-flex align-items-center gap-2">
+                                                                                            <div
+                                                                                                class="d-flex align-items-center gap-2">
                                                                                                 <!-- Start Time with Checkbox -->
                                                                                                 <div>
-                                                                                                    <input class="form-check-input" type="checkbox" 
-                                                                                                           name="selected_slots[]" 
-                                                                                                           value="{{ $slot->id }}" 
-                                                                                                           id="slot_start_{{ $slot->id }}">
-                                                                                                    <label class="form-check-label px-2 " 
-                                                                                                           for="slot_start_{{ $slot->id }}">
-                                                                                                        {{ $slot->slot_start }}
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                                <!-- End Time as Badge -->
-                                                                                                <span class="px-2">
-                                                                                                    {{ $slot->slot_end }}
-                                                                                                </span>
-                                                                                            </div>
-                                                                                        @endforeach
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div> --}}
-
-
-
-
-
-                                        <div role="tabpanel" class="tab-pane fade" id="slots">
-                                            <div class="row pt-4 row-gap-24">
-                                                <div class="col-lg-12 p-0">
-                                                    <div class="form-section">
-                                                        <div class="row mb-20">
-                                                            <label class="primary_input_label" for="slots_table" style="font-size: 1.2rem; font-weight: bold;">
-                                                                @lang('hr.slots_emp')
-                                                                <span class="text-danger"> *</span>
-                                                            </label>
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered table-hover" id="slots_table">
-                                                                    <thead class="thead-light">
-                                                                        <tr>
-                                                                            <th>@lang('hr.day')</th>
-                                                                            <th>@lang('hr.times')</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @php
-                                                                            $groupedSlots = $slots_emp->groupBy('slot_day');
-                                                                        @endphp
-                                                                        @foreach ($groupedSlots as $day => $slots)
-                                                                            <tr>
-                                                                                <td class="align-middle text-center">
-                                                                                    <strong>{{ $day }}</strong>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="d-flex flex-column gap-2">
-                                                                                        @foreach ($slots as $slot)
-                                                                                            <div class="d-flex align-items-center gap-2">
-                                                                                                <!-- Start Time with Checkbox -->
-                                                                                                <div>
-                                                                                                    <input class="form-check-input" type="checkbox" 
-                                                                                                           name="selected_slots[]" 
-                                                                                                           value="{{ $slot->id }}" 
-                                                                                                           id="slot_start_{{ $slot->id }}"
-                                                                                                           @if(in_array($slot->id, $selectedSlots)) checked @endif>
-                                                                                                    <label class="form-check-label px-2" 
-                                                                                                           for="slot_start_{{ $slot->id }}">
+                                                                                                    <input
+                                                                                                        class="form-check-input"
+                                                                                                        type="checkbox"
+                                                                                                        name="selected_slots[]"
+                                                                                                        value="{{ $slot->id }}"
+                                                                                                        id="slot_start_{{ $slot->id }}"
+                                                                                                        @if (in_array($slot->id, $selectedSlots)) checked @endif>
+                                                                                                    <label
+                                                                                                        class="form-check-label px-2"
+                                                                                                        for="slot_start_{{ $slot->id }}">
                                                                                                         {{ $slot->slot_start }}
                                                                                                     </label>
                                                                                                 </div>
@@ -831,13 +800,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        
-
-
-
-                                        
-
 
                                         <div role="tabpanel" class="tab-pane fade" id="payroll_details">
                                             <div class="row pt-4 row-gap-24">
@@ -1196,6 +1158,111 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div role="tabpanel" class="tab-pane fade" id="specilization">
+                                            <div class="row pt-4 row-gap-24">
+                                                <div class="col-lg-12 p-0">
+                                                    <div class="form-section">
+                                                        <div class="row">
+                                                            <!-- Track Type -->
+                                                            <div class="col-lg-4 mb-3">
+                                                                <label for="track_type_id"
+                                                                    class="form-label">@lang('academics.track_types')</label>
+                                                                <select name="track_type_id" id="track_type_id"
+                                                                    class="primary_select form-select @error('track_type_id') is-invalid @enderror">
+                                                                    <option value="">@lang('Select Track Type')</option>
+                                                                    @foreach ($track_types as $type)
+                                                                        <option value="{{ $type->id }}"
+                                                                            {{ $specializations_staff->firstWhere('track_type_id', $type->id) ? 'selected' : '' }}>
+                                                                            {{ $type->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('track_type_id')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+
+                                                            <!-- Category -->
+                                                            <div class="col-lg-4 mb-3">
+                                                                <label for="cat_id"
+                                                                    class="form-label">@lang('common.categories')</label>
+                                                                <select name="cat_id" id="cat_id"
+                                                                    class="primary_select form-select @error('cat_id') is-invalid @enderror">
+                                                                    <option value="">@lang('Select Category')</option>
+                                                                    @foreach ($categories as $category)
+                                                                        <option value="{{ $category->id }}"
+                                                                            {{ $specializations_staff->firstWhere('cat_id', $category->id) ? 'selected' : '' }}>
+                                                                            {{ app()->getLocale() == 'en' ? $category->name_en : $category->name_ar }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('cat_id')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+
+                                                            <!-- Track -->
+                                                            <div class="col-lg-4 mb-3">
+                                                                <label for="track_level"
+                                                                    class="form-label">@lang('academics.tracks')</label>
+                                                                <select class="primary_select form-select " name="track_level" id="track_level"
+                                                                    class="form-select @error('track_level') is-invalid @enderror">
+                                                                    <option value="">@lang('Select Track')</option>
+                                                                    @foreach ($tracks as $item)
+                                                                        <option value="{{ $item->id }}"
+                                                                            {{ $specializations_staff->firstWhere('track_id', $item->id) ? 'selected' : '' }}
+                                                                            data-level="{{ $item->level_number }}">
+                                                                            {{ app()->getLocale() == 'en' ? $item->track_name_en : $item->track_name_ar }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('track_level')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+
+                                                        </div>
+
+                                                        <!-- Container for dynamically generated checkboxes -->
+                                                        <div id="checkbox-container"
+                                                            class="col-lg-12 mt-20 border rounded p-3 bg-light">
+                                                            <h5 class="text-primary">@lang('academics.levels')</h5>
+                                                            <div class="row g-2" id="checkbox-row">
+                                                                @php
+                                                                $selectedLevels = $specializations_staff
+                                                                    ->pluck('levels')
+                                                                    ->toArray();
+                                                                $selectedLevels = $selectedLevels
+                                                                    ? explode(
+                                                                        ',',
+                                                                        implode(',', $selectedLevels),
+                                                                    )
+                                                                    : [];
+
+                                                                // Extract levels from tracks as an array
+                                                                $trackLevels = $tracks
+                                                                    ->pluck('level_number')
+                                                                    ->toArray();
+                                                                $maxLevel = max($trackLevels); // Get the highest level number
+                                                            @endphp
+                                                            @for ($i = 1; $i <= $maxLevel; $i++)
+                                                                <div class="col-md-2">
+                                                                    <input type="checkbox"
+                                                                        id="level_{{ $i }}"
+                                                                        name="levels[]"
+                                                                        value="{{ $i }}"
+                                                                        {{ in_array($i, $selectedLevels) ? 'checked' : '' }}>
+                                                                    <label
+                                                                        for="level_{{ $i }}">@lang('Level')
+                                                                        {{ $i }}</label>
+                                                                </div>
+                                                            @endfor
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1203,7 +1270,8 @@
                     </div>
                 </div>
             </div>
-            {{ Form::close() }}
+        </div>
+        {{ Form::close() }}
         </div>
     </section>
 
@@ -1262,6 +1330,35 @@
             imageChangeWithFile($(this)[0], '#staffImageShow');
         });
     </script>
+
+<script>
+    $(document).ready(function () {
+        $('#track_level').on('change', function () {
+            const selectedOption = $(this).find(':selected'); // Get the selected option
+            const levelNumber = selectedOption.data('level'); // Get the data-level attribute
+            const $checkboxContainer = $('#checkbox-row'); // Target the checkbox row
+
+            // Clear existing checkboxes
+            $checkboxContainer.empty();
+
+            // Generate checkboxes if levelNumber exists
+            if (levelNumber) {
+                for (let i = 1; i <= levelNumber; i++) {
+                    const checkboxHTML = `
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="level${i}" name="levels[]" value="${i}">
+                                <label class="form-check-label text-dark fw-bold" for="level${i}">
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i> Level ${i}
+                                </label>
+                            </div>
+                        </div>`;
+                    $checkboxContainer.append(checkboxHTML); // Append checkbox to the container
+                }
+            }
+        });
+    });
+</script>
 @endsection
 @push('script')
     <script>
@@ -1269,4 +1366,5 @@
             toastr.error("{{ $error }}");
         @endforeach
     </script>
+
 @endpush

@@ -13,4 +13,9 @@ class StaffSlot extends Model
     protected $fillable = ['staff_id','slot_id'];
 
 
+    public function slotEmp()
+    {
+        return $this->belongsTo(SlotEmp::class, 'slot_id'); // 'slot_id' is the foreign key
+    }
+
 }

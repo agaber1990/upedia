@@ -969,6 +969,16 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
 
 
         // Specilization Routes
+        Route::get('calendar_staff', 'Admin\Hr\CalendarStaffController@index')->name('calendar_staff');
+
+        Route::get('calendar_staff/getStaffByTrack', 'Admin\Hr\CalendarStaffController@getStaffByTrack')->name('getStaffByTrack');
+        Route::get('calendar_staff/getSlotsByStaff', 'Admin\Hr\CalendarStaffController@getSlotsByStaff')->name('getSlotsByStaff');
+        Route::get('calendar_staff/schedule-staff-event', 'Admin\Hr\CalendarStaffController@scheduleStaffEvent')->name('scheduleStaffEvent');
+
+
+
+
+        // Specilization Routes
         Route::get('specilization', 'Admin\Hr\SpecilizationController@index')->name('specilization');
 
         Route::post('specilization', 'Admin\Hr\SpecilizationController@store')->name('specilization-store')->middleware('userRolePermission:specilization-store');

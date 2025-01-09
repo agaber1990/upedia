@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staff_sepcializations', function (Blueprint $table) {
+        Schema::create('staff_scheduleds', function (Blueprint $table) {
             $table->id();
-            $table->string('track_id');
-            $table->string('track_type_id');
-            $table->string('levels');
-            $table->string('cat_id');
-            $table->string('staff_id');
+            $table->unsignedBigInteger('staff_slots_id'); // Reference to staff_slots table
+            $table->string('date');
+            $table->string('status'); // Can be 'scheduled', 'confirmed', etc.
             $table->timestamps();
-
         });
     }
 
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('staff_sepcializations');
+        Schema::dropIfExists('staff_scheduleds');
     }
 };

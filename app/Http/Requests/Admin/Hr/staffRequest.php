@@ -68,35 +68,6 @@ class staffRequest extends FormRequest
 
         $rules =
             [
-
-                'role_type' => [
-                    Rule::requiredIf(function () use ($field) {
-                        return in_array('role_type', $field);
-                    })
-                ],
-                'track_id' => [
-                    Rule::requiredIf(function () use ($field) {
-                        return in_array('track_id', $field);
-                    })
-                ],
-                'track_type_id' => [
-                    Rule::requiredIf(function () use ($field) {
-                        return in_array('track_type_id', $field);
-                    })
-                ],
-                'cat_id' => [
-                    Rule::requiredIf(function () use ($field) {
-                        return in_array('cat_id', $field);
-                    })
-                ],
-                'levels' => [
-                    Rule::requiredIf(function () use ($field) {
-                        return in_array('levels', $field); // Conditionally required
-                    }),
-                    'array', // Ensures it's an array
-                    'min:1', // Ensures at least one item exists in the array
-                ],
-
                 'staff_no' => [
                     Rule::requiredIf(function () use ($field) {
                         return in_array('staff_no', $field);
