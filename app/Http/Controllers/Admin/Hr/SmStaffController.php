@@ -292,6 +292,7 @@ class SmStaffController extends Controller
                 $staff->joining_letter = fileUpload($request->joining_letter, $designation);
                 $staff->other_document = fileUpload($request->other_document, $designation);
                 $staff->driving_license = $request->driving_license;
+                $staff->hourly_rate = $request->hourly_rate;
 
                 //Custom Field Start
                 if ($request->customF) {
@@ -603,7 +604,9 @@ class SmStaffController extends Controller
             if ($request->filled('role_type')) {
                 $staff->role_type = $request->role_type;
             }
-
+            if ($request->filled('hourly_rate')) {
+                $staff->hourly_rate = $request->hourly_rate;
+            }
 
             if ($request->filled('basic_salary')) {
                 $basic_salary = !empty($request->basic_salary) ? $request->basic_salary : 0;
