@@ -131,12 +131,12 @@
                                                                         </label>
                                                                         <select
                                                                             class="primary_select  form-control{{ $errors->has('role_type') ? ' is-invalid' : '' }}"
-                                                                            name="role_type" id="role_type">
+                                                                            name="role_type" id="role_type" onchange="getRoleTypeVal(this)">
                                                                             <option data-display="@lang('common.role_types') *"
                                                                                 value="">@lang('common.role_types')
                                                                                 *</option>
                                                                             @foreach ($role_types as $item)
-                                                                                <option value="{{ $item->id }}" {{$item->id == $editData->role_type ? 'selected' : '' }}>
+                                                                                <option value="{{ $item->id }}" {{$item->id == $editData->role_type ? 'selected' : '' }} data-name="{{ $item->title }}">
                                                                                     {{ $item->title }}
                                                                                 </option>
                                                                             @endforeach
@@ -826,6 +826,15 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
+
+
+                                                            <div class="col-lg-6 col-xl-3 mb-20 d-none" id="hourly_rate" >
+                                                                <!-- Second select box to display the selected role name -->
+                                                                <!-- Text input that will be displayed when "Freelancer" is selected -->
+                                                                    
+                                                                </div>
+
+
                                                             @if (in_array('basic_salary', $has_permission))
                                                                 <div class="col-lg-6 col-xl-3 mb-20">
                                                                     <div class="primary_input">
@@ -1358,6 +1367,31 @@
             }
         });
     });
+
+    function getRoleTypeVal(val) {
+    // Get the selected option element
+    var selectedOption = $(val).find('option:selected');
+    
+    // Get the 'data-name' attribute of the selected option
+    var selectedRoleName = selectedOption.data('name');   
+    // Clear the hourly rate section
+    $('#hourly_rate').html('');
+    
+    // If the selected role is 'Freelancer', show the input field for hourly rate
+    if (selectedRoleName.toLowerCase() === 'freelancer') {
+        $('#hourly_rate').html(`
+            <div class="primary_input">
+                <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
+                <input type="text" name="hourly_rate" class="primary_input_field form-control">
+            </div>
+        `);
+        $('#hourly_rate').removeClass('d-none');
+    } else {
+        // Hide the hourly rate section if the role is not 'Freelancer'
+        $('#hourly_rate').addClass('d-none');
+        $('#hourly_rate').html('');
+    }
+    }
 </script>
 @endsection
 @push('script')
