@@ -105,19 +105,24 @@ class CalendarStaffController extends Controller
             'staff_id' => 'required|integer',
             'date' => 'nullable|date', // Optional date filter
         ]);
-    
-        $staff_id = $request->staff_id;
-        $date = $request->date ?? now()->toDateString(); // Default to today's date if not provided
-    
-        $staff = SmStaff::where('id', $staff_id)->first();
-    
+
+        $staff_id = $validated['staff_id'];
+        $date = $validated['date'] ?? now()->toDateString(); // Default to today's date if not provided
+
+        // Fetch the staff member
+        $staff = SmStaff::find($staff_id);
+
         if (!$staff) {
             return response()->json(['error' => 'Staff not found'], 404);
         }
-    
+
         // Fetch the slot_ids associated with the staff_id
         $slots = StaffSlot::where('staff_id', $staff_id)->pluck('slot_id');
-    
+
+        if ($slots->isEmpty()) {
+            return response()->json(['error' => 'No slots found for the staff'], 404);
+        }
+
         // Fetch slot details and include their statuses for the specific date
         $slotDetails = SlotEmp::whereIn('id', $slots)
             ->select("id", "slot_day", "slot_start", "slot_end")
@@ -126,42 +131,44 @@ class CalendarStaffController extends Controller
                 // Get the scheduled event based on slot_id and staff_id
                 $scheduled = StaffScheduled::where('slot_id', $slot->id)
                     ->where('staff_id', $staff_id)
-                    ->whereDate('fromDate', '<=', $date) // Check if date is after or on fromDate
-                    ->whereDate('toDate', '>=', $date) // Check if date is before or on toDate
+                    ->where(function ($query) use ($date) {
+                    $query->whereDate('fromDate', '<=', $date)
+                        ->whereDate('toDate', '>=', $date);
+                })
                     ->first();
-    
+
                 // Determine the status based on the schedule
                 if ($scheduled) {
-                    // Slot has a scheduled event
                     if ($date < $scheduled->fromDate) {
-                        $slot->status = 'available'; // The event has not started yet, slot is available
+                        $slot->status = 'available'; // Event has not started yet
                     } elseif ($date == $scheduled->fromDate) {
-                        $slot->status = 'started'; // The event is just starting today
+                        $slot->status = 'started'; // Event starts today
                     } elseif ($date > $scheduled->fromDate && $date < $scheduled->toDate) {
-                        $slot->status = 'scheduled'; // The event is ongoing between fromDate and toDate
+                        $slot->status = 'scheduled'; // Event is ongoing
                     } elseif ($date == $scheduled->toDate) {
-                        $slot->status = 'ended'; // The event is ending today
+                        $slot->status = 'ended'; // Event ends today
                     } elseif ($date > $scheduled->toDate) {
-                        $slot->status = 'available'; // The event has ended, slot is available
+                        $slot->status = 'available'; // Event has ended
                     }
                 } else {
-                    // No schedule exists, slot is available
-                    $slot->status = 'available';
+                    $slot->status = 'available'; // No schedule, slot is available
                 }
-                
-    
+
                 // Attach the date to the slot for frontend reference
                 $slot->date = $date;
-    
+
                 return $slot;
             });
-    
+
+        // Return response with staff and slot details
         return response()->json([
             'staff' => $staff,
             'slots' => $slotDetails,
         ]);
     }
-    
+
+
+
 
 
     public function scheduleStaffEvent(Request $request)
@@ -170,6 +177,7 @@ class CalendarStaffController extends Controller
         $validated = $request->validate([
             'slot_id' => 'required', // Assuming staff_slots table has slots
             'staff_id' => 'required', // Assuming staff_slots table has slots
+            'courseName' => 'required',
             'fromDate' => 'required',
             'toDate' => 'required',
             'status' => 'required',
@@ -177,6 +185,7 @@ class CalendarStaffController extends Controller
         $scheduledEvent = StaffScheduled::create([
             'slot_id' => $validated['slot_id'],
             'staff_id' => $validated['staff_id'],
+            'courseName' => $validated['courseName'],
             'fromDate' => $validated['fromDate'],
             'toDate' => $validated['toDate'],
             'status' => $validated['status'],

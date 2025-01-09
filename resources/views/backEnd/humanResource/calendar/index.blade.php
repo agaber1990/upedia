@@ -73,7 +73,7 @@
                             <div class="col-lg-6 col-xl-3 mb-20">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="staff_id">@lang('hr.staff')</label>
-                                    <select class="form-control" name="staff_id" id="staff_id"
+                                    <select class="form-control staff_id" name="staff_id" id="staff_id"
                                         onchange="getStaffId(this.value)">
                                         <option data-display="@lang('hr.staff') *" value="">@lang('hr.staff') *
                                         </option>
@@ -84,7 +84,7 @@
                         </div>
                         <hr>
                         <!-- Legend -->
-                        <div class="mt-4 mb-3">
+                        {{-- <div class="mt-4 mb-3">
                             <ul class="list-inline">
                                 <li class="list-inline-item"><button
                                         class="btn btn-success btn-sm">@lang('hr.available')</button>
@@ -101,7 +101,7 @@
                                         class="btn btn-danger btn-sm">@lang('hr.ended')</button></li>
                             </ul>
                         </div>
-                        <hr>
+                        <hr> --}}
                         <!-- Calendar Section -->
                         <div id="calendar"></div>
 
@@ -156,11 +156,17 @@
         opacity: 0.8;
         /* Slightly transparent when hovered */
     }
+
+    .staff_id {
+        font-size: 12px !important;
+        min-height: 45px;
+        color: #415094 !important;
+        border: 1px solid #d4d4d4 !important;
+    }
 </style>
 @push('scripts')
     <!-- Include jQuery -->
     <!-- Include jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -208,6 +214,16 @@
         // Handle the event click for scheduling
         function handleEventClick(info) {
             const event = info.event;
+            console.log(info.event);
+
+            const from_date = info.event.start;
+            const formattedDate = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Africa/Cairo', // Set the timezone to Egypt
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).format(from_date);
+            
 
             // Extract event details
             const eventTitle = event.title; // Available time title
@@ -217,73 +233,85 @@
 
             // Use SweetAlert2 to prompt user for confirmation and date selection
             Swal.fire({
-                title: 'Are you sure?',
+                title: 'Course Info',
                 html: `
             <p style="margin-bottom: 14px;">Do you want to schedule: <strong>${eventTitle}</strong></p>
-            <div class="row">
+            <div class="row text-left">
+                          <div class="form-group col-md-12">
+                    <label style="font-size:14px">Okay, let's add course name</label>
+                    <input type="text" id="courseName" class="form-control"  />
+                </div>
                 <div class="form-group col-md-6">
                     <label style="font-size:14px">Select a From date</label>
-                    <input type="text" id="fromDate" class="form-control" placeholder="From date" />
+                    <input type="text" id="fromDate" class="form-control" />
                 </div>
                 <div class="form-group col-md-6">
                     <label style="font-size:14px">Select a To date</label>
-                    <input type="text" id="toDate" class="form-control" placeholder="To date" />
+                    <input type="text" id="toDate" class="form-control"  />
                 </div>
             </div>
-            <div class="row">
-                <div class="form-group col-md-12">
+            <div class="row text-left">
+                <div class="form-group col-md-12 ">
                     <label style="font-size:14px">Select status</label>
-                    <ul class="list-inline">
+                    <ul class="list-inline" style="font-size:14px">
                         <li class="list-inline-item">
-                            <input type="radio" name="status" value="available" id="statusAvailable" checked>
-                            <label for="statusAvailable" class="btn btn-success btn-sm">Available</label>
+                            <div>
+                                <input type="radio" name="status"  value="available" id="statusAvailable" style="width: 16px; height: 16px" checked>
+                            <label for="statusAvailable" class="text-success">Available</label>
+                                </div>
                         </li>
                         <li class="list-inline-item">
-                            <input type="radio" name="status" value="scheduled" id="statusScheduled">
-                            <label for="statusScheduled" class="btn btn-primary btn-sm">Scheduled</label>
+                            <input type="radio" name="status" value="scheduled" id="statusScheduled" style="width: 16px; height: 16px">
+                            <label for="statusScheduled" class="text-primary ">Scheduled</label>
                         </li>
                         <li class="list-inline-item">
-                            <input type="radio" name="status" value="reserved" id="statusReserved">
-                            <label for="statusReserved" class="btn btn-info btn-sm">Reserved</label>
+                            <input type="radio" name="status" value="reserved" id="statusReserved" style="width: 16px; height: 16px">
+                            <label for="statusReserved" class="text-info ">Reserved</label>
                         </li>
                         <li class="list-inline-item">
-                            <input type="radio" name="status" value="started" id="statusStarted">
-                            <label for="statusStarted" class="btn btn-warning btn-sm">Started</label>
+                            <input type="radio" name="status" value="started" id="statusStarted" style="width: 16px; height: 16px">
+                            <label for="statusStarted" class="text-warning ">Started</label>
                         </li>
                         <li class="list-inline-item">
-                            <input type="radio" name="status" value="ended" id="statusEnded">
-                            <label for="statusEnded" class="btn btn-danger btn-sm">Ended</label>
+                            <input type="radio" name="status" value="ended" id="statusEnded" style="width: 16px; height: 16px">
+                            <label for="statusEnded" class="text-danger ">Ended</label>
                         </li>
                     </ul>
                 </div>
             </div>`,
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, schedule it!',
+                confirmButtonText: 'Yes, Got it!',
                 cancelButtonText: 'No, cancel',
                 reverseButtons: true,
                 didOpen: () => {
-                    // Initialize the date pickers for both "From" and "To" dates
-                    flatpickr('#fromDate', {
+                    // Assign the event's start date to the "From" date input field using jQuery
+                    $('#fromDate').val(formattedDate);
+
+                    // Initialize the date picker for the "From" date
+                    $('#fromDate').flatpickr({
                         dateFormat: 'Y-m-d', // Set the format (YYYY-MM-DD)
                         minDate: 'today', // Disable past dates
-                        defaultDate: new Date().toISOString().split('T')[0], // Default to today's date
+                        defaultDate: formattedDate // Use the event's start date as the default
                     });
-                    flatpickr('#toDate', {
+
+                    // Initialize the date picker for the "To" date
+                    $('#toDate').flatpickr({
                         dateFormat: 'Y-m-d', // Set the format (YYYY-MM-DD)
-                        minDate: 'today', // Disable past dates
-                        defaultDate: new Date().toISOString().split('T')[0], // Default to today's date
+                        minDate: formattedDate // Disable past dates and align with "From" date
                     });
+
                 }
             }).then((result) => {
+                const courseName = document.getElementById('courseName').value; // Get "From" date
                 const fromDate = document.getElementById('fromDate').value; // Get "From" date
                 const toDate = document.getElementById('toDate').value; // Get "To" date
                 const status = document.querySelector('input[name="status"]:checked')?.value; // Get selected status
 
                 // Check if both dates and status are selected
-                if (result.isConfirmed && fromDate && toDate && status) {
+                if (result.isConfirmed && courseName && fromDate && toDate && status) {
                     // If confirmed and all required fields are selected, call the save function
-                    saveScheduledEvent(fromDate, toDate, status, slot_id, staff_id);
+                    saveScheduledEvent(courseName, fromDate, toDate, status, slot_id, staff_id);
                     Swal.fire({
                         title: "Good job!",
                         text: "You clicked the button!",
@@ -310,11 +338,12 @@
 
 
         // Save the scheduled event to the database
-        function saveScheduledEvent(fromDate, toDate, status, slot_id, staff_id) {
+        function saveScheduledEvent(courseName, fromDate, toDate, status, slot_id, staff_id) {
 
             const eventData = {
                 slot_id: slot_id,
                 staff_id: staff_id,
+                courseName: courseName,
                 fromDate: fromDate,
                 toDate: toDate,
                 status: status,
@@ -377,47 +406,51 @@
                 success: function(response) {
                     console.log(response); // Log the response to check its structure
 
-                    // Ensure calendar is available before calling any methods on it
-                    if (calendar) {
-                        // Clear existing events in the calendar
-                        calendar.removeAllEvents();
-                        console.log(response.staff.id);
+                    // Ensure the calendar object is initialized
+                    if (!calendar) {
+                        console.error("Calendar object is not initialized.");
+                        return;
+                    }
 
-                        // Add the fetched events (slots) to the calendar
+                    // Clear existing events in the calendar
+                    calendar.removeAllEvents();
+
+                    // Check if slots exist in the response
+                    if (response.slots && response.slots.length > 0) {
                         response.slots.forEach(function(slot) {
                             let dow = getDayOfWeek(slot.slot_day); // Convert day name to number
 
-                            // Get the start and end time in the correct format for FullCalendar
+                            // Format start and end times for the calendar
                             let startTime = formatTimeForCalendar(slot.slot_start, slot.slot_day);
                             let endTime = formatTimeForCalendar(slot.slot_end, slot.slot_day);
 
-                            // Format start and end time to 12-hour format with AM/PM
+                            // Format start and end times to 12-hour format for display
                             let formattedStart = formatTo12HourTime(slot.slot_start);
                             let formattedEnd = formatTo12HourTime(slot.slot_end);
 
                             // Determine event color based on slot status
                             let eventColor = getStatusColor(slot.status);
 
-                            // Add event to the calendar
+                            // Add the slot as an event to the calendar
                             calendar.addEvent({
-                                slot_id: `${slot.id}`,
-                                title: `${slot.status} Slot in ${formattedStart} - ${formattedEnd}`,
-                                start: startTime, // Slot start time in 24-hour format for calendar
-                                end: endTime, // Slot end time in 24-hour format for calendar
-                                daysOfWeek: [dow],
+                                slot_id: `${slot.id}`, // Unique identifier for the slot
+                                title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
+                                start: startTime, // Slot start time in 24-hour format
+                                end: endTime, // Slot end time in 24-hour format
+                                daysOfWeek: [dow], // Day of the week the slot applies to
                                 description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
-                                overlap: true,
+                                overlap: true, // Allow overlap with other events
                                 display: true,
                                 extendedProps: {
-                                    staff_id: response.staff.id // Add staff_id here
+                                    staff_id: response.staff.id // Add staff_id for reference
                                 },
                                 backgroundColor: eventColor, // Set background color based on status
                                 borderColor: eventColor, // Set border color based on status
-                                textColor: '#fff', // Text color for better contrast
+                                textColor: '#fff', // Ensure good contrast for text
                             });
                         });
                     } else {
-                        console.error("Calendar object is not initialized.");
+                        console.warn("No slots found for the selected staff.");
                     }
                 },
                 error: function() {

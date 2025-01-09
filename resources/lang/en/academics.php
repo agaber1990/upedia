@@ -14,6 +14,7 @@ return [
     'assigned' => 'Assigned',
     'number_of_child' => 'Number Of child',
     'subjects' => 'Subjects',
+    'no_staff_found' => 'No Staff Asssigned',
     'teacher' => 'Teacher',
     'class' => 'Class',
     'section' => 'Section',
