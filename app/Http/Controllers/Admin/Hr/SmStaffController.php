@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Hr;
 
 use App\Models\EmType;
 use App\Models\Track;
+use App\Models\TrackAssignedStaff;
 use App\Models\TrackType;
 use App\Models\SlotEmp;
 use App\Models\StaffSlot;
@@ -311,15 +312,21 @@ class SmStaffController extends Controller
                 $results = $staff->save();
                 $staff->toArray();
 
-          
-                $SpecializationsStaff = new SpecializationsStaff();
-                $SpecializationsStaff->track_id = $request->track_id;
-                $SpecializationsStaff->track_type_id = $request->track_type_id;
-                $SpecializationsStaff->levels = implode(',', $request->levels); 
-                $SpecializationsStaff->cat_id = $request->cat_id;
-                $SpecializationsStaff->staff_id = $staff->id;
+                foreach ($request->track_id as $trackId) {
+                    if (isset($request->levels[$trackId])) {
+                        $levels = implode(',', $request->levels[$trackId]);
+                        $track_type_ids = implode(',', $request->track_type_id);
+                        TrackAssignedStaff::create([
+                            'staff_id' => $staff->id,
+                            'cat_id' => $request->cat_id,
+                            'track_type_id' => $track_type_ids,
+                            'track_id' => $trackId,
+                            'levels' => $levels,
+                        ]);
+                    }
+                }
 
-                $SpecializationsStaff->save();
+
 
                 $st_role_id = $request->role_id;
                 $school_id = Auth::user()->school_id;
@@ -468,15 +475,28 @@ class SmStaffController extends Controller
             $tracks = Track::all();
             $role_types = EmType::all();
             $categories = Category::all();
-            $specializations_staff = SpecializationsStaff::where('staff_id', $id)->get();
-
+            $track_assigned_staff = TrackAssignedStaff::where('staff_id', $editData->id)->get();
             return view('backEnd.humanResource.editStaff', compact(
-                'specializations_staff',
-                'tracks','categories',
-                'role_types','selectedSlots', 'slots_emp', 
-                'track_types', 'editData', 'roles', 'departments', 
-                'designations', 'marital_ststus', 'max_staff_no', 'genders',
-                 'custom_fields', 'custom_filed_values', 'student', 'is_required', 'has_permission'));
+                'track_assigned_staff',
+                'tracks',
+                'categories',
+                'role_types',
+                'selectedSlots',
+                'slots_emp',
+                'track_types',
+                'editData',
+                'roles',
+                'departments',
+                'designations',
+                'marital_ststus',
+                'max_staff_no',
+                'genders',
+                'custom_fields',
+                'custom_filed_values',
+                'student',
+                'is_required',
+                'has_permission'
+            ));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -751,15 +771,37 @@ class SmStaffController extends Controller
 
 
 
-            $SpecializationsStaff =  SpecializationsStaff::where('staff_id', $request->staff_id)->first();
-            $SpecializationsStaff->track_id = $request->track_id;
-            $SpecializationsStaff->track_type_id = $request->track_type_id;
-            $SpecializationsStaff->levels = implode(',', $request->levels); 
-            $SpecializationsStaff->cat_id = $request->cat_id;
-            $SpecializationsStaff->staff_id = $staff->id;
+            $TrackAssignedStaff = TrackAssignedStaff::where('staff_id', $request->staff_id)->get();
 
-            // dd($SpecializationsStaff);
-            $SpecializationsStaff->save();
+            foreach ($request->track_id as $trackId) {
+                if (isset($request->levels[$trackId])) {
+                    $levels = implode(',', $request->levels[$trackId]);
+                    $track_type_ids = implode(',', $request->levels[$trackId]);
+
+                    // Check if a record already exists
+                    $existingRecord = $TrackAssignedStaff->where('track_id', $trackId)->first();
+
+                    if ($existingRecord) {
+                        // Update existing record
+                        $existingRecord->update([
+                            'cat_id' => $request->cat_id,
+                            'track_type_id' => $track_type_ids,
+                            'levels' => $levels,
+                        ]);
+                    } else {
+                        // Create a new record
+                        TrackAssignedStaff::create([
+                            'staff_id' => $request->staff_id, // Use staff_id from request
+                            'cat_id' => $request->cat_id,
+                            'track_type_id' => $track_type_ids,
+                            'track_id' => $trackId,
+                            'levels' => $levels,
+                        ]);
+                    }
+                }
+            }
+
+            // dd($TrackAssignedStaff);
 
 
             //Custom Field Start
@@ -850,6 +892,16 @@ class SmStaffController extends Controller
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
+    }
+
+
+    public function getTracksByCategory($cat_id)
+    {
+        // Fetch tracks by category ID
+        $tracks = Track::where('cat_id', $cat_id)->get();
+
+        // Return a JSON response
+        return response()->json($tracks);
     }
     public function viewStaff($id)
     {

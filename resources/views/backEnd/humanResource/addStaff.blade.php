@@ -1117,10 +1117,8 @@
                                                                 </label>
                                                                 <select
                                                                     class="primary_select  form-control{{ $errors->has('track_type_id') ? ' is-invalid' : '' }}"
-                                                                    name="track_type_id" id="track_type_id">
-                                                                    <option data-display="@lang('academics.track_types') *"
-                                                                        value="">@lang('academics.track_types')
-                                                                        *</option>
+                                                                    name="track_type_id[]" id="track_type_id" multiple>
+                                                              
                                                                     @foreach ($track_types as $tack)
                                                                         <option value="{{ $tack->id }}">
                                                                             {{ $tack->name }}</option>
@@ -1143,27 +1141,19 @@
                                                                 </label>
                                                                 <select
                                                                     class="primary_select form-control {{ $errors->has('track_id') ? 'is-invalid' : '' }}"
-                                                                    name="track_id[]"
-                                                                    id="track_id"
-                                                                    multiple
-                                                                >
-                                                                    @foreach ($tracks as $track)
-                                                                        <option value="{{ $track->id }}"
-                                                                                data-catId="{{ $track->cat_id }}"
-                                                                                data-level="{{ $track->level_number }}">
-                                                                            {{ app()->getLocale() == 'en' ? $track->track_name_en : $track->track_name_ar }}
-                                                                        </option>
-                                                                    @endforeach
+                                                                    name="track_id[]" id="track_id" multiple>
+
                                                                 </select>
-                                                        
+
                                                                 @if ($errors->has('track_id'))
-                                                                    <span class="text-danger invalid-select" role="alert">
+                                                                    <span class="text-danger invalid-select"
+                                                                        role="alert">
                                                                         {{ $errors->first('track_id') }}
                                                                     </span>
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                        
+
 
 
 
@@ -1199,19 +1189,48 @@
     <script>
         $(document).ready(function() {
 
+            // Listen for changes on the category dropdown
             $('#cat_id').on('change', function() {
-                const selectedCatId = $(this).val();
-                console.log(selectedCatId);
-                
-                $('#track_id option').each(function() {
-                    if ($(this).data('catId') == selectedCatId || selectedCatId === '') {
-                        $(this).show(); // Show relevant options
-                    } else {
-                        $(this).hide(); // Hide irrelevant options
-                        $(this).prop('selected', false); // Ensure hidden options are not selected
-                    }
-                });
+                $('#checkbox-container').addClass('d-none');
+
+                var catId = $(this).val(); // Get selected category ID
+                const trackSelect = $('#track_id');
+
+                if (catId) {
+                    // Make AJAX request to fetch tracks
+                    $.ajax({
+                        url: '/tracks-by-category/' + catId,
+                        type: 'GET',
+                        success: function(data) {
+                            // Clear the tracks dropdown
+                            trackSelect.empty();
+
+                            // Populate the dropdown with the fetched tracks
+                            data.forEach(function(track) {
+                                var optionText = (window.locale === 'en') ?
+                                    track.track_name_en :
+                                    track.track_name_ar;
+
+                                    trackSelect.append(
+                                    '<option value="' + track.id +
+                                    '" data-level="' + track.level_number + '">' +
+                                    optionText + '</option>'
+                                );
+                            });
+                            trackSelect.niceSelect('update');
+
+                        },
+                        error: function() {
+                            alert('Failed to fetch tracks. Please try again.');
+                        }
+                    });
+                } else {
+                    // Clear the tracks dropdown if no category is selected
+                    $('#track_id').empty();
+                }
             });
+
+
 
 
             $(document).on('change', '.cutom-photo', function() {
@@ -1353,8 +1372,5 @@
                 $('#hourly_rate').html('');
             }
         }
-
-
-    
     </script>
 @endsection

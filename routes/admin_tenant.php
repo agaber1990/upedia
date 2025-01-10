@@ -1007,6 +1007,8 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
         Route::put('tracks/{id}', 'Admin\Academics\TrackController@update')->name('tracks_update')->middleware('userRolePermission:tracks_edit');
         Route::delete('tracks/{id}', 'Admin\Academics\TrackController@destroy')->name('tracks_delete')->middleware('userRolePermission:tracks_delete');
         
+
+
         // pricing_plan_type_store Routes
         Route::get('pricing_plan_types', 'Admin\Academics\PricingPlanTypeController@index')->name('pricing_plan_types')->middleware('userRolePermission:pricing_plan_type');
         Route::post('pricing_plan_types', 'Admin\Academics\PricingPlanTypeController@store')->name('pricing_plan_type_store')->middleware('userRolePermission:pricing_plan_type_store');
@@ -1528,6 +1530,7 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
         Route::get('delete-staff-timeline-view/{id}', 'Admin\Hr\SmStaffController@deleteStaffTimelineView')->name('delete-staff-timeline-view');
         Route::get('delete-staff-timeline/{id}', 'Admin\Hr\SmStaffController@deleteStaffTimeline')->name('delete-staff-timeline');
 
+        Route::get('/tracks-by-category/{cat_id}', 'Admin\Hr\SmStaffController@getTracksByCategory')->name('getTracksByCategory');
 
         //Staff Attendance
         Route::get('staff-attendance', ['as' => 'staff_attendance', 'uses' => 'Admin\Hr\SmStaffAttendanceController@staffAttendance'])->middleware('userRolePermission:staff_attendance');
