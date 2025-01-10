@@ -39,7 +39,7 @@
                                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => ['slotemployee-update', $slotemployee->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) }}
                             @else
                                 @if (userPermission('slotemployee-store'))
-                                    {{ Form::open([ 
+                                    {{ Form::open([
                                         'class' => 'form-horizontal',
                                         'files' => true,
                                         'route' => 'slotemployee-store',
@@ -62,40 +62,41 @@
                                     <div class="row mt-25">
                                         @php
                                             if (isset($slotemployee)) {
-                                                $slotemployee->slot_day = explode(",",$slotemployee->slot_day);
+                                                $slotemployee->slot_day = explode(',', $slotemployee->slot_day);
                                             }
                                         @endphp
                                         <div class="col-lg-12">
                                             <label class="primary_input_label" for="">@lang('hr.select_slot_day')
                                                 <span class="text-danger"> *</span></label>
                                             <!-- Slot Name Selection (Days of the Week) -->
-                                            <select class="primary_select form-control {{ $errors->has('slot_day') ? ' is-invalid' : '' }}" 
-                                                    id="select_slot_day" name="slot_day[]" multiple>
-                                                <option value="monday" 
+                                            <select
+                                                class="primary_select form-control {{ $errors->has('slot_day') ? ' is-invalid' : '' }}"
+                                                id="select_slot_day" name="slot_day[]" multiple>
+                                                <option value="monday"
                                                     {{ isset($slotemployee) && in_array('monday', $slotemployee->slot_day) ? 'selected' : '' }}>
                                                     @lang('common.monday')
                                                 </option>
-                                                <option value="tuesday" 
+                                                <option value="tuesday"
                                                     {{ isset($slotemployee) && in_array('tuesday', $slotemployee->slot_day) ? 'selected' : '' }}>
                                                     @lang('common.tuesday')
                                                 </option>
-                                                <option value="wednesday" 
+                                                <option value="wednesday"
                                                     {{ isset($slotemployee) && in_array('wednesday', $slotemployee->slot_day) ? 'selected' : '' }}>
                                                     @lang('common.wednesday')
                                                 </option>
-                                                <option value="thursday" 
+                                                <option value="thursday"
                                                     {{ isset($slotemployee) && in_array('thursday', $slotemployee->slot_day) ? 'selected' : '' }}>
                                                     @lang('common.thursday')
                                                 </option>
-                                                <option value="friday" 
+                                                <option value="friday"
                                                     {{ isset($slotemployee) && in_array('friday', $slotemployee->slot_day) ? 'selected' : '' }}>
                                                     @lang('common.friday')
                                                 </option>
-                                                <option value="saturday" 
+                                                <option value="saturday"
                                                     {{ isset($slotemployee) && in_array('saturday', $slotemployee->slot_day) ? 'selected' : '' }}>
                                                     @lang('common.saturday')
                                                 </option>
-                                                <option value="sunday" 
+                                                <option value="sunday"
                                                     {{ isset($slotemployee) && in_array('sunday', $slotemployee->slot_day) ? 'selected' : '' }}>
                                                     @lang('common.sunday')
                                                 </option>
@@ -107,7 +108,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    
+
 
                                     <!-- Slot Start Date -->
                                     <div class="row">
@@ -200,6 +201,7 @@
 
                                             <tr>
                                                 <th>@lang('hr.slotemployee')</th>
+                                                <th>@lang('hr.slot_day')</th>
                                                 <th>@lang('hr.slot_start')</th>
                                                 <th>@lang('hr.slot_end')</th>
                                                 <th>@lang('common.action')</th>
@@ -208,10 +210,20 @@
 
                                         <tbody>
                                             @foreach ($slotemployees as $item)
+                                              
                                                 <tr>
                                                     <td>{{ $item->slot_day }}</td>
-                                                    <td>{{ $item->slot_start }}</td>
-                                                    <td>{{ $item->slot_end }}</td>
+                                                    <td>
+                                                    <td>
+                                                        {{ $item->slot_start ? formatTime($item->slot_start) : 'N/A' }}
+
+                                                    </td>
+
+                                                    </td>
+                                                    <td>
+                                                        {{ $item->slot_end ? formatTime($item->slot_end) : 'N/A' }}
+                                                    </td>
+
                                                     <td>
                                                         <x-drop-down>
                                                             @if (userPermission('slotemployee-edit'))

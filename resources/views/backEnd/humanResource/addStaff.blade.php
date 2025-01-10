@@ -150,12 +150,14 @@
                                                                 </label>
                                                                 <select
                                                                     class="primary_select  form-control{{ $errors->has('role_type') ? ' is-invalid' : '' }}"
-                                                                    name="role_type" id="role_type" onchange="getRoleTypeVal(this)">
+                                                                    name="role_type" id="role_type"
+                                                                    onchange="getRoleTypeVal(this)">
                                                                     <option data-display="@lang('common.role_types') *"
                                                                         value="">@lang('common.role_types')
                                                                         *</option>
                                                                     @foreach ($role_types as $item)
-                                                                        <option value="{{ $item->id }}" data-name="{{ $item->title }}">
+                                                                        <option value="{{ $item->id }}"
+                                                                            data-name="{{ $item->title }}">
                                                                             {{ $item->title }}
                                                                         </option>
                                                                     @endforeach
@@ -712,10 +714,10 @@
                                                         </div>
 
 
-                                                        <div class="col-lg-6 col-xl-3 mb-20 d-none" id="hourly_rate" >
-                                                        <!-- Second select box to display the selected role name -->
-                                                        <!-- Text input that will be displayed when "Freelancer" is selected -->
-                                                            
+                                                        <div class="col-lg-6 col-xl-3 mb-20 d-none" id="hourly_rate">
+                                                            <!-- Second select box to display the selected role name -->
+                                                            <!-- Text input that will be displayed when "Freelancer" is selected -->
+
                                                         </div>
 
                                                         <div class="col-lg-6 col-xl-3 mb-20">
@@ -1082,7 +1084,33 @@
                                             <div class="col-lg-12 p-0">
                                                 <div class="form-section">
                                                     <div class="row">
-                                                        <div class="col-lg-6 col-xl-3 mb-20">
+                                                        <div class="col-lg-6 col-xl-3 ">
+                                                            <div class="primary_input">
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('common.categories')
+                                                                </label>
+                                                                <select
+                                                                    class="primary_select  form-control {{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
+                                                                    name="cat_id" id="cat_id">
+                                                                    <option data-display="@lang('common.categories') *"
+                                                                        value="">@lang('common.categories')
+                                                                        *</option>
+                                                                    @foreach ($categories as $item)
+                                                                        <option value="{{ $item->id }}">
+                                                                            {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+
+                                                                @if ($errors->has('cat_id'))
+                                                                    <span class="text-danger invalid-select"
+                                                                        role="alert">
+                                                                        {{ $errors->first('cat_id') }}
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-xl-3 ">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label"
                                                                     for="">@lang('academics.track_types')
@@ -1107,67 +1135,44 @@
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                       
-                                                        <div class="col-lg-6 col-xl-3 mb-20">
-                                                            <div class="primary_input">
-                                                                <label class="primary_input_label"
-                                                                    for="">@lang('common.categories')
-                                                                </label>
-                                                                <select
-                                                                    class="primary_select  form-control{{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
-                                                                    name="cat_id" id="cat_id">
-                                                                    <option data-display="@lang('common.categories') *"
-                                                                        value="">@lang('common.categories')
-                                                                        *</option>
-                                                                    @foreach ($categories as $item)
-                                                                        <option value="{{ $item->id }}">
-                                                                            {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
 
-                                                                @if ($errors->has('branch_id'))
-                                                                    <span class="text-danger invalid-select"
-                                                                        role="alert">
-                                                                        {{ $errors->first('branch_id') }}
-                                                                    </span>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6 col-xl-3 mb-20">
+                                                        <div class="col-lg-6 col-xl-3">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label" for="">
                                                                     @lang('academics.tracks')
                                                                 </label>
                                                                 <select
-                                                                    class="primary_select form-control{{ $errors->has('track_level') ? ' is-invalid' : '' }}"
-                                                                    name="track_id" id="track_level">
-                                                                    <option data-display="@lang('academics.tracks') *"
-                                                                        value="">
-                                                                        @lang('academics.tracks') *
-                                                                    </option>
-                                                                    @foreach ($tracks as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            data-level="{{ $item->level_number }}">
-                                                                            {{ app()->getLocale() == 'en' ? $item->track_name_en : $item->track_name_ar }}
+                                                                    class="primary_select form-control {{ $errors->has('track_id') ? 'is-invalid' : '' }}"
+                                                                    name="track_id[]"
+                                                                    id="track_id"
+                                                                    multiple
+                                                                >
+                                                                    @foreach ($tracks as $track)
+                                                                        <option value="{{ $track->id }}"
+                                                                                data-catId="{{ $track->cat_id }}"
+                                                                                data-level="{{ $track->level_number }}">
+                                                                            {{ app()->getLocale() == 'en' ? $track->track_name_en : $track->track_name_ar }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
-
-                                                                @if ($errors->has('branch_id'))
-                                                                    <span class="text-danger invalid-select"
-                                                                        role="alert">
-                                                                        {{ $errors->first('branch_id') }}
+                                                        
+                                                                @if ($errors->has('track_id'))
+                                                                    <span class="text-danger invalid-select" role="alert">
+                                                                        {{ $errors->first('track_id') }}
                                                                     </span>
                                                                 @endif
                                                             </div>
                                                         </div>
+                                                        
+
+
 
                                                         <!-- Container for dynamically generated checkboxes -->
-                                                        <div id="checkbox-container"
+                                                        <div id="checkbox-container" class="col-md-12 d-none mt-2"
                                                             class="col-lg-12 mt-20 border rounded p-3 bg-light">
+                                                            <hr />
                                                             <h5 class="text-primary">@lang('academics.levels')</h5>
-                                                            <div class="row g-2" id="checkbox-row">
+                                                            <div id="checkbox-row">
                                                                 <!-- Checkboxes will be added here -->
                                                             </div>
                                                         </div>
@@ -1193,6 +1198,22 @@
 @section('script')
     <script>
         $(document).ready(function() {
+
+            $('#cat_id').on('change', function() {
+                const selectedCatId = $(this).val();
+                console.log(selectedCatId);
+                
+                $('#track_id option').each(function() {
+                    if ($(this).data('catId') == selectedCatId || selectedCatId === '') {
+                        $(this).show(); // Show relevant options
+                    } else {
+                        $(this).hide(); // Hide irrelevant options
+                        $(this).prop('selected', false); // Ensure hidden options are not selected
+                    }
+                });
+            });
+
+
             $(document).on('change', '.cutom-photo', function() {
                 let v = $(this).val();
                 let v1 = $(this).data("id");
@@ -1245,61 +1266,95 @@
         });
     </script>
 
-<script>
-    $(document).ready(function () {
-        $('#track_level').on('change', function () {
-            const selectedOption = $(this).find(':selected'); // Get the selected option
-            const levelNumber = selectedOption.data('level'); // Get the data-level attribute
-            const $checkboxContainer = $('#checkbox-row'); // Target the checkbox row
+    <script>
+        $(document).ready(function() {
+            $('#track_id').on('change', function() {
+                const selectedOptions = $(this).find(':selected'); // Get all selected options
+                const $checkboxContainer = $('#checkbox-row'); // Target the checkbox row
+                console.log(selectedOptions.length);
 
-            // Clear existing checkboxes
-            $checkboxContainer.empty();
+                if (selectedOptions.length > 0) {
+                    // Hide the checkbox container message if tracks are selected
+                    $('#checkbox-container').removeClass('d-none');
 
-            // Generate checkboxes if levelNumber exists
-            if (levelNumber) {
-                for (let i = 1; i <= levelNumber; i++) {
-                    const checkboxHTML = `
-                        <div class="col-lg-4 col-md-4">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="level${i}" name="levels[]" value="${i}">
-                                <label class="form-check-label text-dark fw-bold" for="level${i}">
-                                    <i class="bi bi-check-circle-fill text-success me-1"></i> Level ${i}
-                                </label>
-                            </div>
-                        </div>`;
-                    $checkboxContainer.append(checkboxHTML); // Append checkbox to the container
+                    // Clear existing checkboxes
+                    $checkboxContainer.empty();
+
+                    // Iterate through selected options to create checkboxes for each track
+                    selectedOptions.each(function() {
+                        const trackId = $(this).val(); // Get track ID
+                        const trackName = $(this).text(); // Get track name
+                        const levelNumber = parseInt($(this).data('level'),
+                            10); // Get the level number
+
+                        if (levelNumber && levelNumber > 0) {
+                            // Add a header for the track
+                            const trackHeader = `
+                        <div class="mt-4">
+                            <h5 class="fw-bold text-dark">${trackName}</h5>
+                        </div>
+                        <div class="row" id="track-${trackId}-levels"></div>
+                    `;
+                            $checkboxContainer.append(trackHeader);
+
+                            const $trackLevelContainer = $(`#track-${trackId}-levels`);
+
+                            // Generate checkboxes for levels from 1 to levelNumber
+                            for (let i = 1; i <= levelNumber; i++) {
+                                const checkboxHTML = `
+                            <div class="col-lg-4 col-md-4">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="track${trackId}-level${i}" name="levels[${trackId}][]" value="${i}">
+                                    <label class="form-check-label text-dark fw-bold" for="track${trackId}-level${i}">
+                                        <i class="bi bi-check-circle-fill text-success me-1"></i> Level ${i}
+                                    </label>
+                                </div>
+                            </div>`;
+                                $trackLevelContainer.append(checkboxHTML);
+                            }
+                        } else {
+                            console.warn(
+                                `Invalid or missing level number for Track ID: ${trackId}`);
+                        }
+                    });
+                } else {
+                    // Show the checkbox container message if no tracks are selected
+                    $('#checkbox-container').addClass('d-none');
+                    $checkboxContainer.empty(); // Ensure checkboxes are cleared
                 }
-            }
+            });
         });
-    });
 
-   
-    function getRoleTypeVal(val) {
-    // Get the selected option element
-    var selectedOption = $(val).find('option:selected');
-    
-    // Get the 'data-name' attribute of the selected option
-    var selectedRoleName = selectedOption.data('name');   
-    // Clear the hourly rate section
-    $('#hourly_rate').html('');
-    
-    // If the selected role is 'Freelancer', show the input field for hourly rate
-    if (selectedRoleName.toLowerCase() === 'freelancer') {
-        $('#hourly_rate').html(`
+
+
+
+
+        function getRoleTypeVal(val) {
+            // Get the selected option element
+            var selectedOption = $(val).find('option:selected');
+
+            // Get the 'data-name' attribute of the selected option
+            var selectedRoleName = selectedOption.data('name');
+            // Clear the hourly rate section
+            $('#hourly_rate').html('');
+
+            // If the selected role is 'Freelancer', show the input field for hourly rate
+            if (selectedRoleName.toLowerCase() === 'freelancer') {
+                $('#hourly_rate').html(`
             <div class="primary_input">
                 <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
                 <input type="text" name="hourly_rate" class="primary_input_field form-control">
             </div>
         `);
-        $('#hourly_rate').removeClass('d-none');
-    } else {
-        // Hide the hourly rate section if the role is not 'Freelancer'
-        $('#hourly_rate').addClass('d-none');
-        $('#hourly_rate').html('');
-    }
-}
+                $('#hourly_rate').removeClass('d-none');
+            } else {
+                // Hide the hourly rate section if the role is not 'Freelancer'
+                $('#hourly_rate').addClass('d-none');
+                $('#hourly_rate').html('');
+            }
+        }
 
 
-</script>
     
+    </script>
 @endsection

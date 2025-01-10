@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Academics;
 
 use App\Models\{Track, Level, TrackType};
+use App\Models\Category;
 use App\tableList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -20,8 +21,9 @@ class TrackController extends Controller
             $tracks = Track::get();
             $levels = Level::all();
             $valid_for = TrackType::all();
+            $categories = Category::all();
             
-            return view('backEnd.academics.tracks', compact('tracks','levels','valid_for' ));
+            return view('backEnd.academics.tracks', compact('tracks','levels','valid_for','categories' ));
         } catch (\Exception $e) {
 
             Toastr::error('Operation Failed', 'Failed');
@@ -44,6 +46,7 @@ class TrackController extends Controller
     {
         // Create a new track instance and save the data
         $track = new Track();
+        $track->cat_id = $request->cat_id;
         $track->track_name_en = $request->track_name_en;
         $track->track_name_ar = $request->track_name_ar;
         $track->level_number = $request->level_number;
@@ -68,8 +71,9 @@ class TrackController extends Controller
         $track = Track::find($id);
         $levels = Level::all();
         $valid_for = TrackType::all();
-        
-        return view('backEnd.academics.tracks', compact('tracks','levels','valid_for','track'));
+        $categories = Category::all();
+
+        return view('backEnd.academics.tracks', compact('tracks','levels','valid_for','track','categories'));
     }
 
     /**
@@ -91,6 +95,7 @@ class TrackController extends Controller
     {
         // Update track details
         $track = Track::find($id);
+        $track->cat_id = $request->cat_id;
         $track->track_name_en = $request->track_name_en;
         $track->track_name_ar = $request->track_name_ar;
         $track->level_number = $request->level_number;

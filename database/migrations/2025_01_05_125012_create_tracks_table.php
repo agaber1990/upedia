@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tracks', function (Blueprint $table) {
             $table->id();
+            $table->string('cat_id'); // Foreign key to tracks
             $table->string('track_name_en'); // Foreign key to tracks
             $table->string('track_name_ar'); // Foreign key to tracks
             $table->integer('level_number');

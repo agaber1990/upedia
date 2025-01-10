@@ -18,7 +18,7 @@
 
     <section class="admin-visitor-area up_st_admin_visitor">
         <div class="container-fluid p-0">
-         
+
 
             <div class="row">
                 <!-- Form Section -->
@@ -49,6 +49,33 @@
                         @endif
                         <div class="add-visitor">
                             <!-- Track Name EN -->
+
+                            <div class="row mt-25">
+                                <div class="col-lg-12">
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="">@lang('common.categories')
+                                        </label>
+                                        <select
+                                            class="primary_select  form-control {{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
+                                            name="cat_id" id="cat_id">
+                                            <option data-display="@lang('common.categories') *" value="">@lang('common.categories')
+                                                *</option>
+                                            @foreach ($categories as $item)
+                                                <option value="{{ $item->id }}"
+                                                    {{ old('cat_id', isset($track) ? $track->id : '') == $item->id ? 'selected' : '' }}>
+                                                    {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        @if ($errors->has('cat_id'))
+                                            <span class="text-danger invalid-select" role="alert">
+                                                {{ $errors->first('cat_id') }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row mt-25">
                                 <div class="col-lg-12">
                                     <div class="primary_input">
@@ -160,10 +187,6 @@
                                             {{ old('schedule', isset($track) ? $track->schedule : '') == 'once' ? 'selected' : '' }}>
                                             @lang('academics.once')
                                         </option>
-                                        <option value="weekly"
-                                            {{ old('schedule', isset($track) ? $track->schedule : '') == 'weekly' ? 'selected' : '' }}>
-                                            @lang('academics.per_week')
-                                        </option>
                                         <option value="twice"
                                             {{ old('schedule', isset($track) ? $track->schedule : '') == 'twice' ? 'selected' : '' }}>
                                             @lang('academics.twice')
@@ -186,7 +209,7 @@
                                         id="valid_for" name="valid_for[]" multiple>
                                         @foreach ($valid_for as $type)
                                             <option value="{{ $type->id }}"
-                                                {{ in_array($type->id, old('valid_for', isset($track) ? json_decode($track->valid_for,true) : [])) ? 'selected' : '' }}>
+                                                {{ in_array($type->id, old('valid_for', isset($track) ? json_decode($track->valid_for, true) : [])) ? 'selected' : '' }}>
                                                 {{ $type->name }}
                                             </option>
                                         @endforeach

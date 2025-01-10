@@ -109,6 +109,33 @@ if (!function_exists('activeSmsGateway')) {
         return $activeSmsGateway;
     }
 }
+
+function formatTime($timeString)
+{
+    // Ensure the input is not empty and is a valid time string
+    if (!$timeString || !preg_match('/^\d{2}:\d{2}:\d{2}$/', $timeString)) {
+        return 'Invalid Time Format';
+    }
+
+    // Split the time string into parts
+    $timeParts = explode(':', $timeString);
+
+    if (count($timeParts) === 3) {
+        [$hours, $minutes, $seconds] = $timeParts;
+
+        // Validate that the parts are numeric and within valid ranges
+        if (
+            is_numeric($hours) && $hours >= 0 && $hours <= 23 &&
+            is_numeric($minutes) && $minutes >= 0 && $minutes <= 59 &&
+            is_numeric($seconds) && $seconds >= 0 && $seconds <= 59
+        ) {
+            return \Carbon\Carbon::createFromTime((int)$hours, (int)$minutes, (int)$seconds)->format('h:i A');
+        }
+    }
+
+    return 'Invalid Time Format';
+}
+
 if (!function_exists('youtubeVideo')) {
     function youtubeVideo($video_url)
     {
@@ -153,7 +180,6 @@ function sendSMSApi($to_mobile, $sms, $id)
     } //end Clickatell
 
     //start Himalayasms
-
     else if ($activeSmsGateway->gateway_name == 'Himalayasms') {
         $client = new Client();
         $request = $client->get("https://sms.techhimalaya.com/base/smsapi/index.php", [
@@ -182,7 +208,14 @@ function sendSMSApi($to_mobile, $sms, $id)
 
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "GET", CURLOPT_SSL_VERIFYHOST => 0, CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
         ));
         $response = curl_exec($curl);
         $err = curl_error($curl);
@@ -239,7 +272,6 @@ function sendSMSBio($to_mobile, $sms)
         $clickatell = new \Clickatell\Rest();
         $result = $clickatell->sendMessage(['to' => $to_mobile, 'content' => $sms]);
     } //end Clickatell
-
     else if ($activeSmsGateway->gateway_name == 'Msg91') {
         $msg91_authentication_key_sid = $activeSmsGateway->msg91_authentication_key_sid;
         $msg91_sender_id = $activeSmsGateway->msg91_sender_id;
@@ -252,7 +284,14 @@ function sendSMSBio($to_mobile, $sms)
 
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "GET", CURLOPT_SSL_VERIFYHOST => 0, CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
         ));
         $response = curl_exec($curl);
         $err = curl_error($curl);
@@ -297,7 +336,7 @@ function sendSMSBio($to_mobile, $sms)
         CURLOPT_MAXREDIRS => 10,
         CURLOPT_TIMEOUT => 30,
         CURLOPT_HTTP_VERSION =>
-        CURL_HTTP_VERSION_1_1,
+            CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => "GET",
         CURLOPT_SSL_VERIFYHOST => 0,
         CURLOPT_SSL_VERIFYPEER => 0,
@@ -634,9 +673,9 @@ if (!function_exists('send_mail')) {
         if (!$templete) {
             return;
         }
-        
+
         $school_id = Auth::check() && saasSettings('email_settings') ? Auth::user()->school_id : 1;
-        
+
         $setting = SmEmailSetting::where('school_id', $school_id)->where('active_status', 1)->first();
 
         if (!$setting) {
@@ -661,8 +700,8 @@ if (!function_exists('send_mail')) {
                         ->where('mail_driver', 'smtp')
                         ->first() :
                         DB::table('sm_email_settings')
-                        ->where('mail_driver', 'smtp')
-                        ->first();
+                            ->where('mail_driver', 'smtp')
+                            ->first();
 
                     if ($config) {
                         Config::set('mail.default', 'smtp');
@@ -719,8 +758,8 @@ if (!function_exists('send_mail_without_template')) {
                         ->where('mail_driver', 'smtp')
                         ->first() :
                         DB::table('sm_email_settings')
-                        ->where('mail_driver', 'smtp')
-                        ->first();
+                            ->where('mail_driver', 'smtp')
+                            ->first();
 
                     if ($config) {
                         Config::set('mail.driver', $config->mail_driver);
@@ -739,7 +778,7 @@ if (!function_exists('send_mail_without_template')) {
                 });
             }
             if ($email_driver == "php") {
-                $message = (string)$view;
+                $message = (string) $view;
                 $headers = "From: <$sender_email> \r\n";
                 $headers .= "Reply-To: $receiver_name <$reciver_email> \r\n";
                 $headers .= "MIME-Version: 1.0\r\n";
@@ -893,7 +932,7 @@ if (!function_exists('getFinalResult')) {
             }
             $percentage = $custom_result_setup->$percentage;
             $term_gpa = array_sum($all_subjects_gpa) / $assigned_subject->count();
-            $percentage = number_format((float)$percentage, 2, '.', '');
+            $percentage = number_format((float) $percentage, 2, '.', '');
             $new_width = ($percentage / 100) * $term_gpa;
             return $new_width;
         } catch (\Exception $e) {
@@ -1333,7 +1372,7 @@ if (!function_exists('generalSetting')) {
             if (app()->bound('school')) {
                 $generalSetting = SmGeneralSettings::where('school_id', app('school')->id)->first();
             } elseif (request('school_id')) {
-                $generalSetting =  SmGeneralSettings::where('school_id', request('school_id'))->first();
+                $generalSetting = SmGeneralSettings::where('school_id', request('school_id'))->first();
             } else {
                 // $generalSetting = Auth::check() ? SmGeneralSettings::where('school_id', Auth::user()->school_id)->first() : SmGeneralSettings::where('school_id',app('school')->id)->first();
                 $generalSetting = Auth::check() ? SmGeneralSettings::where('school_id', Auth::user()->school_id)->first() : SmGeneralSettings::where('school_id', 1)->first();
@@ -2273,7 +2312,14 @@ if (!function_exists('send_sms')) {
 
                     curl_setopt_array($curl, array(
                         CURLOPT_URL => $url,
-                        CURLOPT_RETURNTRANSFER => true, CURLOPT_ENCODING => "", CURLOPT_MAXREDIRS => 10, CURLOPT_TIMEOUT => 30, CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1, CURLOPT_CUSTOMREQUEST => "GET", CURLOPT_SSL_VERIFYHOST => 0, CURLOPT_SSL_VERIFYPEER => 0,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 30,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "GET",
+                        CURLOPT_SSL_VERIFYHOST => 0,
+                        CURLOPT_SSL_VERIFYPEER => 0,
                     ));
 
                     $response = curl_exec($curl);
@@ -2685,7 +2731,10 @@ const WEEK_DAYS_BY_NAME = [
 
 const PERMITTED_MODULE = [
     //keep it all lower case.
-    'lead', 'lms', 'university', 'alumni'
+    'lead',
+    'lms',
+    'university',
+    'alumni'
 ];
 
 
@@ -3371,7 +3420,7 @@ if (!function_exists('get_mobile_sms_data')) {
     function get_mobile_sms_data()
     {
         $school_id = Auth::check() && saasSettings('sms_settings') ? Auth::user()->school_id : 1;
-        $active_gateway = SmSmsGateway::where('active_status', 1)->where('gateway_name','Mobile SMS')->where('school_id', $school_id)->first();
+        $active_gateway = SmSmsGateway::where('active_status', 1)->where('gateway_name', 'Mobile SMS')->where('school_id', $school_id)->first();
         return $active_gateway;
     }
 }
@@ -3567,7 +3616,7 @@ if (!function_exists('send_notification')) {
             if (in_array('Email', $active_dest)) {
                 $body = short_code_messege($notification->template[$reciver]['Email'], $data);
                 $view = view('backEnd.email.emailBody', compact('body'));
-                $message = (string)$view;
+                $message = (string) $view;
                 $headers = "From: <$user->email> \r\n";
                 $headers .= "Reply-To: $user->full_name <$user->email> \r\n";
                 $headers .= "MIME-Version: 1.0\r\n";
@@ -3639,9 +3688,9 @@ if (!function_exists('feesCarryForward')) {
                     $fees_type->academic_id = getAcademicId();
                     $fees_type->save();
                 }
-                $data['feesTypes'] = array_merge($feesType, [(int)$fees_type->id]);
-                $data['amount'] = array_merge($payableAmount, [(int)$dueBalance]);
-                $data['sub_total'] = array_merge($sub_total, [(int)$dueBalance]);
+                $data['feesTypes'] = array_merge($feesType, [(int) $fees_type->id]);
+                $data['amount'] = array_merge($payableAmount, [(int) $dueBalance]);
+                $data['sub_total'] = array_merge($sub_total, [(int) $dueBalance]);
                 $data['type'] = 'due';
 
                 $updateCarry = SmFeesCarryForward::where('student_id', $studentRecordId)->first();
@@ -3736,7 +3785,7 @@ if (!function_exists('inAppLiveClassJoinAndClose')) {
     {
         $currentDayStatus = Carbon::now();
         $currentTime = $currentDayStatus->format('g:i A');
-        $givenTime = Carbon::parse($classMeeting->time)->addMinutes((int)$classMeeting->duration)->format('g:i A');
+        $givenTime = Carbon::parse($classMeeting->time)->addMinutes((int) $classMeeting->duration)->format('g:i A');
         if ($currentDayStatus->format('Y-m-d') <= Carbon::parse($classMeeting->date)->format('Y-m-d') && is_null($classMeeting->end_at)) {
             if ($currentTime >= Carbon::parse($classMeeting->time)->format('g:i A')) {
                 if ($currentDayStatus->isBetween($currentTime, $givenTime)) {
@@ -4110,7 +4159,7 @@ if (!function_exists('getProfileImage')) {
             ->select('id', 'name', 'title', 'description', 'slug', 'settings', 'status')
             ->first();
         if ($headerPageData) {
-            return  view('pagebuilder::components.header-footer-page-components', ['page' => $headerPageData]);
+            return view('pagebuilder::components.header-footer-page-components', ['page' => $headerPageData]);
         }
     }
 

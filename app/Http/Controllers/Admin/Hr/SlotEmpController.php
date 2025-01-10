@@ -44,6 +44,7 @@ class SlotEmpController extends Controller
      */
     public function store(SlotEmpRequest $request)
     {
+        
         try {
             $slotemployee = new SlotEmp();
             $slotemployee->slot_day = implode(',', $request->slot_day);

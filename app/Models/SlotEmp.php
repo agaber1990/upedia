@@ -21,4 +21,5 @@ class SlotEmp extends Model
       {
           return $this->hasMany(StaffSlot::class, 'slot_id'); // Assuming 'slot_id' is the foreign key in staff_slots
       }
+
 }

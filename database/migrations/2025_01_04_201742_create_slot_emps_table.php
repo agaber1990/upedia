@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('slot_emps', function (Blueprint $table) {
             $table->increments('id');
             $table->string('slot_day');
-            $table->string('slot_start');
-            $table->string('slot_end');
+            $table->time('slot_start')->nullable(); // Use 'time' type for storing time values
+            $table->time('slot_end')->nullable();
 
             $table->timestamps();
 
