@@ -437,17 +437,10 @@
 
             // Use SweetAlert2 to prompt user for confirmation and date selection
             Swal.fire({
-                title: 'Course Info',
+                title: 'Staff Slot Make It Scheduled',
                 html: `
                     <p style="margin-bottom: 14px;">Do you want to schedule: <strong>${eventTitle}</strong></p>
-                    <div class="row text-left">
-                                <div class="form-group col-md-12">
-                            <label style="font-size:14px">Okay, let's add course name</label>
-                            <input type="text" id="courseName" class="form-control"  />
-                        </div>
-                        
-                
-                    </div>`,
+                    `,
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, Got it!',
@@ -459,13 +452,12 @@
 
                 }
             }).then((result) => {
-                const courseName = document.getElementById('courseName').value; // Get "From" date
                 const status = "scheduled"; // Get selected status
 
                 // Check if both dates and status are selected
-                if (result.isConfirmed && courseName && status) {
+                if (result.isConfirmed && status) {
                     // If confirmed and all required fields are selected, call the save function
-                    saveScheduledEvent(courseName, status, slot_id, staff_id);
+                    saveScheduledEvent(status, slot_id, staff_id);
                     Swal.fire({
                         title: "Good job!",
                         text: "You clicked the button!",
@@ -561,12 +553,11 @@
 
 
         // Save the scheduled event to the database
-        function saveScheduledEvent(courseName, status = "scheduled", slot_id, staff_id) {
+        function saveScheduledEvent(status = "scheduled", slot_id, staff_id) {
 
             const eventData = {
                 slot_id: slot_id,
                 staff_id: staff_id,
-                courseName: courseName,
                 status: status,
             };
             console.log(eventData);

@@ -175,13 +175,11 @@ class CalendarStaffController extends Controller
         $validated = $request->validate([
             'slot_id' => 'required', // Assuming staff_slots table has slots
             'staff_id' => 'required', // Assuming staff_slots table has slots
-            'courseName' => 'required',
             'status' => 'required',
         ]);
         $scheduledEvent = StaffScheduled::create([
             'slot_id' => $validated['slot_id'],
             'staff_id' => $validated['staff_id'],
-            'courseName' => $validated['courseName'],
             'status' => $validated['status'],
         ]);
 

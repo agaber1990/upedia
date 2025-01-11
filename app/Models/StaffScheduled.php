@@ -10,7 +10,7 @@ class StaffScheduled extends Model
     use HasFactory;
 
     protected $fillable = [
-        'slot_id','staff_id', 'courseName','status'
+        'slot_id','staff_id','status'
     ];
 
 }
