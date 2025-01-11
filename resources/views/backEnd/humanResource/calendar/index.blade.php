@@ -88,8 +88,7 @@
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="staff_id">@lang('hr.staff')</label>
                                     <select class="form-control staff_id" name="staff_id" id="staff_id">
-                                        <option data-display="@lang('hr.staff') *" value="">@lang('hr.staff') *
-                                        </option>
+                                   
                                     </select>
                                 </div>
                             </div>
@@ -275,7 +274,7 @@
                         if (response && response.length > 0) {
                             // Add an empty option
                             $('#staff_id').append(
-                                '<option data-display="@lang('hr.staff') *" value="">@lang('hr.staff') *</option>'
+                                '<option data-display="@lang('hr.select_staff') *" value="">@lang('hr.select_staff') *</option>'
                             );
 
                             // Loop through the staff data and append each staff as an option
