@@ -195,77 +195,53 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <x-table>
-                                    <table id="table_id" class="table" cellspacing="0" width="100%">
-
-                                        <thead>
-
+                                    <table class="table" id="slots_table">
+                                        <thead class="thead-light">
                                             <tr>
-                                                <th>@lang('hr.slotemployee')</th>
+                                                <th>@lang('hr.slot_day')</th>
                                                 <th>@lang('hr.slot_day')</th>
                                                 <th>@lang('hr.slot_start')</th>
                                                 <th>@lang('hr.slot_end')</th>
-                                                <th>@lang('common.action')</th>
+                                                <th>@lang('hr.slotemployee') <i class="fa fa-clock"></i></th>
                                             </tr>
                                         </thead>
-
                                         <tbody>
-                                            @foreach ($slotemployees as $item)
-                                              
+                                            @php
+                                                $groupedSlots = $slots_emp->groupBy('slot_day');
+                                            @endphp
+                                            @foreach ($groupedSlots as $day => $slots)
                                                 <tr>
-                                                    <td>{{ $item->slot_day }}</td>
-                                                    <td>
-                                                    <td>
-                                                        {{ $item->slot_start ? formatTime($item->slot_start) : 'N/A' }}
-
-                                                    </td>
-
+                                                    <td class="p-4">
+                                                        {{ $day }}
                                                     </td>
                                                     <td>
-                                                        {{ $item->slot_end ? formatTime($item->slot_end) : 'N/A' }}
-                                                    </td>
+                                                        <div class="d-flex flex-column gap-2">
+                                                            @foreach ($slots as $slot)
+                                                                <div
+                                                                    class="d-flex align-items-center gap-2">
+                                                                    <!-- Start Time with Checkbox -->
+                                                                    <div>
+                                                                        <input class="form-check-input"
+                                                                            type="checkbox"
+                                                                            name="selected_slots[]"
+                                                                            value="{{ $slot->id }}"
+                                                                            id="slot_start_{{ $slot->id }}">
 
-                                                    <td>
-                                                        <x-drop-down>
-                                                            @if (userPermission('slotemployee-edit'))
-                                                                <a class="dropdown-item"
-                                                                    href="{{ route('slotemployee-edit', [$item->id]) }}">@lang('common.edit')</a>
-                                                            @endif
-                                                            @if (userPermission('slotemployee-delete'))
-                                                                <a class="dropdown-item" data-toggle="modal"
-                                                                    data-target="#deleteslotemployeeModal{{ $item->id }}"
-                                                                    href="#">@lang('common.delete')</a>
-                                                            @endif
-                                                        </x-drop-down>
+                                                                        <label
+                                                                            class="form-check-label px-2 "
+                                                                            for="slot_start_{{ $slot->id }}">
+                                                                            {{ $item->slot_start ? formatTime($item->slot_start) : 'N/A' }}
+                                                                        </label>
+                                                                    </div>
+                                                                    <i class="fa fa-angle-right"></i>
+                                                                    <span class="px-2">
+                                                                        {{ $item->slot_end ? formatTime($item->slot_end) : 'N/A' }}
+                                                                    </span>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
                                                     </td>
                                                 </tr>
-                                                <div class="modal fade admin-query"
-                                                    id="deleteslotemployeeModal{{ $item->id }}">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-slot_name">@lang('hr.delete_slotemployee')</h4>
-                                                                <button type="button" class="close"
-                                                                    data-dismiss="modal">&times;</button>
-                                                            </div>
-
-                                                            <div class="modal-body">
-                                                                <div class="text-center">
-                                                                    <h4>@lang('common.are_you_sure_to_delete')</h4>
-                                                                </div>
-
-                                                                <div class="mt-40 d-flex justify-content-between">
-                                                                    <button type="button" class="primary-btn tr-bg"
-                                                                        data-dismiss="modal">@lang('common.cancel')</button>
-                                                                    {{ Form::open(['route' => ['slotemployee-delete', $item->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
-                                                                    <button class="primary-btn fix-gr-bg"
-                                                                        type="submit">@lang('common.delete')</button>
-                                                                    {{ Form::close() }}
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             @endforeach
                                         </tbody>
                                     </table>

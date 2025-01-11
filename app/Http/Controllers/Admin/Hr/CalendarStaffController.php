@@ -8,7 +8,7 @@ use App\Models\CalendarStaff;
 use App\Models\Category;
 use App\Models\EmType;
 use App\Models\SlotEmp;
-use App\Models\SpecializationsStaff;
+use App\Models\TrackAssignedStaff;
 use App\Models\StaffScheduled;
 use App\Models\StaffSlot;
 use App\Models\Track;
@@ -32,7 +32,7 @@ class CalendarStaffController extends Controller
             $tracks = Track::all();
             $role_types = EmType::all();
             $categories = Category::all();
-            $specializations_staff = SpecializationsStaff::get();
+            $specializations_staff = TrackAssignedStaff::get();
             // Format the events for FullCalendar
             $events = $slot_time->map(function ($slot) {
                 return [
@@ -74,16 +74,24 @@ class CalendarStaffController extends Controller
     // AJAX function to fetch staff based on the selected track
     public function getStaffByTrack(Request $request)
     {
-        // Get the selected track ID and track type ID
+        // Get the selected track ID and track type ID from the request
         $track_id = $request->track_id;
-        $track_type_id = $request->track_type_id;
-
+    
+        // Validate that both track_id and track_type_id are provided
+        if (empty($track_id)) {
+            return response()->json(['error' => 'Track ID and Track Type ID are required'], 400);
+        }
+    
         // Filter the staff based on the selected track and track type, and eager load staff details
-        $staff = SpecializationsStaff::where('track_id', $track_id)
-            ->where('track_type_id', $track_type_id)
+        $staff = TrackAssignedStaff::where('track_id', $track_id)
             ->with(['staff:id,full_name']) // Eager load only the staff id and full_name
             ->get();
-
+    
+        // Check if staff are found for the given track and track type
+        if ($staff->isEmpty()) {
+            return response()->json(['message' => 'No staff found for the selected track and type'], 404);
+        }
+    
         // Map the results to return only the required fields (staff_id and full_name)
         $staffNamesAndIds = $staff->map(function ($staffMember) {
             return [
@@ -94,35 +102,37 @@ class CalendarStaffController extends Controller
                 'staff_name' => $staffMember->staff->full_name,  // Staff full name
             ];
         });
-
+    
         // Return the staff data with only necessary fields
         return response()->json($staffNamesAndIds);
     }
+  
+    
+    
     public function getSlotsByStaff(Request $request)
     {
         // Validate staff_id and optional date
         $validated = $request->validate([
             'staff_id' => 'required|integer',
-            'date' => 'nullable|date', // Optional date filter
         ]);
-
+    
         $staff_id = $validated['staff_id'];
         $date = $validated['date'] ?? now()->toDateString(); // Default to today's date if not provided
-
+    
         // Fetch the staff member
         $staff = SmStaff::find($staff_id);
-
+    
         if (!$staff) {
             return response()->json(['error' => 'Staff not found'], 404);
         }
-
+    
         // Fetch the slot_ids associated with the staff_id
         $slots = StaffSlot::where('staff_id', $staff_id)->pluck('slot_id');
-
+    
         if ($slots->isEmpty()) {
             return response()->json(['error' => 'No slots found for the staff'], 404);
         }
-
+    
         // Fetch slot details and include their statuses for the specific date
         $slotDetails = SlotEmp::whereIn('id', $slots)
             ->select("id", "slot_day", "slot_start", "slot_end")
@@ -131,42 +141,30 @@ class CalendarStaffController extends Controller
                 // Get the scheduled event based on slot_id and staff_id
                 $scheduled = StaffScheduled::where('slot_id', $slot->id)
                     ->where('staff_id', $staff_id)
-                    ->where(function ($query) use ($date) {
-                    $query->whereDate('fromDate', '<=', $date)
-                        ->whereDate('toDate', '>=', $date);
-                })
                     ->first();
-
-                // Determine the status based on the schedule
+    
+                // Attach the status and created_at to the slot
                 if ($scheduled) {
-                    if ($date < $scheduled->fromDate) {
-                        $slot->status = 'available'; // Event has not started yet
-                    } elseif ($date == $scheduled->fromDate) {
-                        $slot->status = 'started'; // Event starts today
-                    } elseif ($date > $scheduled->fromDate && $date < $scheduled->toDate) {
-                        $slot->status = 'scheduled'; // Event is ongoing
-                    } elseif ($date == $scheduled->toDate) {
-                        $slot->status = 'ended'; // Event ends today
-                    } elseif ($date > $scheduled->toDate) {
-                        $slot->status = 'available'; // Event has ended
-                    }
+                    $slot->status = $scheduled->status;
+                    $slot->created_at = $scheduled->created_at;  // Include created_at to show when it was created
                 } else {
-                    $slot->status = 'available'; // No schedule, slot is available
+                    $slot->status = 'available';  // If no schedule exists, show it as 'available'
+                    $slot->created_at = null;
                 }
-
+    
                 // Attach the date to the slot for frontend reference
                 $slot->date = $date;
-
+    
                 return $slot;
             });
-
+    
         // Return response with staff and slot details
         return response()->json([
             'staff' => $staff,
             'slots' => $slotDetails,
         ]);
     }
-
+    
 
 
 
@@ -178,16 +176,12 @@ class CalendarStaffController extends Controller
             'slot_id' => 'required', // Assuming staff_slots table has slots
             'staff_id' => 'required', // Assuming staff_slots table has slots
             'courseName' => 'required',
-            'fromDate' => 'required',
-            'toDate' => 'required',
             'status' => 'required',
         ]);
         $scheduledEvent = StaffScheduled::create([
             'slot_id' => $validated['slot_id'],
             'staff_id' => $validated['staff_id'],
             'courseName' => $validated['courseName'],
-            'fromDate' => $validated['fromDate'],
-            'toDate' => $validated['toDate'],
             'status' => $validated['status'],
         ]);
 

@@ -16,8 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('slot_id'); // Reference to staff_slots table
             $table->unsignedBigInteger('staff_id'); // Reference to staff_slots table
             $table->string('courseName');
-            $table->string('fromDate');
-            $table->string('toDate');
             $table->string('status'); // Can be 'scheduled', 'confirmed', etc.
             $table->timestamps();
         });

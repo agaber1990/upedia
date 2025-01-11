@@ -882,25 +882,19 @@
                                                                         <td>
                                                                             <div class="d-flex flex-column gap-2">
                                                                                 @foreach ($slots as $slot)
-                                                                                    <div
-                                                                                        class="d-flex align-items-center gap-2">
+                                                                                    <div class="d-flex align-items-center gap-2">
                                                                                         <!-- Start Time with Checkbox -->
                                                                                         <div>
-                                                                                            <input class="form-check-input"
-                                                                                                type="checkbox"
-                                                                                                name="selected_slots[]"
-                                                                                                value="{{ $slot->id }}"
-                                                                                                id="slot_start_{{ $slot->id }}">
-
-                                                                                            <label
-                                                                                                class="form-check-label px-2 "
-                                                                                                for="slot_start_{{ $slot->id }}">
-                                                                                                {{ $slot->slot_start }}
+                                                                                            <input class="form-check-input" type="checkbox" name="selected_slots[]"
+                                                                                                value="{{ $slot->id }}" id="slot_start_{{ $slot->id }}">
+                                                        
+                                                                                            <label class="form-check-label px-2 " for="slot_start_{{ $slot->id }}">
+                                                                                                {{ formatTime($slot->slot_start) }}
                                                                                             </label>
                                                                                         </div>
                                                                                         <i class="fa fa-angle-right"></i>
                                                                                         <span class="px-2">
-                                                                                            {{ $slot->slot_end }}
+                                                                                            {{ formatTime($slot->slot_end) }}
                                                                                         </span>
                                                                                     </div>
                                                                                 @endforeach
@@ -910,6 +904,7 @@
                                                                 @endforeach
                                                             </tbody>
                                                         </table>
+                                                        
                                                     </div>
                                                 </div>
 
@@ -1118,7 +1113,7 @@
                                                                 <select
                                                                     class="primary_select  form-control{{ $errors->has('track_type_id') ? ' is-invalid' : '' }}"
                                                                     name="track_type_id[]" id="track_type_id" multiple>
-                                                              
+
                                                                     @foreach ($track_types as $tack)
                                                                         <option value="{{ $tack->id }}">
                                                                             {{ $tack->name }}</option>
@@ -1195,6 +1190,7 @@
 
                 var catId = $(this).val(); // Get selected category ID
                 const trackSelect = $('#track_id');
+                const trackTypeSelect = $('#track_type_id');
 
                 if (catId) {
                     // Make AJAX request to fetch tracks
@@ -1204,20 +1200,27 @@
                         success: function(data) {
                             // Clear the tracks dropdown
                             trackSelect.empty();
+                            trackTypeSelect.empty();
 
                             // Populate the dropdown with the fetched tracks
-                            data.forEach(function(track) {
+                            data.tracks.forEach(function(track) {
                                 var optionText = (window.locale === 'en') ?
                                     track.track_name_en :
                                     track.track_name_ar;
 
-                                    trackSelect.append(
+                                trackSelect.append(
                                     '<option value="' + track.id +
                                     '" data-level="' + track.level_number + '">' +
                                     optionText + '</option>'
                                 );
                             });
+                            data.valid_for.forEach(function(validFor) {
+                                trackTypeSelect.append(
+                                    `<option value="${validFor.id}">${validFor.name}</option>`
+                                );
+                            });
                             trackSelect.niceSelect('update');
+                            trackTypeSelect.niceSelect('update');
 
                         },
                         error: function() {

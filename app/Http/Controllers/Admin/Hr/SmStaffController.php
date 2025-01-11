@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Hr;
 
-use App\Models\EmType;
+use App\Models\TrackType;
 use App\Models\Track;
 use App\Models\TrackAssignedStaff;
-use App\Models\TrackType;
 use App\Models\SlotEmp;
 use App\Models\StaffSlot;
 use App\Models\Category;
@@ -42,7 +41,6 @@ use Modules\MultiBranch\Entities\Branch;
 use CreateSmStaffRegistrationFieldsTable;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Admin\Hr\staffRequest;
-use App\Models\SpecializationsStaff;
 use App\SmLeaveDefine;
 use Illuminate\Validation\ValidationException;
 use Modules\RolePermission\Entities\InfixRole;
@@ -164,7 +162,7 @@ class SmStaffController extends Controller
 
             $track_types = TrackType::all();
             $tracks = Track::all();
-            $role_types = EmType::all();
+            $role_types = TrackType::all();
             $categories = Category::all();
 
             $slots_emp = SlotEmp::all();
@@ -473,9 +471,13 @@ class SmStaffController extends Controller
 
             $track_types = TrackType::all();
             $tracks = Track::all();
-            $role_types = EmType::all();
+            $role_types = TrackType::all();
             $categories = Category::all();
-            $track_assigned_staff = TrackAssignedStaff::where('staff_id', $editData->id)->get();
+            // Controller code
+            $track_assigned_staff = TrackAssignedStaff::where('staff_id', $editData->id)
+                ->with('track') // Correct relationship name
+                ->get();
+            // Check if everything is loaded correctly
             return view('backEnd.humanResource.editStaff', compact(
                 'track_assigned_staff',
                 'tracks',
@@ -894,15 +896,39 @@ class SmStaffController extends Controller
         }
     }
 
-
     public function getTracksByCategory($cat_id)
     {
         // Fetch tracks by category ID
         $tracks = Track::where('cat_id', $cat_id)->get();
 
-        // Return a JSON response
-        return response()->json($tracks);
+        // Initialize an empty array to store valid_for IDs
+        $validForIDs = [];
+
+        // Loop through each track and add the valid_for values to the array
+        foreach ($tracks as $track) {
+            // Check if valid_for is a string, and decode it if it's JSON
+            $validFor = is_string($track->valid_for) ? json_decode($track->valid_for) : $track->valid_for;
+
+            // If valid_for is an array, merge it into validForIDs
+            if (is_array($validFor)) {
+                $validForIDs = array_merge($validForIDs, array_map('intval', $validFor));
+            }
+        }
+
+        // Get unique valid_for IDs
+        $validForIDs = array_unique($validForIDs);
+
+        // Fetch the corresponding TrackType values based on valid_for IDs
+        $validForValues = TrackType::whereIn('id', $validForIDs)->get();
+
+        // Return a JSON response with both the tracks and the valid_for values
+        return response()->json([
+            'tracks' => $tracks,
+            'valid_for' => $validForValues
+        ]);
     }
+
+
     public function viewStaff($id)
     {
 

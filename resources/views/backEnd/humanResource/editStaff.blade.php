@@ -621,7 +621,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                                                                        </div> -->
+                                                                                                                </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
@@ -775,12 +775,12 @@
                                                                                                     <label
                                                                                                         class="form-check-label px-2"
                                                                                                         for="slot_start_{{ $slot->id }}">
-                                                                                                        {{ $slot->slot_start }}
+                                                                                                        {{ formatTime($slot->slot_start) }}
                                                                                                     </label>
                                                                                                 </div>
                                                                                                 <!-- End Time as Badge -->
                                                                                                 <span class="px-2">
-                                                                                                    {{ $slot->slot_end }}
+                                                                                                    {{ formatTime($slot->slot_end) }}
                                                                                                 </span>
                                                                                             </div>
                                                                                         @endforeach
@@ -1177,7 +1177,7 @@
                                                                     <option value="">@lang('Select Category')</option>
                                                                     @foreach ($categories as $category)
                                                                         <option value="{{ $category->id }}"
-                                                                            {{ old('cat_id', count($track_assigned_staff) > 0 ? $track_assigned_staff->first()->cat_id : null) == $category->id ? 'selected' : '' }}>
+                                                                            {{ old('cat_id', $track_assigned_staff->first()->cat_id ?? null) == $category->id ? 'selected' : '' }}>
                                                                             {{ app()->getLocale() == 'en' ? $category->name_en : $category->name_ar }}
                                                                         </option>
                                                                     @endforeach
@@ -1195,20 +1195,16 @@
                                                                     class="primary_select form-select @error('track_type_id') is-invalid @enderror"
                                                                     multiple>
                                                                     @php
-                                                                        // Explode the track_type_id values into an array for proper comparison
+                                                                        // Exploding the stored track_type_id for comparison
                                                                         $selectedTrackTypes = old(
                                                                             'track_type_id',
-                                                                            count($track_assigned_staff) > 0
-                                                                                ? explode(
-                                                                                    ',',
-                                                                                    $track_assigned_staff
-                                                                                        ->pluck('track_type_id')
-                                                                                        ->implode(','),
-                                                                                )
-                                                                                : [],
+                                                                            explode(
+                                                                                ',',
+                                                                                $track_assigned_staff->first()
+                                                                                    ->track_type_id ?? '',
+                                                                            ),
                                                                         );
                                                                     @endphp
-
                                                                     @foreach ($track_types as $type)
                                                                         <option value="{{ $type->id }}"
                                                                             {{ in_array($type->id, $selectedTrackTypes) ? 'selected' : '' }}>
@@ -1216,39 +1212,35 @@
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
-
                                                                 @error('track_type_id')
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
 
-
-                                                            <!-- Track -->
                                                             <!-- Track -->
                                                             <div class="col-lg-4 mb-3">
                                                                 <label for="track_id"
                                                                     class="form-label">@lang('academics.tracks')</label>
-                                                                <select class="primary_select form-select"
-                                                                    name="track_id[]" id="track_id" multiple
-                                                                    class="form-select @error('track_id') is-invalid @enderror">
-
+                                                                <select name="track_id[]" id="track_id"
+                                                                    class="primary_select form-select @error('track_id') is-invalid @enderror"
+                                                                    multiple>
                                                                     @php
-                                                                        // Check if track_assigned_staff has any data
-                                                                        $assignedTrackIds = $track_assigned_staff->isNotEmpty()
-                                                                            ? $track_assigned_staff
-                                                                                ->pluck('track_id')
-                                                                                ->toArray()
-                                                                            : [];
-                                                                        // Filter tracks to only include those assigned to the staff
-                                                                        $filteredTracks = $tracks->whereIn(
-                                                                            'id',
-                                                                            $assignedTrackIds,
+                                                                        // Check if there are assigned tracks, fallback to old input or empty array
+                                                                        $assignedTrackIds = old(
+                                                                            'track_id',
+                                                                            $track_assigned_staff->isNotEmpty()
+                                                                                ? explode(
+                                                                                    ',',
+                                                                                    $track_assigned_staff->first()
+                                                                                        ->track_id,
+                                                                                )
+                                                                                : [],
                                                                         );
                                                                     @endphp
 
-                                                                    @foreach ($filteredTracks as $item)
+                                                                    @foreach ($tracks as $item)
                                                                         <option value="{{ $item->id }}"
-                                                                            {{ in_array($item->id, old('track_id', $assignedTrackIds)) ? 'selected' : '' }}
+                                                                            {{ in_array($item->id, $assignedTrackIds) ? 'selected' : '' }}
                                                                             data-level="{{ $item->level_number }}">
                                                                             {{ app()->getLocale() == 'en' ? $item->track_name_en : $item->track_name_ar }}
                                                                         </option>
@@ -1263,55 +1255,51 @@
 
                                                             <!-- Container for dynamically generated checkboxes -->
                                                             <div id="checkbox-container"
-                                                                class="col-lg-12 mt-20 border rounded p-3 bg-light  @if (count($track_assigned_staff) == 0) d-none @endif">
+                                                                class="col-lg-12 mt-20 border rounded p-3 bg-light @if (count($track_assigned_staff) == 0) d-none @endif">
                                                                 <h5 class="text-primary mb-20">@lang('academics.levels')</h5>
-
                                                                 <div id="checkbox-row">
-
-                                                                    @if (count($track_assigned_staff) > 0)
+                                                                    @foreach ($track_assigned_staff as $assigned)
+                                                                        @php
+                                                                            // Get the levels for this specific track
+                                                                            $selectedLevels = explode(
+                                                                                ',',
+                                                                                $assigned->levels,
+                                                                            );
+                                                                            // Ensure $assigned->track is not null before accessing level_number
+                                                                            $track = $assigned->track;
+                                                                            $trackLevels = $track
+                                                                                ? range(1, $track->level_number)
+                                                                                : [];
+                                                                        @endphp
                                                                         <div class="row g-2">
-
-
-
-                                                                            @foreach ($track_assigned_staff as $assigned)
-                                                                                <div class="col-md-12">
-                                                                                    <h6 class="">
-                                                                                        {{ app()->getLocale() == 'en' ? $assigned->track->track_name_en : $assigned->track->track_name_ar }}
-                                                                                    </h6> <!-- Display track name -->
-
+                                                                            <div class="col-md-12">
+                                                                                <h6 class="">
+                                                                                    @if ($track)
+                                                                                        {{ app()->getLocale() == 'en' ? $track->track_name_en : $track->track_name_ar }}
+                                                                                    @else
+                                                                                        @lang('academics.track_not_found')
+                                                                                    @endif
+                                                                                </h6>
+                                                                            </div>
+                                                                            @foreach ($trackLevels as $level)
+                                                                                <div class="col-md-4">
+                                                                                    <input type="checkbox"
+                                                                                        id="level_{{ $track ? $track->id : 'null' }}_{{ $level }}"
+                                                                                        name="levels[{{ $track ? $track->id : 'null' }}][]"
+                                                                                        value="{{ $level }}"
+                                                                                        {{ in_array($level, $selectedLevels) ? 'checked' : '' }}>
+                                                                                    <label
+                                                                                        for="level_{{ $track ? $track->id : 'null' }}_{{ $level }}">@lang('Level')
+                                                                                        {{ $level }}</label>
                                                                                 </div>
-                                                                                @php
-                                                                                    // Get the levels for this specific track
-                                                                                    $selectedLevels = explode(
-                                                                                        ',',
-                                                                                        $assigned->levels,
-                                                                                    );
-                                                                                    $trackLevels = range(
-                                                                                        1,
-                                                                                        $assigned->track->level_number,
-                                                                                    ); // Assuming level_number indicates the total number of levels for the track
-                                                                                @endphp
-
-                                                                                @foreach ($trackLevels as $level)
-                                                                                    <div class="col-md-4">
-                                                                                        <input type="checkbox"
-                                                                                            id="level_{{ $assigned->track->id }}_{{ $level }}"
-                                                                                            name="levels[{{ $assigned->track->id }}][]"
-                                                                                            value="{{ $level }}"
-                                                                                            {{ in_array($level, $selectedLevels) ? 'checked' : '' }}>
-                                                                                        <label
-                                                                                            for="level_{{ $assigned->track->id }}_{{ $level }}">@lang('Level')
-                                                                                            {{ $level }}</label>
-                                                                                    </div>
-                                                                                @endforeach
                                                                             @endforeach
                                                                         </div>
-                                                                    @endif
+                                                                    @endforeach
                                                                 </div>
                                                             </div>
 
-
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -1366,6 +1354,7 @@
 
                 var catId = $(this).val(); // Get selected category ID
                 const trackSelect = $('#track_id');
+                const trackTypeSelect = $('#track_type_id');
 
                 if (catId) {
                     // Make AJAX request to fetch tracks
@@ -1375,9 +1364,10 @@
                         success: function(data) {
                             // Clear the tracks dropdown
                             trackSelect.empty();
+                            trackTypeSelect.empty();
 
                             // Populate the dropdown with the fetched tracks
-                            data.forEach(function(track) {
+                            data.tracks.forEach(function(track) {
                                 var optionText = (window.locale === 'en') ?
                                     track.track_name_en :
                                     track.track_name_ar;
@@ -1388,7 +1378,13 @@
                                     optionText + '</option>'
                                 );
                             });
+                            data.valid_for.forEach(function(validFor) {
+                                trackTypeSelect.append(
+                                    `<option value="${validFor.id}">${validFor.name}</option>`
+                                );
+                            });
                             trackSelect.niceSelect('update');
+                            trackTypeSelect.niceSelect('update');
 
                         },
                         error: function() {

@@ -22,66 +22,84 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
-
-                        <!-- Filter Section -->
                         <div class="row">
-                            <div class="col-lg-6 col-xl-3 mb-20">
+                            <div class="col-lg-6 col-xl-3 ">
                                 <div class="primary_input">
-                                    <label class="primary_input_label" for="">@lang('common.categories')</label>
-                                    <select class="primary_select form-control" name="cat_id" id="cat_id">
-                                        <option data-display="@lang('common.categories') *" value="">@lang('common.categories') *
-                                        </option>
+                                    <label class="primary_input_label" for="">@lang('common.categories')
+                                    </label>
+                                    <select
+                                        class="primary_select  form-control {{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
+                                        name="cat_id" id="cat_id">
+                                        <option data-display="@lang('common.categories') *" value="">@lang('common.categories')
+                                            *</option>
                                         @foreach ($categories as $item)
                                             <option value="{{ $item->id }}">
-                                                {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-xl-3 mb-20">
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="">@lang('academics.track_types')</label>
-                                    <select class="primary_select form-control" name="track_type_id" id="track_type_id">
-                                        <option data-display="@lang('academics.track_types') *" value="">@lang('academics.track_types') *
-                                        </option>
-                                        @foreach ($track_types as $track)
-                                            <option value="{{ $track->id }}">{{ $track->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-
-
-                            <div class="col-lg-6 col-xl-3 mb-20">
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="">@lang('academics.tracks')</label>
-                                    <select class="primary_select form-control" name="track_id" id="track_id"
-                                        onchange="getTrackId(this.value)">
-                                        <option data-display="@lang('academics.tracks') *" value="">@lang('academics.tracks') *
-                                        </option>
-                                        @foreach ($tracks as $track)
-                                            <option value="{{ $track->id }}">
-                                                {{ app()->getLocale() == 'en' ? $track->track_name_en : $track->track_name_ar }}
+                                                {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}
                                             </option>
                                         @endforeach
                                     </select>
+
+                                    @if ($errors->has('cat_id'))
+                                        <span class="text-danger invalid-select" role="alert">
+                                            {{ $errors->first('cat_id') }}
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-xl-3 ">
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="">@lang('academics.track_types')
+                                    </label>
+                                    <select
+                                        class="primary_select  form-control{{ $errors->has('track_type_id') ? ' is-invalid' : '' }}"
+                                        name="track_type_id[]" id="track_type_id">
+
+
+                                    </select>
+
+                                    @if ($errors->has('track_type_id'))
+                                        <span class="text-danger invalid-select" role="alert">
+                                            {{ $errors->first('track_type_id') }}
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-xl-3">
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="">
+                                        @lang('academics.tracks')
+                                    </label>
+                                    <select
+                                        class="primary_select form-control {{ $errors->has('track_id') ? 'is-invalid' : '' }}"
+                                        name="track_id[]" id="track_id">
+
+                                    </select>
+
+                                    @if ($errors->has('track_id'))
+                                        <span class="text-danger invalid-select" role="alert">
+                                            {{ $errors->first('track_id') }}
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-xl-3 mb-20">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="staff_id">@lang('hr.staff')</label>
-                                    <select class="form-control staff_id" name="staff_id" id="staff_id"
-                                        onchange="getStaffId(this.value)">
+                                    <select class="form-control staff_id" name="staff_id" id="staff_id">
                                         <option data-display="@lang('hr.staff') *" value="">@lang('hr.staff') *
                                         </option>
                                     </select>
                                 </div>
                             </div>
-
                         </div>
+                        <!-- Filter Section -->
+
+
+
+
+
                         <hr>
                         <!-- Legend -->
                         {{-- <div class="mt-4 mb-3">
@@ -163,7 +181,13 @@
         color: #415094 !important;
         border: 1px solid #d4d4d4 !important;
     }
+
+    .fc-event-title-container {
+        color: #000 !important
+    }
 </style>
+
+
 @push('scripts')
     <!-- Include jQuery -->
     <!-- Include jQuery -->
@@ -174,8 +198,188 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+
+            // Listen for changes on the category dropdown
+            $('#cat_id').on('change', function() {
+                $('#checkbox-container').addClass('d-none');
+
+                var catId = $(this).val(); // Get selected category ID
+                const trackSelect = $('#track_id');
+                const trackTypeSelect = $('#track_type_id');
+
+                if (catId) {
+                    // Make AJAX request to fetch tracks
+                    $.ajax({
+                        url: '/tracks-by-category/' + catId,
+                        type: 'GET',
+                        success: function(data) {
+                            // Clear the tracks dropdown
+                            trackSelect.empty();
+                            trackTypeSelect.empty();
+                            trackSelect.append("<option>Select Track</option>")
+
+                            // Populate the dropdown with the fetched tracks
+                            data.tracks.forEach(function(track) {
+                                var optionText = (window.locale === 'en') ?
+                                    track.track_name_en :
+                                    track.track_name_ar;
+
+                                trackSelect.append(
+                                    '<option value="' + track.id +
+                                    '" data-level="' + track.level_number + '">' +
+                                    optionText + '</option>'
+                                );
+                            });
+                            trackTypeSelect.append("<option>Select Track Type</option>")
+
+                            data.valid_for.forEach(function(validFor) {
+                                trackTypeSelect.append(
+                                    `<option value="${validFor.id}">${validFor.name}</option>`
+                                );
+                            });
+                            trackSelect.niceSelect('update');
+                            trackTypeSelect.niceSelect('update');
+
+                        },
+                        error: function() {
+                            alert('Failed to fetch tracks. Please try again.');
+                        }
+                    });
+                } else {
+                    // Clear the tracks dropdown if no category is selected
+                    $('#track_id').empty();
+                }
+            });
+
+            $('#track_id').on('change', function() {
+
+
+                // Make an AJAX request to fetch the filtered staff data
+                $.ajax({
+                    url: '{{ route('getStaffByTrack') }}', // The route you will create in your routes/web.php
+                    method: 'GET',
+                    data: {
+                        track_id: $(this).val(),
+                    },
+                    success: function(response) {
+                        console.log(response); // Log the response to check its structure
+                        // Clear the previous staff options
+                        $('#staff_id').empty();
+
+                        // Check if the response contains staff
+                        if (response && response.length > 0) {
+                            // Add an empty option
+                            $('#staff_id').append(
+                                '<option data-display="@lang('hr.staff') *" value="">@lang('hr.staff') *</option>'
+                            );
+
+                            // Loop through the staff data and append each staff as an option
+                            $.each(response, function(index, staff) {
+                                console.log(
+                                    staff); // Log each staff to check its properties
+                                var staffName = staff
+                                    .staff_name; // Use 'staff_name' from the response
+                                $('#staff_id').append('<option value="' + staff
+                                    .staff_id + '">' +
+                                    staffName + '</option>');
+                            });
+                        } else {
+                            // If no staff found, add a default option
+                            $('#staff_id').append(
+                                '<option value="">@lang('academics.no_staff_found')</option>'
+                            );
+                        }
+                    },
+                    error: function() {
+                        // Handle error
+                        alert('Failed to fetch staff data.');
+                    }
+                });
+            });
+
+            $('#staff_id').on('change', function() {
+                $.ajax({
+                    url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
+                    method: 'GET',
+                    data: {
+                        staff_id: $(this).val(),
+                    },
+                    success: function(response) {
+                        console.log(response); // Log the response to check its structure
+
+                        // Ensure the calendar object is initialized
+                        if (!calendar) {
+                            console.error("Calendar object is not initialized.");
+                            return;
+                        }
+                        console.log(calendar);
+
+                        // Clear existing events in the calendar
+                        calendar.removeAllEvents();
+
+                        // Check if slots exist in the response
+                        if (response.slots && response.slots.length > 0) {
+                            response.slots.forEach(function(slot) {
+                                let dow = getDayOfWeek(slot
+                                    .slot_day); // Convert day name to number
+
+                                // Format start and end times for the calendar (in 24-hour format)
+                                let startTime = formatTimeForCalendar(slot.slot_start,
+                                    slot.slot_day);
+                                let endTime = formatTimeForCalendar(slot.slot_end, slot
+                                    .slot_day);
+
+                                // Format start and end times to 12-hour format for display
+                                let formattedStart = formatTo12HourTime(slot
+                                    .slot_start);
+                                let formattedEnd = formatTo12HourTime(slot.slot_end);
+
+                                // Determine event color based on slot status
+                                let eventColor = getStatusColor(slot.status);
+
+                                // Add the slot as an event to the calendar
+                                calendar.addEvent({
+                                    slot_id: `${slot.id}`, // Unique identifier for the slot
+                                    title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
+                                    start: startTime, // Slot start time in 24-hour format
+                                    end: endTime, // Slot end time in 24-hour format
+                                    daysOfWeek: [
+                                        dow
+                                    ], // Day of the week the slot applies to
+                                    description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
+                                    overlap: true, // Allow overlap with other events
+                                    display: true,
+                                    extendedProps: {
+                                        staff_id: response.staff
+                                            .id // Add staff_id for reference
+                                    },
+                                    backgroundColor: eventColor, // Set background color based on status
+                                    borderColor: eventColor, // Set border color based on status
+                                    textColor: '#fff', // Ensure good contrast for text
+                                });
+                            });
+                        } else {
+                            console.warn("No slots found for the selected staff.");
+                        }
+                    },
+                    error: function() {
+                        alert('Failed to fetch staff data.');
+                    }
+                });
+            });
+
+        });
+    </script>
 
     <script>
+        // Listen for changes on the category dropdown
+
+
         // Declare calendar globally
         let calendar = null;
 
@@ -223,7 +427,7 @@
                 month: '2-digit',
                 day: '2-digit'
             }).format(from_date);
-            
+
 
             // Extract event details
             const eventTitle = event.title; // Available time title
@@ -235,50 +439,15 @@
             Swal.fire({
                 title: 'Course Info',
                 html: `
-            <p style="margin-bottom: 14px;">Do you want to schedule: <strong>${eventTitle}</strong></p>
-            <div class="row text-left">
-                          <div class="form-group col-md-12">
-                    <label style="font-size:14px">Okay, let's add course name</label>
-                    <input type="text" id="courseName" class="form-control"  />
-                </div>
-                <div class="form-group col-md-6">
-                    <label style="font-size:14px">Select a From date</label>
-                    <input type="text" id="fromDate" class="form-control" />
-                </div>
-                <div class="form-group col-md-6">
-                    <label style="font-size:14px">Select a To date</label>
-                    <input type="text" id="toDate" class="form-control"  />
-                </div>
-            </div>
-            <div class="row text-left">
-                <div class="form-group col-md-12 ">
-                    <label style="font-size:14px">Select status</label>
-                    <ul class="list-inline" style="font-size:14px">
-                        <li class="list-inline-item">
-                            <div>
-                                <input type="radio" name="status"  value="available" id="statusAvailable" style="width: 16px; height: 16px" checked>
-                            <label for="statusAvailable" class="text-success">Available</label>
-                                </div>
-                        </li>
-                        <li class="list-inline-item">
-                            <input type="radio" name="status" value="scheduled" id="statusScheduled" style="width: 16px; height: 16px">
-                            <label for="statusScheduled" class="text-primary ">Scheduled</label>
-                        </li>
-                        <li class="list-inline-item">
-                            <input type="radio" name="status" value="reserved" id="statusReserved" style="width: 16px; height: 16px">
-                            <label for="statusReserved" class="text-info ">Reserved</label>
-                        </li>
-                        <li class="list-inline-item">
-                            <input type="radio" name="status" value="started" id="statusStarted" style="width: 16px; height: 16px">
-                            <label for="statusStarted" class="text-warning ">Started</label>
-                        </li>
-                        <li class="list-inline-item">
-                            <input type="radio" name="status" value="ended" id="statusEnded" style="width: 16px; height: 16px">
-                            <label for="statusEnded" class="text-danger ">Ended</label>
-                        </li>
-                    </ul>
-                </div>
-            </div>`,
+                    <p style="margin-bottom: 14px;">Do you want to schedule: <strong>${eventTitle}</strong></p>
+                    <div class="row text-left">
+                                <div class="form-group col-md-12">
+                            <label style="font-size:14px">Okay, let's add course name</label>
+                            <input type="text" id="courseName" class="form-control"  />
+                        </div>
+                        
+                
+                    </div>`,
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, Got it!',
@@ -286,38 +455,23 @@
                 reverseButtons: true,
                 didOpen: () => {
                     // Assign the event's start date to the "From" date input field using jQuery
-                    $('#fromDate').val(formattedDate);
 
-                    // Initialize the date picker for the "From" date
-                    $('#fromDate').flatpickr({
-                        dateFormat: 'Y-m-d', // Set the format (YYYY-MM-DD)
-                        minDate: 'today', // Disable past dates
-                        defaultDate: formattedDate // Use the event's start date as the default
-                    });
-
-                    // Initialize the date picker for the "To" date
-                    $('#toDate').flatpickr({
-                        dateFormat: 'Y-m-d', // Set the format (YYYY-MM-DD)
-                        minDate: formattedDate // Disable past dates and align with "From" date
-                    });
 
                 }
             }).then((result) => {
                 const courseName = document.getElementById('courseName').value; // Get "From" date
-                const fromDate = document.getElementById('fromDate').value; // Get "From" date
-                const toDate = document.getElementById('toDate').value; // Get "To" date
-                const status = document.querySelector('input[name="status"]:checked')?.value; // Get selected status
+                const status = "scheduled"; // Get selected status
 
                 // Check if both dates and status are selected
-                if (result.isConfirmed && courseName && fromDate && toDate && status) {
+                if (result.isConfirmed && courseName && status) {
                     // If confirmed and all required fields are selected, call the save function
-                    saveScheduledEvent(courseName, fromDate, toDate, status, slot_id, staff_id);
+                    saveScheduledEvent(courseName, status, slot_id, staff_id);
                     Swal.fire({
                         title: "Good job!",
                         text: "You clicked the button!",
                         icon: "success"
                     });
-                } else if (!fromDate || !toDate || !status) {
+                } else if (!status) {
                     // If any field is not selected, show an error message
                     Swal.fire(
                         'Error',
@@ -338,14 +492,12 @@
 
 
         // Save the scheduled event to the database
-        function saveScheduledEvent(courseName, fromDate, toDate, status, slot_id, staff_id) {
+        function saveScheduledEvent(courseName, status = "scheduled", slot_id, staff_id) {
 
             const eventData = {
                 slot_id: slot_id,
                 staff_id: staff_id,
                 courseName: courseName,
-                fromDate: fromDate,
-                toDate: toDate,
                 status: status,
             };
             console.log(eventData);
@@ -382,90 +534,28 @@
             return `${currentYear}-${currentMonth}-${currentDay}T${time}:00`;
         }
 
-        // Helper function to convert 24-hour time (HH:mm) to 12-hour time (HH:mm AM/PM)
-        function formatTo12HourTime(time) {
-            let [hour, minute] = time.split(':'); // Split the time into hour and minute
-            let ampm = hour >= 12 ? 'PM' : 'AM'; // Determine AM or PM
-            hour = (hour > 12) ? hour - 12 : hour; // Convert 24-hour to 12-hour format
-            if (hour == 0) {
-                hour = 12; // 12 AM for midnight
-            }
-            return `${hour}:${minute} ${ampm}`;
+        function formatTo12HourTime(timeString) {
+            // Split the time string into hours, minutes, and seconds
+            let [hours, minutes, seconds] = timeString.split(':');
+
+            // Convert to 12-hour format
+            hours = parseInt(hours);
+            let period = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Handle 0 as 12
+
+            // Return formatted time string
+            return `${hours}:${minutes} ${period}`;
         }
 
-
-        // This function is used to fetch staff slot data
-        function getStaffId(staffID) {
-            // Make an AJAX request to fetch the filtered staff data
-            $.ajax({
-                url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
-                method: 'GET',
-                data: {
-                    staff_id: staffID,
-                },
-                success: function(response) {
-                    console.log(response); // Log the response to check its structure
-
-                    // Ensure the calendar object is initialized
-                    if (!calendar) {
-                        console.error("Calendar object is not initialized.");
-                        return;
-                    }
-
-                    // Clear existing events in the calendar
-                    calendar.removeAllEvents();
-
-                    // Check if slots exist in the response
-                    if (response.slots && response.slots.length > 0) {
-                        response.slots.forEach(function(slot) {
-                            let dow = getDayOfWeek(slot.slot_day); // Convert day name to number
-
-                            // Format start and end times for the calendar
-                            let startTime = formatTimeForCalendar(slot.slot_start, slot.slot_day);
-                            let endTime = formatTimeForCalendar(slot.slot_end, slot.slot_day);
-
-                            // Format start and end times to 12-hour format for display
-                            let formattedStart = formatTo12HourTime(slot.slot_start);
-                            let formattedEnd = formatTo12HourTime(slot.slot_end);
-
-                            // Determine event color based on slot status
-                            let eventColor = getStatusColor(slot.status);
-
-                            // Add the slot as an event to the calendar
-                            calendar.addEvent({
-                                slot_id: `${slot.id}`, // Unique identifier for the slot
-                                title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
-                                start: startTime, // Slot start time in 24-hour format
-                                end: endTime, // Slot end time in 24-hour format
-                                daysOfWeek: [dow], // Day of the week the slot applies to
-                                description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
-                                overlap: true, // Allow overlap with other events
-                                display: true,
-                                extendedProps: {
-                                    staff_id: response.staff.id // Add staff_id for reference
-                                },
-                                backgroundColor: eventColor, // Set background color based on status
-                                borderColor: eventColor, // Set border color based on status
-                                textColor: '#fff', // Ensure good contrast for text
-                            });
-                        });
-                    } else {
-                        console.warn("No slots found for the selected staff.");
-                    }
-                },
-                error: function() {
-                    alert('Failed to fetch staff data.');
-                }
-            });
-        }
 
         // Function to get color based on event status
         function getStatusColor(status) {
             switch (status) {
                 case 'available':
-                    return '#080'; // Blue
+                    return '#fff3cb'; // Blue
                 case 'scheduled':
-                    return '#4CAF50'; // Green
+                    return '#cfe2f3'; // Green
                 case 'started':
                     return '#FF9800'; // Orange
                 case 'ended':
@@ -481,63 +571,6 @@
         function formatTimeForCalendar(time, dayOfWeek) {
             // Implement your logic to convert the time to FullCalendar's format (e.g., HH:mm)
             return `${dayOfWeek}T${time}`;
-        }
-
-        // Example of function to format to 12-hour time with AM/PM
-        function formatTo12HourTime(time) {
-            let date = new Date(`1970-01-01T${time}:00`);
-            let hours = date.getHours();
-            let minutes = date.getMinutes();
-            let suffix = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12; // the hour '0' should be '12'
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            return `${hours}:${minutes} ${suffix}`;
-        }
-
-
-        function getTrackId(trackID) {
-            var track_type_id = $('#track_type_id').val(); // Get the selected track type ID
-
-            // Make an AJAX request to fetch the filtered staff data
-            $.ajax({
-                url: '{{ route('getStaffByTrack') }}', // The route you will create in your routes/web.php
-                method: 'GET',
-                data: {
-                    track_id: trackID,
-                    track_type_id: track_type_id,
-                },
-                success: function(response) {
-                    console.log(response); // Log the response to check its structure
-                    // Clear the previous staff options
-                    $('#staff_id').empty();
-
-                    // Check if the response contains staff
-                    if (response && response.length > 0) {
-                        // Add an empty option
-                        $('#staff_id').append(
-                            '<option data-display="@lang('hr.staff') *" value="">@lang('hr.staff') *</option>'
-                        );
-
-                        // Loop through the staff data and append each staff as an option
-                        $.each(response, function(index, staff) {
-                            console.log(staff); // Log each staff to check its properties
-                            var staffName = staff.staff_name; // Use 'staff_name' from the response
-                            $('#staff_id').append('<option value="' + staff.staff_id + '">' +
-                                staffName + '</option>');
-                        });
-                    } else {
-                        // If no staff found, add a default option
-                        $('#staff_id').append(
-                            '<option value="">@lang('academics.no_staff_found')</option>'
-                        );
-                    }
-                },
-                error: function() {
-                    // Handle error
-                    alert('Failed to fetch staff data.');
-                }
-            });
         }
     </script>
 @endpush
