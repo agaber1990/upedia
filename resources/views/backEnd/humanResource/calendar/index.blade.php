@@ -471,6 +471,75 @@
                         text: "You clicked the button!",
                         icon: "success"
                     });
+
+                    $.ajax({
+                    url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
+                    method: 'GET',
+                    data: {
+                        staff_id: $('#staff_id').val(),
+                    },
+                    success: function(response) {
+                        console.log(response); // Log the response to check its structure
+
+                        // Ensure the calendar object is initialized
+                        if (!calendar) {
+                            console.error("Calendar object is not initialized.");
+                            return;
+                        }
+                        console.log(calendar);
+
+                        // Clear existing events in the calendar
+                        calendar.removeAllEvents();
+
+                        // Check if slots exist in the response
+                        if (response.slots && response.slots.length > 0) {
+                            response.slots.forEach(function(slot) {
+                                let dow = getDayOfWeek(slot
+                                    .slot_day); // Convert day name to number
+
+                                // Format start and end times for the calendar (in 24-hour format)
+                                let startTime = formatTimeForCalendar(slot.slot_start,
+                                    slot.slot_day);
+                                let endTime = formatTimeForCalendar(slot.slot_end, slot
+                                    .slot_day);
+
+                                // Format start and end times to 12-hour format for display
+                                let formattedStart = formatTo12HourTime(slot
+                                    .slot_start);
+                                let formattedEnd = formatTo12HourTime(slot.slot_end);
+
+                                // Determine event color based on slot status
+                                let eventColor = getStatusColor(slot.status);
+
+                                // Add the slot as an event to the calendar
+                                calendar.addEvent({
+                                    slot_id: `${slot.id}`, // Unique identifier for the slot
+                                    title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
+                                    start: startTime, // Slot start time in 24-hour format
+                                    end: endTime, // Slot end time in 24-hour format
+                                    daysOfWeek: [
+                                        dow
+                                    ], // Day of the week the slot applies to
+                                    description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
+                                    overlap: true, // Allow overlap with other events
+                                    display: true,
+                                    extendedProps: {
+                                        staff_id: response.staff
+                                            .id // Add staff_id for reference
+                                    },
+                                    backgroundColor: eventColor, // Set background color based on status
+                                    borderColor: eventColor, // Set border color based on status
+                                    textColor: '#fff', // Ensure good contrast for text
+                                });
+                            });
+                        } else {
+                            console.warn("No slots found for the selected staff.");
+                        }
+                    },
+                    error: function() {
+                        alert('Failed to fetch staff data.');
+                    }
+                });
                 } else if (!status) {
                     // If any field is not selected, show an error message
                     Swal.fire(
