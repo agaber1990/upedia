@@ -1031,6 +1031,16 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
         Route::delete('discount_plans/{id}', 'Admin\Academics\DiscountPlanController@destroy')->name('discount_plans-delete')->middleware('userRolePermission:discount_plans-delete');
 
 
+          // sales_management Routes
+          Route::get('sales_management', 'Admin\Academics\SalesManagementController@index')->name('sales_management')->middleware('userRolePermission:sales_management');
+          Route::post('sales_management', 'Admin\Academics\SalesManagementController@store')->name('sales_management-store')->middleware('userRolePermission:sales_management-store');
+          Route::get('sales_management/{id}', 'Admin\Academics\SalesManagementController@show')->name('sales_management-edit')->middleware('userRolePermission:sales_management-edit');
+          Route::put('sales_management/{id}', 'Admin\Academics\SalesManagementController@update')->name('sales_management-update')->middleware('userRolePermission:sales_management-edit');
+          Route::delete('sales_management/{id}', 'Admin\Academics\SalesManagementController@destroy')->name('sales_management-delete')->middleware('userRolePermission:sales_management-delete');
+  
+  
+  
+
 
         // Bank Account
         // Route::resource('bank-account', 'Admin\Accounts\SmBankAccountController')->middleware('userRolePermission:156');

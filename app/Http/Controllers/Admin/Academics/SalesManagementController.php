@@ -1,0 +1,186 @@
+<?php
+
+namespace App\Http\Controllers\Admin\Academics;
+use App\Http\Controllers\Controller;
+use App\ApiBaseMethod;
+use App\Http\Requests\DiscountPlanRequest;
+use Illuminate\Http\Request;
+use Brian2694\Toastr\Facades\Toastr;
+use App\Models\DiscountPlan;
+use App\Models\StaffSlot;
+use App\Models\Track;
+use App\Models\TrackAssignedStaff;
+use App\SmStaff;
+
+class SalesManagementController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function __construct()
+    {
+        $this->middleware('PM');
+    }
+    public function index(Request $request)
+
+    {
+        try {
+            $slots = StaffSlot::get();
+            $staff = SmStaff::get();
+            $trackAssignedStaff = TrackAssignedStaff::get();
+            $tracks = Track::get();
+
+            if (ApiBaseMethod::checkUrl($request->fullUrl())) {
+                return ApiBaseMethod::sendResponse($staff, null);
+            }
+            return view('backEnd.academics.sales_management.index', compact('staff','slots','trackAssignedStaff','tracks'));
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(DiscountPlanRequest $request)
+    {
+
+        try {
+            $discountPlan = new DiscountPlan();
+            $discountPlan->name_en = $request->name_en;
+            $discountPlan->name_ar = $request->name_ar;
+            $discountPlan->number = $request->number;
+
+            $result = $discountPlan->save();
+
+            if (ApiBaseMethod::checkUrl($request->fullUrl())) {
+                if ($result) {
+                    return ApiBaseMethod::sendResponse(null, 'discountPlan has been created successfully');
+                } else {
+                    return ApiBaseMethod::sendError('Something went wrong, please try again.');
+                }
+            }
+
+            Toastr::success('Operation successful', 'Success');
+            return redirect()->back();
+
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+    /**
+     * Display the specified resource.
+     */
+    public function show(Request $request, $id)
+    {
+
+        try {
+            $discountPlan = DiscountPlan::find($id);
+            $discountPlans = DiscountPlan::get();
+            if (ApiBaseMethod::checkUrl($request->fullUrl())) {
+                $data = [];
+                $data['discountPlans'] = $discountPlan->toArray();
+                $data['discountPlans'] = $discountPlans->toArray();
+                return ApiBaseMethod::sendResponse($data, null);
+            }
+            return view('backEnd.academics.discount_plan.discount_plan', compact('discountPlan', 'discountPlans'));
+
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+
+    public function update(DiscountPlanRequest $request, $id)
+    {
+        try {
+            $discountPlan = DiscountPlan::find($request->id);
+            $discountPlan->name_en = $request->name_en;
+            $discountPlan->name_ar = $request->name_ar;
+            $discountPlan->number = $request->number;
+
+            $result = $discountPlan->save();
+            if (ApiBaseMethod::checkUrl($request->fullUrl())) {
+                if ($result) {
+                    return ApiBaseMethod::sendResponse(null, 'discountPlan has been updated successfully');
+                } else {
+                    return ApiBaseMethod::sendError('Something went wrong, please try again.');
+                }
+            }
+            Toastr::success('Operation successful', 'Success');
+            return redirect('discount_plans');
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Request $request, $id)
+    {
+
+        try {
+            $tables = \App\tableList::getTableList('discountPlan_id', $id);
+            // return $tables;
+            try {
+                if ($tables == null) {
+
+                    $discountPlan = DiscountPlan::destroy($id);
+                    if ($discountPlan) {
+                        if (ApiBaseMethod::checkUrl($request->fullUrl())) {
+                            if ($discountPlan) {
+                                return ApiBaseMethod::sendResponse(null, 'Deleted successfully');
+                            } else {
+                                return ApiBaseMethod::sendError('Something went wrong, please try again');
+                            }
+                        }
+                        Toastr::success('Operation successful', 'Success');
+                        return redirect()->back();
+                    } else {
+                        Toastr::error('Operation Failed', 'Failed');
+                        return redirect()->back();
+                    }
+                } else {
+                    $msg = 'This data already used in  : ' . $tables . ' Please remove those data first';
+                    Toastr::error($msg, 'Failed');
+                    return redirect()->back();
+                }
+            } catch (\Illuminate\Database\QueryException $e) {
+
+                $msg = 'This data already used in  : ' . $tables . ' Please remove those data first';
+                Toastr::error($msg, 'Failed');
+                return redirect()->back();
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
+}
