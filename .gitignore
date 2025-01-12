@@ -8,7 +8,7 @@
 
 /storage/framework
 /storage/logs
-
+/bootstrap/cache/config.php
 # Specific storage subdirectories to exclude
 storage/debugbar/
 storage/app/uploads

@@ -199,10 +199,9 @@
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>@lang('hr.slot_day')</th>
-                                                <th>@lang('hr.slot_day')</th>
-                                                <th>@lang('hr.slot_start')</th>
-                                                <th>@lang('hr.slot_end')</th>
+                                                
                                                 <th>@lang('hr.slotemployee') <i class="fa fa-clock"></i></th>
+                                                <th>@lang('common.action')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -216,7 +215,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="d-flex flex-column gap-2">
-                                                            @foreach ($slots as $slot)
+                                                            @foreach ($slots as $item)
                                                                 <div
                                                                     class="d-flex align-items-center gap-2">
                                                                     <!-- Start Time with Checkbox -->
@@ -224,12 +223,12 @@
                                                                         <input class="form-check-input"
                                                                             type="checkbox"
                                                                             name="selected_slots[]"
-                                                                            value="{{ $slot->id }}"
-                                                                            id="slot_start_{{ $slot->id }}">
+                                                                            value="{{ $item->id }}"
+                                                                            id="slot_start_{{ $item->id }}">
 
                                                                         <label
                                                                             class="form-check-label px-2 "
-                                                                            for="slot_start_{{ $slot->id }}">
+                                                                            for="slot_start_{{ $item->id }}">
                                                                             {{ $item->slot_start ? formatTime($item->slot_start) : 'N/A' }}
                                                                         </label>
                                                                     </div>
@@ -240,6 +239,19 @@
                                                                 </div>
                                                             @endforeach
                                                         </div>
+                                                    </td>
+                                                    <td>
+                                                        <x-drop-down>
+                                                            @if (userPermission('slotemployee-edit'))
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('slotemployee-edit', [$item->id]) }}">@lang('common.edit')</a>
+                                                            @endif
+                                                            @if (userPermission('slotemployee-delete'))
+                                                                <a class="dropdown-item" data-toggle="modal"
+                                                                    data-target="#deleteslotemployeeModal{{ $item->id }}"
+                                                                    href="#">@lang('common.delete')</a>
+                                                            @endif
+                                                        </x-drop-down>
                                                     </td>
                                                 </tr>
                                             @endforeach

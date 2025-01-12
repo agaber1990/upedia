@@ -23,12 +23,12 @@ class SlotEmpController extends Controller
     public function index(Request $request)
     {
         try {
-            $slotemployees = SlotEmp::get(); // Get all slot records
+            $slots_emp = SlotEmp::get(); // Get all slot records
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
-                return ApiBaseMethod::sendResponse($slotemployees, null);
+                return ApiBaseMethod::sendResponse($slots_emp, null);
             }
 
-            return view('backEnd.humanResource.slotemployees.index', compact('slotemployees'));
+            return view('backEnd.humanResource.slotemployees.index', compact('slots_emp'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
