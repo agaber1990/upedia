@@ -1344,10 +1344,15 @@
 @endsection
 @include('backEnd.partials.date_picker_css_js')
 @section('script')
+
     <script src="{{ asset('/backEnd/') }}/js/croppie.js"></script>
     <script src="{{ asset('/backEnd/') }}/js/editStaff.js"></script>
     <script>
         $(document).ready(function() {
+
+          
+            
+
 
             $('#cat_id').on('change', function() {
                 $('#checkbox-container').addClass('d-none');
@@ -1445,7 +1450,7 @@
                         <div class="row" id="track-${trackId}-levels"></div>
                     `;
                         $checkboxContainer.append(trackHeader);
-
+                    
                         const $trackLevelContainer = $(`#track-${trackId}-levels`);
 
                         // Generate checkboxes for levels from 1 to levelNumber
@@ -1505,10 +1510,27 @@
                     }
                 }
             });
+
+            var hour_rate = '{{$editData->hourly_rate}}';
+            console.log(hour_rate);
+            
+            if(hour_rate !== null) {
+                $('#hourly_rate').html(`
+                    <div class="primary_input">
+                        <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
+                        <input type="text" name="hourly_rate" value="${hour_rate}" class="primary_input_field form-control">
+                    </div>
+                `); 
+                $('#hourly_rate').removeClass('d-none');
+            }
+
         });
 
+
         function getRoleTypeVal(val) {
+
             // Get the selected option element
+
             var selectedOption = $(val).find('option:selected');
 
             // Get the 'data-name' attribute of the selected option
@@ -1521,7 +1543,7 @@
                 $('#hourly_rate').html(`
             <div class="primary_input">
                 <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
-                <input type="text" name="hourly_rate" class="primary_input_field form-control">
+                <input type="text" name="hourly_rate" value="{{$editData->hourly_rate}}" class="primary_input_field form-control">
             </div>
         `);
                 $('#hourly_rate').removeClass('d-none');
