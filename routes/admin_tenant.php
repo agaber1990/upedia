@@ -973,7 +973,7 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
 
         Route::get('calendar_staff/getStaffByTrack', 'Admin\Hr\CalendarStaffController@getStaffByTrack')->name('getStaffByTrack');
         Route::get('calendar_staff/getSlotsByStaff', 'Admin\Hr\CalendarStaffController@getSlotsByStaff')->name('getSlotsByStaff');
-        Route::get('calendar_staff/schedule-staff-event', 'Admin\Hr\CalendarStaffController@scheduleStaffEvent')->name('scheduleStaffEvent');
+        Route::post('calendar_staff/schedule-staff-event', 'Admin\Hr\CalendarStaffController@scheduleStaffEvent')->name('scheduleStaffEvent');
 
 
 

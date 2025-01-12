@@ -18,6 +18,8 @@ return [
     'class' => 'Class',
     'section' => 'Section',
     'subject' => 'Subject',
+    'start_date' => 'Start Date',
+    'end_date' => 'End Date',
     'edit_section' => 'Edit Section',
     'add_section' => 'Add Section',
     'save_section' => 'Save Section',

@@ -13,9 +13,16 @@ return new class extends Migration
     {
         Schema::create('staff_scheduleds', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('slot_id'); // Reference to staff_slots table
-            $table->unsignedBigInteger('staff_id'); // Reference to staff_slots table
-            $table->string('status'); // Can be 'scheduled', 'confirmed', etc.
+            $table->unsignedBigInteger('cat_id');
+            $table->json('slot_id');  // Change this from unsignedBigInteger to json type
+            $table->integer('staff_id');
+            $table->integer('track_type_id');
+            $table->integer('track_id');
+            $table->string('status');
+            $table->integer('session');
+            $table->string('schedule');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
         });
     }
