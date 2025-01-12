@@ -201,6 +201,7 @@
 
 @push('scripts')
     <script>
+        var $locale = '{{app()->getLocale()}}';
         $(document).ready(function() {
 
             // Listen for changes on the category dropdown
@@ -224,7 +225,7 @@
 
                             // Populate the dropdown with the fetched tracks
                             data.tracks.forEach(function(track) {
-                                var optionText = (window.locale === 'en') ?
+                                var optionText = ($locale === 'en') ?
                                     track.track_name_en :
                                     track.track_name_ar;
 

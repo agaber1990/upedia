@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Hr;
 
-use App\Models\TrackType;
+use App\Models\{TrackType,EmType};
 use App\Models\Track;
 use App\Models\TrackAssignedStaff;
 use App\Models\SlotEmp;
@@ -162,7 +162,7 @@ class SmStaffController extends Controller
 
             $track_types = TrackType::all();
             $tracks = Track::all();
-            $role_types = TrackType::all();
+            $role_types = EmType::all();
             $categories = Category::all();
 
             $slots_emp = SlotEmp::all();
@@ -471,7 +471,7 @@ class SmStaffController extends Controller
 
             $track_types = TrackType::all();
             $tracks = Track::all();
-            $role_types = TrackType::all();
+            $role_types = EmType::all();
             $categories = Category::all();
             // Controller code
             $track_assigned_staff = TrackAssignedStaff::where('staff_id', $editData->id)
