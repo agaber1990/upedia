@@ -2,6 +2,11 @@
 @section('title')
     @lang('hr.calendar')
 @endsection
+<style>
+    .table tbody td {
+        padding: 10px !important
+    }
+</style>
 @section('mainContent')
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
@@ -88,9 +93,13 @@
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="staff_id">@lang('hr.staff')</label>
                                     <select class="form-control staff_id" name="staff_id" id="staff_id">
-                                   
+
                                     </select>
                                 </div>
+                            </div>
+                            <div class="col-lg-6 col-xl-12 mb-20">
+                                <table id="slotTable" class="table table-bordered"></table>
+
                             </div>
                         </div>
                         <!-- Filter Section -->
@@ -201,7 +210,7 @@
 
 @push('scripts')
     <script>
-        var $locale = '{{app()->getLocale()}}';
+        var $locale = '{{ app()->getLocale() }}';
         $(document).ready(function() {
 
             // Listen for changes on the category dropdown
@@ -324,6 +333,53 @@
 
                         // Check if slots exist in the response
                         if (response.slots && response.slots.length > 0) {
+                            // Group slots by day
+                            const days = [...new Set(response.slots.map(slot => slot
+                            .slot_day))]; // Get unique days
+                            const slotsByDay = {};
+                            days.forEach(day => {
+                                slotsByDay[day] = response.slots.filter(slot => slot
+                                    .slot_day === day);
+                            });
+
+                            // Get unique time slots and convert to AM/PM
+                            const timeSlots = [...new Set(response.slots.map(slot =>
+                                    `${slot.slot_start} - ${slot.slot_end}`))]
+                                .map(time => {
+                                    const [start, end] = time.split(" - ");
+                                    return `${convertToAmPm(start)} - ${convertToAmPm(end)}`;
+                                });
+
+                            // Create table dynamically
+                            let tableHTML = "<thead><tr><th>Time</th>";
+                            days.forEach(day => {
+                                tableHTML += `<th>${day}</th>`;
+                            });
+                            tableHTML += "</tr></thead>";
+
+                            tableHTML += "<tbody>";
+                            timeSlots.forEach(time => {
+                                tableHTML += `<tr><td>${time}</td>`;
+                                days.forEach(day => {
+                                    const originalTime = time.split(" - ").map(
+                                        t => convertTo24Hour(t)).join(" - ");
+                                    const slot = slotsByDay[day].find(s =>
+                                        `${s.slot_start} - ${s.slot_end}` ===
+                                        originalTime);
+                                    if (slot) {
+                                        tableHTML +=
+                                            `<td><input type="checkbox" data-slot-id="${slot.id}" ${slot.status === "scheduled" ? "checked" : ""}></td>`;
+                                    } else {
+                                        tableHTML += "<td></td>";
+                                    }
+                                });
+                                tableHTML += "</tr>";
+                            });
+                            tableHTML += "</tbody>";
+
+                            // Append table to DOM
+                            $("#slotTable").html(tableHTML);
+
                             response.slots.forEach(function(slot) {
                                 let dow = getDayOfWeek(slot
                                     .slot_day); // Convert day name to number
@@ -377,6 +433,23 @@
     </script>
 
     <script>
+        // Helper function to convert time to AM/PM format
+        function convertToAmPm(time) {
+            const [hour, minute, second] = time.split(":").map(Number);
+            const ampm = hour >= 12 ? "PM" : "AM";
+            const formattedHour = hour % 12 || 12; // Convert 0 to 12 for 12-hour format
+            return `${formattedHour}:${minute.toString().padStart(2, "0")} ${ampm}`;
+        }
+
+        // Helper function to convert time from AM/PM to 24-hour format
+        function convertTo24Hour(time) {
+            const [hourPart, minutePart] = time.split(":");
+            const [minute, ampm] = minutePart.split(" ");
+            let hour = parseInt(hourPart, 10);
+            if (ampm === "PM" && hour !== 12) hour += 12;
+            if (ampm === "AM" && hour === 12) hour = 0;
+            return `${hour.toString().padStart(2, "0")}:${minute}:00`;
+        }
         // Listen for changes on the category dropdown
 
 
@@ -465,73 +538,73 @@
                     });
 
                     $.ajax({
-                    url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
-                    method: 'GET',
-                    data: {
-                        staff_id: $('#staff_id').val(),
-                    },
-                    success: function(response) {
-                        console.log(response); // Log the response to check its structure
+                        url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
+                        method: 'GET',
+                        data: {
+                            staff_id: $('#staff_id').val(),
+                        },
+                        success: function(response) {
+                            console.log(response); // Log the response to check its structure
 
-                        // Ensure the calendar object is initialized
-                        if (!calendar) {
-                            console.error("Calendar object is not initialized.");
-                            return;
-                        }
-                        console.log(calendar);
+                            // Ensure the calendar object is initialized
+                            if (!calendar) {
+                                console.error("Calendar object is not initialized.");
+                                return;
+                            }
+                            console.log(calendar);
 
-                        // Clear existing events in the calendar
-                        calendar.removeAllEvents();
+                            // Clear existing events in the calendar
+                            calendar.removeAllEvents();
 
-                        // Check if slots exist in the response
-                        if (response.slots && response.slots.length > 0) {
-                            response.slots.forEach(function(slot) {
-                                let dow = getDayOfWeek(slot
-                                    .slot_day); // Convert day name to number
+                            // Check if slots exist in the response
+                            if (response.slots && response.slots.length > 0) {
+                                response.slots.forEach(function(slot) {
+                                    let dow = getDayOfWeek(slot
+                                        .slot_day); // Convert day name to number
 
-                                // Format start and end times for the calendar (in 24-hour format)
-                                let startTime = formatTimeForCalendar(slot.slot_start,
-                                    slot.slot_day);
-                                let endTime = formatTimeForCalendar(slot.slot_end, slot
-                                    .slot_day);
+                                    // Format start and end times for the calendar (in 24-hour format)
+                                    let startTime = formatTimeForCalendar(slot.slot_start,
+                                        slot.slot_day);
+                                    let endTime = formatTimeForCalendar(slot.slot_end, slot
+                                        .slot_day);
 
-                                // Format start and end times to 12-hour format for display
-                                let formattedStart = formatTo12HourTime(slot
-                                    .slot_start);
-                                let formattedEnd = formatTo12HourTime(slot.slot_end);
+                                    // Format start and end times to 12-hour format for display
+                                    let formattedStart = formatTo12HourTime(slot
+                                        .slot_start);
+                                    let formattedEnd = formatTo12HourTime(slot.slot_end);
 
-                                // Determine event color based on slot status
-                                let eventColor = getStatusColor(slot.status);
+                                    // Determine event color based on slot status
+                                    let eventColor = getStatusColor(slot.status);
 
-                                // Add the slot as an event to the calendar
-                                calendar.addEvent({
-                                    slot_id: `${slot.id}`, // Unique identifier for the slot
-                                    title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
-                                    start: startTime, // Slot start time in 24-hour format
-                                    end: endTime, // Slot end time in 24-hour format
-                                    daysOfWeek: [
-                                        dow
-                                    ], // Day of the week the slot applies to
-                                    description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
-                                    overlap: true, // Allow overlap with other events
-                                    display: true,
-                                    extendedProps: {
-                                        staff_id: response.staff
-                                            .id // Add staff_id for reference
-                                    },
-                                    backgroundColor: eventColor, // Set background color based on status
-                                    borderColor: eventColor, // Set border color based on status
-                                    textColor: '#fff', // Ensure good contrast for text
+                                    // Add the slot as an event to the calendar
+                                    calendar.addEvent({
+                                        slot_id: `${slot.id}`, // Unique identifier for the slot
+                                        title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
+                                        start: startTime, // Slot start time in 24-hour format
+                                        end: endTime, // Slot end time in 24-hour format
+                                        daysOfWeek: [
+                                            dow
+                                        ], // Day of the week the slot applies to
+                                        description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
+                                        overlap: true, // Allow overlap with other events
+                                        display: true,
+                                        extendedProps: {
+                                            staff_id: response.staff
+                                                .id // Add staff_id for reference
+                                        },
+                                        backgroundColor: eventColor, // Set background color based on status
+                                        borderColor: eventColor, // Set border color based on status
+                                        textColor: '#fff', // Ensure good contrast for text
+                                    });
                                 });
-                            });
-                        } else {
-                            console.warn("No slots found for the selected staff.");
+                            } else {
+                                console.warn("No slots found for the selected staff.");
+                            }
+                        },
+                        error: function() {
+                            alert('Failed to fetch staff data.');
                         }
-                    },
-                    error: function() {
-                        alert('Failed to fetch staff data.');
-                    }
-                });
+                    });
                 } else if (!status) {
                     // If any field is not selected, show an error message
                     Swal.fire(
