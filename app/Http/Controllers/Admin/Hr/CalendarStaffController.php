@@ -193,10 +193,9 @@ class CalendarStaffController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
-        dd($validated); 
         // Create the scheduled event (now using JSON array for slot_id)
         StaffScheduled::create([
-            'slot_id' => implode(',', $request->selected_slots),  // Joining slot IDs as comma-separated string
+            'slot_id' => json_encode($validated['selected_slots']), // Save as JSON
             'cat_id' => $validated['cat_id'],
             'staff_id' => $validated['staff_id'],
             'track_type_id' => $validated['track_type_id'],

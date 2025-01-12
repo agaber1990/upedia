@@ -210,6 +210,8 @@
 
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         var $locale = '{{ app()->getLocale() }}';
         $(document).ready(function() {
