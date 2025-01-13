@@ -7,6 +7,7 @@ use App\Http\Requests\DiscountPlanRequest;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Models\DiscountPlan;
+use App\Models\SlotEmp;
 use App\Models\StaffSlot;
 use App\Models\Track;
 use App\Models\TrackAssignedStaff;
@@ -25,10 +26,11 @@ class SalesManagementController extends Controller
 
     {
         try {
-            $slots = StaffSlot::get();
-            $staff = SmStaff::get();
+            $slots = StaffSlot::with('slotEmp')->get();
+                        $staff = SmStaff::get();
             $trackAssignedStaff = TrackAssignedStaff::get();
             $tracks = Track::get();
+            $slotTime = SlotEmp::get();
 
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 return ApiBaseMethod::sendResponse($staff, null);
