@@ -91,47 +91,13 @@
 
                             <div class="col-lg-6 col-xl-3 mb-20">
                                 <div class="primary_input">
-                                    <label class="primary_input_label" for="session">@lang('academics.session')</label>
-                                    <select class="form-control session staff_id" name="session" id="session">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-3 mb-20">
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="scheduled">@lang('academics.schedule')</label>
-                                    <select class="form-control scheduled staff_id" name="scheduled" id="scheduled">
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-3 mb-20">
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="start_date">@lang('academics.start_date')</label>
-                                    <input type="date" min="{{ date('Y-m-d') }}" class="form-control staff_id" name="start_date" id="start_date">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-xl-3 mb-20">
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="end_date">@lang('academics.end_date')</label>
-                                    <input type="date" min="{{ date('Y-m-d') }}" class="form-control staff_id" id="end_date" disabled>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-xl-3 mb-20">
-                                <div class="primary_input">
                                     <label class="primary_input_label" for="staff_id">@lang('hr.staff')</label>
                                     <select class="form-control staff_id" name="staff_id" id="staff_id">
 
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-12 mb-20">
-                                <div id="slotContainer">
 
-                                </div>
-
-                            </div>
                         </div>
                         <!-- Filter Section -->
 
@@ -140,26 +106,7 @@
 
 
                         <hr>
-                        <!-- Legend -->
-                        {{-- <div class="mt-4 mb-3">
-                            <ul class="list-inline">
-                                <li class="list-inline-item"><button
-                                        class="btn btn-success btn-sm">@lang('hr.available')</button>
-                                </li>
-                                <li class="list-inline-item"><button
-                                        class="btn btn-primary btn-sm">@lang('hr.scheduled')</button>
-                                </li>
-                                <li class="list-inline-item"><button class="btn btn-info btn-sm">@lang('hr.reserved')</button>
-                                </li>
-                                <li class="list-inline-item"><button
-                                        class="btn btn-warning btn-sm">@lang('hr.started')</button>
-                                </li>
-                                <li class="list-inline-item"><button
-                                        class="btn btn-danger btn-sm">@lang('hr.ended')</button></li>
-                            </ul>
-                        </div>
-                        <hr> --}}
-                        <!-- Calendar Section -->
+
                         <div id="calendar"></div>
 
 
@@ -380,104 +327,25 @@
 
             $('#staff_id').on('change', function() {
                 $.ajax({
-                    url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
+                    url: '{{ route('getSlotsByStaffReport') }}', // The route for fetching slots
                     method: 'GET',
                     data: {
                         staff_id: $(this).val(),
                     },
                     success: function(response) {
-                        console.log(response); // Log the response to check its structure
+                        console.log(response); // Log the response for debugging
 
                         // Ensure the calendar object is initialized
                         if (!calendar) {
                             console.error("Calendar object is not initialized.");
                             return;
                         }
-                        console.log(calendar);
 
                         // Clear existing events in the calendar
                         calendar.removeAllEvents();
 
                         // Check if slots exist in the response
                         if (response.slots && response.slots.length > 0) {
-                            // Group slots by day
-                            const days = [...new Set(response.slots.map(slot => slot
-                                .slot_day))]; // Get unique days
-                            const slotsByDay = {};
-                            days.forEach(day => {
-                                slotsByDay[day] = response.slots.filter(slot => slot
-                                    .slot_day === day);
-                            });
-
-                            // Get unique time slots and convert to AM/PM
-                            const timeSlots = [...new Set(response.slots.map(slot =>
-                                    `${slot.slot_start} - ${slot.slot_end}`))]
-                                .map(time => {
-                                    const [start, end] = time.split(" - ");
-                                    return `${convertToAmPm(start)} - ${convertToAmPm(end)}`;
-                                });
-                            // Create the Bootstrap layout dynamically
-                            let scheduleHTML =
-                                '<hr><div class="container-fluid"><div class="row">';
-
-                            days.forEach((day, index) => {
-                                // Add a column for each day
-                                scheduleHTML += `
-                                        <div class="col-md-2 mb-4">
-                                            <h5 class="mb-3">${day}</h5>
-                                            <div class="time-slots">
-                                    `;
-
-                                // Loop through time slots
-                                timeSlots.forEach(time => {
-                                    const originalTime = time
-                                        .split(" - ")
-                                        .map(t => convertTo24Hour(t))
-                                        .join(" - ");
-
-                                    const slot = slotsByDay[day]?.find(
-                                        s =>
-                                        `${s.slot_start} - ${s.slot_end}` ===
-                                        originalTime
-                                    );
-
-                                    scheduleHTML += `
-                                        <div class="form-check mb-2" style="background-color: ${slot && slot.status !== "scheduled" ? "#fff4cb" : "transparent"};
-                                        color: ${slot && slot.status !== "scheduled" ? "#000" : "#444"};">
-                                            <input 
-                                                class="form-check-input" 
-                                                type="checkbox" 
-                                                data-slot-id="${slot ? slot.id : ''}" 
-                                                ${slot ? (slot.status === "scheduled" ? "" : "") : "disabled"}
-                                            >
-                                            <label class="form-check-label">${time}</label>
-                                        </div>
-                                    `;
-
-                                });
-
-                                // Close time-slots and column
-                                scheduleHTML += `
-                                            </div> <!-- End of time-slots -->
-                                        </div> <!-- End of col-md-3 -->
-                                    `;
-
-                                // Close and start a new row after every 4 columns
-                                if ((index + 1) % 6 === 0 && index !== days.length -
-                                    1) {
-                                    scheduleHTML += '</div><div class="row">';
-                                }
-                            });
-
-                            // Close the last row and container
-                            scheduleHTML += '</div></div><hr>';
-
-                            // Append the schedule to the DOM
-                            $("#slotContainer").html(scheduleHTML);
-
-
-
-
                             response.slots.forEach(function(slot) {
                                 let dow = getDayOfWeek(slot
                                     .slot_day); // Convert day name to number
@@ -496,26 +364,49 @@
                                 // Determine event color based on slot status
                                 let eventColor = getStatusColor(slot.status);
 
-                                // Add the slot as an event to the calendar
-                                calendar.addEvent({
-                                    slot_id: `${slot.id}`, // Unique identifier for the slot
-                                    title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
-                                    start: startTime, // Slot start time in 24-hour format
-                                    end: endTime, // Slot end time in 24-hour format
-                                    daysOfWeek: [
-                                        dow
-                                    ], // Day of the week the slot applies to
-                                    description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
-                                    overlap: true, // Allow overlap with other events
-                                    display: true,
-                                    extendedProps: {
-                                        staff_id: response.staff
-                                            .id // Add staff_id for reference
-                                    },
-                                    backgroundColor: eventColor, // Set background color based on status
-                                    borderColor: eventColor, // Set border color based on status
-                                    textColor: '#fff', // Ensure good contrast for text
-                                });
+                                if (slot.status === 'scheduled' && slot.start_date &&
+                                    slot.end_date) {
+                                    // Generate events for all dates between start_date and end_date
+                                    let currentDate = new Date(slot.start_date);
+                                    const endDate = new Date(slot.end_date);
+
+                                    while (currentDate <= endDate) {
+                                        // Add the slot as an event for each date
+                                        if (currentDate.getDay() === dow) {
+                                            calendar.addEvent({
+                                                slot_id: `${slot.id}`, // Unique identifier for the slot
+                                                title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
+                                                start: `${formatDate(currentDate)}`, // Start datetime
+                                                end: `${formatDate(currentDate)}`, // End datetime
+                                                description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
+                                                overlap: true, // Allow overlap with other events
+                                                display: true,
+                                                backgroundColor: eventColor, // Background color based on status
+                                                borderColor: eventColor, // Border color based on status
+                                                textColor: '#fff', // Ensure good contrast for text
+                                            });
+                                        }
+                                        currentDate.setDate(currentDate.getDate() +
+                                            1); // Move to the next day
+                                    }
+                                } else if (slot.status === 'available') {
+                                    // Add the slot as a recurring weekly event
+                                    calendar.addEvent({
+                                        slot_id: `${slot.id}`, // Unique identifier for the slot
+                                        title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
+                                        start: startTime, // Slot start time in 24-hour format
+                                        end: endTime, // Slot end time in 24-hour format
+                                        daysOfWeek: [
+                                            dow
+                                        ], // Day of the week the slot applies to
+                                        description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
+                                        overlap: true, // Allow overlap with other events
+                                        display: true,
+                                        backgroundColor: eventColor, // Background color based on status
+                                        borderColor: eventColor, // Border color based on status
+                                        textColor: '#fff', // Ensure good contrast for text
+                                    });
+                                }
                             });
                         } else {
                             console.warn("No slots found for the selected staff.");
@@ -538,7 +429,10 @@
             const formattedHour = hour % 12 || 12; // Convert 0 to 12 for 12-hour format
             return `${formattedHour}:${minute.toString().padStart(2, "0")} ${ampm}`;
         }
-
+// Format date to YYYY-MM-DD
+function formatDate(date) {
+    return date.toISOString().split('T')[0];
+}
         // Helper function to convert time from AM/PM to 24-hour format
         function convertTo24Hour(time) {
             const [hourPart, minutePart] = time.split(":");
@@ -623,86 +517,15 @@
 
                 }
             }).then((result) => {
-                const status = "scheduled"; // Get selected status
-
                 // Check if both dates and status are selected
                 if (result.isConfirmed && status) {
                     // If confirmed and all required fields are selected, call the save function
-                    saveScheduledEvent(status, slot_id, staff_id);
                     Swal.fire({
                         title: "Good job!",
                         text: "You clicked the button!",
                         icon: "success"
                     });
 
-                    $.ajax({
-                        url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
-                        method: 'GET',
-                        data: {
-                            staff_id: $('#staff_id').val(),
-                        },
-                        success: function(response) {
-                            console.log(response); // Log the response to check its structure
-
-                            // Ensure the calendar object is initialized
-                            if (!calendar) {
-                                console.error("Calendar object is not initialized.");
-                                return;
-                            }
-                            console.log(calendar);
-
-                            // Clear existing events in the calendar
-                            calendar.removeAllEvents();
-
-                            // Check if slots exist in the response
-                            if (response.slots && response.slots.length > 0) {
-                                response.slots.forEach(function(slot) {
-                                    let dow = getDayOfWeek(slot
-                                        .slot_day); // Convert day name to number
-
-                                    // Format start and end times for the calendar (in 24-hour format)
-                                    let startTime = formatTimeForCalendar(slot.slot_start,
-                                        slot.slot_day);
-                                    let endTime = formatTimeForCalendar(slot.slot_end, slot
-                                        .slot_day);
-
-                                    // Format start and end times to 12-hour format for display
-                                    let formattedStart = formatTo12HourTime(slot
-                                        .slot_start);
-                                    let formattedEnd = formatTo12HourTime(slot.slot_end);
-
-                                    // Determine event color based on slot status
-                                    let eventColor = getStatusColor(slot.status);
-
-                                    // Add the slot as an event to the calendar
-                                    calendar.addEvent({
-                                        slot_id: `${slot.id}`, // Unique identifier for the slot
-                                        title: `${slot.status}: ${formattedStart} - ${formattedEnd}`,
-                                        start: startTime, // Slot start time in 24-hour format
-                                        end: endTime, // Slot end time in 24-hour format
-                                        daysOfWeek: [
-                                            dow
-                                        ], // Day of the week the slot applies to
-                                        description: `${slot.slot_day} ${formattedStart} - ${formattedEnd}`,
-                                        overlap: true, // Allow overlap with other events
-                                        display: true,
-                                        extendedProps: {
-                                            staff_id: response.staff
-                                                .id // Add staff_id for reference
-                                        },
-                                        backgroundColor: eventColor, // Set background color based on status
-                                        borderColor: eventColor, // Set border color based on status
-                                        textColor: '#fff', // Ensure good contrast for text
-                                    });
-                                });
-                            } else {
-                                console.warn("No slots found for the selected staff.");
-                            }
-                        },
-                        error: function() {
-                            alert('Failed to fetch staff data.');
-                        }
-                    });
                 } else if (!status) {
                     // If any field is not selected, show an error message
                     Swal.fire(
@@ -723,30 +546,7 @@
 
 
 
-        // Save the scheduled event to the database
-        function saveScheduledEvent(status = "scheduled", slot_id, staff_id) {
 
-            const eventData = {
-                slot_id: slot_id,
-                staff_id: staff_id,
-                status: status,
-            };
-            console.log(eventData);
-
-            // AJAX request to save event to the database
-            $.ajax({
-                url: '{{ route('scheduleStaffEvent') }}', // Your backend route for saving the event
-                method: 'GET',
-                data: eventData,
-                success: function(response) {
-                    console.log(response);
-
-                },
-                error: function(error) {
-                    alert('Error saving event: ' + error.message);
-                }
-            });
-        }
 
 
         // Helper function to convert day name to its corresponding day of the week (0-6)
