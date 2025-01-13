@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Academics;
 use App\Http\Controllers\Controller;
 use App\ApiBaseMethod;
 use App\Http\Requests\DiscountPlanRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Models\DiscountPlan;
@@ -32,13 +33,15 @@ class SalesManagementController extends Controller
             $staff = SmStaff::get();
             $trackAssignedStaff = TrackAssignedStaff::get();
             $tracks = Track::get();
+            $categories = Category::get();
+
             $slotTime = SlotEmp::get();
             $staffScheduleds = StaffScheduled::all();
 
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 return ApiBaseMethod::sendResponse($staff, null);
             }
-            return view('backEnd.academics.sales_management.index', compact('staff', 'slots', 'trackAssignedStaff', 'tracks', 'staffScheduleds'));
+            return view('backEnd.academics.sales_management.index', compact('staff', 'slots', 'trackAssignedStaff', 'tracks', 'staffScheduleds','categories'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();

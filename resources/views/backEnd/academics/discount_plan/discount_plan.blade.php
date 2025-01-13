@@ -171,7 +171,7 @@
                                             @foreach ($discountPlans as $discountPlan)
                                                 <tr>
                                                     <td>{{ $discountPlan->percentage }}</td>
-                                                    <td>{{ $discountPlan->level_id }}</td>
+                                                    <td>{{ $discountPlan->level->level_number }}</td>
                                                     <td>
                                                         <x-drop-down>
                                                             @if (userPermission('discount_plans-edit'))

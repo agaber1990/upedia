@@ -12,4 +12,8 @@ class DiscountPlan extends Model
     protected $table = 'discount_plans';
     protected $fillable = ['percentage',  'level_id'];
 
+    public function level()
+    {
+        return $this->belongsTo(level::class, 'level_id');
+    }
 }
