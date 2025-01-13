@@ -76,22 +76,22 @@ class CalendarStaffController extends Controller
     {
         // Get the selected track ID and track type ID from the request
         $track_id = $request->track_id;
-    
+        $track = Track::find($track_id);
         // Validate that both track_id and track_type_id are provided
         if (empty($track_id)) {
             return response()->json(['error' => 'Track ID and Track Type ID are required'], 400);
         }
-    
+
         // Filter the staff based on the selected track and track type, and eager load staff details
         $staff = TrackAssignedStaff::where('track_id', $track_id)
             ->with(['staff:id,full_name']) // Eager load only the staff id and full_name
             ->get();
-    
+
         // Check if staff are found for the given track and track type
         if ($staff->isEmpty()) {
             return response()->json(['message' => 'No staff found for the selected track and type'], 404);
         }
-    
+
         // Map the results to return only the required fields (staff_id and full_name)
         $staffNamesAndIds = $staff->map(function ($staffMember) {
             return [
@@ -102,37 +102,49 @@ class CalendarStaffController extends Controller
                 'staff_name' => $staffMember->staff->full_name,  // Staff full name
             ];
         });
-    
-        // Return the staff data with only necessary fields
-        return response()->json($staffNamesAndIds);
+
+        // Include the track details in the response
+        return response()->json([
+            'track' => [
+                'cat_id' => $track->cat_id,
+                'track_name_en' => $track->track_name_en, // Assuming the track has a "name" field
+                'track_name_ar' => $track->track_name_ar ?? null, // Optional description field
+                'level_number' => $track->level_number ?? null, // Optional description field
+                'length' => $track->length ?? null, // Optional description field
+                'session' => $track->session ?? null, // Optional description field
+                'schedule' => $track->schedule ?? null, // Optional description field
+                'valid_for' => $track->valid_for ?? null, // Optional description field
+            ],
+            'staff' => $staffNamesAndIds,
+        ]);
     }
-  
-    
-    
+
+
+
     public function getSlotsByStaff(Request $request)
     {
         // Validate staff_id and optional date
         $validated = $request->validate([
             'staff_id' => 'required|integer',
         ]);
-    
+
         $staff_id = $validated['staff_id'];
         $date = $validated['date'] ?? now()->toDateString(); // Default to today's date if not provided
-    
+
         // Fetch the staff member
         $staff = SmStaff::find($staff_id);
-    
+
         if (!$staff) {
             return response()->json(['error' => 'Staff not found'], 404);
         }
-    
+
         // Fetch the slot_ids associated with the staff_id
         $slots = StaffSlot::where('staff_id', $staff_id)->pluck('slot_id');
-    
+
         if ($slots->isEmpty()) {
             return response()->json(['error' => 'No slots found for the staff'], 404);
         }
-    
+
         // Fetch slot details and include their statuses for the specific date
         $slotDetails = SlotEmp::whereIn('id', $slots)
             ->select("id", "slot_day", "slot_start", "slot_end")
@@ -142,7 +154,7 @@ class CalendarStaffController extends Controller
                 $scheduled = StaffScheduled::where('slot_id', $slot->id)
                     ->where('staff_id', $staff_id)
                     ->first();
-    
+
                 // Attach the status and created_at to the slot
                 if ($scheduled) {
                     $slot->status = $scheduled->status;
@@ -151,21 +163,19 @@ class CalendarStaffController extends Controller
                     $slot->status = 'available';  // If no schedule exists, show it as 'available'
                     $slot->created_at = null;
                 }
-    
+
                 // Attach the date to the slot for frontend reference
                 $slot->date = $date;
-    
+
                 return $slot;
             });
-    
+
         // Return response with staff and slot details
         return response()->json([
             'staff' => $staff,
             'slots' => $slotDetails,
         ]);
     }
-    
-
 
 
 
@@ -173,18 +183,38 @@ class CalendarStaffController extends Controller
     {
         // Validate incoming data
         $validated = $request->validate([
-            'slot_id' => 'required', // Assuming staff_slots table has slots
-            'staff_id' => 'required', // Assuming staff_slots table has slots
-            'status' => 'required',
+            'selected_slots' => 'required|array',
+            'cat_id' => 'required|exists:categories,id',
+            'staff_id' => 'required|exists:sm_staffs,id',
+            'track_id' => 'required|integer',
+            'track_type_id' => 'required|integer',
+            'session' => 'required|integer',
+            'schedule' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
         ]);
-        $scheduledEvent = StaffScheduled::create([
-            'slot_id' => $validated['slot_id'],
+        // Create the scheduled event (now using JSON array for slot_id)
+        StaffScheduled::create([
+            'slot_id' => json_encode($validated['selected_slots']), // Save as JSON
+            'cat_id' => $validated['cat_id'],
             'staff_id' => $validated['staff_id'],
-            'status' => $validated['status'],
+            'track_type_id' => $validated['track_type_id'],
+            'track_id' => $validated['track_id'],
+            'status' => 'scheduled',
+            'session' => $validated['session'],
+            'schedule' => $validated['schedule'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
         ]);
-
-        return response()->json(['success' => true, 'data' => $scheduledEvent], 200);
+    
+        // Return a response with success
+        return response()->json([
+            'success' => "Staff Assigned slots successfully",
+        ], 200);
     }
+    
+    
+
 
 
 
