@@ -31,7 +31,6 @@ return [
     'update_class' => 'Update Class',
     'delete_class' => 'Delete Class',
     'class_list' => 'Class List',
-
     'edit_track' => 'Edit Track',
     'add_track' => 'Add Track',
     'save_track' => 'Save Track',
@@ -196,4 +195,7 @@ return [
     'edit_discount_plan' => 'Edit Discount plan',
     'add_discount_plan' => 'Add Discount plan',
     'update_discount_plan' => 'Update Discount plan',
+    'sales_management'=>'Sales Management',
+    'staff_name'=>'Staff Name',
+    'slot_times'=>'Slot Times',
 ];

@@ -129,8 +129,6 @@ class CalendarStaffController extends Controller
         ]);
 
         $staff_id = $validated['staff_id'];
-        $date = $validated['date'] ?? now()->toDateString(); // Default to today's date if not provided
-
         // Fetch the staff member
         $staff = SmStaff::find($staff_id);
 
@@ -149,30 +147,22 @@ class CalendarStaffController extends Controller
         $slotDetails = SlotEmp::whereIn('id', $slots)
             ->select("id", "slot_day", "slot_start", "slot_end")
             ->get()
-            ->map(function ($slot) use ($staff_id, $date) {
-                // Get the scheduled event based on slot_id and staff_id
-                $scheduled = StaffScheduled::where('slot_id', $slot->id)
-                    ->where('staff_id', $staff_id)
-                    ->first();
+            ->map(function ($slot) use ($staff_id) {
+                $staff_scheduleds = StaffScheduled::where('staff_id', $staff_id)
+                    ->get();
+                 // loop for every one here 
+                 foreach ($staff_scheduleds as $item) {
+                     $scheduled_ids = json_decode($item->slot_id, true);
 
-                // Attach the status and created_at to the slot
-                if ($scheduled) {
-                    $slot->status = $scheduled->status;
-                    $slot->created_at = $scheduled->created_at;  // Include created_at to show when it was created
-                } else {
-                    $slot->status = 'available';  // If no schedule exists, show it as 'available'
-                    $slot->created_at = null;
-                }
-
-                // Attach the date to the slot for frontend reference
-                $slot->date = $date;
+                    # code...
+                    $isScheduled = in_array($slot->id, $scheduled_ids);
+                    $slot->status = $isScheduled ? $item->status : 'available';
+                 }
 
                 return $slot;
             });
-
         // Return response with staff and slot details
         return response()->json([
-            'staff' => $staff,
             'slots' => $slotDetails,
         ]);
     }

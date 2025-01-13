@@ -412,7 +412,7 @@
                                                 type="checkbox" 
                                                  name="slot[${day}][]" 
                                                 data-slot-id="${slot ? slot.id : ''}" 
-                                                ${slot ? (slot.status === "scheduled" ? "" : "") : "disabled"}
+                                                ${slot ? (slot.status === "scheduled" ? "disabled" : "") : "disabled"}
                                             >
                                             <label class="form-check-label">${time}</label>
                                         </div>
@@ -556,14 +556,12 @@
                         icon: "success"
                     });
                     $("#slotContainer").html('');
-                    $('#track_type_id').val('');
-                    $('#track_id').val('');
-                    $('#session').val('');
-                    $('#scheduled').val('');
+                    $('#session').html('');
+                    $('#scheduled').html('');
                     $('#start_date').val('');
                     $('#end_date').val('');
-                    $('#staff_id').val('');
-
+                    $('#staff_id').html('');
+                    $("#submitAssignStaff").html('');
                 },
                 error: function(error) {
                     alert('Error saving event: ' + error.message);

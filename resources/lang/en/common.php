@@ -679,5 +679,6 @@ return [
     'pricing_plan' => 'Pricing Plan',
     'categories' => 'Categories',
     'discount_plans' => 'Discount Plans',
+    'not_available'=>'Not Available'
 ]
     ?>
