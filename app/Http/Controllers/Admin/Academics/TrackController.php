@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Academics;
 
 use App\Models\{Track, Level, TrackType};
 use App\Models\Category;
+use App\Models\PricingPlanType;
 use App\tableList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -74,6 +75,17 @@ class TrackController extends Controller
         $categories = Category::all();
 
         return view('backEnd.academics.tracks', compact('tracks','levels','valid_for','track','categories'));
+    }
+    public function tracksPricingPlan(Request $request, $id)
+    {
+
+        $tracks = Track::get();
+        $track = Track::find($id);
+        $levels = Level::all();
+        $pricing_plan_types = PricingPlanType::all();
+        $tracktypes = TrackType::whereIn("id",  json_decode($track->valid_for))->get();
+
+        return view('backEnd.academics.trackspricingplan', compact('tracks','levels','pricing_plan_types','tracktypes','track'));
     }
 
     /**

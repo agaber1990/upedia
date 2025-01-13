@@ -62,21 +62,6 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
-                                                <label class="primary_input_label" for="percentage">@lang('academics.percentage')
-                                                    <span class="text-danger"> *</span>
-                                                </label>
-                                                <input
-                                                    class="primary_input_field form-control{{ $errors->has('percentage') ? ' is-invalid' : '' }}"
-                                                    type="text"
-                                                    name="percentage"
-                                                    id="percentage"
-                                                    autocomplete="off"
-                                                    value="{{ old('percentage', isset($discountPlan) ? $discountPlan->percentage : '') }}">
-                                                
-                                                @if ($errors->has('percentage'))
-                                                    <span class="text-danger">{{ $errors->first('percentage') }}</span>
-                                                @endif
-                                                
                                                 <label class="primary_input_label" for="level_id">@lang('academics.level_id')
                                                     <span class="text-danger"> *</span>
                                                 </label>
@@ -97,6 +82,22 @@
                                                 @if ($errors->has('level_id'))
                                                     <span class="text-danger">{{ $errors->first('level_id') }}</span>
                                                 @endif
+                                                <label class="primary_input_label" for="percentage">@lang('academics.percentage')
+                                                    <span class="text-danger"> *</span>
+                                                </label>
+                                                <input
+                                                    class="primary_input_field form-control{{ $errors->has('percentage') ? ' is-invalid' : '' }}"
+                                                    type="text"
+                                                    name="percentage"
+                                                    id="percentage"
+                                                    autocomplete="off"
+                                                    value="{{ old('percentage', isset($discountPlan) ? $discountPlan->percentage : '') }}">
+                                                
+                                                @if ($errors->has('percentage'))
+                                                    <span class="text-danger">{{ $errors->first('percentage') }}</span>
+                                                @endif
+                                                
+                                             
                                                 
 
 
@@ -161,8 +162,8 @@
                                         <thead>
 
                                             <tr>
-                                                <th>@lang('academics.percentage')</th>
                                                 <th>@lang('academics.level_id')</th>
+                                                <th>@lang('academics.percentage')</th>
                                                 <th>@lang('common.action')</th>
                                             </tr>
                                         </thead>
@@ -170,8 +171,8 @@
                                         <tbody>
                                             @foreach ($discountPlans as $discountPlan)
                                                 <tr>
-                                                    <td>{{ $discountPlan->percentage }}</td>
                                                     <td>{{ $discountPlan->level_id }}</td>
+                                                    <td>{{ $discountPlan->percentage }}</td>
                                                     <td>
                                                         <x-drop-down>
                                                             @if (userPermission('discount_plans-edit'))
