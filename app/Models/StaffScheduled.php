@@ -12,6 +12,8 @@ class StaffScheduled extends Model
     // Add all fields that can be mass-assigned
     protected $fillable = [
         'cat_id',
+        'course_name_en',
+        'course_name_ar',
         'slot_id',
         'staff_id',
         'status',
