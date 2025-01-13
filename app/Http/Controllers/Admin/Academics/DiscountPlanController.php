@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin\Academics;
+
 use App\Http\Controllers\Controller;
 use App\ApiBaseMethod;
 use App\Http\Requests\DiscountPlanRequest;
@@ -26,7 +27,7 @@ class DiscountPlanController extends Controller
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 return ApiBaseMethod::sendResponse($discountPlans, null);
             }
-            return view('backEnd.academics.discount_plan.discount_plan', compact('discountPlans','levels'));
+            return view('backEnd.academics.discount_plan.discount_plan', compact('discountPlans', 'levels'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -47,28 +48,36 @@ class DiscountPlanController extends Controller
     public function store(DiscountPlanRequest $request)
     {
 
-        try {
-            $discountPlan = new DiscountPlan();
-            $discountPlan->percentage = $request->percentage;
-            $discountPlan->level_id = $request->level_id;
+        // try {
+        $discountPlan = new DiscountPlan();
+        $discountPlan->name_en = $request->name_en;
+        $discountPlan->name_ar = $request->name_ar;
+        $levels_prices = [
+            'level_id' => $request->level_id,
+            'price' => $request->price
+        ];
+        $discountPlan->levels_prices = json_encode($levels_prices);
 
-            $result = $discountPlan->save();
+        dd($discountPlan);
 
-            if (ApiBaseMethod::checkUrl($request->fullUrl())) {
-                if ($result) {
-                    return ApiBaseMethod::sendResponse(null, 'discountPlan has been created successfully');
-                } else {
-                    return ApiBaseMethod::sendError('Something went wrong, please try again.');
-                }
+        $result = $discountPlan->save();
+
+
+        if (ApiBaseMethod::checkUrl($request->fullUrl())) {
+            if ($result) {
+                return ApiBaseMethod::sendResponse(null, 'discountPlan has been created successfully');
+            } else {
+                return ApiBaseMethod::sendError('Something went wrong, please try again.');
             }
-
-            Toastr::success('Operation successful', 'Success');
-            return redirect()->back();
-
-        } catch (\Exception $e) {
-            Toastr::error('Operation Failed', 'Failed');
-            return redirect()->back();
         }
+
+        Toastr::success('Operation successful', 'Success');
+        return redirect()->back();
+
+        // } catch (\Exception $e) {
+        //     Toastr::error('Operation Failed', 'Failed');
+        //     return redirect()->back();
+        // }
     }
     /**
      * Display the specified resource.
@@ -87,8 +96,7 @@ class DiscountPlanController extends Controller
                 $data['discountPlans'] = $discountPlans->toArray();
                 return ApiBaseMethod::sendResponse($data, null);
             }
-            return view('backEnd.academics.discount_plan.discount_plan', compact('discountPlan','levels', 'discountPlans'));
-
+            return view('backEnd.academics.discount_plan.discount_plan', compact('discountPlan', 'levels', 'discountPlans'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();

@@ -30,15 +30,15 @@
                                     <thead>
                                         <tr>
                                             <th>@lang('academics.staff_name')</th>
-                                            <th>@lang('academics.cat_id')</th>
+                                            <th>@lang('academics.category')</th>
                                             <th>@lang('academics.slot_id')</th>
                                             <th>@lang('academics.status')</th>
                                             <th>@lang('academics.session')</th>
                                             <th>@lang('academics.schedule')</th>
                                             <th>@lang('academics.start_date')</th>
                                             <th>@lang('academics.end_date')</th>
-                                            <th>@lang('academics.track_type_id')</th>
-                                            <th>@lang('academics.track_id')</th>
+                                            <th>@lang('academics.track_type')</th>
+                                            <th>@lang('academics.track')</th>
                                         </tr>
                                     </thead>
                                     <tbody>

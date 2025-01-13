@@ -200,5 +200,7 @@ return [
     'slot_times'=>'Slot Times',
     'percentage'=>'Percentage',
     'level_number'=>'Level Number',
-    'select_level'=> 'Select Level'
+    'select_level'=> 'Select Level',
+    'track_type'=> 'Track Type',
+    'status'=> 'Status',
 ];

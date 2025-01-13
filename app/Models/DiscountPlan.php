@@ -10,10 +10,10 @@ class DiscountPlan extends Model
     use HasFactory;
 
     protected $table = 'discount_plans';
-    protected $fillable = ['percentage',  'level_id'];
 
-    public function level()
-    {
-        return $this->belongsTo(level::class, 'level_id');
-    }
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'levels_prices'
+    ];
 }
