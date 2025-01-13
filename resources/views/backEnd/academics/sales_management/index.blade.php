@@ -45,15 +45,15 @@
                                         @foreach ($staffScheduleds as $scheduled)
                                             <tr>
                                                 <td>{{ $staff->firstWhere('id', $scheduled->staff_id)->full_name }}</td>
-                                                <td>{{ $scheduled->cat_id }}</td>
+                                                <td>{{ $scheduled->category->name_en }}</td>
                                                 <td>{{ $scheduled->slot_id }}</td>
                                                 <td>{{ $scheduled->status }}</td>
                                                 <td>{{ $scheduled->session }}</td>
                                                 <td>{{ $scheduled->schedule }}</td>
                                                 <td>{{ $scheduled->start_date }}</td>
                                                 <td>{{ $scheduled->end_date }}</td>
-                                                <td>{{ $scheduled->track_type_id }}</td>
-                                                <td>{{ $scheduled->track_id }}</td>
+                                                <td>{{ $scheduled->trackType->name }}</td>
+                                                <td>{{ $scheduled->track->track_name_en }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

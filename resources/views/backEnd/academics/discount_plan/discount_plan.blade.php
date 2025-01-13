@@ -162,7 +162,7 @@
                                         <thead>
 
                                             <tr>
-                                                <th>@lang('academics.level_id')</th>
+                                                <th>@lang('academics.level_number')</th>
                                                 <th>@lang('academics.percentage')</th>
                                                 <th>@lang('common.action')</th>
                                             </tr>
@@ -171,7 +171,7 @@
                                         <tbody>
                                             @foreach ($discountPlans as $discountPlan)
                                                 <tr>
-                                                    <td>{{ $discountPlan->level_id }}</td>
+                                                    <td>{{ $discountPlan->level->level_number}}</td>
                                                     <td>{{ $discountPlan->percentage }}</td>
                                                     <td>
                                                         <x-drop-down>

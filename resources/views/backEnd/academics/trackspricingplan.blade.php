@@ -56,13 +56,26 @@
                 </div>
 
                 <div class="col-md-4">
-                    <div class="white-box">
                         <div class="main-title">
                             <h3 class="mb-15">@lang('academics.discount_plan')</h3>
                         </div>
-                        Discount Paln<Br>
-                     level  ----    percentage 
-                    </div>
+                        <div class="primary_input">
+                            <label class="primary_input_label" for="">@lang('academics.discount_plan')
+                            </label>
+                            <select
+                                class="primary_select  form-control{{ $errors->has('discount_plan') ? ' is-invalid' : '' }}"
+                                name="discount_plan" id="discount_plan">
+                                    <option value="1">optain 2 levels 10%</option>
+
+                            </select>
+
+                            @if ($errors->has('discount_plan'))
+                                <span class="text-danger invalid-select" role="alert">
+                                    {{ $errors->first('discount_plan') }}
+                                </span>
+                            @endif
+                        </div>
+                  
                 </div>
             </div>
         </div>
