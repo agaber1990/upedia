@@ -27,7 +27,24 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
+                      
                         <div class="row">
+                            <div class="col-md-6 ">
+                                <div class="primary_input mb-2">
+                                  <label class="primary_input_label" for="">@lang('common.course_name_en')
+                                      <span class="text-danger"> *</span></label>
+                                  <input
+                                      class="primary_input_field form-control " name="course_name_en" id="course_name_en" />
+                                </div>
+                          </div>
+                            <div class="col-md-6 ">
+                                <div class="primary_input mb-2">
+                                  <label class="primary_input_label" for="">@lang('common.course_name_ar')
+                                      <span class="text-danger"> *</span></label>
+                                  <input dir="rtl"
+                                      class="primary_input_field form-control " name="course_name_ar" id="course_name_ar" />
+                                </div>
+                          </div>
                             <div class="col-lg-6 col-xl-3 ">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('common.categories')
@@ -510,6 +527,8 @@
         });
 
         function submitAssignedForm() {
+            let course_name_en = $('#course_name_en').val();
+            let course_name_ar = $('#course_name_ar').val();
             let cat_id = $('#cat_id').val();
             let track_type_id = $('#track_type_id').val();
             let track_id = $('#track_id').val();
@@ -532,6 +551,8 @@
 
             // Prepare form data
             let formData = {
+                course_name_en: course_name_en,
+                course_name_ar: course_name_ar,
                 cat_id: cat_id,
                 track_type_id: track_type_id,
                 track_id: track_id,
@@ -555,7 +576,10 @@
                         text: "You clicked the button!",
                         icon: "success"
                     });
+                    $('#course_name_en').val('');
+                    $('#course_name_ar').val('');
                     $("#slotContainer").html('');
+                    $('#session').html('');
                     $('#session').html('');
                     $('#scheduled').html('');
                     $('#start_date').val('');

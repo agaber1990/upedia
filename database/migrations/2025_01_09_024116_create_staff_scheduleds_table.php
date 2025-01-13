@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('cat_id');
             $table->json('slot_id');  // Change this from unsignedBigInteger to json type
+            $table->text('course_name_en');
+            $table->text('course_name_ar');
             $table->integer('staff_id');
             $table->integer('track_type_id');
             $table->integer('track_id');

@@ -173,6 +173,8 @@ class CalendarStaffController extends Controller
     {
         // Validate incoming data
         $validated = $request->validate([
+            'course_name_en' => 'required|string',
+            'course_name_ar' => 'required|string',
             'selected_slots' => 'required|array',
             'cat_id' => 'required|exists:categories,id',
             'staff_id' => 'required|exists:sm_staffs,id',
@@ -185,6 +187,8 @@ class CalendarStaffController extends Controller
         ]);
         // Create the scheduled event (now using JSON array for slot_id)
         StaffScheduled::create([
+            'course_name_en' => $validated['course_name_en'],
+            'course_name_ar' => $validated['course_name_ar'],
             'slot_id' => json_encode($validated['selected_slots']), // Save as JSON
             'cat_id' => $validated['cat_id'],
             'staff_id' => $validated['staff_id'],
