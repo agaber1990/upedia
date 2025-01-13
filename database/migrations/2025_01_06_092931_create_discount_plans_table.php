@@ -13,9 +13,8 @@ return new class extends Migration {
         Schema::create('discount_plans', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('name_ar');
-            $table->string('name_en');
-            $table->integer('number')->default(0);
+            $table->unsignedInteger('level_id')->nullable();
+            $table->float('percentage')->default(0);
         });
     }
 

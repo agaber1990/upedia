@@ -62,26 +62,44 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="primary_input">
-                                                <label class="primary_input_label" for="">@lang('academics.discount_plan_name_en')
-                                                    <span class="text-danger"> *</span></label>
+                                                <label class="primary_input_label" for="percentage">@lang('academics.percentage')
+                                                    <span class="text-danger"> *</span>
+                                                </label>
                                                 <input
-                                                    class="primary_input_field form-control{{ $errors->has('name_en') ? ' is-invalid' : '' }}"
-                                                    type="text" name="name_en" autocomplete="off"
-                                                    value="{{ isset($discountPlan) ? $discountPlan->name_en : Request::old('name_en') }}">
+                                                    class="primary_input_field form-control{{ $errors->has('percentage') ? ' is-invalid' : '' }}"
+                                                    type="text"
+                                                    name="percentage"
+                                                    id="percentage"
+                                                    autocomplete="off"
+                                                    value="{{ old('percentage', isset($discountPlan) ? $discountPlan->percentage : '') }}">
+                                                
+                                                @if ($errors->has('percentage'))
+                                                    <span class="text-danger">{{ $errors->first('percentage') }}</span>
+                                                @endif
+                                                
+                                                <label class="primary_input_label" for="level_id">@lang('academics.level_id')
+                                                    <span class="text-danger"> *</span>
+                                                </label>
+                                                
+                                                <select
+                                                    class="primary_select form-control{{ $errors->has('level_id') ? ' is-invalid' : '' }}"
+                                                    name="level_id"
+                                                    id="level_id">
+                                                    <option value="" disabled selected>@lang('academics.select_level')</option>
+                                                    @foreach ($levels as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ old('level_id', isset($discountPlan) ? $discountPlan->level_id : '') == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->level_number }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                
+                                                @if ($errors->has('level_id'))
+                                                    <span class="text-danger">{{ $errors->first('level_id') }}</span>
+                                                @endif
+                                                
 
-                                                <label class="primary_input_label" for="">@lang('academics.discount_plan_name_ar')
-                                                    <span class="text-danger"> *</span></label>
-                                                <input
-                                                    class="primary_input_field form-control{{ $errors->has('name_ar') ? ' is-invalid' : '' }}"
-                                                    type="text" name="name_ar" autocomplete="off"
-                                                    value="{{ isset($discountPlan) ? $discountPlan->name_ar : Request::old('name_ar') }}">
 
-                                                    <label class="primary_input_label" for="">@lang('academics.discount_plan_number')
-                                                        <span class="text-danger"> *</span></label>
-                                                    <input
-                                                        class="primary_input_field form-control{{ $errors->has('number') ? ' is-invalid' : '' }}"
-                                                          type="number" name="number" min="0" step="1" autocomplete="off"
-                                                        value="{{ isset($discountPlan) ? $discountPlan->number : Request::old('number') }}">
 
 
                                                 <input type="hidden" name="id"
@@ -143,9 +161,8 @@
                                         <thead>
 
                                             <tr>
-                                                <th>@lang('academics.discount_plan_name_en')</th>
-                                                <th>@lang('academics.discount_plan_name_ar')</th>
-                                                <th>@lang('academics.discount_plan_number')</th>
+                                                <th>@lang('academics.percentage')</th>
+                                                <th>@lang('academics.level_id')</th>
                                                 <th>@lang('common.action')</th>
                                             </tr>
                                         </thead>
@@ -153,9 +170,8 @@
                                         <tbody>
                                             @foreach ($discountPlans as $discountPlan)
                                                 <tr>
-                                                    <td>{{ $discountPlan->name_en }}</td>
-                                                    <td>{{ $discountPlan->name_ar }}</td>
-                                                    <td>{{ $discountPlan->number }}</td>
+                                                    <td>{{ $discountPlan->percentage }}</td>
+                                                    <td>{{ $discountPlan->level_id }}</td>
                                                     <td>
                                                         <x-drop-down>
                                                             @if (userPermission('discount_plans-edit'))

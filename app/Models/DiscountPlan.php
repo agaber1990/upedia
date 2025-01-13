@@ -10,6 +10,6 @@ class DiscountPlan extends Model
     use HasFactory;
 
     protected $table = 'discount_plans';
-    protected $fillable = ['name_en', 'name_ar', 'number'];
+    protected $fillable = ['percentage',  'level_id'];
 
 }

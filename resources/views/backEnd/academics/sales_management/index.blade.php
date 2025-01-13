@@ -22,50 +22,38 @@
                 <div class="col-lg-12">
                     <div class="white-box">
                         <div class="main-title">
-                            <h3 class="mb-15">@lang('academics.sales_management')</h3>
+                            <h3 class="mb-15">@lang('academics.staff_schedule')</h3>
                         </div>
                         <div class="table-responsive">
                             <x-table>
-                                <table id="table_id" class="table" cellspacing="0" width="100%">
+                                <table id="schedule_table" class="table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>@lang('academics.staff_name')</th>
-                                            <th>@lang('academics.tracks')</th>
-                                            <th>@lang('academics.slot_times')</th>
+                                            <th>@lang('academics.cat_id')</th>
+                                            <th>@lang('academics.slot_id')</th>
+                                            <th>@lang('academics.status')</th>
+                                            <th>@lang('academics.session')</th>
+                                            <th>@lang('academics.schedule')</th>
+                                            <th>@lang('academics.start_date')</th>
+                                            <th>@lang('academics.end_date')</th>
+                                            <th>@lang('academics.track_type_id')</th>
+                                            <th>@lang('academics.track_id')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($staff as $person)
+                                        @foreach ($staffScheduleds as $scheduled)
                                             <tr>
-                                                <td>{{ $person->full_name }}</td>
-                                                <td>
-                                                    @php
-                                                        $personTracks = $trackAssignedStaff->where(
-                                                            'staff_id',
-                                                            $person->id,
-                                                        );
-                                                    @endphp
-                                                    <ul>
-                                                        @foreach ($personTracks as $track)
-                                                            <li>{{ $tracks->firstWhere('id', $track->track_id)->track_name_en ?? __('common.not_available') }}
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </td>
-                                                <td>
-                                                    @php
-                                                        $slotsForStaff = $slots->where('staff_id', $person->id);
-                                                    @endphp
-                                                    <ul>
-                                                        @foreach ($slotsForStaff as $slot)
-                                                            <li>
-                                                                {{ $slot->slotEmp->slot_day ?? __('common.not_available') }}:
-                                                                {{ $slot->slotEmp->slot_start ?? '' }} -
-                                                                {{ $slot->slotEmp->slot_end ?? '' }}
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </td>
+                                                <td>{{ $staff->firstWhere('id', $scheduled->staff_id)->full_name }}</td>
+                                                <td>{{ $scheduled->cat_id }}</td>
+                                                <td>{{ $scheduled->slot_id }}</td>
+                                                <td>{{ $scheduled->status }}</td>
+                                                <td>{{ $scheduled->session }}</td>
+                                                <td>{{ $scheduled->schedule }}</td>
+                                                <td>{{ $scheduled->start_date }}</td>
+                                                <td>{{ $scheduled->end_date }}</td>
+                                                <td>{{ $scheduled->track_type_id }}</td>
+                                                <td>{{ $scheduled->track_id }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

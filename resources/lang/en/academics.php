@@ -198,4 +198,6 @@ return [
     'sales_management'=>'Sales Management',
     'staff_name'=>'Staff Name',
     'slot_times'=>'Slot Times',
+    'percentage'=>'Percentage',
+    'level_id'=>'Level'
 ];

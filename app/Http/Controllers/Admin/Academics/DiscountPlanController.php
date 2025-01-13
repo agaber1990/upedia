@@ -7,6 +7,7 @@ use App\Http\Requests\DiscountPlanRequest;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use App\Models\DiscountPlan;
+use App\Models\Level;
 
 class DiscountPlanController extends Controller
 {
@@ -21,10 +22,11 @@ class DiscountPlanController extends Controller
     {
         try {
             $discountPlans = DiscountPlan::get();
+            $levels = Level::get();
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 return ApiBaseMethod::sendResponse($discountPlans, null);
             }
-            return view('backEnd.academics.discount_plan.discount_plan', compact('discountPlans'));
+            return view('backEnd.academics.discount_plan.discount_plan', compact('discountPlans','levels'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -47,9 +49,8 @@ class DiscountPlanController extends Controller
 
         try {
             $discountPlan = new DiscountPlan();
-            $discountPlan->name_en = $request->name_en;
-            $discountPlan->name_ar = $request->name_ar;
-            $discountPlan->number = $request->number;
+            $discountPlan->percentage = $request->percentage;
+            $discountPlan->level_id = $request->level_id;
 
             $result = $discountPlan->save();
 
@@ -78,13 +79,15 @@ class DiscountPlanController extends Controller
         try {
             $discountPlan = DiscountPlan::find($id);
             $discountPlans = DiscountPlan::get();
+            $levels = Level::get();
+
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 $data = [];
                 $data['discountPlans'] = $discountPlan->toArray();
                 $data['discountPlans'] = $discountPlans->toArray();
                 return ApiBaseMethod::sendResponse($data, null);
             }
-            return view('backEnd.academics.discount_plan.discount_plan', compact('discountPlan', 'discountPlans'));
+            return view('backEnd.academics.discount_plan.discount_plan', compact('discountPlan','levels', 'discountPlans'));
 
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -108,9 +111,8 @@ class DiscountPlanController extends Controller
     {
         try {
             $discountPlan = DiscountPlan::find($request->id);
-            $discountPlan->name_en = $request->name_en;
-            $discountPlan->name_ar = $request->name_ar;
-            $discountPlan->number = $request->number;
+            $discountPlan->percentage = $request->percentage;
+            $discountPlan->level_id = $request->level_id;
 
             $result = $discountPlan->save();
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
