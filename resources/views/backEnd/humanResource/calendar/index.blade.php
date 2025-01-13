@@ -227,6 +227,8 @@
                         url: '/tracks-by-category/' + catId,
                         type: 'GET',
                         success: function(data) {
+                            console.log(data);
+                            
                             // Clear the tracks dropdown
                             trackSelect.empty();
                             trackTypeSelect.empty();
