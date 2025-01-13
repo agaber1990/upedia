@@ -969,7 +969,7 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
 
 
         // Specilization Routes
-        Route::get('calendar_staff_report', 'Admin\Hr\CalendarStaffController@calendar_staff_report')->name('calendar_staff_report');
+        Route::get('calendar_report', 'Admin\Hr\CalendarStaffController@calendar_report')->name('calendar_report');
         Route::get('calendar_staff', 'Admin\Hr\CalendarStaffController@index')->name('calendar_staff');
 
         Route::get('calendar_staff/getStaffByTrack', 'Admin\Hr\CalendarStaffController@getStaffByTrack')->name('getStaffByTrack');

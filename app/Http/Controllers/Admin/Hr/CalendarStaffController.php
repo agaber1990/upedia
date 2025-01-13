@@ -289,7 +289,7 @@ class CalendarStaffController extends Controller
 
 
 
-    public function calendar_staff_report(Request $request)
+    public function calendar_report(Request $request)
     {
         try {
             // Fetch the necessary data with the staff_slots relationship

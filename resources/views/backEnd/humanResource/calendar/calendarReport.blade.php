@@ -1,6 +1,6 @@
 @extends('backEnd.master')
 @section('title')
-    @lang('hr.calendar')
+    @lang('hr.calendar_report')
 @endsection
 <style>
     .table tbody td {
@@ -11,11 +11,11 @@
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
-                <h1>@lang('hr.calendar')</h1>
+                <h1>@lang('hr.calendar_report')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
                     <a href="#">@lang('hr.human_resource')</a>
-                    <a href="#">@lang('hr.calendar')</a>
+                    <a href="#">@lang('hr.calendar_report')</a>
                 </div>
             </div>
         </div>
