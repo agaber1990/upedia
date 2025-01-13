@@ -263,6 +263,11 @@
                                             <td>{{ $track->length }} @lang('academics.weeks')</td>
                                             <td>
                                                 <x-drop-down>
+                                                    @if (userPermission('assigned_pricing_plan'))
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('tracksPricingPlan', [$track->id]) }}">
+                                                            @lang('common.pricing_plan')</a>
+                                                    @endif
                                                     @if (userPermission('tracks_edit'))
                                                         <a class="dropdown-item"
                                                             href="{{ route('tracks_edit', [$track->id]) }}">@lang('common.edit')</a>

@@ -1002,6 +1002,7 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
 
         // Tracks Routes
         Route::get('tracks', 'Admin\Academics\TrackController@index')->name('tracks')->middleware('userRolePermission:tracks');
+        Route::get('tracks-pricing-plan/{id}', 'Admin\Academics\TrackController@tracksPricingPlan')->name('tracksPricingPlan')->middleware('userRolePermission:tracksPricingPlan');
         Route::post('tracks', 'Admin\Academics\TrackController@store')->name('tracks_store')->middleware('userRolePermission:tracks_store');
         Route::get('tracks/{id}', 'Admin\Academics\TrackController@show')->name('tracks_edit')->middleware('userRolePermission:tracks_edit');
         Route::put('tracks/{id}', 'Admin\Academics\TrackController@update')->name('tracks_update')->middleware('userRolePermission:tracks_edit');
