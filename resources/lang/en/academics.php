@@ -199,5 +199,6 @@ return [
     'staff_name'=>'Staff Name',
     'slot_times'=>'Slot Times',
     'percentage'=>'Percentage',
-    'level_id'=>'Level'
+    'level_id'=>'Level',
+    'select_level'=> 'Select Level'
 ];
