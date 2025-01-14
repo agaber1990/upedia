@@ -22,8 +22,12 @@ class DiscountPlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'percentage' => 'required|string|max:255',
-            'level_id' => 'required|integer|min:0',
+            'name_en' => 'string|max:255', 
+            'name_ar' => 'string|max:255', 
+            'level_id' => 'array',        
+            'level_id.*' => 'integer|exists:levels,id', 
+            'price' => 'array',          
+            'price.*' => 'numeric|min:0', 
         ];
     }
 }
