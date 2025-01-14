@@ -335,7 +335,6 @@
                     success: function(response) {
                         console.log(response); // Log the response for debugging
 
-                        // Ensure the calendar object is initialized
                         if (!calendar) {
                             console.error("Calendar object is not initialized.");
                             return;
