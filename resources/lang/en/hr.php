@@ -222,6 +222,7 @@ return [
     'exit' => 'Exit',
     'teacher_information_view' => 'Teacher Information View',
     'field' => 'field',
+    'calendar_report' => 'Calendar Report',
     'crop_image_and_upload' => 'Crop Image And Upload',
     'staff_attendance_import' => 'Staff Attendance Import',
     'P' => 'P',

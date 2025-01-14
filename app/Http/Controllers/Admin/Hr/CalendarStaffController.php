@@ -123,12 +123,13 @@ class CalendarStaffController extends Controller
 
     public function getSlotsByStaff(Request $request)
     {
-        // Validate staff_id and optional date
+        // Validate staff_id
         $validated = $request->validate([
             'staff_id' => 'required|integer',
         ]);
 
         $staff_id = $validated['staff_id'];
+
         // Fetch the staff member
         $staff = SmStaff::find($staff_id);
 
@@ -143,29 +144,104 @@ class CalendarStaffController extends Controller
             return response()->json(['error' => 'No slots found for the staff'], 404);
         }
 
-        // Fetch slot details and include their statuses for the specific date
+        // Fetch slot details
         $slotDetails = SlotEmp::whereIn('id', $slots)
             ->select("id", "slot_day", "slot_start", "slot_end")
             ->get()
             ->map(function ($slot) use ($staff_id) {
-                $staff_scheduleds = StaffScheduled::where('staff_id', $staff_id)
-                    ->get();
-                 // loop for every one here 
-                 foreach ($staff_scheduleds as $item) {
-                     $scheduled_ids = json_decode($item->slot_id, true);
+                // Fetch scheduled slots for the staff
+                $staff_scheduleds = StaffScheduled::where('staff_id', $staff_id)->get();
 
-                    # code...
-                    $isScheduled = in_array($slot->id, $scheduled_ids);
-                    $slot->status = $isScheduled ? $item->status : 'available';
-                 }
+                if ($staff_scheduleds->isEmpty()) {
+                    // Default status is 'available' if no schedules exist
+                    $slot->status = 'available';
+                } else {
+                    // Check if the slot is scheduled
+                    $isScheduled = false;
+                    foreach ($staff_scheduleds as $item) {
+                        $scheduled_ids = json_decode($item->slot_id, true);
+                        if (in_array($slot->id, $scheduled_ids)) {
+                            $isScheduled = true;
+                            $slot->status = $item->status;
+                            break;
+                        }
+                    }
+
+                    if (!$isScheduled) {
+                        $slot->status = 'available';
+                    }
+                }
 
                 return $slot;
             });
+
         // Return response with staff and slot details
         return response()->json([
             'slots' => $slotDetails,
         ]);
     }
+    public function getSlotsByStaffReport(Request $request)
+    {
+        // Validate staff_id
+        $validated = $request->validate([
+            'staff_id' => 'required|integer',
+        ]);
+
+        $staff_id = $validated['staff_id'];
+
+        // Fetch the staff member
+        $staff = SmStaff::find($staff_id);
+
+        if (!$staff) {
+            return response()->json(['error' => 'Staff not found'], 404);
+        }
+
+        // Fetch the slot_ids associated with the staff_id
+        $slots = StaffSlot::where('staff_id', $staff_id)->pluck('slot_id');
+
+        if ($slots->isEmpty()) {
+            return response()->json(['error' => 'No slots found for the staff'], 404);
+        }
+
+        // Fetch slot details
+        $slotDetails = SlotEmp::whereIn('id', $slots)
+            ->select("id", "slot_day", "slot_start", "slot_end")
+            ->get()
+            ->map(function ($slot) use ($staff_id) {
+                // Fetch scheduled slots for the staff
+                $staff_scheduleds = StaffScheduled::where('staff_id', $staff_id)->get();
+
+                if ($staff_scheduleds->isEmpty()) {
+                    // Default status is 'available' if no schedules exist
+                    $slot->status = 'available';
+                } else {
+                    // Check if the slot is scheduled
+                    $isScheduled = false;
+                    foreach ($staff_scheduleds as $item) {
+                        $scheduled_ids = json_decode($item->slot_id, true);
+                        if (in_array($slot->id, $scheduled_ids)) {
+                            $isScheduled = true;
+                            $slot->status = $item->status;
+                            $slot->start_date = $item->start_date;
+                            $slot->end_date = $item->end_date;
+                            break;
+                        }
+                    }
+
+                    if (!$isScheduled) {
+                        $slot->status = 'available';
+                    }
+                }
+
+                return $slot;
+            });
+
+        // Return response with staff and slot details
+        return response()->json([
+            'slots' => $slotDetails,
+        ]);
+    }
+
 
 
 
@@ -200,14 +276,12 @@ class CalendarStaffController extends Controller
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
         ]);
-    
+
         // Return a response with success
         return response()->json([
             'success' => "Staff Assigned slots successfully",
         ], 200);
     }
-    
-    
 
 
 
@@ -215,43 +289,43 @@ class CalendarStaffController extends Controller
 
 
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function calendar_report(Request $request)
     {
-        //
-    }
+        try {
+            // Fetch the necessary data with the staff_slots relationship
+            $slot_time = SlotEmp::get(); // Eager load staffSlots
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CalendarStaff $calendarStaff)
-    {
-        //
-    }
+            // $staffSlots = StaffSlot::where("staff_id", $slot_time->id)
+            $track_types = TrackType::all();
+            $tracks = Track::all();
+            $role_types = EmType::all();
+            $categories = Category::all();
+            $specializations_staff = TrackAssignedStaff::get();
+            // Format the events for FullCalendar
+            $events = $slot_time->map(function ($slot) {
+                return [
+                    'title' => 'Available',
+                    'start' => $slot->slot_start,
+                    'end' => $slot->slot_end,
+                    'color' => 'green'
+                ];
+            });
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CalendarStaff $calendarStaff)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CalendarStaff $calendarStaff)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CalendarStaff $calendarStaff)
-    {
-        //
+            // Pass the formatted events to the view
+            return view('backEnd.humanResource.calendar.calendarReport', compact(
+                'events',
+                'track_types',
+                'tracks',
+                'role_types',
+                'categories',
+                'specializations_staff'
+            ));
+        } catch (\Exception $e) {
+            // Handle error
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
     }
 }
