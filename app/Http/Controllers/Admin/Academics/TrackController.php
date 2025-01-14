@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Academics;
 
-use App\Models\{Track, Level, TrackType};
+use App\Models\{DiscountPlan, Track, Level, TrackPricingPlan, TrackType};
 use App\Models\Category;
 use App\Models\PricingPlanType;
 use App\tableList;
@@ -23,8 +23,8 @@ class TrackController extends Controller
             $levels = Level::all();
             $valid_for = TrackType::all();
             $categories = Category::all();
-            
-            return view('backEnd.academics.tracks', compact('tracks','levels','valid_for','categories' ));
+
+            return view('backEnd.academics.tracks', compact('tracks', 'levels', 'valid_for', 'categories'));
         } catch (\Exception $e) {
 
             Toastr::error('Operation Failed', 'Failed');
@@ -74,7 +74,7 @@ class TrackController extends Controller
         $valid_for = TrackType::all();
         $categories = Category::all();
 
-        return view('backEnd.academics.tracks', compact('tracks','levels','valid_for','track','categories'));
+        return view('backEnd.academics.tracks', compact('tracks', 'levels', 'valid_for', 'track', 'categories'));
     }
     public function tracksPricingPlan(Request $request, $id)
     {
@@ -84,9 +84,17 @@ class TrackController extends Controller
         $levels = Level::all();
         $pricing_plan_types = PricingPlanType::all();
         $tracktypes = TrackType::whereIn("id",  json_decode($track->valid_for))->get();
+        $discount_plans = DiscountPlan::all();
+        $track_pricing_plans = TrackPricingPlan::where('track_id', $track->id)->get();
 
-        return view('backEnd.academics.trackspricingplan', compact('tracks','levels','pricing_plan_types','tracktypes','track'));
+        $pricing_data = [];
+        foreach ($track_pricing_plans as $plan) {
+            $pricing_data[$plan->pricing_plan_type_id][$plan->track_type_id] = $plan->price;
+        }
+
+        return view('backEnd.academics.trackspricingplan', compact('tracks', 'levels', 'pricing_plan_types', 'tracktypes', 'track', 'discount_plans', 'track_pricing_plans', 'pricing_data'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -96,7 +104,7 @@ class TrackController extends Controller
         //
     }
 
-   /**
+    /**
      * Update the specified track in the database.
      *
      * @param  TrackRequest  $request
@@ -124,36 +132,36 @@ class TrackController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-   
-     public function destroy(Request $request, $id)
-     {
- 
-         try {
-             $tables = \App\tableList::getTableList('track_id', $id);
-             // return $tables;
-             try {
-                 if ($tables == null) {
- 
-                     $track = Track::destroy($id);
-                     Toastr::success('Operation successful', 'Success');
-                     return redirect()->back();
-                 } else {
-                     $msg = 'This data already used in  : ' . $tables . ' Please remove those data first';
-                     Toastr::error($msg, 'Failed');
-                     return redirect()->back();
-                 }
-             } catch (\Illuminate\Database\QueryException $e) {
- 
-                 $msg = 'This data already used in  : ' . $tables . ' Please remove those data first';
-                 Toastr::error($msg, 'Failed');
-                 return redirect()->back();
-             } catch (\Exception $e) {
-                 Toastr::error('Operation Failed', 'Failed');
-                 return redirect()->back();
-             }
-         } catch (\Exception $e) {
-             Toastr::error('Operation Failed', 'Failed');
-             return redirect()->back();
-         }
-     }
+
+    public function destroy(Request $request, $id)
+    {
+
+        try {
+            $tables = \App\tableList::getTableList('track_id', $id);
+            // return $tables;
+            try {
+                if ($tables == null) {
+
+                    $track = Track::destroy($id);
+                    Toastr::success('Operation successful', 'Success');
+                    return redirect()->back();
+                } else {
+                    $msg = 'This data already used in  : ' . $tables . ' Please remove those data first';
+                    Toastr::error($msg, 'Failed');
+                    return redirect()->back();
+                }
+            } catch (\Illuminate\Database\QueryException $e) {
+
+                $msg = 'This data already used in  : ' . $tables . ' Please remove those data first';
+                Toastr::error($msg, 'Failed');
+                return redirect()->back();
+            } catch (\Exception $e) {
+                Toastr::error('Operation Failed', 'Failed');
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
+    }
 }
