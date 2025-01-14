@@ -208,5 +208,5 @@ return [
     'name_ar' => 'Arabic Name',
     'price' => 'Price',
     'level_number' => 'Level Number',
-    'time' => 'Time'
+    'time_slot' => 'Time Slot Staff'
 ];

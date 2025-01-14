@@ -31,7 +31,7 @@
                                         <tr>
                                             <th>@lang('academics.staff_name')</th>
                                             <th>@lang('academics.category')</th>
-                                            <th>@lang('academics.time')</th>
+                                            <th>@lang('academics.time_slot')</th>
                                             <th>@lang('academics.status')</th>
                                             <th>@lang('academics.session')</th>
                                             <th>@lang('academics.schedule')</th>
@@ -74,49 +74,59 @@
 
                                                 <td>
                                                     <x-drop-down>
+                                                        @if (userPermission('view_calendar'))
+                                                            <a class="dropdown-item" href="#">@lang('common.view_calendar')</a>
+                                                        @endif
+
                                                         @if (userPermission('discount_plans-edit'))
                                                             <a class="dropdown-item"
                                                                 href="{{ route('discount_plans-edit', ['$staffScheduleds->id']) }}">@lang('common.edit')</a>
                                                         @endif
+
                                                         @if (userPermission('discount_plans-delete'))
                                                             <a class="dropdown-item" data-toggle="modal"
                                                                 data-target="#deletediscount_planModal{{ '$staffScheduleds->id' }}"
                                                                 href="#">@lang('common.delete')</a>
                                                         @endif
+
+
+                                                        @if (userPermission('assigned_students'))
+                                                            <a class="dropdown-item" href="#">@lang('common.assigned_students')</a>
+                                                        @endif
+
                                                     </x-drop-down>
                                                 </td>
                                             </tr>
 
                                             <div class="modal fade admin-query"
-                                            id="deletediscount_planModal{{ '$staffScheduleds->id' }}">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">@lang('academics.delete_discount_plan')</h4>
-                                                        <button type="button" class="close"
-                                                            data-dismiss="modal">&times;</button>
-                                                    </div>
-
-                                                    <div class="modal-body">
-                                                        <div class="text-center">
-                                                            <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                id="deletediscount_planModal{{ '$staffScheduleds->id' }}">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">@lang('academics.delete_discount_plan')</h4>
+                                                            <button type="button" class="close"
+                                                                data-dismiss="modal">&times;</button>
                                                         </div>
 
-                                                        <div class="mt-40 d-flex justify-content-between">
-                                                            <button type="button" class="primary-btn tr-bg"
-                                                                data-dismiss="modal">@lang('common.cancel')</button>
-                                                            {{ Form::open(['route' => ['discount_plans-delete', '$staffScheduleds->id'], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
-                                                            <button class="primary-btn fix-gr-bg"
-                                                                type="submit">@lang('common.delete')</button>
-                                                            {{ Form::close() }}
-                                                        </div>
-                                                    </div>
+                                                        <div class="modal-body">
+                                                            <div class="text-center">
+                                                                <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                            </div>
 
+                                                            <div class="mt-40 d-flex justify-content-between">
+                                                                <button type="button" class="primary-btn tr-bg"
+                                                                    data-dismiss="modal">@lang('common.cancel')</button>
+                                                                {{ Form::open(['route' => ['discount_plans-delete', '$staffScheduleds->id'], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                <button class="primary-btn fix-gr-bg"
+                                                                    type="submit">@lang('common.delete')</button>
+                                                                {{ Form::close() }}
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-
                                         @endforeach
                                     </tbody>
                                 </table>
