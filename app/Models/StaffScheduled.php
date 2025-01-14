@@ -33,7 +33,7 @@ class StaffScheduled extends Model
 
     public function slot()
     {
-        return $this->belongsTo(StaffSlot::class, 'slot_id');
+        return $this->belongsTo(SlotEmp::class, 'slot_id');
     }
 
     public function staff()

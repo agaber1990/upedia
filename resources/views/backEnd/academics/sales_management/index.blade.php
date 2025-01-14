@@ -31,7 +31,7 @@
                                         <tr>
                                             <th>@lang('academics.staff_name')</th>
                                             <th>@lang('academics.category')</th>
-                                            <th>@lang('academics.slot_id')</th>
+                                            <th>@lang('academics.time')</th>
                                             <th>@lang('academics.status')</th>
                                             <th>@lang('academics.session')</th>
                                             <th>@lang('academics.schedule')</th>
@@ -46,7 +46,22 @@
                                             <tr>
                                                 <td>{{ $staff->firstWhere('id', $scheduled->staff_id)->full_name }}</td>
                                                 <td>{{ $scheduled->category->name_en }}</td>
-                                                <td>{{ $scheduled->slot_id }}</td>
+                                                <td>
+                                                    @foreach (json_decode($scheduled->slot_id) as $slotId)
+                                                        @php
+                                                            $slot = $slotTime->firstWhere('id', $slotId);
+                                                        @endphp
+                                                        @if ($slot)
+                                                            {{ $slot->slot_day }}:
+                                                            {{ date('h:i A', strtotime($slot->slot_start)) }} -
+                                                            {{ date('h:i A', strtotime($slot->slot_end)) }}<br>
+                                                        @else
+                                                            Invalid Slot ID: {{ $slotId }}<br>
+                                                        @endif
+                                                    @endforeach
+
+                                                </td>
+
                                                 <td>{{ $scheduled->status }}</td>
                                                 <td>{{ $scheduled->session }}</td>
                                                 <td>{{ $scheduled->schedule }}</td>
