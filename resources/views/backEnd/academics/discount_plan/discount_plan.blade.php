@@ -108,7 +108,7 @@
                                                     <div class="col-md-12">
                                                         <div class="primary_input">
                                                             <label class="primary_input_label"
-                                                                for="level_id">@lang('academics.level_id')
+                                                                for="level_id">@lang('academics.level_number')
                                                                 <span class="text-danger"> *</span>
                                                             </label>
                                                             <select class="primary_select form-control" name="level_id[]"
@@ -147,7 +147,7 @@
                                                     <div class="col-md-12">
                                                         <div class="primary_input">
                                                             <label class="primary_input_label"
-                                                                for="level_id">@lang('academics.level_id')
+                                                                for="level_id">@lang('academics.level_number')
                                                                 <span class="text-danger"> *</span>
                                                             </label>
 
@@ -241,7 +241,7 @@
                                         <thead>
 
                                             <tr>
-                                                {{-- <th>@lang('academics.level_id')</th> --}}
+                                                {{-- <th>@lang('academics.level_number')</th> --}}
                                                 <th>@lang('academics.levels_prices')</th>
                                                 <th>@lang('academics.name_en')</th>
                                                 <th>@lang('academics.name_ar')</th>
@@ -340,7 +340,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="primary_input">
-                        <label class="primary_input_label" for="level_id">@lang('academics.level_id')
+                        <label class="primary_input_label" for="level_id">@lang('academics.level_number')
                             <span class="text-danger"> *</span>
                         </label>
                         <select

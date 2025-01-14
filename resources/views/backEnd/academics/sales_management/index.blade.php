@@ -22,7 +22,7 @@
                 <div class="col-lg-12">
                     <div class="white-box">
                         <div class="main-title">
-                            <h3 class="mb-15">@lang('academics.staff_schedule')</h3>
+                            <h3 class="mb-15">@lang('academics.sales_management')</h3>
                         </div>
                         <div class="table-responsive">
                             <x-table>

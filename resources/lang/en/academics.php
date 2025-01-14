@@ -203,4 +203,9 @@ return [
     'select_level'=> 'Select Level',
     'track_type'=> 'Track Type',
     'status'=> 'Status',
+    'levels_prices'=>'Levels Prices',
+    'name_en'=>'English Name',
+    'name_ar'=>'Arabic Name',
+    'price'=>'Price',
+    'level_number'=>'Level Number'
 ];
