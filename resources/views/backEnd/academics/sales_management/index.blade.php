@@ -26,7 +26,7 @@
                         </div>
                         <div class="table-responsive">
                             <x-table>
-                                <table id="schedule_table" class="table" cellspacing="0" width="100%">
+                                <table id="table_id" class="table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>@lang('academics.staff_name')</th>
@@ -39,6 +39,8 @@
                                             <th>@lang('academics.end_date')</th>
                                             <th>@lang('academics.track_type')</th>
                                             <th>@lang('academics.track')</th>
+                                            <th>@lang('common.action')</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -69,7 +71,52 @@
                                                 <td>{{ $scheduled->end_date }}</td>
                                                 <td>{{ $scheduled->trackType->name }}</td>
                                                 <td>{{ $scheduled->track->track_name_en }}</td>
+
+                                                <td>
+                                                    <x-drop-down>
+                                                        @if (userPermission('discount_plans-edit'))
+                                                            <a class="dropdown-item"
+                                                                href="{{ route('discount_plans-edit', ['$staffScheduleds->id']) }}">@lang('common.edit')</a>
+                                                        @endif
+                                                        @if (userPermission('discount_plans-delete'))
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#deletediscount_planModal{{ '$staffScheduleds->id' }}"
+                                                                href="#">@lang('common.delete')</a>
+                                                        @endif
+                                                    </x-drop-down>
+                                                </td>
                                             </tr>
+
+                                            <div class="modal fade admin-query"
+                                            id="deletediscount_planModal{{ '$staffScheduleds->id' }}">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">@lang('academics.delete_discount_plan')</h4>
+                                                        <button type="button" class="close"
+                                                            data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="text-center">
+                                                            <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                        </div>
+
+                                                        <div class="mt-40 d-flex justify-content-between">
+                                                            <button type="button" class="primary-btn tr-bg"
+                                                                data-dismiss="modal">@lang('common.cancel')</button>
+                                                            {{ Form::open(['route' => ['discount_plans-delete', '$staffScheduleds->id'], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                            <button class="primary-btn fix-gr-bg"
+                                                                type="submit">@lang('common.delete')</button>
+                                                            {{ Form::close() }}
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                         @endforeach
                                     </tbody>
                                 </table>
