@@ -32,18 +32,20 @@
             @endif
             <div class="row">
 
-                <div class="button-container">
-                    <button id="add_session_btn" class="circular-btn" aria-label="Toggle new session form">
-                        <i class="fas fa-plus" style="color: #fff"></i>
-                    </button>
-                    <span id="add_session" class="mt-3 input-session" style="display: none;">
-                        <button id="session_modal_btn" class="session-btn">
-                            <i class="fas fa-plus" style="color: #000000"></i> Session
-                        </button>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div class="btnSelect">
 
-
-
-                    </span>
+                            <button id="add_session_btn" class="circular-btn mx-2" aria-label="Toggle new session form">
+                                <i class="fas fa-plus" style="color: #fff"></i>
+                            </button>
+                        </div>
+                        <div id="add_session" class="input-session" style="display: none;width:100%">
+                            <button id="session_modal_btn" class="session-btn">
+                                <i class="fas fa-plus" style="color: #000000"></i> Session
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -63,15 +65,15 @@
                                         <span class="text-danger"> *</span>
                                     </label>
                                     <input class="primary_input_field form-control" type="text" name="session_name_en"
-                                        id="session_name_en"  autocomplete="off">
+                                        id="session_name_en" autocomplete="off">
                                     <input type="hidden" id="track_id" name="track_id" value="{{ $track->id }}">
                                 </div>
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="session_name_ar">@lang('academics.session_name_ar')
                                         <span class="text-danger"> *</span>
                                     </label>
-                                    <input class="primary_input_field form-control" type="text"
-                                        id="session_name_ar" name="session_name_ar" autocomplete="off">
+                                    <input class="primary_input_field form-control" type="text" id="session_name_ar"
+                                        name="session_name_ar" autocomplete="off">
                                     <input type="hidden" id="track_id" name="track_id" value="{{ $track->id }}">
                                 </div>
 
@@ -91,12 +93,22 @@
 @endsection
 
 <style>
-    .button-container {}
+    .btnSelect {
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+    }
+    .btnSelect .circular-btn {
+        border-radius: 50%;
+        padding: 16px 17px;
+  
+    }
+    .btnSelect .fa {
+        padding: 15px;
+    }
 
     .circular-btn {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
+
         background-color: #007bff;
         border: none;
         color: #fff;
@@ -108,9 +120,9 @@
 
     .input-session {
         padding: 8px 12px;
-        border: 1px solid #ccc;
         border-radius: 4px;
-        width: 307px;
+        background: #fff;
+        box-shadow: 0px 4px 20px rgba(39, 32, 120, 0.1)
     }
 
     .session-btn {
@@ -123,6 +135,8 @@
     }
 </style>
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function() {
             $('#add_session_btn').click(function(event) {
@@ -140,23 +154,45 @@
             });
             $('#add_session_for_submit').click(function(event) {
                 event.preventDefault();
-                //submit input to db
+                // Submit input to db
                 let formData = {
                     session_name_en: $('#session_name_en').val(),
                     session_name_ar: $('#session_name_ar').val(),
-                    tack_id: $('#track_id').val(),
+                    track_id: $('#track_id').val(),
                     _token: '{{ csrf_token() }}'
                 };
+
                 $.ajax({
-                    url : "{{route('track_sessions_store')}}",
+                    url: "{{ route('track_sessions_store') }}",
                     method: "POST",
                     data: formData,
                     success: function(res) {
-                        console.log(res);
-                        
+                        // Show SweetAlert confirmation
+                        $('#exampleModal').modal('hide');
+
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Session has been successfully added.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+
+                        $('#session_name_en').val('')
+                        $('#session_name_ar').val('')
+                    },
+                    error: function(xhr, status, error) {
+                        $('#exampleModal').modal('hide');
+
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Sorry! you can\'t add more sessions.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
                     }
                 });
             });
+
 
         });
     </script>

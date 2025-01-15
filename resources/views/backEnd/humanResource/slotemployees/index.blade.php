@@ -220,11 +220,11 @@
                                                                     class="d-flex align-items-center gap-2">
                                                                     <!-- Start Time with Checkbox -->
                                                                     <div>
-                                                                        <input class="form-check-input"
+                                                                        {{-- <input class="form-check-input"
                                                                             type="checkbox"
                                                                             name="selected_slots[]"
                                                                             value="{{ $item->id }}"
-                                                                            id="slot_start_{{ $item->id }}">
+                                                                            id="slot_start_{{ $item->id }}"> --}}
 
                                                                         <label
                                                                             class="form-check-label px-2 "
