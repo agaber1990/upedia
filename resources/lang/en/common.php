@@ -684,6 +684,7 @@ return [
     'course_name_ar'=>'Course Name (Arabic)',
      'assigned_students'=>'Assigned Students',
     'view_calendar'=>'View Calendar',
-    'sales_management'=>'Sales Management'
+    'sales_management'=>'Sales Management',
+    'track_sessions'=>'Track Session'
 ]
     ?>

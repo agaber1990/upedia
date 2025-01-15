@@ -1001,6 +1001,10 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
         Route::delete('track_types/{id}', 'Admin\Academics\TrackTypeController@destroy')->name('track_types_delete')->middleware('userRolePermission:track_types_delete');
 
 
+          // track sessions Routes
+          Route::get('track_sessions/{track_id}', 'Admin\Academics\TrackSessionController@index')->name('track_sessions');
+          Route::post('track_sessions', 'Admin\Academics\TrackSessionController@store')->name('track_sessions_store');
+       
 
         // Tracks Routes
         Route::get('tracks', 'Admin\Academics\TrackController@index')->name('tracks')->middleware('userRolePermission:tracks');

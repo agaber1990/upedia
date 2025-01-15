@@ -208,5 +208,11 @@ return [
     'name_ar' => 'Arabic Name',
     'price' => 'Price',
     'level_number' => 'Level Number',
-    'time_slot' => 'Time Slot Staff'
+    'time_slot' => 'Time Slot Staff',
+    'track_session' => 'Track Session',
+    'track_sessions' => 'Track Sessions',
+    'add_session' => 'Add Session',
+    'session_name' => 'Session Name',
+    'session_name_en' => 'session Name (English)',
+    'session_name_ar' => 'session Name (Arabic)',
 ];
