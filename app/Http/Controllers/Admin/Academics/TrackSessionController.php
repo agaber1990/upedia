@@ -18,8 +18,9 @@ class TrackSessionController extends Controller
 
         $track = Track::where('id', $track_id)->first();
         $sessions = TrackSession::where('id', $track->id)->with('track')->get();
+        $menus = TrackSession::where('track_id', $track->id)->with('track')->get();
 
-        return view('backEnd.academics.sessions.index', compact('track', 'sessions'));
+        return view('backEnd.academics.sessions.index', compact('track', 'sessions', 'menus'));
     }
     /**
      * Show the form for creating a new resource.

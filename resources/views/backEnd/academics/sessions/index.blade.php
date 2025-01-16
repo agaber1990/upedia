@@ -90,6 +90,12 @@
             </div>
         </div>
     </section>
+
+
+    <section>
+
+        @include('backEnd.academics.sessions.session_card')
+    </section>
 @endsection
 
 <style>
@@ -98,11 +104,13 @@
         display: flex;
         align-items: center;
     }
+
     .btnSelect .circular-btn {
         border-radius: 50%;
         padding: 16px 17px;
-  
+
     }
+
     .btnSelect .fa {
         padding: 15px;
     }
