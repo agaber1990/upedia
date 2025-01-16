@@ -84,9 +84,21 @@ class TrackSessionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TrackSession $trackSession)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'session_name_en' => 'required|string|max:255',
+            'session_name_ar' => 'required|string|max:255',
+        ]);
+
+        $session = TrackSession::findOrFail($id);
+
+        $session->update([
+            'session_name_en' => $request->session_name_en,
+            'session_name_ar' => $request->session_name_ar,
+        ]);
+
+        return response()->json(['message' => 'Session updated successfully']);
     }
 
     /**

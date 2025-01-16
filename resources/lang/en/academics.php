@@ -215,4 +215,5 @@ return [
     'session_name' => 'Session Name',
     'session_name_en' => 'session Name (English)',
     'session_name_ar' => 'session Name (Arabic)',
+    'update_session' => 'Update Session'
 ];

@@ -49,6 +49,13 @@
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div>
+
+                                                                <button class="btn btn-primary btn-sm"
+                                                                    onclick="updateSession({{ $element->id }}, '{{ $element->session_name_en }}', '{{ $element->session_name_ar }}')">
+                                                                    Edit
+                                                                </button>
+                                                            </div>
+                                                            <div>
                                                                 @lang('common.session_name_en') : {{ $element->session_name_en }}
                                                             </div>
                                                             <div>
@@ -78,3 +85,15 @@
         </div>
     </div>
 @endif
+
+@push('script')
+    <script>
+        function updateSession(id, session_name_en, session_name_ar) {
+            $('#update_session_name_en').val(session_name_en);
+            $('#update_session_name_ar').val(session_name_ar);
+            $('#update_session_track_id').val(id);
+
+            $('#ModalUpdateSession').modal('show');
+        }
+    </script>
+@endpush

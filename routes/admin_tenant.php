@@ -1001,11 +1001,11 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
         Route::delete('track_types/{id}', 'Admin\Academics\TrackTypeController@destroy')->name('track_types_delete')->middleware('userRolePermission:track_types_delete');
 
 
-          // track sessions Routes
-          Route::get('track_sessions/{track_id}', 'Admin\Academics\TrackSessionController@index')->name('track_sessions');
-          Route::post('track_sessions/store', 'Admin\Academics\TrackSessionController@store')->name('track_sessions_store');
-       
-
+        // track sessions Routes
+        Route::get('track_sessions/{track_id}', 'Admin\Academics\TrackSessionController@index')->name('track_sessions');
+        Route::post('track_sessions/store', 'Admin\Academics\TrackSessionController@store')->name('track_sessions_store');
+        Route::put('track_sessions/{id}', 'Admin\Academics\TrackSessionController@update')->name('track_session_update');
+        
         // Tracks Routes
         Route::get('tracks', 'Admin\Academics\TrackController@index')->name('tracks')->middleware('userRolePermission:tracks');
         Route::get('tracks-pricing-plan/{id}', 'Admin\Academics\TrackController@tracksPricingPlan')->name('tracksPricingPlan')->middleware('userRolePermission:tracksPricingPlan');
@@ -1014,7 +1014,7 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
         Route::get('tracks/{id}', 'Admin\Academics\TrackController@show')->name('tracks_edit')->middleware('userRolePermission:tracks_edit');
         Route::put('tracks/{id}', 'Admin\Academics\TrackController@update')->name('tracks_update')->middleware('userRolePermission:tracks_edit');
         Route::delete('tracks/{id}', 'Admin\Academics\TrackController@destroy')->name('tracks_delete')->middleware('userRolePermission:tracks_delete');
-        
+
 
 
         // pricing_plan_type_store Routes
@@ -1039,15 +1039,15 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
         Route::delete('discount_plans/{id}', 'Admin\Academics\DiscountPlanController@destroy')->name('discount_plans-delete')->middleware('userRolePermission:discount_plans-delete');
 
 
-          // sales_management Routes
-          Route::get('sales_management', 'Admin\Academics\SalesManagementController@index')->name('sales_management')->middleware('userRolePermission:sales_management');
-          Route::post('sales_management', 'Admin\Academics\SalesManagementController@store')->name('sales_management-store')->middleware('userRolePermission:sales_management-store');
-          Route::get('sales_management/{id}', 'Admin\Academics\SalesManagementController@show')->name('sales_management-edit')->middleware('userRolePermission:sales_management-edit');
-          Route::put('sales_management/{id}', 'Admin\Academics\SalesManagementController@update')->name('sales_management-update')->middleware('userRolePermission:sales_management-edit');
-          Route::delete('sales_management/{id}', 'Admin\Academics\SalesManagementController@destroy')->name('sales_management-delete')->middleware('userRolePermission:sales_management-delete');
-  
-  
-  
+        // sales_management Routes
+        Route::get('sales_management', 'Admin\Academics\SalesManagementController@index')->name('sales_management')->middleware('userRolePermission:sales_management');
+        Route::post('sales_management', 'Admin\Academics\SalesManagementController@store')->name('sales_management-store')->middleware('userRolePermission:sales_management-store');
+        Route::get('sales_management/{id}', 'Admin\Academics\SalesManagementController@show')->name('sales_management-edit')->middleware('userRolePermission:sales_management-edit');
+        Route::put('sales_management/{id}', 'Admin\Academics\SalesManagementController@update')->name('sales_management-update')->middleware('userRolePermission:sales_management-edit');
+        Route::delete('sales_management/{id}', 'Admin\Academics\SalesManagementController@destroy')->name('sales_management-delete')->middleware('userRolePermission:sales_management-delete');
+
+
+
 
 
         // Bank Account

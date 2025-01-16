@@ -87,6 +87,38 @@
                     </div>
                 </div>
 
+
+                <!-- Modal update -->
+                <div class="modal fade" id="ModalUpdateSession" tabindex="-1" aria-labelledby="ModalLabelUpdateSession"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="ModalLabelUpdateSession">@lang('academics.update_session')</h1>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="update_session_name_en">@lang('academics.session_name_en') <span
+                                            class="text-danger"> *</span></label>
+                                    <input class="primary_input_field form-control" type="text" name="session_name_en"
+                                        id="update_session_name_en" autocomplete="off">
+                                </div>
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="update_session_name_ar">@lang('academics.session_name_ar') <span
+                                            class="text-danger"> *</span></label>
+                                    <input class="primary_input_field form-control" type="text" name="session_name_ar"
+                                        id="update_session_name_ar" autocomplete="off">
+                                </div>
+                                <input type="hidden" id="update_session_track_id">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="update_session_for_submit"
+                                    class="primary-btn fix-gr-bg text-nowrap">Update changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -188,6 +220,7 @@
                         $('#session_name_en').val('')
                         $('#session_name_ar').val('')
                     },
+
                     error: function(xhr, status, error) {
                         $('#exampleModal').modal('hide');
 
@@ -202,6 +235,45 @@
             });
 
 
+            $(document).ready(function() {
+                $('#update_session_for_submit').click(function(event) {
+                    event.preventDefault();
+                    const sessionId = $('#update_session_track_id').val();
+
+                    const data = {
+                        session_name_en: $('#update_session_name_en').val(),
+                        session_name_ar: $('#update_session_name_ar').val(),
+                        track_id: $('#track_id').val(),
+                        _token: '{{ csrf_token() }}'
+                    };
+
+
+                    $.ajax({
+                        url: `/track_sessions/${sessionId}`,
+                        method: "PUT",
+                        data: data,
+                        success: function(res) {
+                            $('#ModalUpdateSession').modal('hide');
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Session has been successfully updated.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            $('#ModalUpdateSession').modal('hide');
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Sorry! You can\'t update the session.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            console.error('Error:', error);
+                        }
+                    });
+                });
+            });
         });
     </script>
 @endpush
