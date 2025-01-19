@@ -379,22 +379,19 @@
 @endpush
 <section class="admin-visitor-area up_st_admin_visitor">
     <div class="container-fluid p-0">
-        <div class="row">
-            <div class="col-lg-12">
+        <hr>
                 <div class="row">
-                    <div class="col-lg-4 no-gutters">
+                    <div class="col-md-12 no-gutters">
                         <div class="main-title">
-                            <h3 class="mb-30">@lang('front_settings.menu_list')</h3>
+                            <h3>@lang('common.sessions')</h3>
                         </div>
+                     
                     </div>
-                </div>
-                <div class="row">
+                  
                     <div class="col-lg-12" id="menuList">
                         @include('backEnd.academics.sessions.collapse')
                     </div>
                 </div>
-            </div>
-        </div>
     </div>
     {{-- Delete Modal Start --}}
     <div class="modal fade admin-query" id="deleteSubmenuItem">

@@ -679,12 +679,13 @@ return [
     'pricing_plan' => 'Pricing Plan',
     'categories' => 'Categories',
     'discount_plans' => 'Discount Plans',
-    'not_available'=>'Not Available',
-    'course_name_en'=>'Course Name (English)',
-    'course_name_ar'=>'Course Name (Arabic)',
-     'assigned_students'=>'Assigned Students',
-    'view_calendar'=>'View Calendar',
-    'sales_management'=>'Sales Management',
-    'track_sessions'=>'Track Session'
+    'not_available' => 'Not Available',
+    'course_name_en' => 'Course Name (English)',
+    'course_name_ar' => 'Course Name (Arabic)',
+    'assigned_students' => 'Assigned Students',
+    'view_calendar' => 'View Calendar',
+    'sales_management' => 'Sales Management',
+    'track_sessions' => 'Track Session',
+    'sessions' => 'Sessions'
 ]
     ?>

@@ -48,18 +48,7 @@
                             <div class="card-body">
                                 <form enctype="multipart/form-data" id="elementEditForm">
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                
-                                            <div>
-                                                @lang('common.session_name_en') : {{ $element->session_name_en }}
-                                            </div>
-                                            <div>
-                                                @lang('common.session_number') : {{ $element->session_number }}
-                                            </div>
-                                            <div>
-                                                @lang('common.session_ref') : {{ $element->session_ref }}
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </form>
                             </div>
