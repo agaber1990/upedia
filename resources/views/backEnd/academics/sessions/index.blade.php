@@ -149,13 +149,13 @@
 
     .circular-btn {
 
-        background-color: #007bff;
+        background-color: #3f4d8f;
         border: none;
         color: #fff;
     }
 
     .circular-btn:hover {
-        background-color: #0056b3;
+        background-color: #212c60;
     }
 
     .input-session {
