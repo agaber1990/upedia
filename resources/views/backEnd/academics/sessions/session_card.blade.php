@@ -181,8 +181,8 @@
         }
 
         /**
-                                                                                                                                                                                                        * Nestable Extras
-                                                                                                                                                                                                        */
+                                                                                                                                                                                                                    * Nestable Extras
+                                                                                                                                                                                                                    */
 
         .nestable-lists {
             display: block;
@@ -207,8 +207,8 @@
         }
 
         /**
-                                                                                                                                                                                                        * Nestable Draggable Handles
-                                                                                                                                                                                                        */
+                                                                                                                                                                                                                    * Nestable Draggable Handles
+                                                                                                                                                                                                                    */
 
         .dd3-content {
             display: block;
@@ -389,6 +389,7 @@
             </div>
 
             <div class="col-lg-12" id="menuList">
+
                 @include('backEnd.academics.sessions.collapse')
             </div>
         </div>
@@ -526,11 +527,8 @@
                         url: `/get_all_sessions/${trackId}`,
                         method: 'GET',
                         success: function(response) {
-                            renderSessionList(response.sessions);
+                            fetchAllSessions()
 
-                            toastr.success('Session Deleted Successfully.', 'Success', {
-                                timeOut: 5000,
-                            });
                         },
                     });
 
@@ -550,7 +548,6 @@
 
 
         function renderSessionList(sessions) {
-            $('#menuList').empty();
             let sessionHtml = '<ol class="dd-list">';
 
             sessions.forEach(function(element) {
@@ -600,7 +597,89 @@
 
             sessionHtml += '</ol>';
 
-            $('#menuList').append(sessionHtml);
+            $('#menuList').html(sessionHtml);
+        }
+
+
+        function fetchAllSessions() {
+            $('#menuList').html(`
+            <div class="input-session">
+                <div class="card-body text-center">
+                    <svg class="lds-microsoft" width="80px" height="80px" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                        <g transform="rotate(0)">
+                            <circle cx="81.73413361164941" cy="74.35045716034882" fill="#3f4d8f" r="5"
+                                transform="rotate(340.001 49.9999 50)">
+                                <animateTransform attributeName="transform" type="rotate" calcMode="spline"
+                                    values="0 50 50;360 50 50" times="0;1" keySplines="0.5 0 0.5 1" repeatCount="indefinite"
+                                    dur="1.5s" begin="0s"></animateTransform>
+                            </circle>
+                            <circle cx="74.35045716034882" cy="81.73413361164941" fill="#3f4d8f" r="5"
+                                transform="rotate(348.352 50.0001 50.0001)">
+                                <animateTransform attributeName="transform" type="rotate" calcMode="spline"
+                                    values="0 50 50;360 50 50" times="0;1" keySplines="0.5 0 0.5 1" repeatCount="indefinite"
+                                    dur="1.5s" begin="-0.0625s"></animateTransform>
+                            </circle>
+                            <circle cx="65.3073372946036" cy="86.95518130045147" fill="#3f4d8f" r="5"
+                                transform="rotate(354.236 50 50)">
+                                <animateTransform attributeName="transform" type="rotate" calcMode="spline"
+                                    values="0 50 50;360 50 50" times="0;1" keySplines="0.5 0 0.5 1" repeatCount="indefinite"
+                                    dur="1.5s" begin="-0.125s"></animateTransform>
+                            </circle>
+                            <circle cx="55.22104768880207" cy="89.65779445495241" fill="#3f4d8f" r="5"
+                                transform="rotate(357.958 50.0002 50.0002)">
+                                <animateTransform attributeName="transform" type="rotate" calcMode="spline"
+                                    values="0 50 50;360 50 50" times="0;1" keySplines="0.5 0 0.5 1" repeatCount="indefinite"
+                                    dur="1.5s" begin="-0.1875s"></animateTransform>
+                            </circle>
+                            <circle cx="44.77895231119793" cy="89.65779445495241" fill="#3f4d8f" r="5"
+                                transform="rotate(359.76 50.0064 50.0064)">
+                                <animateTransform attributeName="transform" type="rotate" calcMode="spline"
+                                    values="0 50 50;360 50 50" times="0;1" keySplines="0.5 0 0.5 1"
+                                    repeatCount="indefinite" dur="1.5s" begin="-0.25s"></animateTransform>
+                            </circle>
+                            <circle cx="34.692662705396415" cy="86.95518130045147" fill="#3f4d8f" r="5"
+                                transform="rotate(0.183552 50 50)">
+                                <animateTransform attributeName="transform" type="rotate" calcMode="spline"
+                                    values="0 50 50;360 50 50" times="0;1" keySplines="0.5 0 0.5 1"
+                                    repeatCount="indefinite" dur="1.5s" begin="-0.3125s"></animateTransform>
+                            </circle>
+                            <circle cx="25.649542839651176" cy="81.73413361164941" fill="#3f4d8f" r="5"
+                                transform="rotate(1.86457 50 50)">
+                                <animateTransform attributeName="transform" type="rotate" calcMode="spline"
+                                    values="0 50 50;360 50 50" times="0;1" keySplines="0.5 0 0.5 1"
+                                    repeatCount="indefinite" dur="1.5s" begin="-0.375s"></animateTransform>
+                            </circle>
+                            <circle cx="18.2658663883506" cy="74.35045716034884" fill="#3f4d8f" r="5"
+                                transform="rotate(5.45126 50 50)">
+                                <animateTransform attributeName="transform" type="rotate" calcMode="spline"
+                                    values="0 50 50;360 50 50" times="0;1" keySplines="0.5 0 0.5 1"
+                                    repeatCount="indefinite" dur="1.5s" begin="-0.4375s"></animateTransform>
+                            </circle>
+                            <animateTransform attributeName="transform" type="rotate" calcMode="spline"
+                                values="0 50 50;0 50 50" times="0;1" keySplines="0.5 0 0.5 1" repeatCount="indefinite"
+                                dur="1.5s"></animateTransform>
+                        </g>
+                        </svg>
+                    <div>Loading...</div>
+                </div>
+            </div>
+            `);
+
+            const trackId = $('#track_id').val();
+            $.ajax({
+                url: `/get_all_sessions/${trackId}`,
+                method: 'GET',
+                success: function(response) {
+                    renderSessionList(response.sessions);
+
+                    toastr.success(
+                        'Session Created Successfully.',
+                        'Success', {
+                            timeOut: 5000,
+                        });
+                },
+            });
         }
     </script>
 @endpush

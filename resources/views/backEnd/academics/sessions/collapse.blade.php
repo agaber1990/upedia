@@ -1,4 +1,6 @@
 @if (count(@$menus) > 0)
+<div class="input-session">
+    
     <div id="accordion" class="dd">
         <ol class="dd-list">
             @foreach ($menus as $key => $element)
@@ -12,7 +14,7 @@
                             </div>
                             <div class="pull-right btn_div">
                                 @if (userPermission('element-update'))
-                                    <a href="javascript:void(0);" 
+                                    <a href="javascript:void(0);"
                                         onclick="updateSession({{ $element->id }}, '{{ $element->session_name_en }}', '{{ $element->session_name_ar }}')"
                                         class="primary-btn btn_zindex panel-title">
                                         @lang('common.edit')
@@ -44,11 +46,12 @@
                             </div>
                         </div>
                         <div id="collapse_{{ $element->id }}" class="collapse"
-                            aria-labelledby="heading_{{ $element->id }}" data-parent="#accordion_{{ $element->id }}">
+                            aria-labelledby="heading_{{ $element->id }}"
+                            data-parent="#accordion_{{ $element->id }}">
                             <div class="card-body">
                                 <form enctype="multipart/form-data" id="elementEditForm">
                                     <div class="row">
-                                        
+
                                     </div>
                                 </form>
                             </div>
@@ -58,10 +61,12 @@
             @endforeach
         </ol>
     </div>
+</div>
 @else
-    <div class="card">
+    <div class="input-session">
         <div class="card-body text-center">
-            @lang('front_settings.not_found_data')
+
+           No Data
         </div>
     </div>
 @endif

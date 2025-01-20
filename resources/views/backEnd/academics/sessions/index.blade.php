@@ -224,21 +224,8 @@
                         $('#session_name_en').val('')
                         $('#session_name_ar').val('')
                         $('#exampleModal').modal('hide');
-                        const trackId = $('#track_id').val();
-                        $.ajax({
-                            url: `/get_all_sessions/${trackId}`,
-                            method: 'GET',
-                            success: function(response) {
-                                renderSessionList(response.sessions);
-
-                                toastr.success(
-                                    'Session Created Successfully.',
-                                    'Success', {
-                                        timeOut: 5000,
-                                    });
-                            },
-                        });
-
+                        fetchAllSessions();
+                      
                     },
 
                     error: function(xhr, status, error) {
@@ -289,13 +276,8 @@
                                 url: `/get_all_sessions/${trackId}`,
                                 method: 'GET',
                                 success: function(response) {
-                                    renderSessionList(response.sessions);
-
-                                    toastr.success(
-                                        'Session Updated Successfully.',
-                                        'Success', {
-                                            timeOut: 5000,
-                                        });
+                                    fetchAllSessions()
+                                  
                                 },
                             });
 
