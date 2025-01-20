@@ -22,6 +22,18 @@ class TrackSessionController extends Controller
 
         return view('backEnd.academics.sessions.index', compact('track', 'sessions', 'menus'));
     }
+
+
+    public function fetchJsonData($track_id)
+    {
+        $track = Track::where('id', $track_id)->first();
+        $sessions = TrackSession::where('track_id', $track->id)->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Session deleted successfully.',
+            'sessions' => $sessions
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -104,8 +116,9 @@ class TrackSessionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TrackSession $trackSession)
+    public function destroy($id)
     {
-        //
+        $session = TrackSession::findOrFail($id);
+        $session->delete();
     }
 }

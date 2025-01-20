@@ -181,8 +181,8 @@
         }
 
         /**
-                                                        * Nestable Extras
-                                                        */
+                                                                                                                                                                                                        * Nestable Extras
+                                                                                                                                                                                                        */
 
         .nestable-lists {
             display: block;
@@ -207,8 +207,8 @@
         }
 
         /**
-                                                        * Nestable Draggable Handles
-                                                        */
+                                                                                                                                                                                                        * Nestable Draggable Handles
+                                                                                                                                                                                                        */
 
         .dd3-content {
             display: block;
@@ -380,18 +380,18 @@
 <section class="admin-visitor-area up_st_admin_visitor">
     <div class="container-fluid p-0">
         <hr>
-                <div class="row">
-                    <div class="col-md-12 no-gutters">
-                        <div class="main-title">
-                            <h3>@lang('common.sessions')</h3>
-                        </div>
-                     
-                    </div>
-                  
-                    <div class="col-lg-12" id="menuList">
-                        @include('backEnd.academics.sessions.collapse')
-                    </div>
+        <div class="row">
+            <div class="col-md-12 no-gutters">
+                <div class="main-title">
+                    <h3>@lang('common.sessions')</h3>
                 </div>
+
+            </div>
+
+            <div class="col-lg-12" id="menuList">
+                @include('backEnd.academics.sessions.collapse')
+            </div>
+        </div>
     </div>
     {{-- Delete Modal Start --}}
     <div class="modal fade admin-query" id="deleteSubmenuItem">
@@ -408,6 +408,7 @@
                     <div class="mt-40 d-flex justify-content-between">
                         <button type="button" class="primary-btn tr-bg" data-dismiss="modal">@lang('common.cancel')</button>
                         <input type="hidden" name="id" id="item-delete" value="">
+                        <input type="hidden" id="track_id" name="track_id" value="{{ $track->id }}">
                         <a class="primary-btn fix-gr-bg" id="delete-item" href="#">@lang('common.delete')</a>
                     </div>
                 </div>
@@ -416,6 +417,27 @@
     </div>
     {{-- Delete Modal End --}}
 </section>
+
+<style>
+    .item_header {
+        background: #415094;
+
+    }
+
+    .item_header .pull-left {
+        color: #fff;
+    }
+
+    .item_header .primary-btn {
+        color: #fff;
+
+    }
+
+    .item_header .collapge_arrow_normal {
+        color: #fff;
+
+    }
+</style>
 
 @include('backEnd.partials.multi_select_js')
 @push('script')
@@ -481,23 +503,104 @@
         function elementDelete(id) {
             $('#deleteSubmenuItem').modal('show');
             $('#item-delete').val(id);
+
         }
+
+
 
         $(document).on('click', '#delete-item', function(event) {
             event.preventDefault();
             $('#deleteSubmenuItem').modal('hide');
             let id = $('#item-delete').val();
             let data = {
-                'id': id,
                 '_token': '{{ csrf_token() }}',
-            }
-            $.post("{{ route('delete-element') }}", data,
-                function(data) {
-                    toastr.success('Delete Successfully.', 'Success', {
+            };
+
+            $.ajax({
+                url: "{{ route('track_session_delete', ['id' => ':id']) }}".replace(':id', id),
+                type: 'DELETE',
+                data: data,
+                success: function(response) {
+                    const trackId = $('#track_id').val();
+                    $.ajax({
+                        url: `/get_all_sessions/${trackId}`,
+                        method: 'GET',
+                        success: function(response) {
+                            renderSessionList(response.sessions);
+
+                            toastr.success('Session Deleted Successfully.', 'Success', {
+                                timeOut: 5000,
+                            });
+                        },
+                    });
+
+                },
+                error: function(xhr, status, error) {
+                    toastr.error('Failed to delete session.', 'Error', {
                         timeOut: 5000,
                     });
-                    reloadWithData(data);
-                });
+                    console.error('Error:', error);
+                }
+            });
         });
+
+
+
+
+
+
+        function renderSessionList(sessions) {
+            $('#menuList').empty();
+            let sessionHtml = '<ol class="dd-list">';
+
+            sessions.forEach(function(element) {
+                sessionHtml += `
+            <li class="dd-item" data-id="${element.id}">
+                <div class="card accordion_card" id="accordion_${element.id}">
+                    <div class="item_header" id="heading_${element.id}">
+                        <div class="dd-handle">
+                            <div class="pull-left">
+                                ${element.session_name_en}
+                            </div>
+                        </div>
+                        <div class="pull-right btn_div">
+                            <a href="javascript:void(0);" 
+                                onclick="updateSession(${element.id}, '${element.session_name_en}', '${element.session_name_ar}')"
+                                class="primary-btn btn_zindex panel-title">
+                                @lang('common.edit')
+                                <i class="ti-pencil-alt"></i>
+                            </a>
+                            <a href="javascript:void(0);" onclick="" data-toggle="collapse"
+                                data-target="#collapse_${element.id}" aria-expanded="false"
+                                aria-controls="collapse_${element.id}"
+                                class="primary-btn btn_zindex panel-title">
+                                @lang('common.show')
+                                <i class="ti-angle-down"></i>
+                            </a>
+                            <a href="javascript:void(0);" onclick="elementDelete(${element.id})"
+                                class="primary-btn btn_zindex mb-3">
+                                <i class="ti-close"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="collapse_${element.id}" class="collapse"
+                        aria-labelledby="heading_${element.id}" data-parent="#accordion_${element.id}">
+                        <div class="card-body">
+                            <form enctype="multipart/form-data" id="elementEditForm">
+                                <div class="row">
+                                    <!-- Add form fields here if needed -->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        `;
+            });
+
+            sessionHtml += '</ol>';
+
+            $('#menuList').append(sessionHtml);
+        }
     </script>
 @endpush

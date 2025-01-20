@@ -1005,7 +1005,10 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
         Route::get('track_sessions/{track_id}', 'Admin\Academics\TrackSessionController@index')->name('track_sessions');
         Route::post('track_sessions/store', 'Admin\Academics\TrackSessionController@store')->name('track_sessions_store');
         Route::put('track_sessions/{id}', 'Admin\Academics\TrackSessionController@update')->name('track_session_update');
-        
+        Route::delete('track_sessions/{id}', 'Admin\Academics\TrackSessionController@destroy')->name('track_session_delete');
+        Route::get('get_all_sessions/{track_id}', 'Admin\Academics\TrackSessionController@fetchJsonData')->name('get_all_sessions');
+
+
         // Tracks Routes
         Route::get('tracks', 'Admin\Academics\TrackController@index')->name('tracks')->middleware('userRolePermission:tracks');
         Route::get('tracks-pricing-plan/{id}', 'Admin\Academics\TrackController@tracksPricingPlan')->name('tracksPricingPlan')->middleware('userRolePermission:tracksPricingPlan');

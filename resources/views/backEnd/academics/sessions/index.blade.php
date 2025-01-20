@@ -206,19 +206,39 @@
                     url: "{{ route('track_sessions_store') }}",
                     method: "POST",
                     data: formData,
-                    success: function(res) {
-                        // Show SweetAlert confirmation
-                        $('#exampleModal').modal('hide');
+                    // success: function(res) {
+                    //     // Show SweetAlert confirmation
+                    //     $('#exampleModal').modal('hide');
 
-                        Swal.fire({
-                            title: 'Success!',
-                            text: 'Session has been successfully added.',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        });
+                    //     Swal.fire({
+                    //         title: 'Success!',
+                    //         text: 'Session has been successfully added.',
+                    //         icon: 'success',
+                    //         confirmButtonText: 'OK'
+                    //     });
 
+                    //     $('#session_name_en').val('')
+                    //     $('#session_name_ar').val('')
+                    // },
+                    success: function(response) {
                         $('#session_name_en').val('')
                         $('#session_name_ar').val('')
+                        $('#exampleModal').modal('hide');
+                        const trackId = $('#track_id').val();
+                        $.ajax({
+                            url: `/get_all_sessions/${trackId}`,
+                            method: 'GET',
+                            success: function(response) {
+                                renderSessionList(response.sessions);
+
+                                toastr.success(
+                                    'Session Created Successfully.',
+                                    'Success', {
+                                        timeOut: 5000,
+                                    });
+                            },
+                        });
+
                     },
 
                     error: function(xhr, status, error) {
@@ -252,14 +272,33 @@
                         url: `/track_sessions/${sessionId}`,
                         method: "PUT",
                         data: data,
-                        success: function(res) {
+                        // success: function(res) {
+                        //     $('#ModalUpdateSession').modal('hide');
+                        //     Swal.fire({
+                        //         title: 'Success!',
+                        //         text: 'Session has been successfully updated.',
+                        //         icon: 'success',
+                        //         confirmButtonText: 'OK'
+                        //     });
+                        // },
+
+                        success: function(response) {
                             $('#ModalUpdateSession').modal('hide');
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Session has been successfully updated.',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
+                            const trackId = $('#track_id').val();
+                            $.ajax({
+                                url: `/get_all_sessions/${trackId}`,
+                                method: 'GET',
+                                success: function(response) {
+                                    renderSessionList(response.sessions);
+
+                                    toastr.success(
+                                        'Session Updated Successfully.',
+                                        'Success', {
+                                            timeOut: 5000,
+                                        });
+                                },
                             });
+
                         },
                         error: function(xhr, status, error) {
                             $('#ModalUpdateSession').modal('hide');
