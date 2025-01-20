@@ -89,14 +89,73 @@
                                                                 href="#">@lang('common.delete')</a>
                                                         @endif
 
-
                                                         @if (userPermission('assigned_students'))
-                                                            <a class="dropdown-item" href="#">@lang('common.assigned_students')</a>
+                                                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                                id="student_modal_btn_{{ $scheduled->id }}"
+                                                                data-bs-target="#assignedStudents_{{ $scheduled->id }}">
+                                                                @lang('common.assigned_students')
+                                                            </a>
                                                         @endif
 
                                                     </x-drop-down>
                                                 </td>
                                             </tr>
+
+
+
+
+
+                                            <!-- Modal for Assigned Students -->
+                                            <div class="modal fade" id="assignedStudents_{{ $scheduled->id }}"
+                                                tabindex="-1" aria-labelledby="assignedStudentsLabel_{{ $scheduled->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5"
+                                                                id="assignedStudentsLabel_{{ $scheduled->id }}">
+                                                                @lang('common.assigned_students')
+                                                            </h1>
+                                                            <button type="button" class="close closeStudentModal"
+                                                                data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="primary_input">
+                                                                <label class="primary_input_label"
+                                                                    for="studentDropdown_{{ $scheduled->id }}">
+                                                                    @lang('common.select_student') <span class="text-danger"> *</span>
+                                                                </label>
+                                                                <select class="primary_select form-control"
+                                                                    name="studentDropdown"
+                                                                    id="studentDropdown_{{ $scheduled->id }}">
+                                                                    @foreach ($students as $student)
+                                                                        <option value="{{ $student->id }}">
+                                                                            {{ $student->full_name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <input type="hidden" id="scheduleId" name="schedule_id"
+                                                                    value="{{ $scheduled->id }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button"
+                                                                class="closeStudentModal primary-btn tr-bg"
+                                                                data-bs-dismiss="modal">@lang('common.close')</button>
+                                                            <button type="button"
+                                                                id="saveAssignedStudents_{{ $scheduled->id }}"
+                                                                class="primary-btn fix-gr-bg text-nowrap">
+                                                                @lang('common.save_changes')
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
 
                                             <div class="modal fade admin-query"
                                                 id="deletediscount_planModal{{ '$staffScheduleds->id' }}">
@@ -139,3 +198,20 @@
     </section>
 @endsection
 @include('backEnd.partials.data_table_js')
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            $('[id^="student_modal_btn_"]').click(function(event) {
+                event.preventDefault();
+                const targetModal = $(this).data('bs-target');
+                $(targetModal).modal('show');
+            });
+
+            $('.closeStudentModal').click(function(event) {
+                event.preventDefault();
+                $(this).closest('.modal').modal('hide');
+            });
+        });
+    </script>
+@endpush

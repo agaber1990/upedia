@@ -81,7 +81,8 @@
                             <div class="modal-footer">
 
                                 <button type="button" id="add_session_for_submit"
-                                    class="primary-btn fix-gr-bg text-nowrap">Save changes</button>
+                                    class="primary-btn fix-gr-bg text-nowrap"> @lang('common.save_changes')
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -225,7 +226,7 @@
                         $('#session_name_ar').val('')
                         $('#exampleModal').modal('hide');
                         fetchAllSessions();
-                      
+
                     },
 
                     error: function(xhr, status, error) {
@@ -277,7 +278,7 @@
                                 method: 'GET',
                                 success: function(response) {
                                     fetchAllSessions()
-                                  
+
                                 },
                             });
 

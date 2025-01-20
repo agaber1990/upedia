@@ -686,6 +686,7 @@ return [
     'view_calendar' => 'View Calendar',
     'sales_management' => 'Sales Management',
     'track_sessions' => 'Track Session',
-    'sessions' => 'Sessions'
+    'sessions' => 'Sessions',
+    'save_changes'=>'Save Changes',
 ]
     ?>

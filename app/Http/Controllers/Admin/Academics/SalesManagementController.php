@@ -13,6 +13,7 @@ use App\Models\StaffSlot;
 use App\Models\Track;
 use App\Models\TrackAssignedStaff;
 use App\SmStaff;
+use App\SmStudent;
 
 class SalesManagementController extends Controller
 {
@@ -34,11 +35,13 @@ class SalesManagementController extends Controller
             $categories = Category::get();
             $slotTime = SlotEmp::get();
             $staffScheduleds = StaffScheduled::all();
+            $students = SmStudent::where('active_status', 1)->get();
+            // dd($students);
 
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 return ApiBaseMethod::sendResponse($staff, null);
             }
-            return view('backEnd.academics.sales_management.index', compact('staff', 'slots', 'trackAssignedStaff', 'tracks', 'staffScheduleds','categories','slotTime'));
+            return view('backEnd.academics.sales_management.index', compact('students', 'staff', 'slots', 'trackAssignedStaff', 'tracks', 'staffScheduleds', 'categories', 'slotTime'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
