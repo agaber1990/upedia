@@ -28,7 +28,7 @@ class SlotEmpController extends Controller
                 return ApiBaseMethod::sendResponse($slotemployees, null);
             }
 
-            return view('backEnd.humanResource.slotemployees.index', compact('slots_emp'));
+            return view('backEnd.humanResource.slotemployees.index', compact('slotemployees'));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
