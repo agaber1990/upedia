@@ -10,18 +10,8 @@
             "App\\Http\\Middleware\\SubdomainMiddleware",
             "App\\Http\\Middleware\\ProductMiddleware"
         ]
-    },
-    {
-        "domain": null,
-        "method": "POST",
-        "uri": "2fa",
-        "name": "2fa.verify",
-        "action": "Modules\\TwoFactorAuth\\Http\\Controllers\\TwoFactorAuthController@verifyCode",
-        "middleware": [
-            "web",
-            "App\\Http\\Middleware\\SubdomainMiddleware"
-        ]
-    },
+    }
+
     {
         "domain": null,
         "method": "GET|HEAD",
@@ -1101,18 +1091,7 @@
             "App\\Http\\Middleware\\CheckDashboardMiddleware"
         ]
     },
-    {
-        "domain": null,
-        "method": "GET|HEAD",
-        "uri": "after-login",
-        "name": null,
-        "action": "App\\Http\\Controllers\\HomeController@dashboard",
-        "middleware": [
-            "web",
-            "App\\Http\\Middleware\\SubdomainMiddleware",
-            "App\\Http\\Middleware\\Authenticate"
-        ]
-    },
+  
     {
         "domain": null,
         "method": "GET|HEAD",

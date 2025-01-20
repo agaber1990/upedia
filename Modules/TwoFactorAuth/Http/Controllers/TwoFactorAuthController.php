@@ -33,26 +33,6 @@ class TwoFactorAuthController extends Controller
     }
 
     
-    public function verifyCode(Request $request)
-    {
-        $request->validate([
-            'otp_code' => 'required'
-        ]);
-        $setting = TwoFactorSetting::where('school_id', Auth::user()->school_id)->first();
-        $verify = UserOtpCode::query();
-        $verify->where('user_id', auth()->user()->id)->where('otp_code', $request->otp_code); 
-        if($setting->expired_time != 0){
-            $verify->where('expired_time', '>=', Carbon::now());
-        }               
-        $verify = $verify->first();
-        if ($verify) {
-            Session::put('user_2fa', auth()->user()->id);
-            return redirect('/after-login');
-        }
-
-        Toastr::error('You entered wrong code', 'Failed');
-        return redirect()->back()->with('error', 'You entered wrong code.')->withInput();
-    }
 
     
   

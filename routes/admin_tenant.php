@@ -25,7 +25,6 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/reg', function () {});
 
 
-Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
 
     // User Auth Routes
     Route::group(['middleware' => ['CheckDashboardMiddleware']], function () {
@@ -2571,4 +2570,4 @@ Route::group(['middleware' => 'subscriptionAccessUrl'], function () {
         Route::post('user-forum-reply-vote-store', 'userReplyVote')->name('user-forum-reply-vote.store');
     });
     Route::get('user-custom-menu/{slug?}', 'HomeController@userCustomMenu')->name('user-custom-menu.index');
-});
+
