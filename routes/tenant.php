@@ -61,7 +61,6 @@ Route::group(['middleware' => []], function () {
     Route::get('/student_update', 'HomeController@studentUpdate');
     Route::get('/class_update_new', 'HomeController@classUpdateNew');
 
-    Route::get('/after-login', 'HomeController@dashboard');
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
     Route::get('ajax-get-login-access', 'SmAuthController@getLoginAccess');
 
