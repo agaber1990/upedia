@@ -687,6 +687,9 @@ return [
     'sales_management' => 'Sales Management',
     'track_sessions' => 'Track Session',
     'sessions' => 'Sessions',
+    'select' => 'Select ...',
+    'lets_assigned' => "Let's Assign",
+    'create_invoice' => "Create Invoice",
     'save_changes'=>'Save Changes',
 ]
     ?>

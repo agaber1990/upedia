@@ -1,10 +1,7 @@
 @extends('backEnd.master')
 @section('title')
-    @if (moduleStatusCheck('University'))
-        @lang('university::un.assign_faculty_department')
-    @else
-        @lang('student.assign_class')
-    @endif
+@lang('student.lets_assigned')
+
 @endsection
 @push('css')
     <style>
@@ -62,24 +59,10 @@
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>
-                    @if (moduleStatusCheck('University'))
-                        @lang('university::un.assign_faculty_department')
-                    @else
-                        @lang('student.assign_class')
-                    @endif
+                    @lang('common.lets_assigned')
+
                 </h1>
-                @if (moduleStatusCheck('University'))
-                    <div class="bc-pages">
-                        <a href="{{ url('dashboard') }}">@lang('common.dashboard')</a>
-                        <a href="{{ route('student_list') }}">@lang('student.student_list')</a>
-                        <a href="#">
-                            @if (moduleStatusCheck('University'))
-                                @lang('university::un.assign_faculty_department')
-                            @else
-                                @lang('student.assign_class')
-                            @endif
-                        </a>
-                @endif
+              
             </div>
         </div>
     </section>
@@ -97,7 +80,7 @@
                         <div class="text-right mb-20">
                             <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
                                 data-toggle="modal" data-target="#assignClass"> <span class="ti-plus pr-2"></span>
-                                @lang('common.add')</button>
+                                @lang('common.create_invoice')</button>
                         </div>
                         <div class="table-responsive">
                         <table id="" class="table simple-table school-table"
@@ -237,156 +220,48 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        @if (moduleStatusCheck('University'))
-                            @lang('university::un.assign_faculty_department')
-                        @else
-                            @lang('student.assign_class')
-                        @endif
+                        @lang('common.create_invoice')
+
                     </h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
+                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'student.record.store', 'method' => 'POST']) }}
 
-                <div class="modal-body">
+                <div class="modal-body pt-3">
                     <div class="container-fluid">
-                        {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'student.record.store', 'method' => 'POST']) }}
-
 
                         <input type="hidden" name="student_id" value="{{ $student_detail->id }}">
-                        @if (!moduleStatusCheck('University'))
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="primary_input ">
-                                        <select
-                                            class="primary_select  form-control{{ $errors->has('session') ? ' is-invalid' : '' }}"
-                                            name="session" id="academic_year">
-                                            <option data-display="@lang('common.academic_year') *" value="">@lang('common.academic_year')
-                                                *</option>
-                                            @foreach ($sessions as $session)
-                                                <option value="{{ $session->id }}"
-                                                    {{ old('session') == $session->id ? 'selected' : '' }}>
-                                                    {{ $session->year }}[{{ $session->title }}]</option>
-                                            @endforeach
-                                        </select>
-
-                                        @if ($errors->has('session'))
-                                            <span class="text-danger invalid-select" role="alert">
-                                                {{ $errors->first('session') }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-25">
-                                <div class="col-lg-12">
-                                    <div class="primary_input " id="class-div">
-                                        <select
-                                            class="primary_select  form-control{{ $errors->has('class') ? ' is-invalid' : '' }}"
-                                            name="class" id="classSelectStudent">
-                                            <option data-display="@lang('common.class') *" value="">@lang('common.class')
-                                                *</option>
-                                        </select>
-                                        <div class="pull-right loader loader_style" id="select_class_loader">
-                                            <img class="loader_img_style"
-                                                src="{{ asset('/backEnd/img/demo_wait.gif') }}" alt="loader">
-                                        </div>
-
-                                        @if ($errors->has('class'))
-                                            <span class="text-danger invalid-select" role="alert">
-                                                {{ $errors->first('class') }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-25">
-                                <div class="col-lg-12">
-                                    <div class="primary_input " id="sectionStudentDiv">
-                                        <select
-                                            class="primary_select  form-control{{ $errors->has('section') ? ' is-invalid' : '' }}"
-                                            name="section" id="sectionSelectStudent">
-                                            <option data-display="@lang('common.section') *" value="">@lang('common.section')
-                                                *</option>
-                                        </select>
-                                        <div class="pull-right loader loader_style" id="select_section_loader">
-                                            <img class="loader_img_style"
-                                                src="{{ asset('/backEnd/img/demo_wait.gif') }}" alt="loader">
-                                        </div>
-
-                                        @if ($errors->has('section'))
-                                            <span class="text-danger invalid-select" role="alert">
-                                                {{ $errors->first('section') }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                            @includeIf('university::common.session_faculty_depart_academic_semester_level', [
-                                'mt' => 'mt-0',
-                                'required' => ['USN', 'UF', 'UD', 'UA', 'US', 'USL'],
-                                'row' => 1,
-                                'div' => 'col-lg-12',
-                                'hide' => ['USUB'],
-                            ])
-                        @endif
-                        @if (generalSetting()->multiple_roll == 1)
-                            <div class="row mt-25">
-                                <div class="col-lg-12">
-                                    <div class="primary_input ">
-                                        <input oninput="numberCheck(this)" class="primary_input_field" type="text"
-                                            id="roll_number" name="roll_number" value="{{ old('roll_number') }}">
-                                        <label>
-                                            {{ moduleStatusCheck('Lead') == true ? __('lead::lead.id_number') : __('student.roll') }}
-                                            @if (is_required('roll_number') == true)
-                                                <span class="text-danger"> *</span>
-                                            @endif
-                                        </label>
-
-                                        <span class="text-danger" id="roll-error" role="alert">
-                                            <strong></strong>
-                                        </span>
-                                        @if ($errors->has('roll_number'))
-                                            <span class="text-danger">
-                                                {{ $errors->first('roll_number') }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
-                        <div class="row  mt-25">
+                        <div class="row">
                             <div class="col-lg-12">
-                                <label for="is_default">@lang('student.is_default')</label>
-                                <div class="d-flex radio-btn-flex mt-10">
+                                <div class="primary_input ">
+                                    <label for="">@lang('academics.level_number')</label>
+                                    <select multiple
+                                        class="primary_select  form-control{{ $errors->has('session') ? ' is-invalid' : '' }}"
+                                        name="session" id="academic_year">
+                                        <option data-display="@lang('academics.level_number') *" value="">@lang('academics.level_number')
+                                            *</option>
+                                        <option value="">1</option>
+                                        <option value="">2</option>
+                                        <option value="">3</option>
+                                    </select>
 
-                                    <div class="mr-30">
-                                        <input type="radio" name="is_default" id="isDefaultYes" value="1"
-                                            class="common-radio relationButton">
-                                        <label for="isDefaultYes">@lang('common.yes')</label>
-                                    </div>
-                                    <div class="mr-30">
-                                        <input type="radio" name="is_default" id="isDefaultNo" value="0"
-                                            class="common-radio relationButton" checked>
-                                        <label for="isDefaultNo">@lang('common.no')</label>
-                                    </div>
-
+                                    @if ($errors->has('session'))
+                                        <span class="text-danger invalid-select" role="alert">
+                                            {{ $errors->first('session') }}
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
                         </div>
-
-
-                        <div class="col-lg-12 text-center mt-20">
-                            <div class="mt-40 d-flex justify-content-between">
-                                <button type="button" class="primary-btn tr-bg"
-                                    data-dismiss="modal">@lang('admin.cancel')</button>
-                                <button class="primary-btn fix-gr-bg submit" id="save_button_query"
-                                    type="submit">@lang('admin.save')</button>
-                            </div>
-                        </div>
-                        {{ Form::close() }}
+                     
                     </div>
                 </div>
+
+                <div class="modal-footer">
+                    <button type="submit"
+                    class="primary-btn fix-gr-bg">@lang('common.submit')</button>                           
+                </div>
+                {{ Form::close() }}
 
             </div>
         </div>
