@@ -31,24 +31,33 @@ class StaffScheduled extends Model
         return $this->belongsTo(category::class, 'cat_id');
     }
 
-    public function slot()
-    {
-        return $this->belongsTo(SlotEmp::class, 'slot_id');
-    }
-
     public function staff()
     {
         return $this->belongsTo(SmStaff::class, 'staff_id');
     }
-    
+
     public function trackType()
     {
         return $this->belongsTo(TrackType::class, 'track_type_id');
     }
+
     public function track()
     {
         return $this->belongsTo(Track::class, 'track_id');
     }
 
-   
+    public function getSlotsAttribute()
+    {
+        $slotIds = json_decode($this->slot_id, true);
+        if (is_array($slotIds) && count($slotIds) > 0) {
+            return SlotEmp::whereIn('id', $slotIds)->get();
+        }
+        return collect();
+    }
+
+    // Manually fetch slots for compatibility with other logic
+    public function slots()
+    {
+        return $this->getSlotsAttribute();
+    }
 }

@@ -14,6 +14,10 @@ use App\Models\Track;
 use App\Models\TrackAssignedStaff;
 use App\SmStaff;
 use App\SmStudent;
+use App\SmSchool;
+use App\SmAcademicYear;
+use App\Models\StudentRecord;
+use App\SmClass;
 
 class SalesManagementController extends Controller
 {
@@ -25,7 +29,6 @@ class SalesManagementController extends Controller
         $this->middleware('PM');
     }
     public function index(Request $request)
-
     {
         try {
             $slots = StaffSlot::with('slotEmp')->get();
@@ -50,6 +53,18 @@ class SalesManagementController extends Controller
 
 
 
+    public function assignStudent($scheduledId, $id)
+    {
+        $data['staff_scheduleds'] = StaffScheduled::with('track', 'category', 'staff')
+            ->find($scheduledId); // Simplified query using find()
+
+            // dd($data['staff_scheduleds']->slots());
+      
+
+
+        $data['student_detail'] = SmStudent::where('id', $id)->first();
+        return view('backEnd.academics.sales_management.assign_student', $data);
+    }
 
     /**
      * Show the form for creating a new resource.

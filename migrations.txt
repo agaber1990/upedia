@@ -6,4 +6,3 @@ php artisan migrate:refresh --path=database/migrations/2025_01_09_024116_create_
 php artisan migrate:refresh --path=database/migrations/2025_01_06_092931_create_discount_plans_table.php
 php artisan migrate:refresh --path=database/migrations/2025_01_15_110145_create_track_sessions_table.php
 
-
