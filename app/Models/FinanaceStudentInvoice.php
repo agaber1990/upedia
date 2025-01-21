@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class FinanaceStudentInvoice extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'staff_scheduleds_id',
+        'student_id',
+        'invoice_number',
+        'levels_ids'
+    ];
 }

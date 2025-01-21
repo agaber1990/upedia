@@ -1,8 +1,8 @@
 @extends('backEnd.master')
 @section('title')
-@lang('student.lets_assigned')
-
+    @lang('student.lets_assigned')
 @endsection
+{{-- {{ dd($staff_scheduleds) }} --}}
 @push('css')
     <style>
         .badge {
@@ -13,15 +13,17 @@
             display: inline-block;
             font-size: 8px;
         }
-        .icon-only [class*="ti-"]{
+
+        .icon-only [class*="ti-"] {
             color: #fff;
             font-size: 14px;
         }
-        .icon-only:hover [class*="ti-"]{
-            color: #fff!important;
+
+        .icon-only:hover [class*="ti-"] {
+            color: #fff !important;
         }
 
-        .table thead td{
+        .table thead td {
             text-align: left;
         }
 
@@ -31,8 +33,6 @@
     </style>
 @endpush
 @section('mainContent')
-
-
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
@@ -40,7 +40,7 @@
                     @lang('common.lets_assigned')
 
                 </h1>
-              
+
             </div>
         </div>
     </section>
@@ -61,21 +61,20 @@
                                 @lang('common.create_invoice')</button>
                         </div>
                         <div class="table-responsive">
-                        <table id="" class="table simple-table school-table"
-                            cellspacing="0">
-                            <thead>
-                                <tr >
-                                    <th>@lang('common.invoice_number')</th>
-                                    <th>@lang('common.bill_status')</th>
-                                    <th>@lang('student.action')</th>
-                                </tr>
-                            </thead>
+                            <table id="" class="table simple-table school-table" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>@lang('common.invoice_number')</th>
+                                        <th>@lang('common.bill_status')</th>
+                                        <th>@lang('student.action')</th>
+                                    </tr>
+                                </thead>
 
-                            <tbody>
-                                {{-- Loop --}}
-                               
-                            </tbody>
-                        </table>
+                                <tbody>
+                                    {{-- Loop --}}
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -97,51 +96,81 @@
                     </h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'student.record.store', 'method' => 'POST']) }}
+                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'sales_management_store', 'method' => 'POST']) }}
+
 
                 <div class="modal-body pt-3">
                     <div class="container-fluid">
-
+                        <!-- Hidden Input for Student ID -->
                         <input type="hidden" name="student_id" value="{{ $student_detail->id }}">
+                        <input type="hidden" name="staff_scheduleds_id" value="{{ $staff_scheduleds->id }}">
+
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="primary_input ">
-                                    <label for="">@lang('academics.level_number')</label>
-                                    <select multiple
-                                        class="primary_select  form-control{{ $errors->has('session') ? ' is-invalid' : '' }}"
-                                        name="session" id="academic_year">
-                                        <option data-display="@lang('academics.level_number') *" value="">@lang('academics.level_number')
-                                            *</option>
-                                        <option value="">1</option>
-                                        <option value="">2</option>
-                                        <option value="">3</option>
+                            <div class="col-md-6">
+                                <h5 class="mb-3">Details</h5>
+                                <ul>
+                                    <li><strong>Category:</strong> {{ $staff_scheduleds->category->name_en }}</li>
+                                    <li><strong>Staff Name:</strong> {{ $staff_scheduleds->staff->full_name }}</li>
+                                    <li><strong>Track Name:</strong> {{ $staff_scheduleds->track->track_name_en }}</li>
+                                    <li><strong>Track Type Name:</strong> {{ $staff_scheduleds->trackType->name }}</li>
+                                    <li><strong>Status:</strong> {{ $staff_scheduleds->status }}</li>
+                                    <li><strong>Session:</strong> {{ $staff_scheduleds->session }}</li>
+                                    <li><strong>Schedule:</strong> {{ $staff_scheduleds->schedule }}</li>
+                                    <li><strong>Start Date:</strong> {{ $staff_scheduleds->start_date }}</li>
+                                    <li><strong>End Date:</strong> {{ $staff_scheduleds->end_date }}</li>
+                                </ul>
+                            </div>
+
+                            <!-- Slots Section -->
+                            <div class="col-md-6 mt-4">
+                                <h5 class="mb-3">Available Slots</h5>
+                                <ul>
+                                    @foreach ($slots as $slot)
+                                        <li>
+                                            <strong>{{ $slot->slot_day }}:</strong> {{ formatTime($slot->slot_start) }} -
+                                            {{ formatTime($slot->slot_end) }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                            <!-- Level Selection Section -->
+                            <div class="col-md-12 mt-4">
+                                <div class="form-group">
+                                    <label for="levels_ids">@lang('academics.level_number')</label>
+                                    <select name="levels_ids" id="levels_ids"
+                                        class="form-control primary_select {{ $errors->has('levels_ids') ? 'is-invalid' : '' }}">
+                                        <option data-display="@lang('academics.level_number') *" value="">@lang('academics.level_number') *
+                                        </option>
+                                        @foreach ($levels as $level)
+                                            <option value="{{ $level->id }}">
+                                                {{ $level->level_number }}
+                                            </option>
+                                        @endforeach
                                     </select>
 
-                                    @if ($errors->has('session'))
-                                        <span class="text-danger invalid-select" role="alert">
-                                            {{ $errors->first('session') }}
+                                    @if ($errors->has('levels_ids'))
+                                        <span class="text-danger" role="alert">
+                                            {{ $errors->first('levels_ids') }}
                                         </span>
                                     @endif
                                 </div>
                             </div>
                         </div>
-                     
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="submit"
-                    class="primary-btn fix-gr-bg">@lang('common.submit')</button>                           
+
+                <div class="modal-footer" id="add_btn">
+                    <button type="submit" class="primary-btn fix-gr-bg">@lang('common.submit')</button>
                 </div>
+
                 {{ Form::close() }}
 
             </div>
         </div>
     </div>
     <!-- assign class form modal end-->
-
-
 @endsection
 @push('script')
-   
 @endpush
