@@ -146,7 +146,7 @@
                                                         <div class="col-lg-6 col-xl-2 mb-20">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label"
-                                                                    for="">@lang('common.role_types')
+                                                                    for="">@lang('common.role_types') *
                                                                 </label>
                                                                 <select
                                                                     class="primary_select  form-control{{ $errors->has('role_type') ? ' is-invalid' : '' }}"
