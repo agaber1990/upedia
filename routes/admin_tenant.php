@@ -1047,6 +1047,7 @@ Route::get('/reg', function () {});
         Route::get('sales_management/{id}', 'Admin\Academics\SalesManagementController@show')->name('sales_management-edit')->middleware('userRolePermission:sales_management-edit');
         Route::put('sales_management/{id}', 'Admin\Academics\SalesManagementController@update')->name('sales_management-update')->middleware('userRolePermission:sales_management-edit');
         Route::delete('sales_management/{id}', 'Admin\Academics\SalesManagementController@destroy')->name('sales_management-delete')->middleware('userRolePermission:sales_management-delete');
+        Route::get('sales_management/assign-student/{id}', 'Admin\Academics\SalesManagementController@assignStudent')->name('sales_assign_student')->middleware('userRolePermission:sales_assign_student');
 
 
 

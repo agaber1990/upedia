@@ -14,6 +14,10 @@ use App\Models\Track;
 use App\Models\TrackAssignedStaff;
 use App\SmStaff;
 use App\SmStudent;
+use App\SmSchool;
+use App\SmAcademicYear;
+use App\Models\StudentRecord;
+use App\SmClass;
 
 class SalesManagementController extends Controller
 {
@@ -50,6 +54,19 @@ class SalesManagementController extends Controller
 
 
 
+    public function assignStudent($id)
+    {
+        $data['schools'] = SmSchool::get();
+        $data['sessions'] = SmAcademicYear::get(['id', 'year', 'title']);
+        $data['student_records'] = StudentRecord::where('student_id', $id)->where('active_status', 1)
+            ->when(moduleStatusCheck('University'), function ($query) {
+                $query->whereNull('class_id');
+            })->get();
+        $data['student_detail'] = SmStudent::where('id', $id)->first();
+        $data['classes'] = SmClass::get(['id', 'class_name']);
+        $data['siblings'] = SmStudent::where('parent_id', $data['student_detail']->parent_id)->whereNotNull('parent_id')->where('id', '!=', $id)->status()->withoutGlobalScope(StatusAcademicSchoolScope::class)->get();
+        return view('backEnd.academics.sales_management.assign_student', $data);
+    }
 
     /**
      * Show the form for creating a new resource.
