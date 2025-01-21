@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('finanace_student_invoices', function (Blueprint $table) {
             $table->id(); 
             $table->unsignedBigInteger('staff_scheduleds_id');
+            $table->string('staff_scheduleds_status')->default('reserved');
             $table->integer('student_id');
             $table->string('invoice_number');
             $table->string('levels_ids');
