@@ -2,7 +2,6 @@
 @section('title')
     @lang('academics.track_session')
 @endsection
-{{-- {{ dd($track, $sessions) }} --}}
 @section('mainContent')
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
@@ -61,6 +60,20 @@
                             <div class="modal-body">
 
                                 <div class="primary_input">
+                                    <label class="primary_input_label" for="level_id">
+                                        @lang('common.select_student') <span class="text-danger"> *</span>
+                                    </label>
+                                    <select class="primary_select form-control" name="level_id" id="level_id">
+                                        @foreach ($levels as $level)
+                                            <option value="{{ $level->id }}">
+                                                {{ $level->level_number }}</option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+
+                                <div class="primary_input">
+
                                     <label class="primary_input_label" for="session_name_en">@lang('academics.session_name_en')
                                         <span class="text-danger"> *</span>
                                     </label>
@@ -99,15 +112,28 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
+
                                 <div class="primary_input">
-                                    <label class="primary_input_label" for="update_session_name_en">@lang('academics.session_name_en') <span
-                                            class="text-danger"> *</span></label>
+                                    <label class="primary_input_label" for="update_level_id">
+                                        @lang('common.select_student') <span class="text-danger"> *</span>
+                                    </label>
+                                    <select class="primary_select form-control" name="level_id" id="update_level_id">
+                                        @foreach ($levels as $level)
+                                            <option value="{{ $level->id }}">
+                                                {{ $level->level_number }}</option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="update_session_name_en">@lang('academics.session_name_en')
+                                        <span class="text-danger"> *</span></label>
                                     <input class="primary_input_field form-control" type="text" name="session_name_en"
                                         id="update_session_name_en" autocomplete="off">
                                 </div>
                                 <div class="primary_input">
-                                    <label class="primary_input_label" for="update_session_name_ar">@lang('academics.session_name_ar') <span
-                                            class="text-danger"> *</span></label>
+                                    <label class="primary_input_label" for="update_session_name_ar">@lang('academics.session_name_ar')
+                                        <span class="text-danger"> *</span></label>
                                     <input class="primary_input_field form-control" type="text" name="session_name_ar"
                                         id="update_session_name_ar" autocomplete="off">
                                 </div>
@@ -195,10 +221,10 @@
             });
             $('#add_session_for_submit').click(function(event) {
                 event.preventDefault();
-                // Submit input to db
                 let formData = {
                     session_name_en: $('#session_name_en').val(),
                     session_name_ar: $('#session_name_ar').val(),
+                    level_id: $('#level_id').val(),
                     track_id: $('#track_id').val(),
                     _token: '{{ csrf_token() }}'
                 };
@@ -207,25 +233,13 @@
                     url: "{{ route('track_sessions_store') }}",
                     method: "POST",
                     data: formData,
-                    // success: function(res) {
-                    //     // Show SweetAlert confirmation
-                    //     $('#exampleModal').modal('hide');
 
-                    //     Swal.fire({
-                    //         title: 'Success!',
-                    //         text: 'Session has been successfully added.',
-                    //         icon: 'success',
-                    //         confirmButtonText: 'OK'
-                    //     });
-
-                    //     $('#session_name_en').val('')
-                    //     $('#session_name_ar').val('')
-                    // },
                     success: function(response) {
                         $('#session_name_en').val('')
                         $('#session_name_ar').val('')
+                        $('#level_id').val('')
                         $('#exampleModal').modal('hide');
-                        fetchAllSessions();
+                        window.location.reload()
 
                     },
 
@@ -251,6 +265,7 @@
                     const data = {
                         session_name_en: $('#update_session_name_en').val(),
                         session_name_ar: $('#update_session_name_ar').val(),
+                        level_id: $('#update_level_id').val(),
                         track_id: $('#track_id').val(),
                         _token: '{{ csrf_token() }}'
                     };
@@ -272,15 +287,8 @@
 
                         success: function(response) {
                             $('#ModalUpdateSession').modal('hide');
-                            const trackId = $('#track_id').val();
-                            $.ajax({
-                                url: `/get_all_sessions/${trackId}`,
-                                method: 'GET',
-                                success: function(response) {
-                                    fetchAllSessions()
+                            window.location.reload()
 
-                                },
-                            });
 
                         },
                         error: function(xhr, status, error) {

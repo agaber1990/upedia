@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Academics;
 
 use App\Http\Controllers\Controller;
+use App\Models\Level;
 use Illuminate\Http\Request;
 use App\Models\Track;
 use App\Models\TrackSession;
@@ -18,9 +19,12 @@ class TrackSessionController extends Controller
 
         $track = Track::where('id', $track_id)->first();
         $sessions = TrackSession::where('id', $track->id)->with('track')->get();
-        $menus = TrackSession::where('track_id', $track->id)->with('track')->get();
+        $menus = TrackSession::where('track_id', $track->id)->with('track', 'level')->get();
+        $levels = Level::where('id', '<=', $track->level_number)->get();
 
-        return view('backEnd.academics.sessions.index', compact('track', 'sessions', 'menus'));
+        $groupedMenus = $menus->groupBy('level_id');
+
+        return view('backEnd.academics.sessions.index', compact('track', 'sessions', 'menus', 'levels', 'groupedMenus'));
     }
 
 
@@ -49,6 +53,7 @@ class TrackSessionController extends Controller
     {
         $validated = $request->validate([
             'track_id' => 'required|exists:tracks,id',
+            'level_id' => 'required|exists:levels,id',
             'session_name_en' => 'required|string',
             'session_name_ar' => 'required|string',
         ]);
@@ -65,11 +70,13 @@ class TrackSessionController extends Controller
         // Create the track session
         TrackSession::create([
             'track_id' => $validated['track_id'],
+            'level_id' => $validated['level_id'],
             'session_number' => $existingSessionsCount + 1,
             'session_name_en' => $validated['session_name_en'],
             'session_name_ar' => $validated['session_name_ar'],
             'session_ref' => "TRS" . time()
         ]);
+
 
         return response()->json([
             'message' => 'Track session added successfully.',
@@ -101,6 +108,7 @@ class TrackSessionController extends Controller
         $request->validate([
             'session_name_en' => 'required|string|max:255',
             'session_name_ar' => 'required|string|max:255',
+            'level_id' => 'required|exists:levels,id',
         ]);
 
         $session = TrackSession::findOrFail($id);
@@ -108,6 +116,7 @@ class TrackSessionController extends Controller
         $session->update([
             'session_name_en' => $request->session_name_en,
             'session_name_ar' => $request->session_name_ar,
+            'level_id' => $request->level_id,
         ]);
 
         return response()->json(['message' => 'Session updated successfully']);

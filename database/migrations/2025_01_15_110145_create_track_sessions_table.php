@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('track_sessions', function (Blueprint $table) {
             $table->id();
             $table->integer('track_id');
+            $table->integer('level_id');
             $table->string('session_name_en');
             $table->string('session_name_ar');
             $table->integer('session_number');
