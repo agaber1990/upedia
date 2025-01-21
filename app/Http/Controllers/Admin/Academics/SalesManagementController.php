@@ -29,7 +29,6 @@ class SalesManagementController extends Controller
         $this->middleware('PM');
     }
     public function index(Request $request)
-
     {
         try {
             $slots = StaffSlot::with('slotEmp')->get();
@@ -54,17 +53,16 @@ class SalesManagementController extends Controller
 
 
 
-    public function assignStudent($id)
+    public function assignStudent($scheduledId, $id)
     {
-        $data['schools'] = SmSchool::get();
-        $data['sessions'] = SmAcademicYear::get(['id', 'year', 'title']);
-        $data['student_records'] = StudentRecord::where('student_id', $id)->where('active_status', 1)
-            ->when(moduleStatusCheck('University'), function ($query) {
-                $query->whereNull('class_id');
-            })->get();
+        $data['staff_scheduleds'] = StaffScheduled::with('track', 'category', 'staff')
+            ->find($scheduledId); // Simplified query using find()
+
+            // dd($data['staff_scheduleds']->slots());
+      
+
+
         $data['student_detail'] = SmStudent::where('id', $id)->first();
-        $data['classes'] = SmClass::get(['id', 'class_name']);
-        $data['siblings'] = SmStudent::where('parent_id', $data['student_detail']->parent_id)->whereNotNull('parent_id')->where('id', '!=', $id)->status()->withoutGlobalScope(StatusAcademicSchoolScope::class)->get();
         return view('backEnd.academics.sales_management.assign_student', $data);
     }
 

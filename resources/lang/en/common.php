@@ -689,6 +689,8 @@ return [
     'sessions' => 'Sessions',
     'select' => 'Select ...',
     'lets_assigned' => "Let's Assign",
+    'invoice_number' => "Invoice NO.",
+    'bill_status' => "Bill Status",
     'create_invoice' => "Create Invoice",
     'save_changes'=>'Save Changes',
 ]

@@ -170,7 +170,7 @@
             
             if(id > 0) {
                     $('#modal_footer_'+scheduledId).html(
-                    `<a  href="/sales_management/assign-student/${id}"
+                    `<a  href="/sales_management/${scheduledId}/assign-student/${id}"
                         class="primary-btn fix-gr-bg text-nowrap">
                         @lang('common.lets_assigned')
                     </a>`

@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id(); 
             $table->unsignedBigInteger('staff_scheduleds_id');
             $table->integer('student_id');
+            $table->string('invoice_number');
             $table->string('levels_ids');
             // Use ENUM for payment_status
-            $table->enum('payment_status', ['paid', 'not_paid', 'refunded','paid_purchased']);
+            $table->enum('payment_status', ['paid', 'not_paid', 'refunded','paid_purchased'])->default('not_paid');
             // Use ENUM for bill_status
-            $table->enum('bill_status', ['pending', 'billed', 'cancelled']);
+            $table->enum('bill_status', ['pending', 'billed', 'cancelled'])->default('pending');
             $table->integer('delivery_note')->default(0);
             $table->timestamps();
         });
