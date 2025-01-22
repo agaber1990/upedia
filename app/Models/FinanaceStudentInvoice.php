@@ -13,6 +13,9 @@ class FinanaceStudentInvoice extends Model
         'staff_scheduleds_id',
         'student_id',
         'invoice_number',
-        'levels_ids'
+        'levels_id',
+        'payment_status',
+        'bill_status',
+        'delivery_note',
     ];
 }

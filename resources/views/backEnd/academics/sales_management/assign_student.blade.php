@@ -55,7 +55,11 @@
                 <!-- Start Student Details -->
                 <div class="col-lg-9 student-details up_admin_visitor">
                     <div class="white-box mt-40">
-                        <div class="text-right mb-20">
+                        <div class="d-flex justify-content-between mb-20">
+                            <h3>
+                                @lang('common.invoices')
+            
+                            </h3>
                             <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
                                 data-toggle="modal" data-target="#assignStudent"> <span class="ti-plus pr-2"></span>
                                 @lang('common.create_invoice')</button>
@@ -66,12 +70,29 @@
                                     <tr>
                                         <th>@lang('common.invoice_number')</th>
                                         <th>@lang('common.bill_status')</th>
-                                        <th>@lang('student.action')</th>
+                                        <th>@lang('common.delivery_note')</th>
+                                        <th>@lang('common.action')</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    {{-- Loop --}}
+                                    @foreach ($student_invoices as $item)
+                                    <tr>
+                                        <td>{{ $item->invoice_number }}</td>
+                                        <td>
+                                            <span class="badge @if($item->bill_status === 'pending')badge-warning @elseif ($item->bill_status === 'billed')badge-success @elseif ($item->bill_status === 'cancelled')badge-danger @endif">
+                                                {{ ucfirst($item->bill_status) }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $item->delivery_note }}</td>
+                                        <td>
+                                           <a href="" class="print_now">
+                                            <i class="fas fa-print"></i>
+                                           </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                
 
                                 </tbody>
                             </table>
@@ -132,14 +153,12 @@
                                         </li>
                                     @endforeach
                                 </ul>
-                            </div>
-
-                            <!-- Level Selection Section -->
-                            <div class="col-md-12 mt-4">
+                                <hr>
                                 <div class="form-group">
-                                    <label for="levels_ids">@lang('academics.level_number')</label>
-                                    <select name="levels_ids" id="levels_ids"
-                                        class="form-control primary_select {{ $errors->has('levels_ids') ? 'is-invalid' : '' }}">
+                                    
+                                    <h5 for="levels_id">@lang('academics.level_number')</h5>
+                                    <select name="levels_id" id="levels_id"
+                                        class="form-control primary_select {{ $errors->has('levels_id') ? 'is-invalid' : '' }}">
                                         <option data-display="@lang('academics.level_number') *" value="">@lang('academics.level_number') *
                                         </option>
                                         @foreach ($levels as $level)
@@ -148,14 +167,16 @@
                                             </option>
                                         @endforeach
                                     </select>
-
-                                    @if ($errors->has('levels_ids'))
+    
+                                    @if ($errors->has('levels_id'))
                                         <span class="text-danger" role="alert">
-                                            {{ $errors->first('levels_ids') }}
+                                            {{ $errors->first('levels_id') }}
                                         </span>
                                     @endif
                                 </div>
                             </div>
+                            <!-- Level Selection Section -->
+                            
                         </div>
                     </div>
                 </div>
@@ -172,5 +193,31 @@
     </div>
     <!-- assign class form modal end-->
 @endsection
+
+
+<style>
+    .badge {
+        font-size: 12px !important;
+    }
+    .badge-success {
+        background: #080 !important;
+
+    }
+    .badge-success {
+        background: #080 !important;
+
+    }
+    .badge-warning {
+        background: rgb(81, 81, 81) !important;
+
+    }
+    .badge-danger {
+        background: rgb(255, 10, 10) !important;
+    }
+
+    .print_now {
+        font-size: 16px
+    }
+</style>
 @push('script')
 @endpush

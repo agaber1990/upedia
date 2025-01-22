@@ -51,13 +51,13 @@ class SalesManagementController extends Controller
         $data['staff_scheduleds'] = StaffScheduled::with('trackType', 'track.levels', 'category', 'staff')
             ->find($scheduledId); // Simplified query using find()
 
-        // dd($data['staff_scheduleds']);
-        // dd($data['staff_scheduleds']->slots());
-
-        $data['slots'] = $data['staff_scheduleds']->slots();
-
-        $data['levels'] = Level::where('id', '<=', $data['staff_scheduleds']->track->level_number)->get();
-        $data['student_detail'] = SmStudent::where('id', $id)->first();
+            // dd($data['staff_scheduleds']->slots());
+            
+            $data['slots'] = $data['staff_scheduleds']->slots();
+            
+            $data['levels'] = Level::where('id', '<=', $data['staff_scheduleds']->track->level_number)->get();
+            $data['student_detail'] = SmStudent::where('id', $id)->first();
+            $data['student_invoices'] = FinanaceStudentInvoice::where('student_id', $data['student_detail']->id)->get();
         return view('backEnd.academics.sales_management.assign_student', $data);
     }
 
@@ -66,22 +66,17 @@ class SalesManagementController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        $validated = $request->validate([
-            'staff_scheduleds_id' => 'required|exists:staff_scheduleds,id',
-            'student_id' => 'required|exists:sm_students,id',
-            'levels_ids' => 'required|exists:levels,id',
-            'invoice_number' => 'required|string',
-        ]);
-
+        
 
         $invoiceData = [
             'staff_scheduleds_id' => $request['staff_scheduleds_id'],
             'student_id' => $request['student_id'],
-            'levels_ids' => $request['levels_ids'],
+            'levels_id' => $request['levels_id'],
             'invoice_number' => "NO" . time(),
         ];
         FinanaceStudentInvoice::create($invoiceData);
+        Toastr::success('Created successfully', 'Success');
+        return redirect()->back();
     }
 
     /**

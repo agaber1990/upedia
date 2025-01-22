@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('finanace_student_invoices', function (Blueprint $table) {
             $table->id(); 
             $table->unsignedBigInteger('staff_scheduleds_id');
-            $table->string('staff_scheduleds_status')->default('reserved');
             $table->integer('student_id');
+            $table->integer('levels_id');
             $table->string('invoice_number');
-            $table->string('levels_ids');
+            $table->string('staff_scheduleds_status')->default('reserved');
             // Use ENUM for payment_status
             $table->enum('payment_status', ['paid', 'not_paid', 'refunded','paid_purchased'])->default('not_paid');
             // Use ENUM for bill_status
