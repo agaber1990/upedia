@@ -8,7 +8,6 @@
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
-                <h1>@lang('academics.courses')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
                     <a href="#">@lang('academics.academics')</a>
@@ -19,16 +18,17 @@
     </section>
 
     <section class="admin-visitor-area up_admin_visitor up_st_admin_visitor pl_22">
-        <div class="row">
-            <div class="col-6">
-                <h3>
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+            <div class="">
+                <h3 class="mb-0">
                     @lang('academics.students')</h3>
             </div>
-            <div class="col-6">
-                <button class="btn btn-primary" id="assign_student">
-                    @lang('common.add')
+            <div class="">
+                <button class="primary-btn small fix-gr-bg"id="assign_student">
+                    <span class="ti-plus pr-2"></span>
+                     @lang('common.add')
                 </button>
-
+             
 
 
             </div>
@@ -84,7 +84,6 @@
                                 <table id="table_id" class="table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>@lang('academics.student_id')</th>
                                             <th>@lang('academics.student_name')</th>
                                             <th>@lang('common.action')</th>
 
@@ -93,9 +92,7 @@
                                     <tbody>
                                         @foreach ($students as $item)
                                             <tr>
-                                                <td>{{ $item->id }}</td>
                                                 <td>{{ $item->full_name }}</td>
-                                                <td>{{ $item->schedule }}</td>
                                                 <td>
                                                     <x-drop-down>
 

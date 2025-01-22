@@ -28,7 +28,7 @@ class StaffScheduled extends Model
 
     public function category()
     {
-        return $this->belongsTo(category::class, 'cat_id');
+        return $this->belongsTo(Category::class, 'cat_id');
     }
 
     public function staff()
