@@ -13,7 +13,8 @@ class TrackType extends Model
 
     protected $fillable = ['name'];
 
-
-
-
+    public function track_pricing_plans()
+    {
+        return $this->hasMany(TrackPricingPlan::class);
+    }
 }

@@ -1042,20 +1042,22 @@ Route::get('/reg', function () {});
 
 
         // sales_management Routes
-        Route::get('sales_management', 'Admin\Academics\SalesManagementController@index')->name('sales_management');
-        Route::post('sales_management', 'Admin\Academics\SalesManagementController@store')->name('sales_management_store');
-        Route::get('sales_management/{id}', 'Admin\Academics\SalesManagementController@show')->name('sales_management-edit');
-        Route::put('sales_management/{id}', 'Admin\Academics\SalesManagementController@update')->name('sales_management-update');
-        Route::delete('sales_management/{id}', 'Admin\Academics\SalesManagementController@destroy')->name('sales_management-delete');
-        Route::get('sales_management/{scheduledId}/assign-student/{id}', 'Admin\Academics\SalesManagementController@assignStudent')->name('sales_assign_student');
+        Route::get('sm_courses', 'Admin\Academics\SmCourseController@index')->name('sm_courses');
+        Route::get('sm_courses/{id}', 'Admin\Academics\SmCourseController@show')->name('sm_courses_show');
+        Route::post('sm_courses', 'Admin\Academics\SmCourseController@store')->name('sm_courses_store');
+        Route::put('sm_courses/{id}', 'Admin\Academics\SmCourseController@update')->name('sm_courses_update');
+        Route::delete('sm_courses/{id}', 'Admin\Academics\SmCourseController@destroy')->name('sm_courses_delete');
+
+        
+        Route::get('sm_courses/{scheduledId}/assign-student/{id}', 'Admin\Academics\SmCourseController@assignStudent')->name('sales_assign_student');
 
         
         // finance Routes
-        Route::get('finance/invoice', 'Admin\Finance\FinanceController@invoice')->name('finance.invoice');
-        Route::get('finance', 'Admin\Finance\FinanceController@index')->name('finance');
+        Route::get('finance/invoice/{id}', 'Admin\Finance\FinanceController@invoice')->name('finance.invoice');
+        Route::get('finance', 'Admin\Finance\FinanceController@index')->name('index.invoice');
 
-
-
+   
+        
         // Bank Account
         // Route::resource('bank-account', 'Admin\Accounts\SmBankAccountController')->middleware('userRolePermission:156');
         Route::get('bank-account', 'Admin\Accounts\SmBankAccountController@index')->name('bank-account')->middleware('userRolePermission:bank-account');

@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Admin\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\FinanaceStudentInvoice;
 use App\Models\Finance;
-use App\Models\Level;
-use App\Models\StaffScheduled;
-use App\SmStudent;
 use Illuminate\Http\Request;
 
 class FinanceController extends Controller
@@ -42,16 +39,17 @@ class FinanceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function invoice()
+    public function invoice($id)
     {
-        return view('backEnd.finance.invoice');
+        $finance_invoice = FinanaceStudentInvoice::with('student', 'levels', 'staff_scheduled.track', 'staff_scheduled.trackType.track_pricing_plans')->findOrFail($id);
+        return view('backEnd.finance.invoice', compact('finance_invoice'));
     }
     public function show(Finance $finance)
     {
         //
     }
-
-    /**
+ 
+   /**
      * Show the form for editing the specified resource.
      */
     public function edit(Finance $finance)

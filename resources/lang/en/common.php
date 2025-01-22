@@ -687,6 +687,8 @@ return [
     'assigned_students' => 'Assigned Students',
     'view_calendar' => 'View Calendar',
     'sales_management' => 'Sales Management',
+    'sm_courses' => 'Courses',
+    'courses' => 'Courses',
     'track_sessions' => 'Track Session',
     'sessions' => 'Sessions',
     'select' => 'Select ...',

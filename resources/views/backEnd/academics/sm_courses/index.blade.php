@@ -1,16 +1,16 @@
 @extends('backEnd.master')
 @section('title')
-    @lang('academics.sales_management')
+    @lang('academics.courses')
 @endsection
 @section('mainContent')
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
-                <h1>@lang('academics.sales_management')</h1>
+                <h1>@lang('academics.courses')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
                     <a href="#">@lang('academics.academics')</a>
-                    <a href="#">@lang('academics.sales_management')</a>
+                    <a href="#">@lang('academics.courses')</a>
                 </div>
             </div>
         </div>
@@ -21,12 +21,13 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="white-box">
-                    
+
                         <div class="table-responsive">
                             <x-table>
                                 <table id="table_id" class="table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>@lang('academics.course_name_en')</th>
                                             <th>@lang('academics.staff_name')</th>
                                             <th>@lang('academics.category')</th>
                                             <th>@lang('academics.time_slot')</th>
@@ -44,6 +45,8 @@
                                     <tbody>
                                         @foreach ($staffScheduleds as $scheduled)
                                             <tr>
+                                                <td>{{ $scheduled->course_name_en }}</td>
+
                                                 <td>{{ $staff->firstWhere('id', $scheduled->staff_id)->full_name }}</td>
                                                 <td>{{ $scheduled->category->name_en }}</td>
                                                 <td>
@@ -76,18 +79,21 @@
                                                             <a class="dropdown-item" href="#">@lang('common.view_calendar')</a>
                                                         @endif
                                                         @if (userPermission('assigned_students'))
-                                                            <a class="dropdown-item" onclick="openModalAssigns({{ $scheduled->id }})" >
+                                                            <a class="dropdown-item"
+                                                                onclick="openModalAssigns({{ $scheduled->id }})">
                                                                 @lang('common.assigned_students')
+                                                            </a>
+                                                        @endif
+                                                        @if (userPermission('assigned_students'))
+                                                            <a class="dropdown-item"
+                                                                href="{{ route('sm_courses_show', $scheduled->id) }}">
+                                                                @lang('common.edit')
                                                             </a>
                                                         @endif
 
                                                     </x-drop-down>
                                                 </td>
                                             </tr>
-
-
-
-
 
                                             <!-- Modal for Assigned Students -->
                                             <div class="modal fade" id="assign_student_modal_{{ $scheduled->id }}"
@@ -112,26 +118,25 @@
                                                                     @lang('common.select_student') <span class="text-danger"> *</span>
                                                                 </label>
                                                                 <select class="primary_select form-control"
-                                                                    name="studentDropdown" onchange="getStudentId({{ $scheduled->id }},this.value)"
+                                                                    name="studentDropdown"
+                                                                    onchange="getStudentId({{ $scheduled->id }},this.value)"
                                                                     id="studentDropdown_{{ $scheduled->id }}">
-                                                                   <option value="0">@lang('common.select')</option>
-                                                                   @foreach ($students as $student)
-                                                                   <option value="{{ $student->id }}">
-                                                                       {{ $student->full_name }}</option>
-                                                               @endforeach
+                                                                    <option value="0">@lang('common.select')</option>
+                                                                    @foreach ($students as $student)
+                                                                        <option value="{{ $student->id }}">
+                                                                            {{ $student->full_name }}</option>
+                                                                    @endforeach
                                                                 </select>
                                                                 <input type="hidden" id="scheduleId" name="schedule_id"
                                                                     value="{{ $scheduled->id }}">
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer" id="modal_footer_{{ $scheduled->id }}">
-                                                         
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -162,29 +167,30 @@
 
 
         function openModalAssigns(id) {
-            $('#assign_student_modal_'+id).modal('show');
+            $('#assign_student_modal_' + id).modal('show');
 
         }
+
         function getStudentId(scheduledId, id) {
             console.log(id);
-            
-            if(id > 0) {
-                    $('#modal_footer_'+scheduledId).html(
-                    `<a  href="/sales_management/${scheduledId}/assign-student/${id}"
+
+            if (id > 0) {
+                $('#modal_footer_' + scheduledId).html(
+                    `<a  href="/courses/${scheduledId}/assign-student/${id}"
                         class="primary-btn fix-gr-bg text-nowrap">
                         @lang('common.lets_assigned')
                     </a>`
                 );
-            }else{
-                    $('#modal_footer_'+scheduledId).html(
+            } else {
+                $('#modal_footer_' + scheduledId).html(
                     `<button type="button"  disabled 
                         class="primary-btn fix-gr-bg text-nowrap">
                         @lang('common.lets_assigned')
                     </button>`
                 );
             }
-          
-         
+
+
         }
     </script>
 @endpush
