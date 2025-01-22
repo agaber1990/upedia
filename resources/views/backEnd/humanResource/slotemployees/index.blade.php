@@ -73,33 +73,39 @@
                                                 class="primary_select form-control {{ $errors->has('slot_day') ? ' is-invalid' : '' }}"
                                                 id="select_slot_day" name="slot_day[]" multiple>
                                                 <option value="monday"
-                                                    {{ isset($slotemployee) && in_array('monday', $slotemployee->slot_day) ? 'selected' : '' }}>
-                                                    @lang('common.monday')
-                                                </option>
-                                                <option value="tuesday"
-                                                    {{ isset($slotemployee) && in_array('tuesday', $slotemployee->slot_day) ? 'selected' : '' }}>
-                                                    @lang('common.tuesday')
-                                                </option>
-                                                <option value="wednesday"
-                                                    {{ isset($slotemployee) && in_array('wednesday', $slotemployee->slot_day) ? 'selected' : '' }}>
-                                                    @lang('common.wednesday')
-                                                </option>
-                                                <option value="thursday"
-                                                    {{ isset($slotemployee) && in_array('thursday', $slotemployee->slot_day) ? 'selected' : '' }}>
-                                                    @lang('common.thursday')
-                                                </option>
-                                                <option value="friday"
-                                                    {{ isset($slotemployee) && in_array('friday', $slotemployee->slot_day) ? 'selected' : '' }}>
-                                                    @lang('common.friday')
-                                                </option>
-                                                <option value="saturday"
-                                                    {{ isset($slotemployee) && in_array('saturday', $slotemployee->slot_day) ? 'selected' : '' }}>
-                                                    @lang('common.saturday')
-                                                </option>
-                                                <option value="sunday"
-                                                    {{ isset($slotemployee) && in_array('sunday', $slotemployee->slot_day) ? 'selected' : '' }}>
-                                                    @lang('common.sunday')
-                                                </option>
+                                                {{ isset($slotemployee) && in_array('monday', array_map('strtolower', $slotemployee->slot_day)) ? 'selected' : '' }}>
+                                                @lang('common.monday')
+                                            </option>
+                                            
+                                            <option value="tuesday"
+                                                {{ isset($slotemployee) && in_array('tuesday', array_map('strtolower', $slotemployee->slot_day)) ? 'selected' : '' }}>
+                                                @lang('common.tuesday')
+                                            </option>
+                                            
+                                            <option value="wednesday"
+                                                {{ isset($slotemployee) && in_array('wednesday', array_map('strtolower', $slotemployee->slot_day)) ? 'selected' : '' }}>
+                                                @lang('common.wednesday')
+                                            </option>
+                                            
+                                            <option value="thursday"
+                                                {{ isset($slotemployee) && in_array('thursday', array_map('strtolower', $slotemployee->slot_day)) ? 'selected' : '' }}>
+                                                @lang('common.thursday')
+                                            </option>
+                                            
+                                            <option value="friday"
+                                                {{ isset($slotemployee) && in_array('friday', array_map('strtolower', $slotemployee->slot_day)) ? 'selected' : '' }}>
+                                                @lang('common.friday')
+                                            </option>
+                                            
+                                            <option value="saturday"
+                                                {{ isset($slotemployee) && in_array('saturday', array_map('strtolower', $slotemployee->slot_day)) ? 'selected' : '' }}>
+                                                @lang('common.saturday')
+                                            </option>
+                                            
+                                            <option value="sunday"
+                                                {{ isset($slotemployee) && in_array('sunday', array_map('strtolower', $slotemployee->slot_day)) ? 'selected' : '' }}>
+                                                @lang('common.sunday')
+                                            </option>
                                             </select>
                                             @if ($errors->has('slot_day'))
                                                 <span class="text-danger invalid-select" role="alert">
@@ -195,66 +201,51 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <x-table>
-                                    <table class="table" id="slots_table">
+
+                                    <table id="table_id" class="table" cellspacing="0" width="100%">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>@lang('hr.slot_day')</th>
-                                                
-                                                <th>@lang('hr.slotemployee') <i class="fa fa-clock"></i></th>
+
+                                                <th>@lang('hr.slot_start') <i class="fa fa-clock"></i></th>
+                                                <th>@lang('hr.slot_end') <i class="fa fa-clock"></i></th>
                                                 <th>@lang('common.action')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php
-                                                $groupedSlots = $slots_emp->groupBy('slot_day');
-                                            @endphp
-                                            @foreach ($groupedSlots as $day => $slots)
+
+
+                                            @foreach ($slotemployees as $slot)
                                                 <tr>
                                                     <td class="p-4">
-                                                        {{ $day }}
+                                                        {{ $slot->slot_day }}
                                                     </td>
                                                     <td>
-                                                        <div class="d-flex flex-column gap-2">
-                                                            @foreach ($slots as $item)
-                                                                <div
-                                                                    class="d-flex align-items-center gap-2">
-                                                                    <!-- Start Time with Checkbox -->
-                                                                    <div>
-                                                                        <input class="form-check-input"
-                                                                            type="checkbox"
-                                                                            name="selected_slots[]"
-                                                                            value="{{ $item->id }}"
-                                                                            id="slot_start_{{ $item->id }}">
 
-                                                                        <label
-                                                                            class="form-check-label px-2 "
-                                                                            for="slot_start_{{ $item->id }}">
-                                                                            {{ $item->slot_start ? formatTime($item->slot_start) : 'N/A' }}
-                                                                        </label>
-                                                                    </div>
-                                                                    <i class="fa fa-angle-right"></i>
-                                                                    <span class="px-2">
-                                                                        {{ $item->slot_end ? formatTime($item->slot_end) : 'N/A' }}
-                                                                    </span>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
+                                                        {{ formatTime($slot->slot_start) }}
+                                                    </td>
+                                                    <td>
+
+                                                        {{ formatTime($slot->slot_end) }}
+
                                                     </td>
                                                     <td>
                                                         <x-drop-down>
                                                             @if (userPermission('slotemployee-edit'))
                                                                 <a class="dropdown-item"
-                                                                    href="{{ route('slotemployee-edit', [$item->id]) }}">@lang('common.edit')</a>
+                                                                    href="{{ route('slotemployee-edit', [$slot->id]) }}">@lang('common.edit')</a>
                                                             @endif
                                                             @if (userPermission('slotemployee-delete'))
                                                                 <a class="dropdown-item" data-toggle="modal"
-                                                                    data-target="#deleteslotemployeeModal{{ $item->id }}"
+                                                                    data-target="#deleteslotemployeeModal{{ $slot->id }}"
                                                                     href="#">@lang('common.delete')</a>
                                                             @endif
                                                         </x-drop-down>
                                                     </td>
                                                 </tr>
                                             @endforeach
+
+
                                         </tbody>
                                     </table>
                                 </x-table>

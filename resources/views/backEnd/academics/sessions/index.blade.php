@@ -1,0 +1,310 @@
+@extends('backEnd.master')
+@section('title')
+    @lang('academics.track_session')
+@endsection
+@section('mainContent')
+    <section class="sms-breadcrumb mb-20">
+        <div class="container-fluid">
+            <div class="row justify-content-between">
+                <h1>@lang('academics.track_session')</h1>
+                <div class="bc-pages">
+                    <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
+                    <a href="#">@lang('academics.academics')</a>
+                    <a href="#">@lang('academics.track_session')</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="admin-visitor-area up_admin_visitor up_st_admin_visitor pl_22">
+        <div class="container-fluid p-0">
+            @if (isset($discountPlan))
+                @if (userPermission('track_sessions-store'))
+                    <div class="row">
+                        <div class="offset-lg-10 col-lg-2 text-right col-md-12 mb-20">
+                            <a href="{{ route('track_sessions') }}" class="primary-btn small fix-gr-bg">
+                                <span class="ti-plus pr-2"></span>
+                                @lang('common.add')
+                            </a>
+                        </div>
+                    </div>
+                @endif
+            @endif
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <div class="btnSelect">
+
+                            <button id="add_session_btn" class="circular-btn mx-2" aria-label="Toggle new session form">
+                                <i class="fas fa-plus" style="color: #fff"></i>
+                            </button>
+                        </div>
+                        <div id="add_session" class="input-session" style="display: none;width:100%">
+                            <button id="session_modal_btn" class="session-btn">
+                                <i class="fas fa-plus" style="color: #000000"></i> Session
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">@lang('academics.add_session')</h1>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="level_id">
+                                        @lang('common.select_student') <span class="text-danger"> *</span>
+                                    </label>
+                                    <select class="primary_select form-control" name="level_id" id="level_id">
+                                        @foreach ($levels as $level)
+                                            <option value="{{ $level->id }}">
+                                                {{ $level->level_number }}</option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+
+                                <div class="primary_input">
+
+                                    <label class="primary_input_label" for="session_name_en">@lang('academics.session_name_en')
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <input class="primary_input_field form-control" type="text" name="session_name_en"
+                                        id="session_name_en" autocomplete="off">
+                                    <input type="hidden" id="track_id" name="track_id" value="{{ $track->id }}">
+                                </div>
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="session_name_ar">@lang('academics.session_name_ar')
+                                        <span class="text-danger"> *</span>
+                                    </label>
+                                    <input class="primary_input_field form-control" type="text" id="session_name_ar"
+                                        name="session_name_ar" autocomplete="off">
+                                    <input type="hidden" id="track_id" name="track_id" value="{{ $track->id }}">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" id="add_session_for_submit"
+                                    class="primary-btn fix-gr-bg text-nowrap"> @lang('common.save_changes')
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Modal update -->
+                <div class="modal fade" id="ModalUpdateSession" tabindex="-1" aria-labelledby="ModalLabelUpdateSession"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="ModalLabelUpdateSession">@lang('academics.update_session')</h1>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="update_level_id">
+                                        @lang('common.select_student') <span class="text-danger"> *</span>
+                                    </label>
+                                    <select class="primary_select form-control" name="level_id" id="update_level_id">
+                                        @foreach ($levels as $level)
+                                            <option value="{{ $level->id }}">
+                                                {{ $level->level_number }}</option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="update_session_name_en">@lang('academics.session_name_en')
+                                        <span class="text-danger"> *</span></label>
+                                    <input class="primary_input_field form-control" type="text" name="session_name_en"
+                                        id="update_session_name_en" autocomplete="off">
+                                </div>
+                                <div class="primary_input">
+                                    <label class="primary_input_label" for="update_session_name_ar">@lang('academics.session_name_ar')
+                                        <span class="text-danger"> *</span></label>
+                                    <input class="primary_input_field form-control" type="text" name="session_name_ar"
+                                        id="update_session_name_ar" autocomplete="off">
+                                </div>
+                                <input type="hidden" id="update_session_track_id">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="update_session_for_submit"
+                                    class="primary-btn fix-gr-bg text-nowrap">Update changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section>
+
+        @include('backEnd.academics.sessions.session_card')
+    </section>
+@endsection
+
+<style>
+    .btnSelect {
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+    }
+
+    .btnSelect .circular-btn {
+        border-radius: 50%;
+        padding: 16px 17px;
+
+    }
+
+    .btnSelect .fa {
+        padding: 15px;
+    }
+
+    .circular-btn {
+
+        background-color: #3f4d8f;
+        border: none;
+        color: #fff;
+    }
+
+    .circular-btn:hover {
+        background-color: #212c60;
+    }
+
+    .input-session {
+        padding: 8px 12px;
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0px 4px 20px rgba(39, 32, 120, 0.1)
+    }
+
+    .session-btn {
+        background: none;
+        border: none;
+    }
+
+    .session-btn:hover {
+        color: #007bff;
+    }
+</style>
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#add_session_btn').click(function(event) {
+                event.preventDefault();
+                $('#add_session').toggle();
+                if ($('#add_session').is(':visible')) {
+                    $(this).html('<i class="fas fa-times " style="color: #fff"></i>');
+                } else {
+                    $(this).html('<i class="fas fa-plus " style="color: #fff"></i>');
+                }
+            });
+            $('#session_modal_btn').click(function(event) {
+                event.preventDefault();
+                $('#exampleModal').modal('show');
+            });
+            $('#add_session_for_submit').click(function(event) {
+                event.preventDefault();
+                let formData = {
+                    session_name_en: $('#session_name_en').val(),
+                    session_name_ar: $('#session_name_ar').val(),
+                    level_id: $('#level_id').val(),
+                    track_id: $('#track_id').val(),
+                    _token: '{{ csrf_token() }}'
+                };
+
+                $.ajax({
+                    url: "{{ route('track_sessions_store') }}",
+                    method: "POST",
+                    data: formData,
+
+                    success: function(response) {
+                        $('#session_name_en').val('')
+                        $('#session_name_ar').val('')
+                        $('#level_id').val('')
+                        $('#exampleModal').modal('hide');
+                        window.location.reload()
+
+                    },
+
+                    error: function(xhr, status, error) {
+                        $('#exampleModal').modal('hide');
+
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Sorry! you can\'t add more sessions.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+
+
+            $(document).ready(function() {
+                $('#update_session_for_submit').click(function(event) {
+                    event.preventDefault();
+                    const sessionId = $('#update_session_track_id').val();
+
+                    const data = {
+                        session_name_en: $('#update_session_name_en').val(),
+                        session_name_ar: $('#update_session_name_ar').val(),
+                        level_id: $('#update_level_id').val(),
+                        track_id: $('#track_id').val(),
+                        _token: '{{ csrf_token() }}'
+                    };
+
+
+                    $.ajax({
+                        url: `/track_sessions/${sessionId}`,
+                        method: "PUT",
+                        data: data,
+                        // success: function(res) {
+                        //     $('#ModalUpdateSession').modal('hide');
+                        //     Swal.fire({
+                        //         title: 'Success!',
+                        //         text: 'Session has been successfully updated.',
+                        //         icon: 'success',
+                        //         confirmButtonText: 'OK'
+                        //     });
+                        // },
+
+                        success: function(response) {
+                            $('#ModalUpdateSession').modal('hide');
+                            window.location.reload()
+
+
+                        },
+                        error: function(xhr, status, error) {
+                            $('#ModalUpdateSession').modal('hide');
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Sorry! You can\'t update the session.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            console.error('Error:', error);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+@endpush
+@include('backEnd.partials.data_table_js')

@@ -27,24 +27,24 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
-                      
+
                         <div class="row">
                             <div class="col-md-6 ">
                                 <div class="primary_input mb-2">
-                                  <label class="primary_input_label" for="">@lang('common.course_name_en')
-                                      <span class="text-danger"> *</span></label>
-                                  <input
-                                      class="primary_input_field form-control " name="course_name_en" id="course_name_en" />
+                                    <label class="primary_input_label" for="">@lang('common.course_name_en')
+                                        <span class="text-danger"> *</span></label>
+                                    <input class="primary_input_field form-control " name="course_name_en"
+                                        id="course_name_en" />
                                 </div>
-                          </div>
+                            </div>
                             <div class="col-md-6 ">
                                 <div class="primary_input mb-2">
-                                  <label class="primary_input_label" for="">@lang('common.course_name_ar')
-                                      <span class="text-danger"> *</span></label>
-                                  <input dir="rtl"
-                                      class="primary_input_field form-control " name="course_name_ar" id="course_name_ar" />
+                                    <label class="primary_input_label" for="">@lang('common.course_name_ar')
+                                        <span class="text-danger"> *</span></label>
+                                    <input dir="rtl" class="primary_input_field form-control " name="course_name_ar"
+                                        id="course_name_ar" />
                                 </div>
-                          </div>
+                            </div>
                             <div class="col-lg-6 col-xl-3 ">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="">@lang('common.categories')
@@ -227,7 +227,7 @@
 
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         var $locale = '{{ app()->getLocale() }}';
@@ -248,7 +248,7 @@
                         type: 'GET',
                         success: function(data) {
                             console.log(data);
-                            
+
                             // Clear the tracks dropdown
                             trackSelect.empty();
                             trackTypeSelect.empty();
@@ -514,8 +514,11 @@
                 // If "once" (sessions are once a week), add (sessionCount - 1) weeks
                 endDate.setDate(start.getDate() + (sessionCount - 1) * 7); // 7 days per week
             } else if (schedule === "twice") {
-                // If "twice" (sessions are twice a week), add (sessionCount / 2) weeks
-                endDate.setDate(start.getDate() + (sessionCount / 2 - 1) * 7); // 7 days per week
+                // If "twice" (sessions are twice a week), calculate based on 2 sessions per week
+                var weeksRequired = Math.ceil(sessionCount / 2); // Calculate the number of weeks needed
+                console.log(weeksRequired);
+                
+                endDate.setDate(start.getDate() + (weeksRequired - 1) * 7); // Add weeks to the start date
             }
 
             // Set the calculated end date and enable the input field
@@ -542,7 +545,7 @@
             let selectedSlots = [];
             $('input[name^="slot"]').each(function() {
                 if ($(this).is(':checked')) {
-                    selectedSlots.push($(this).data('slot-id')); 
+                    selectedSlots.push($(this).data('slot-id'));
                 }
             });
 

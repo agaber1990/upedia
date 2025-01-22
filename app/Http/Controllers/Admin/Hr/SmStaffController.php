@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Hr;
 
-use App\Models\{TrackType,EmType};
+use App\Models\{TrackType, EmType};
 use App\Models\Track;
 use App\Models\TrackAssignedStaff;
 use App\Models\SlotEmp;
@@ -309,18 +309,19 @@ class SmStaffController extends Controller
                 // leaver define data  insert for staff
                 $results = $staff->save();
                 $staff->toArray();
-
-                foreach ($request->track_id as $trackId) {
-                    if (isset($request->levels[$trackId])) {
-                        $levels = implode(',', $request->levels[$trackId]);
-                        $track_type_ids = implode(',', $request->track_type_id);
-                        TrackAssignedStaff::create([
-                            'staff_id' => $staff->id,
-                            'cat_id' => $request->cat_id,
-                            'track_type_id' => $track_type_ids,
-                            'track_id' => $trackId,
-                            'levels' => $levels,
-                        ]);
+                if (isset($request->track_id)) {
+                    foreach ($request->track_id as $trackId) {
+                        if (isset($request->levels[$trackId])) {
+                            $levels = implode(',', $request->levels[$trackId]);
+                            $track_type_ids = implode(',', $request->track_type_id);
+                            TrackAssignedStaff::create([
+                                'staff_id' => $staff->id,
+                                'cat_id' => $request->cat_id,
+                                'track_type_id' => $track_type_ids,
+                                'track_id' => $trackId,
+                                'levels' => $levels,
+                            ]);
+                        }
                     }
                 }
 
@@ -774,34 +775,36 @@ class SmStaffController extends Controller
 
 
             $TrackAssignedStaff = TrackAssignedStaff::where('staff_id', $request->staff_id)->get();
+            if (isset($request->track_id)) {
+                foreach ($request->track_id as $trackId) {
+                    if (isset($request->levels[$trackId])) {
+                        $levels = implode(',', $request->levels[$trackId]);
+                        $track_type_ids = implode(',', $request->levels[$trackId]);
 
-            foreach ($request->track_id as $trackId) {
-                if (isset($request->levels[$trackId])) {
-                    $levels = implode(',', $request->levels[$trackId]);
-                    $track_type_ids = implode(',', $request->levels[$trackId]);
+                        // Check if a record already exists
+                        $existingRecord = $TrackAssignedStaff->where('track_id', $trackId)->first();
 
-                    // Check if a record already exists
-                    $existingRecord = $TrackAssignedStaff->where('track_id', $trackId)->first();
-
-                    if ($existingRecord) {
-                        // Update existing record
-                        $existingRecord->update([
-                            'cat_id' => $request->cat_id,
-                            'track_type_id' => $track_type_ids,
-                            'levels' => $levels,
-                        ]);
-                    } else {
-                        // Create a new record
-                        TrackAssignedStaff::create([
-                            'staff_id' => $request->staff_id, // Use staff_id from request
-                            'cat_id' => $request->cat_id,
-                            'track_type_id' => $track_type_ids,
-                            'track_id' => $trackId,
-                            'levels' => $levels,
-                        ]);
+                        if ($existingRecord) {
+                            // Update existing record
+                            $existingRecord->update([
+                                'cat_id' => $request->cat_id,
+                                'track_type_id' => $track_type_ids,
+                                'levels' => $levels,
+                            ]);
+                        } else {
+                            // Create a new record
+                            TrackAssignedStaff::create([
+                                'staff_id' => $request->staff_id, // Use staff_id from request
+                                'cat_id' => $request->cat_id,
+                                'track_type_id' => $track_type_ids,
+                                'track_id' => $trackId,
+                                'levels' => $levels,
+                            ]);
+                        }
                     }
                 }
             }
+
 
             // dd($TrackAssignedStaff);
 

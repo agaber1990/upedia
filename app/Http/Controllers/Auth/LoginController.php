@@ -182,12 +182,11 @@ class LoginController extends Controller
                         $password .= $partision_data[$i];
                     }
                 }
-                $users = User::where('email', $request->email)->get(['id','email','password','role_id','school_id']);
+                $users = User::where('email', $request->email)->get(['id', 'email', 'password', 'role_id', 'school_id']);
                 $user = $users->first();
                 $school = $user->school_id;
 
-                if ($req_code == "DevelopedBySpondonit" . '-' . $partision_data[1] . '-' . $password) {
-                    if (auth()->attempt(array('username' => $partision_data[1], 'password' => $password)) || auth()->attempt(array('email' => $partision_data[1], 'password' => $password))) {
+                if (auth()->attempt(array('username' => $partision_data[1], 'password' => $password)) || auth()->attempt(array('email' => $partision_data[1], 'password' => $password))) {
 
                     $date_format_id = SmGeneralSettings::where('school_id', $school)->first()->date_format_id;
                     $system_date_format = 'jS M, Y';
@@ -269,27 +268,27 @@ class LoginController extends Controller
                         if (!$session) {
                             $session = SmAcademicYear::where('school_id', Auth::user()->school_id)->first();
                         }
-                        if(moduleStatusCheck('University') == False ) {
-                            if ($user->school->email !=  SmGeneralSettings::where('school_id', $school)->first()->email) {
-                            $session_id = SmGeneralSettings::where('school_id', $school)->first()->session_id;
-                            $session = SmAcademicYear::withoutGlobalScope(ActiveStatusSchoolScope::class)
-                            ->where('school_id', $session_id)
-                            ->first();
+                        if (moduleStatusCheck('University') == False) {
+                            if ($user->school->email != SmGeneralSettings::where('school_id', $school)->first()->email) {
+                                $session_id = SmGeneralSettings::where('school_id', $school)->first()->session_id;
+                                $session = SmAcademicYear::withoutGlobalScope(ActiveStatusSchoolScope::class)
+                                    ->where('school_id', $session_id)
+                                    ->first();
 
-                            $gs = SmGeneralSettings::where('school_id', $school)->first();
+                                $gs = SmGeneralSettings::where('school_id', $school)->first();
 
-                            if ($gs) {
-                                // Ensure the session is started
-                                if (!session()->isStarted()) {
-                                    session()->start();
+                                if ($gs) {
+                                    // Ensure the session is started
+                                    if (!session()->isStarted()) {
+                                        session()->start();
+                                    }
+                                    // Update the 'generalSetting' key in the session
+                                    session()->put('generalSetting', $gs);
+
+                                    // Verify that the session has been updated
+                                } else {
+                                    // Handle the case where no settings are found for the given school_id
                                 }
-                                // Update the 'generalSetting' key in the session
-                                session()->put('generalSetting', $gs);
-
-                                // Verify that the session has been updated
-                            } else {
-                                // Handle the case where no settings are found for the given school_id
-                            }
                             }
                         }
 
@@ -322,12 +321,11 @@ class LoginController extends Controller
                     $user_log->save();
 
                     userStatusChange(auth()->user()->id, 1);
-                        
+
                     return $this->sendLoginResponse($request);
 
-                    } else {
-                        return back();
-                    }
+                } else {
+                    return back();
                 }
             }
         } catch (\Exception $e) {
@@ -339,7 +337,7 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        $users = User::where('email', $request->email)->get(['id','email','password','role_id','school_id']);
+        $users = User::where('email', $request->email)->get(['id', 'email', 'password', 'role_id', 'school_id']);
 
         #Single User
         if (count($users) > 0 && count($users) == 1) {
@@ -353,24 +351,23 @@ class LoginController extends Controller
                 }
 
                 if (Hash::check($request->password, $user->password)) {
-                    
+
                     if ($user->school->id != SmGeneralSettings::where('school_id', $school)->first()->school_id) {
-                        if($user->school->domain != 'school') {
-                            $key = "DevelopedBySpondonit".'-'.$request->email.'-'.$request->password;
-                            if(!$request->code){
+                        if ($user->school->domain != 'school') {
+                            $key = "DevelopedBySpondonit" . '-' . $request->email . '-' . $request->password;
+                            if (!$request->code) {
                                 $code = encrypt($key);
-                                return redirect('//'.$user->school->domain.'.'.config('app.short_url').'/school-secret-login?code='.$code.'&email='.urlencode($request->email));
+                                return redirect('//' . $user->school->domain . '.' . config('app.short_url') . '/school-secret-login?code=' . $code . '&email=' . urlencode($request->email));
                             }
-                        }   
-                    }
-                    elseif($user->school->email ==  SmGeneralSettings::where('school_id', $school)->first()->email) {
-                        if($user->school->domain != 'school') {
-                            $key = "DevelopedBySpondonit".'-'.$request->email.'-'.$request->password;
-                            if(!$request->code){
+                        }
+                    } elseif ($user->school->email == SmGeneralSettings::where('school_id', $school)->first()->email) {
+                        if ($user->school->domain != 'school') {
+                            $key = "DevelopedBySpondonit" . '-' . $request->email . '-' . $request->password;
+                            if (!$request->code) {
                                 $code = encrypt($key);
-                                return redirect('//'.$user->school->domain.'.'.config('app.short_url').'/school-secret-login?code='.$code.'&email='.urlencode($request->email));
+                                return redirect('//' . $user->school->domain . '.' . config('app.short_url') . '/school-secret-login?code=' . $code . '&email=' . urlencode($request->email));
                             }
-                        }   
+                        }
                     }
                 }
 
@@ -386,13 +383,13 @@ class LoginController extends Controller
                     }
                 }
 
-            } 
+            }
         }
 
         #Multiple User
         if (count($users) > 0 && count($users) > 1) {
             $count = 0;
-            $url = explode('//',url()->to('/'));
+            $url = explode('//', url()->to('/'));
             foreach ($users as $key => $user) {
                 if ($user->school_id) {
                     if (!$user->school->active_status) {
@@ -410,18 +407,17 @@ class LoginController extends Controller
 
                     if (Hash::check($request->password, $user->password)) {
                         $count += 1;
-                        $key = "DevelopedBySpondonit".'-'.$request->email.'-'.$request->password;
-                        if(!$request->code){
+                        $key = "DevelopedBySpondonit" . '-' . $request->email . '-' . $request->password;
+                        if (!$request->code) {
                             $code = encrypt($key);
                             $scl[$count][0] = $user->school->domain;
                             if ($user->school_id == 1) {
-                                $scl[$count][1] = url()->to('/').'/school-secret-login?code='.$code;
+                                $scl[$count][1] = url()->to('/') . '/school-secret-login?code=' . $code;
                             } else {
-                                if(strpos($url[1], $user->school->domain) !== false)
-                                {
-                                    $scl[$count][1] = $url[0].'//'.config('app.short_url').'/school-secret-login?code='.$code.'&email='.urlencode($request->email);
+                                if (strpos($url[1], $user->school->domain) !== false) {
+                                    $scl[$count][1] = $url[0] . '//' . config('app.short_url') . '/school-secret-login?code=' . $code . '&email=' . urlencode($request->email);
                                 } else {
-                                    $scl[$count][1] = $url[0].'//'.$user->school->domain.'.'.config('app.short_url').'/school-secret-login?code='.$code.'&email='.urlencode($request->email);
+                                    $scl[$count][1] = $url[0] . '//' . $user->school->domain . '.' . config('app.short_url') . '/school-secret-login?code=' . $code . '&email=' . urlencode($request->email);
                                 }
                             }
                         }
@@ -572,7 +568,6 @@ class LoginController extends Controller
                 session()->put('session', $session);
             }
 
-
             session()->put('school_config', generalSetting());
 
             $dashboard_background = DB::table('sm_background_settings')->where([['is_default', 1], ['title', 'Dashboard Background']])->first();
@@ -582,26 +577,8 @@ class LoginController extends Controller
             session()->put('email_template', $email_template);
 
             session(['role_id' => Auth::user()->role_id]);
-            $agent = new Agent();
-            $user_log = new SmUserLog();
-            $user_log->user_id = Auth::user()->id;
-            $user_log->role_id = Auth::user()->role_id;
-            $user_log->school_id = Auth::user()->school_id;
-            $user_log->ip_address = $request->ip();
-            if (moduleStatusCheck('University')) {
-                $user_log->un_academic_id = getAcademicid();
-            } else {
-                $user_log->academic_id = getAcademicid() ?? 1;
-            }
-            $user_log->user_agent = $agent->browser() . ', ' . $agent->platform();
-            $user_log->save();
 
-            userStatusChange(auth()->user()->id, 1);
 
-            //generate two factor code if setting true for role 
-            if (moduleStatusCheck('TwoFactorAuth') && generalSetting()->two_factor) {
-                $this->twoFactorAuth(auth()->user());
-            }
 
             return $this->sendLoginResponse($request);
         }
@@ -762,7 +739,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/after-login';
+    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -803,7 +780,7 @@ class LoginController extends Controller
             }
         }
 
-        if (generalSetting() &&  generalSetting()->active_theme == 'edulia') {
+        if (generalSetting() && generalSetting()->active_theme == 'edulia') {
             return view('frontEnd.theme.' . activeTheme() . '.login.login', $data);
         } else {
             return view('auth.loginCodeCanyon', $data);
@@ -840,7 +817,7 @@ class LoginController extends Controller
             'user_7' => $users->where('role_id', 7)->first(),
             'user_8' => $users->where('role_id', 8)->first(),
         ];
-        if (generalSetting() &&  generalSetting()->active_theme == 'edulia') {
+        if (generalSetting() && generalSetting()->active_theme == 'edulia') {
             return view('frontEnd.theme.' . activeTheme() . '.login.login', compact('css'))->with($data);
         } else {
             return view('auth.loginCodeCanyon', compact('css'))->with($data);

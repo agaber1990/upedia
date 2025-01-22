@@ -68,6 +68,7 @@ class staffRequest extends FormRequest
 
         $rules =
             [
+                'role_type' => ['required',],
                 'staff_no' => [
                     Rule::requiredIf(function () use ($field) {
                         return in_array('staff_no', $field);

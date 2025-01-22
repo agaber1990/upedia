@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class FinanaceStudentInvoice extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'staff_scheduleds_id',
+        'student_id',
+        'invoice_number',
+        'levels_ids'
+    ];
+}

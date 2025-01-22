@@ -12,9 +12,7 @@ use App\Models\Level;
 
 class DiscountPlanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function __construct()
     {
         $this->middleware('PM');
@@ -34,54 +32,43 @@ class DiscountPlanController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(DiscountPlanRequest $request)
     {
 
-        // try {
-        $discountPlan = new DiscountPlan();
-        $discountPlan->name_en = $request->name_en;
-        $discountPlan->name_ar = $request->name_ar;
-        $levels_prices = [
-            'level_id' => $request->level_id,
-            'price' => $request->price
-        ];
-        $discountPlan->levels_prices = json_encode($levels_prices);
+        try {
 
-        dd($discountPlan);
+            $validated = $request->validated();
+            $levelsPrices = array_map(function ($level, $price) {
+                return [
+                    'level_id' => intval($level),
+                    'price' => floatval($price),
+                ];
+            }, $validated['level_id'], $validated['price']);
 
-        $result = $discountPlan->save();
+            $discountPlan = new DiscountPlan();
+            $discountPlan->name_en = $validated['name_en'];
+            $discountPlan->name_ar = $validated['name_ar'];
+            $discountPlan->levels_prices = $levelsPrices;
+            $result = $discountPlan->save();
 
 
-        if (ApiBaseMethod::checkUrl($request->fullUrl())) {
-            if ($result) {
-                return ApiBaseMethod::sendResponse(null, 'discountPlan has been created successfully');
-            } else {
-                return ApiBaseMethod::sendError('Something went wrong, please try again.');
+            if (ApiBaseMethod::checkUrl($request->fullUrl())) {
+                if ($result) {
+                    return ApiBaseMethod::sendResponse(null, 'discountPlan has been created successfully');
+                } else {
+                    return ApiBaseMethod::sendError('Something went wrong, please try again.');
+                }
             }
+
+            Toastr::success('Operation successful', 'Success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
         }
-
-        Toastr::success('Operation successful', 'Success');
-        return redirect()->back();
-
-        // } catch (\Exception $e) {
-        //     Toastr::error('Operation Failed', 'Failed');
-        //     return redirect()->back();
-        // }
     }
-    /**
-     * Display the specified resource.
-     */
+
+
     public function show(Request $request, $id)
     {
 
@@ -103,25 +90,24 @@ class DiscountPlanController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
 
     public function update(DiscountPlanRequest $request, $id)
     {
         try {
-            $discountPlan = DiscountPlan::find($request->id);
-            $discountPlan->percentage = $request->percentage;
-            $discountPlan->level_id = $request->level_id;
 
+            $validated = $request->validated();
+            $discountPlan = DiscountPlan::findOrFail($id);
+            $levelsPrices = array_map(function ($level, $price) {
+                return [
+                    'level_id' => intval($level),
+                    'price' => floatval($price),
+                ];
+            }, $validated['level_id'], $validated['price']);
+            $discountPlan->name_en = $validated['name_en'];
+            $discountPlan->name_ar = $validated['name_ar'];
+            $discountPlan->levels_prices = $levelsPrices;
+
+            // Save the changes
             $result = $discountPlan->save();
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
                 if ($result) {
