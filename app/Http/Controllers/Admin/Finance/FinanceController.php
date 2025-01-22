@@ -42,9 +42,10 @@ class FinanceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function invoice()
+    public function invoice($id)
     {
-        return view('backEnd.finance.invoice');
+        $finance_invoice = FinanaceStudentInvoice::with('student', 'levels', 'staff_scheduled')->findOrFail($id);
+        return view('backEnd.finance.invoice', compact('finance_invoice'));
     }
     public function show(Finance $finance)
     {
