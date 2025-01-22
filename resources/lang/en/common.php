@@ -696,5 +696,6 @@ return [
     'create_invoice' => "Create Invoice",
     'save_changes'=>'Save Changes',
     'finance'=>'Finance',
+    'invoices'=>'Invoices',
 ]
     ?>

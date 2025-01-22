@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin\Finance;
 
 use App\Http\Controllers\Controller;
-
-
+use App\Models\FinanaceStudentInvoice;
 use App\Models\Finance;
+use App\Models\Level;
+use App\Models\StaffScheduled;
+use App\SmStudent;
 use Illuminate\Http\Request;
 
 class FinanceController extends Controller
@@ -15,7 +17,10 @@ class FinanceController extends Controller
      */
     public function index()
     {
-        //
+
+        $data['invoices'] = FinanaceStudentInvoice::with('student', 'levels', 'staff_scheduled')->get();
+
+        return view('backEnd.finance.index', $data);
     }
 
     /**
@@ -40,7 +45,6 @@ class FinanceController extends Controller
     public function invoice()
     {
         return view('backEnd.finance.invoice');
-
     }
     public function show(Finance $finance)
     {

@@ -1049,8 +1049,10 @@ Route::get('/reg', function () {});
         Route::delete('sales_management/{id}', 'Admin\Academics\SalesManagementController@destroy')->name('sales_management-delete');
         Route::get('sales_management/{scheduledId}/assign-student/{id}', 'Admin\Academics\SalesManagementController@assignStudent')->name('sales_assign_student');
 
-
+        
+        // finance Routes
         Route::get('finance/invoice', 'Admin\Finance\FinanceController@invoice')->name('finance.invoice');
+        Route::get('finance', 'Admin\Finance\FinanceController@index')->name('index.invoice');
 
 
 
