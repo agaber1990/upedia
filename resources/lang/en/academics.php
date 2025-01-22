@@ -153,6 +153,7 @@ return [
     'track_types_title' => 'Track Type Title',
     'track_types' => 'Track Type',
     'start_date' => 'Start Date',
+    'add_new' => 'Add New',
     'student_name' => 'Student Name',
     'end_date' => 'End Date',
     'select_schedule' => 'Select Schedule',

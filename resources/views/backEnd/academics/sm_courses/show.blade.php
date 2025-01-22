@@ -40,7 +40,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="assing_modalLabel">@lang('academics.add_course_student')</h1>
+                        <h1 class="modal-title fs-5" id="assing_modalLabel">@lang('academics.add_new')</h1>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
