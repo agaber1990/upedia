@@ -83,7 +83,6 @@ class SmCourseController extends Controller
     {
         $course = StaffScheduled::findOrFail($id);
         $students = SmStudent::get();
-
         return view('backEnd.academics.sm_courses.show', compact('course','students'));
     }
     
