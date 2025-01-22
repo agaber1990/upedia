@@ -63,6 +63,8 @@
                                 <thead>
                                     <tr>
                                         <th>@lang('common.invoice_number')</th>
+                                        <th>@lang('common.payment_status')</th>
+
                                         <th>@lang('common.bill_status')</th>
                                         <th>@lang('common.delivery_note')</th>
                                         <th>@lang('common.action')</th>
@@ -76,7 +78,14 @@
                                             <td>
                                                 <span
                                                     class="badge @if ($item->bill_status === 'pending') badge-warning @elseif ($item->bill_status === 'billed')badge-success @elseif ($item->bill_status === 'cancelled')badge-danger @endif">
-                                                    {{ ucfirst($item->bill_status) }}
+                                                    {{ __('common.'.$item->bill_status) }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    class="badge @if ($item->payment_status === 'refunded') badge-refunded @elseif ($item->payment_status === 'paid')badge-success @elseif ($item->payment_status === 'not_paid')badge-danger  @elseif ($item->payment_status === 'paid_purchased')badge-purchased @endif ">
+                                                    {{ __('common.'.$item->payment_status) }}
+
                                                 </span>
                                             </td>
                                             <td>{{ $item->delivery_note }}</td>
@@ -149,6 +158,17 @@
     .badge-danger {
         background: rgb(255, 10, 10) !important;
     }
+    .badge-refunded {
+        background: rgb(134, 7, 207) !important;
+
+    }
+
+    .badge-purchased {
+        background: rgb(42, 146, 0) !important;
+    }
+
+    
+
 
     .print_now {
         font-size: 16px

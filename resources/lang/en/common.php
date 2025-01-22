@@ -695,7 +695,15 @@ return [
     'bill_status' => "Bill Status",
     'create_invoice' => "Create Invoice",
     'save_changes'=>'Save Changes',
+    'payment_status'=>'Payment Status',
     'finance'=>'Finance',
     'invoices'=>'Invoices',
+    "pending" => "Pending",
+    "billed" => "Billed",
+    "cancelled" => "Cancelled",
+    "refunded" => "Refunded",
+    "paid" => "Paid",
+    "not_paid" => "Not Paid",
+    "paid_purchased" => "Paid Purchased",
 ]
     ?>
