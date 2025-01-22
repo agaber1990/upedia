@@ -21,7 +21,7 @@ use App\SmAcademicYear;
 use App\Models\StudentRecord;
 use App\SmClass;
 
-class SalesManagementController extends Controller
+class SmCourseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,7 +41,7 @@ class SalesManagementController extends Controller
         $staffScheduleds = StaffScheduled::all();
         $students = SmStudent::where('active_status', 1)->get();
 
-        return view('backEnd.academics.sales_management.index', compact('students', 'staff', 'slots', 'trackAssignedStaff', 'tracks', 'staffScheduleds', 'categories', 'slotTime'));
+        return view('backEnd.academics.sm_courses.index', compact('students', 'staff', 'slots', 'trackAssignedStaff', 'tracks', 'staffScheduleds', 'categories', 'slotTime'));
     }
 
 
@@ -51,14 +51,14 @@ class SalesManagementController extends Controller
         $data['staff_scheduleds'] = StaffScheduled::with('trackType', 'track.levels', 'category', 'staff')
             ->find($scheduledId); // Simplified query using find()
 
-            // dd($data['staff_scheduleds']->slots());
-            
-            $data['slots'] = $data['staff_scheduleds']->slots();
-            
-            $data['levels'] = Level::where('id', '<=', $data['staff_scheduleds']->track->level_number)->get();
-            $data['student_detail'] = SmStudent::where('id', $id)->first();
-            $data['student_invoices'] = FinanaceStudentInvoice::where('student_id', $data['student_detail']->id)->get();
-        return view('backEnd.academics.sales_management.assign_student', $data);
+        // dd($data['staff_scheduleds']->slots());
+
+        $data['slots'] = $data['staff_scheduleds']->slots();
+
+        $data['levels'] = Level::where('id', '<=', $data['staff_scheduleds']->track->level_number)->get();
+        $data['student_detail'] = SmStudent::where('id', $id)->first();
+        $data['student_invoices'] = FinanaceStudentInvoice::where('student_id', $data['student_detail']->id)->get();
+        return view('backEnd.academics.sm_courses.assign_student', $data);
     }
 
     /**
@@ -66,7 +66,7 @@ class SalesManagementController extends Controller
      */
     public function store(Request $request)
     {
-        
+
 
         $invoiceData = [
             'staff_scheduleds_id' => $request['staff_scheduleds_id'],
@@ -79,7 +79,11 @@ class SalesManagementController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function show($id)
+    {
+        $course = StaffScheduled::findOrFail($id);
+
+        return view('backEnd.academics.sm_courses.show', compact('course'));
+    }
+    
 }

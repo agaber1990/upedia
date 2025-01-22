@@ -14,4 +14,9 @@ class Track extends Model
     {
         return $this->belongsTo(Level::class, 'level_number');
     }
+
+    public function track_pricing_plans()
+    {
+        return $this->hasMany(TrackPricingPlan::class);
+    }
 }

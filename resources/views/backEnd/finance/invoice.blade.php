@@ -42,10 +42,10 @@
             <main>
 
                 <div class="row">
-                    <div class="col-6"><strong class="main-title">Date:</strong>
+                    <div class="col-6"><strong class="main-title">Date: </strong>
                         {{ $finance_invoice->created_at->format('Y-m-d') }}
                     </div>
-                    <div class="col-6 text-end"> <strong class="main-title">Invoice No:</strong>
+                    <div class="col-6 text-end"> <strong class="main-title">Invoice No: </strong>
                         {{ $finance_invoice->invoice_number }}</div>
                 </div>
                 <hr>
@@ -72,45 +72,36 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <td class="col-3"><strong class="main-title">Service</strong></td>
-                                <td class="col-4"><strong class="main-title">Description</strong></td>
-                                <td class="col-2"><strong class="main-title">Rate</strong></td>
-                                <td class="col-1 text-end"><strong class="main-title">QTY</strong></td>
+                                <td class="col-3"><strong class="main-title">Course Name</strong></td>
+                                <td class="col-1 text-end"><strong class="main-title">Levels</strong></td>
                                 <td class="col-2 text-end"><strong class="main-title">Amount</strong></td>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="col-3">SEO</td>
-                                <td class="col-4 text-1">Optimize for search engines</td>
-                                <td class="col-2">$520.00</td>
-                                <td class="col-1 text-end">1</td>
-                                <td class="col-2 text-end">$450.00</td>
+                                <td class="col-3"> {{ $finance_invoice->staff_scheduled->track->track_name_en }}</td>
+                                <td class="col-1 text-end">{{ $finance_invoice->levels_id }}</td>
+                                <td class="col-2 text-end">
+                                    {{ $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price }}</td>
                             </tr>
-                            <tr>
-                                <td class="col-3">Development</td>
-                                <td class="col-4 text-1">Website Development</td>
-                                <td class="col-2">$100.00</td>
-                                <td class="col-1 text-end">10</td>
-                                <td class="col-2 text-end">$1250.00</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="bg-light-2 text-end border-0"><strong class="main-title">Sub
-                                        Total:</strong></td>
-                                <td class="bg-light-2 text-end border-0">$1500.00</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="bg-light-2 text-end border-0"><strong
-                                        class="main-title">Tax:</strong></td>
-                                <td class="bg-light-2 text-end border-0">$325.00</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="bg-light-2 text-end border-0"><strong
-                                        class="main-title">Total:</strong></td>
-                                <td class="bg-light-2 text-end border-0">$1825.00</td>
-                            </tr>
+
+
                         </tbody>
                     </table>
+
+
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div><strong class="main-title">Sub Total:</strong></div>
+                        <div> <strong class="main-title">Tax:</strong></div>
+                        <div> <strong class="main-title">Total:</strong></div>
+                    </div>
+                    <div class="col">
+                        <div class="">$1500.00</div>
+                        <div class="">$1500.00</div>
+                        <div class="">$1500.00</div>
+                    </div>
                 </div>
             </main>
 
@@ -119,14 +110,20 @@
             <footer class="text-center mt-4">
                 <p class="text-1"><strong class="main-title">NOTE :</strong> This is computer generated receipt and does not
                     require physical
-                    signature.</p>
-                <div class="btn-group btn-group-sm d-print-none">
-                    <a href="#" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-print"></i>
-                        Print</a>
-                    <a href="" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-download"></i>
-                        Download</a>
-                </div>
+                    signature.</p>           
+                    <div class="btn-group btn-group-sm d-print-none">
+                        <a href="#" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-print"></i>
+                            Print</a>
+                        <a href="" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-download"></i>
+                            Download</a>
+                    </div>
             </footer>
+
+            <div class="btn-group btn-group-sm d-print-none">
+                <button onclick="window.print()" class="btn btn-light border text-black-50 shadow-none">
+                    <i class="fa fa-print"></i> Print
+                </button>
+            </div>
         </div>
     </section>
 @endsection

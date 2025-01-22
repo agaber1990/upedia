@@ -215,5 +215,8 @@ return [
     'session_name' => 'Session Name',
     'session_name_en' => 'session Name (English)',
     'session_name_ar' => 'session Name (Arabic)',
-    'update_session' => 'Update Session'
+    'update_session' => 'Update Session',
+    'courses' => 'Courses',
+    'course_name_en' => 'Course Name (English)',
+    'course_name_ar' => 'Course Name (Arabic)',
 ];
