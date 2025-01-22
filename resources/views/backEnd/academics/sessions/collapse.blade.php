@@ -64,13 +64,7 @@
             </ol>
         </div>
     </div>
-@else
-    <div class="input-session">
-        <div class="card-body text-center">
 
-            No Data
-        </div>
-    </div>
 @endif
 
 

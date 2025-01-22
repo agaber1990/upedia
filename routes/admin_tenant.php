@@ -1052,7 +1052,7 @@ Route::get('/reg', function () {});
         
         // finance Routes
         Route::get('finance/invoice', 'Admin\Finance\FinanceController@invoice')->name('finance.invoice');
-        Route::get('finance', 'Admin\Finance\FinanceController@index')->name('index.invoice');
+        Route::get('finance', 'Admin\Finance\FinanceController@index')->name('finance');
 
 
 

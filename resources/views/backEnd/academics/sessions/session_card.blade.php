@@ -398,20 +398,7 @@
                 @endforeach
             </div>
         </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-12 no-gutters">
-                <div class="main-title">
-                    <h3>@lang('common.sessions')</h3>
-                </div>
-
-            </div>
-
-            <div class="col-lg-12" id="menuList">
-
-                @include('backEnd.academics.sessions.collapse')
-            </div>
-        </div>
+      
     </div>
     {{-- Delete Modal Start --}}
     <div class="modal fade admin-query" id="deleteSubmenuItem">
