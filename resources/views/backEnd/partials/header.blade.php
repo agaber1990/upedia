@@ -32,6 +32,7 @@
 <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/fnt.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/nice-select.css') }}" />
 <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/toastr.min.css') }}" />
+
 @if(userRtlLtl() ==1)
     <link rel="stylesheet" href="{{ asset('/backEnd/assets/css/rtl/bootstrap.rtl.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('/backEnd/assets/css/global_rtl.css') }}">

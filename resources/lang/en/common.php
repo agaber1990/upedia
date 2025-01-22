@@ -695,5 +695,6 @@ return [
     'bill_status' => "Bill Status",
     'create_invoice' => "Create Invoice",
     'save_changes'=>'Save Changes',
+    'finance'=>'Finance',
 ]
     ?>

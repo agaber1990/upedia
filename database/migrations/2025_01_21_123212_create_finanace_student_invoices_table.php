@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('bill_status', ['pending', 'billed', 'cancelled'])->default('pending');
             $table->integer('delivery_note')->default(0);
             $table->timestamps();
+            
         });
     }
 

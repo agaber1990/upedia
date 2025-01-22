@@ -1050,6 +1050,7 @@ Route::get('/reg', function () {});
         Route::get('sales_management/{scheduledId}/assign-student/{id}', 'Admin\Academics\SalesManagementController@assignStudent')->name('sales_assign_student');
 
 
+        Route::get('finance/invoice', 'Admin\Finance\FinanceController@invoice')->name('finance.invoice');
 
 
 

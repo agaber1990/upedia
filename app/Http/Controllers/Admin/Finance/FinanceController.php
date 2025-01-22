@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Finance;
 
-use App\Models\FinanaceStudentInvoice;
+use App\Http\Controllers\Controller;
+
+
+use App\Models\Finance;
 use Illuminate\Http\Request;
 
-class FinanaceStudentInvoiceController extends Controller
+class FinanceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,12 +21,6 @@ class FinanaceStudentInvoiceController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function invoice()
-    {
-        return view('backEnd.finance.invoice');
-
-    }
-
     public function create()
     {
         //
@@ -40,7 +37,12 @@ class FinanaceStudentInvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(FinanaceStudentInvoice $finanaceStudentInvoice)
+    public function invoice()
+    {
+        return view('backEnd.finance.invoice');
+
+    }
+    public function show(Finance $finance)
     {
         //
     }
@@ -48,7 +50,7 @@ class FinanaceStudentInvoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(FinanaceStudentInvoice $finanaceStudentInvoice)
+    public function edit(Finance $finance)
     {
         //
     }
@@ -56,7 +58,7 @@ class FinanaceStudentInvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, FinanaceStudentInvoice $finanaceStudentInvoice)
+    public function update(Request $request, Finance $finance)
     {
         //
     }
@@ -64,7 +66,7 @@ class FinanaceStudentInvoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(FinanaceStudentInvoice $finanaceStudentInvoice)
+    public function destroy(Finance $finance)
     {
         //
     }
