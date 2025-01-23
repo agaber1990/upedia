@@ -84,11 +84,13 @@ class SmCourseController extends Controller
     public function show($id)
     {
         $course = StaffScheduled::findOrFail($id);
-        $allStudents = SmStudent::get();
-        $enrolledStudentIds = CourseStudent::where('course_id', $id)->pluck('student_id')->toArray();
-        $studentsNotInCourse = $allStudents->whereNotIn('id', $enrolledStudentIds);
+        $course_students = CourseStudent::where('course_id', $id)
+        ->with('student')
+        ->with('course')
+        ->get();
+        $students = SmStudent::get();
 
-        return view('backEnd.academics.sm_courses.show', compact('course', 'allStudents', 'studentsNotInCourse'));
+        return view('backEnd.academics.sm_courses.show', compact('course','course_students', 'students'));
     }
 
     public function storeCourseToStudent(Request $request)
