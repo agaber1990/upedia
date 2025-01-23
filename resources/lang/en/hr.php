@@ -260,5 +260,6 @@ return [
     'staff_type' => "Staff Type",
     'slots_emp' => "Slots Employee",
     'slots' => "Slots Time",
+    'date' => "Date",
     "hourly_rate"=>"Hourly Rate"
 ];

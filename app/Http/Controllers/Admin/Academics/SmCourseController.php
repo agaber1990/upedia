@@ -83,16 +83,55 @@ class SmCourseController extends Controller
 
     public function show($id)
     {
-        $course = StaffScheduled::findOrFail($id);
+        // Fetch the course with related staff and slots
+        $course = StaffScheduled::where('id', $id)
+            ->with('staff')
+            ->first();
+    
+        if (!$course) {
+            abort(404, 'Course not found');
+        }
+    
+        // Decode slot IDs and retrieve slot details
+        $slotIds = json_decode($course->slot_id, true); // Assuming slot_id is a JSON array
+        $slots = SlotEmp::whereIn('id', $slotIds)->get();
+    
+        // Parse start_date and end_date
+        $startDate = new \DateTime($course->start_date);
+        $endDate = new \DateTime($course->end_date);
+        $interval = new \DateInterval('P1D');
+        $datePeriod = new \DatePeriod($startDate, $interval, $endDate->modify('+1 day'));
+    
+        // Generate table data
+        $tableData = [];
+        foreach ($datePeriod as $date) {
+            foreach ($slots as $slot) {
+                if ($date->format('l') === $slot->slot_day) { // Match slot_day with the day name
+                    $tableData[] = [
+                        'slot_day' => $slot->slot_day,
+                        'slot_start' => $slot->slot_start,
+                        'slot_end' => $slot->slot_end,
+                        'date' => $date->format('Y-m-d'),
+                        'staff_id' => $course->staff->id,
+                        'staff_name' => $course->staff->first_name,
+                    ];
+                }
+            }
+        }
+    
+        // Additional data
         $course_students = CourseStudent::where('course_id', $id)
-        ->with('student')
-        ->with('course')
-        ->get();
+            ->with('student')
+            ->with('course')
+            ->get();
+    
         $categories = Category::get();
         $students = SmStudent::get();
-
-        return view('backEnd.academics.sm_courses.show', compact('categories','course','course_students', 'students'));
+    
+        // Pass table data to the view
+        return view('backEnd.academics.sm_courses.show', compact('categories', 'course', 'course_students', 'students', 'tableData'));
     }
+    
 
     public function storeCourseToStudent(Request $request)
     {

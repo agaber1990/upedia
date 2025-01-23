@@ -163,7 +163,7 @@
                             <input type="date" min="{{ date('Y-m-d') }}" class="form-control staff_id"
                                 name="start_date" id="start_date">
                         </div>
-                    </div>  
+                    </div>
 
                     <div class="col-lg-6 col-xl-3 mb-20">
                         <div class="primary_input">
@@ -177,7 +177,7 @@
 
                     </div>
 
-                 
+
                 </div>
 
             </div>
@@ -277,8 +277,64 @@
         </div>
 
 
+        <div class="container-fluid p-0 mt-5">
+         
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-lg-4 no-gutters">
+                        <div class="">
+
+                            <h3 class="mb-15">    @lang('hr.slots')</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Schedule Table -->
+                        <x-table>
+                            <table id="table_id" class="table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>@lang('hr.slot_day')</th>
+                                        <th>@lang('hr.slot_start')</th>
+                                        <th>@lang('hr.slot_end')</th>
+                                        <th>@lang('hr.date')</th>
+                                        <th>@lang('hr.staff_name')</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($tableData as $row)
+                                        <tr>
+                                            <td>{{ $row['slot_day'] }}</td>
+                                            <td>{{ formatTime($row['slot_start']) }}</td>
+                                            <td>{{ formatTime($row['slot_end']) }}</td>
+                                            <td>{{ $row['date'] }}</td>
+                                            <td>
+                                                <select class="primary_select">
+                                                    <option value="{{ $row['staff_id'] }}">{{ $row['staff_name'] }}
+                                                    </option>
+                                                    <!-- Add more options dynamically if needed -->
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">@lang('common.no_data_available')</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </x-table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </section>
 @endsection
+@include('backEnd.partials.data_table_js')
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -618,7 +674,7 @@
                         text: "You clicked the button!",
                         icon: "success"
                     });
-                    
+
                 },
                 error: function(error) {
                     alert('Error saving event: ' + error.message);
@@ -690,4 +746,5 @@
         transform: translate(-50%, -50%);
         z-index: 999;
     }
+
 </style>
