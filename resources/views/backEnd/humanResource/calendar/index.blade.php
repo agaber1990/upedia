@@ -109,7 +109,7 @@
                             <div class="col-lg-6 col-xl-3 mb-20">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="session">@lang('academics.session')</label>
-                                    <select class="form-control session staff_id" name="session" id="session">
+                                    <select class="form-control session staff_id" name="session" id="session" >
                                     </select>
                                 </div>
                             </div>
@@ -303,16 +303,10 @@
                         // Populate session options
                         $('#session').empty(); // Clear any previous session options
                         $('#session').append(
-                            '<option value="">@lang('academics.select_session') *</option>'
+                           `<option value="${response.track.session}">${response.track.session}</option>`
                         );
 
-                        // Loop from 1 to 30 and create options for the session dropdown
-                        for (var i = 1; i <= 30; i++) {
-                            var selected = (i === response.track.session) ? 'selected' :
-                                ''; // Check if this session matches the response
-                            $('#session').append('<option value="' + i + '" ' + selected + '>' +
-                                i + '</option>');
-                        }
+                      
 
                         // Populate schedule options (once or twice)
                         $('#scheduled').empty(); // Clear previous schedule options
@@ -495,9 +489,10 @@
         function calculateEndDate() {
             // Get the selected start date, session, and schedule
             var startDate = $('#start_date').val();
-            var sessionCount = parseInt($('#session').val());
+            var sessionCount = $('#session').val();
             var schedule = $('#scheduled').val();
-
+            console.log(sessionCount,schedule,startDate);
+            
             // If any required field is missing, disable the end date field and return
             if (!startDate || !sessionCount || !schedule) {
                 $('#end_date').prop('disabled', true);
@@ -525,7 +520,7 @@
             $('#end_date').val(endDate.toISOString().split('T')[0]); // Format the date as YYYY-MM-DD
         }
         // Event listeners for changes to the start date, session, and schedule
-        $('#start_date, #session, #scheduled').on('change', function() {
+        $('#start_date, #scheduled').on('change', function() {
             calculateEndDate(); // Call the function to calculate the end date
         });
 

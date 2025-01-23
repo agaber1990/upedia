@@ -152,28 +152,6 @@
                                     @enderror
                                 </div>
                             </div>
-                            <!-- Length -->
-                            <div class="row mt-25">
-                                <div class="col-lg-12">
-                                    <label class="primary_input_label" for="length">
-                                        @lang('academics.length') <span class="text-danger"> *</span>
-                                    </label>
-                                    <select
-                                        class="primary_select form-control {{ $errors->has('length') ? 'is-invalid' : '' }}"
-                                        id="length" name="length">
-                                        @for ($i = 1; $i <= 20; $i++)
-                                            <option value="{{ $i }}"
-                                                {{ old('length', isset($track) ? $track->length : '') == $i ? 'selected' : '' }}>
-                                                {{ $i }} @lang('academics.weeks')
-                                            </option>
-                                        @endfor
-                                    </select>
-                                    @error('length')
-                                        <span class="text-danger invalid-select" role="alert">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-
                             <!-- Schedule -->
                             <div class="row mt-25">
                                 <div class="col-lg-12">
@@ -250,7 +228,6 @@
                                         <th>@lang('academics.track_name_en')</th>
                                         <th>@lang('academics.level_number')</th>
                                         <th>@lang('academics.schedule')</th>
-                                        <th>@lang('academics.length')</th>
                                         <th>@lang('academics.action')</th>
                                     </tr>
                                 </thead>
@@ -260,7 +237,6 @@
                                             <td>{{ $track->track_name_en }}</td>
                                             <td>{{ $track->level_number }}</td>
                                             <td>{{ $track->schedule }}</td>
-                                            <td>{{ $track->length }} @lang('academics.weeks')</td>
                                             <td>
                                                 <x-drop-down>
                                                     @if (userPermission('track_sessions'))

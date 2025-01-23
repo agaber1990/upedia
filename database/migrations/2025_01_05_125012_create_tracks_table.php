@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('track_name_en'); // Foreign key to tracks
             $table->string('track_name_ar'); // Foreign key to tracks
             $table->integer('level_number');
-            $table->string('length'); // Example: '1w', '2w'
             $table->integer('session'); // Example: 1-10 sessions
             $table->string('schedule'); // Example: 'Once per week'
             $table->json('valid_for'); // Example: ['private', 'group']

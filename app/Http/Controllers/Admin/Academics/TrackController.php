@@ -51,7 +51,6 @@ class TrackController extends Controller
         $track->track_name_en = $request->track_name_en;
         $track->track_name_ar = $request->track_name_ar;
         $track->level_number = $request->level_number;
-        $track->length = $request->length;
         $track->session = $request->session;
         $track->schedule = $request->schedule;
         $track->valid_for = json_encode($request->valid_for); // Store valid_for as JSON
@@ -119,7 +118,6 @@ class TrackController extends Controller
         $track->track_name_en = $request->track_name_en;
         $track->track_name_ar = $request->track_name_ar;
         $track->level_number = $request->level_number;
-        $track->length = $request->length;
         $track->session = $request->session;
         $track->schedule = $request->schedule;
         $track->valid_for = json_encode($request->valid_for); // Update valid_for as JSON
