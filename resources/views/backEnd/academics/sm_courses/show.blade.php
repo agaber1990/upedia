@@ -163,7 +163,7 @@
                             <input type="date" min="{{ date('Y-m-d') }}" class="form-control staff_id"
                                 name="start_date" id="start_date">
                         </div>
-                    </div>
+                    </div>  
 
                     <div class="col-lg-6 col-xl-3 mb-20">
                         <div class="primary_input">
@@ -172,20 +172,12 @@
                                 id="end_date" disabled>
                         </div>
                     </div>
-
-
-                    <div class="col-md-12 mb-20">
-                        <div id="slotContainer">
-
-                        </div>
+                    <div class="col-lg-6 col-xl-3 d-flex align-items-center mt-1">
+                        <button class="primary-btn  fix-gr-bg" onclick="submitAssignedForm()">@lang('common.update_information')</button>
 
                     </div>
-                    <div class="col-md-12 mb-20">
-                        <div id="submitAssignStaff">
 
-                        </div>
-
-                    </div>
+                 
                 </div>
 
             </div>
@@ -600,6 +592,7 @@
 
             // Prepare form data
             let formData = {
+                staff_scheduled_id: course_details.id,
                 course_name_en: course_name_en,
                 course_name_ar: course_name_ar,
                 cat_id: cat_id,
@@ -625,16 +618,7 @@
                         text: "You clicked the button!",
                         icon: "success"
                     });
-                    $('#course_name_en').val('');
-                    $('#course_name_ar').val('');
-                    $("#slotContainer").html('');
-                    $('#session').html('');
-                    $('#session').html('');
-                    $('#scheduled').html('');
-                    $('#start_date').val('');
-                    $('#end_date').val('');
-                    $('#staff_id').html('');
-                    $("#submitAssignStaff").html('');
+                    
                 },
                 error: function(error) {
                     alert('Error saving event: ' + error.message);

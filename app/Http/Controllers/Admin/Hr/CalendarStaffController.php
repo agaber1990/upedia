@@ -244,10 +244,46 @@ class CalendarStaffController extends Controller
 
 
 
-
     public function scheduleStaffEvent(Request $request)
     {
-        // Validate incoming data
+      
+    
+        $schedule = null;
+        if (isset($request->staff_scheduled_id)) {
+            $schedule = StaffScheduled::find($request->staff_scheduled_id);
+        }
+        // Check if a record with the same staff_id, track_id, session, schedule, start_date, and end_date already exists
+    
+        if ($schedule) {
+              // Validate incoming data
+        $validated = $request->validate([
+            'course_name_en' => 'required|string',
+            'course_name_ar' => 'required|string',
+            'cat_id' => 'required|exists:categories,id',
+            'track_id' => 'required|integer',
+            'track_type_id' => 'required|integer',
+            'session' => 'required|integer',
+            'schedule' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
+            // Update the existing record
+            $schedule->update([
+                'course_name_en' => $validated['course_name_en'],
+                'course_name_ar' => $validated['course_name_ar'],
+                'cat_id' => $validated['cat_id'],
+                'track_id' => $validated['track_id'],
+                'track_type_id' => $validated['track_type_id'],
+                'session' => $validated['session'],
+                'schedule' => $validated['schedule'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+
+            ]);
+    
+            $message = "Staff Scheduled event updated successfully.";
+        } else {
+              // Validate incoming data
         $validated = $request->validate([
             'course_name_en' => 'required|string',
             'course_name_ar' => 'required|string',
@@ -261,28 +297,30 @@ class CalendarStaffController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
-        // Create the scheduled event (now using JSON array for slot_id)
-        StaffScheduled::create([
-            'course_name_en' => $validated['course_name_en'],
-            'course_name_ar' => $validated['course_name_ar'],
-            'slot_id' => json_encode($validated['selected_slots']), // Save as JSON
-            'cat_id' => $validated['cat_id'],
-            'staff_id' => $validated['staff_id'],
-            'track_type_id' => $validated['track_type_id'],
-            'track_id' => $validated['track_id'],
-            'status' => 'scheduled',
-            'session' => $validated['session'],
-            'schedule' => $validated['schedule'],
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
-        ]);
-
+            // Create a new record
+            StaffScheduled::create([
+                'course_name_en' => $validated['course_name_en'],
+                'course_name_ar' => $validated['course_name_ar'],
+                'slot_id' => json_encode($validated['selected_slots']),
+                'cat_id' => $validated['cat_id'],
+                'staff_id' => $validated['staff_id'],
+                'track_type_id' => $validated['track_type_id'],
+                'track_id' => $validated['track_id'],
+                'status' => 'scheduled',
+                'session' => $validated['session'],
+                'schedule' => $validated['schedule'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+            ]);
+    
+            $message = "Staff Scheduled event created successfully.";
+        }
+    
         // Return a response with success
         return response()->json([
-            'success' => "Staff Assigned slots successfully",
+            'success' => $message,
         ], 200);
     }
-
 
 
 
