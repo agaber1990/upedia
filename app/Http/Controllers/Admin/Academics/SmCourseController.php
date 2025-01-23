@@ -21,6 +21,7 @@ use App\SmSchool;
 use App\SmAcademicYear;
 use App\Models\StudentRecord;
 use App\SmClass;
+use Exception;
 
 class SmCourseController extends Controller
 {
@@ -83,22 +84,43 @@ class SmCourseController extends Controller
     public function show($id)
     {
         $course = StaffScheduled::findOrFail($id);
-        $students = SmStudent::get();
-        return view('backEnd.academics.sm_courses.show', compact('course', 'students'));
+        $allStudents = SmStudent::get();
+        $enrolledStudentIds = CourseStudent::where('course_id', $id)->pluck('student_id')->toArray();
+        $studentsNotInCourse = $allStudents->whereNotIn('id', $enrolledStudentIds);
+
+        return view('backEnd.academics.sm_courses.show', compact('course', 'allStudents', 'studentsNotInCourse'));
     }
 
     public function storeCourseToStudent(Request $request)
     {
-        $request->validate([
-            'course_id' => 'required|exists:staff_scheduleds,id',
-            'student_id' => 'required|exists:sm_students,id',
-        ]);
-        $validated = [
-            'course_id' => $request->course_id,
-            'student_id' => $request->student_id,
-        ];
-        CourseStudent::create($validated);
-        Toastr::success('Created successfully', 'Success');
-        return redirect()->back();
+        try {
+            $request->validate([
+                'course_id' => 'required|exists:staff_scheduleds,id',
+                'student_id' => [
+                    'required',
+                    'exists:sm_students,id',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $exists = CourseStudent::where('course_id', $request->course_id)
+                            ->where('student_id', $value)
+                            ->exists();
+
+                        if ($exists) {
+                            $fail('The student is already enrolled in this course.');
+                        }
+                    },
+                ],
+
+            ]);
+            $validated = [
+                'course_id' => $request->course_id,
+                'student_id' => $request->student_id,
+            ];
+            CourseStudent::create($validated);
+            Toastr::success('Created successfully', 'Success');
+            return redirect()->back();
+        } catch (Exception $e) {
+            Toastr::error('The student is already enrolled in this course.', 'Error');
+            return redirect()->back();
+        }
     }
 }
