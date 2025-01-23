@@ -88,9 +88,10 @@ class SmCourseController extends Controller
         ->with('student')
         ->with('course')
         ->get();
+        $categories = Category::get();
         $students = SmStudent::get();
 
-        return view('backEnd.academics.sm_courses.show', compact('course','course_students', 'students'));
+        return view('backEnd.academics.sm_courses.show', compact('categories','course','course_students', 'students'));
     }
 
     public function storeCourseToStudent(Request $request)
@@ -124,5 +125,13 @@ class SmCourseController extends Controller
             Toastr::error('The student is already enrolled in this course.', 'Error');
             return redirect()->back();
         }
+    }
+
+
+    public function course_students_delete(Request $request, $id)
+    {
+        CourseStudent::destroy($request->id);
+        Toastr::success('Operation successful', 'Success');
+        return back();
     }
 }

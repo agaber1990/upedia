@@ -1057,6 +1057,7 @@ Route::get('/reg', function () {});
         Route::put('sm_courses/{id}', 'Admin\Academics\SmCourseController@update')->name('sm_courses_update');
         Route::delete('sm_courses/{id}', 'Admin\Academics\SmCourseController@destroy')->name('sm_courses_delete');
         Route::post('sm_course_student', 'Admin\Academics\SmCourseController@storeCourseToStudent')->name('sm_courses_storeCourseToStudent');
+        Route::delete('sm_courses/{id}', 'Admin\Academics\SmCourseController@course_students_delete')->name('course_students_delete');
 
         
         Route::get('sm_courses/{scheduledId}/assign-student/{id}', 'Admin\Academics\SmCourseController@assignStudent')->name('sales_assign_student');
