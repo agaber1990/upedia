@@ -109,7 +109,7 @@
                             <div class="col-lg-6 col-xl-3 mb-20">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="session">@lang('academics.session')</label>
-                                    <select class="form-control session staff_id" name="session" id="session" >
+                                    <select class="form-control session staff_id" name="session" id="session">
                                     </select>
                                 </div>
                             </div>
@@ -231,7 +231,7 @@
 
     <script>
         var $locale = '{{ app()->getLocale() }}';
-        $(document).ready(function() {
+    $(document).ready(function() {
 
             // Listen for changes on the category dropdown
             $('#cat_id').on('change', function() {
@@ -303,10 +303,10 @@
                         // Populate session options
                         $('#session').empty(); // Clear any previous session options
                         $('#session').append(
-                           `<option value="${response.track.session}">${response.track.session}</option>`
+                            `<option value="${response.track.session}">${response.track.session}</option>`
                         );
 
-                      
+
 
                         // Populate schedule options (once or twice)
                         $('#scheduled').empty(); // Clear previous schedule options
@@ -364,106 +364,106 @@
             });
 
             $('#staff_id').on('change', function() {
-                $.ajax({
-                    url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
-                    method: 'GET',
-                    data: {
-                        staff_id: $(this).val(),
-                    },
-                    success: function(response) {
+                    $.ajax({
+                        url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
+                        method: 'GET',
+                        data: {
+                            staff_id: $(this).val(),
+                        },
+                        success: function(response) {
 
 
-                        // Check if slots exist in the response
-                        if (response.slots && response.slots.length > 0) {
-                            // Group slots by day
-                            const days = [...new Set(response.slots.map(slot => slot
-                                .slot_day))]; // Get unique days
-                            const slotsByDay = {};
-                            days.forEach(day => {
-                                slotsByDay[day] = response.slots.filter(slot => slot
-                                    .slot_day === day);
-                            });
-
-                            // Get unique time slots and convert to AM/PM
-                            const timeSlots = [...new Set(response.slots.map(slot =>
-                                    `${slot.slot_start} - ${slot.slot_end}`))]
-                                .map(time => {
-                                    const [start, end] = time.split(" - ");
-                                    return `${convertToAmPm(start)} - ${convertToAmPm(end)}`;
+                            // Check if slots exist in the response
+                            if (response.slots && response.slots.length > 0) {
+                                // Group slots by day
+                                const days = [...new Set(response.slots.map(slot => slot
+                                    .slot_day))]; // Get unique days
+                                const slotsByDay = {};
+                                days.forEach(day => {
+                                    slotsByDay[day] = response.slots.filter(slot => slot
+                                        .slot_day === day);
                                 });
-                            // Create the Bootstrap layout dynamically
-                            let scheduleHTML =
-                                '<hr><div class="container-fluid"><div class="row">';
 
-                            days.forEach((day, index) => {
-                                // Add a column for each day
-                                scheduleHTML += `
-                                        <div class="col-md-2 mb-4">
-                                            <h5 class="mb-3">${day}</h5>
-                                            <div class="time-slots">
-                                    `;
+                                // Get unique time slots and convert to AM/PM
+                                const timeSlots = [...new Set(response.slots.map(slot =>
+                                        `${slot.slot_start} - ${slot.slot_end}`))]
+                                    .map(time => {
+                                        const [start, end] = time.split(" - ");
+                                        return `${convertToAmPm(start)} - ${convertToAmPm(end)}`;
+                                    });
+                                // Create the Bootstrap layout dynamically
+                                let scheduleHTML =
+                                    '<hr><div class="container-fluid"><div class="row">';
 
-                                // Loop through time slots
-                                timeSlots.forEach(time => {
-                                    const originalTime = time
-                                        .split(" - ")
-                                        .map(t => convertTo24Hour(t))
-                                        .join(" - ");
-
-                                    const slot = slotsByDay[day]?.find(
-                                        s =>
-                                        `${s.slot_start} - ${s.slot_end}` ===
-                                        originalTime
-                                    );
+                                days.forEach((day, index) => {
+                                    // Add a column for each day
                                     scheduleHTML += `
-                                        <div class="form-check mb-2" style="background-color: ${slot && slot.status !== "scheduled" ? "#fff4cb" : "transparent"};
-                                        color: ${slot && slot.status !== "scheduled" ? "#000" : "#444"};">
-                                            <input 
-                                                class="form-check-input" 
-                                                type="checkbox" 
-                                                 name="slot[${day}][]" 
-                                                data-slot-id="${slot ? slot.id : ''}" 
-                                                ${slot ? (slot.status === "scheduled" ? "disabled" : "") : "disabled"}
-                                            >
-                                            <label class="form-check-label">${time}</label>
-                                        </div>
-                                    `;
+                                            <div class="col-md-2 mb-4">
+                                                <h5 class="mb-3">${day}</h5>
+                                                <div class="time-slots">
+                                        `;
 
+                                    // Loop through time slots
+                                    timeSlots.forEach(time => {
+                                        const originalTime = time
+                                            .split(" - ")
+                                            .map(t => convertTo24Hour(t))
+                                            .join(" - ");
+
+                                        const slot = slotsByDay[day]?.find(
+                                            s =>
+                                            `${s.slot_start} - ${s.slot_end}` ===
+                                            originalTime
+                                        );
+                                        scheduleHTML += `
+                                            <div class="form-check mb-2" style="background-color: ${slot && slot.status !== "scheduled" ? "#fff4cb" : "transparent"};
+                                            color: ${slot && slot.status !== "scheduled" ? "#000" : "#444"};">
+                                                <input 
+                                                    class="form-check-input" 
+                                                    type="checkbox" 
+                                                    name="slot[${day}][]" 
+                                                    data-slot-id="${slot ? slot.id : ''}" 
+                                                    ${slot ? (slot.status === "scheduled" ? "disabled" : "") : "disabled"}
+                                                >
+                                                <label class="form-check-label">${time}</label>
+                                            </div>
+                                        `;
+
+                                    });
+
+                                    // Close time-slots and column
+                                    scheduleHTML += `
+                                                </div> <!-- End of time-slots -->
+                                            </div> <!-- End of col-md-3 -->
+                                        `;
+
+                                    // Close and start a new row after every 4 columns
+                                    if ((index + 1) % 6 === 0 && index !== days.length -
+                                        1) {
+                                        scheduleHTML += '</div><div class="row">';
+                                    }
                                 });
 
-                                // Close time-slots and column
-                                scheduleHTML += `
-                                            </div> <!-- End of time-slots -->
-                                        </div> <!-- End of col-md-3 -->
-                                    `;
+                                // Close the last row and container
+                                scheduleHTML += '</div></div><hr>';
 
-                                // Close and start a new row after every 4 columns
-                                if ((index + 1) % 6 === 0 && index !== days.length -
-                                    1) {
-                                    scheduleHTML += '</div><div class="row">';
-                                }
-                            });
+                                // Append the schedule to the DOM
+                                $("#slotContainer").html(scheduleHTML);
+                                $("#submitAssignStaff").html(
+                                    `<button class="btn btn-primary" onclick="submitAssignedForm()">Submit</button>`
+                                );
 
-                            // Close the last row and container
-                            scheduleHTML += '</div></div><hr>';
-
-                            // Append the schedule to the DOM
-                            $("#slotContainer").html(scheduleHTML);
-                            $("#submitAssignStaff").html(
-                                `<button class="btn btn-primary" onclick="submitAssignedForm()">Submit</button>`
-                            );
-
-                        } else {
-                            console.warn("No slots found for the selected staff.");
+                            } else {
+                                console.warn("No slots found for the selected staff.");
+                            }
+                        },
+                        error: function() {
+                            alert('Failed to fetch staff data.');
                         }
-                    },
-                    error: function() {
-                        alert('Failed to fetch staff data.');
-                    }
-                });
+                    });
             });
 
-        });
+    });
     </script>
 
     <script>
@@ -491,8 +491,8 @@
             var startDate = $('#start_date').val();
             var sessionCount = $('#session').val();
             var schedule = $('#scheduled').val();
-            console.log(sessionCount,schedule,startDate);
-            
+            console.log(sessionCount, schedule, startDate);
+
             // If any required field is missing, disable the end date field and return
             if (!startDate || !sessionCount || !schedule) {
                 $('#end_date').prop('disabled', true);
@@ -512,7 +512,7 @@
                 // If "twice" (sessions are twice a week), calculate based on 2 sessions per week
                 var weeksRequired = Math.ceil(sessionCount / 2); // Calculate the number of weeks needed
                 console.log(weeksRequired);
-                
+
                 endDate.setDate(start.getDate() + (weeksRequired - 1) * 7); // Add weeks to the start date
             }
 

@@ -53,7 +53,7 @@
                                     @lang('common.select_student') <span class="text-danger"> *</span>
                                 </label>
                                 <select class="primary_select form-control" name="student_id" id="student_id">
-                                    @foreach ($allStudents as $item)
+                                    @foreach ($students as $item)
                                         <option value="{{ $item->id }}">
                                             {{ $item->full_name }}</option>
                                     @endforeach
@@ -61,8 +61,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="primary-btn fix-gr-bg text-nowrap">
-                                @lang('common.save_changes')
+                            <button type="submit" class="mt-3 primary-btn fix-gr-bg text-nowrap">
+                                @lang('common.submit')
                             </button>
                         </div>
                     </form>
@@ -89,9 +89,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($allStudents as $item)
+                                        @foreach ($course_students as $item)
+
                                             <tr>
-                                                <td>{{ $item->full_name }}</td>
+                                                <td>{{ $item->student->full_name }}</td>
                                                 <td>
                                                     <x-drop-down>
 
