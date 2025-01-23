@@ -53,7 +53,7 @@
                                     @lang('common.select_student') <span class="text-danger"> *</span>
                                 </label>
                                 <select class="primary_select form-control" name="student_id" id="student_id">
-                                    @foreach ($students as $item)
+                                    @foreach ($allStudents as $item)
                                         <option value="{{ $item->id }}">
                                             {{ $item->full_name }}</option>
                                     @endforeach
@@ -89,7 +89,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($students as $item)
+                                        @foreach ($allStudents as $item)
                                             <tr>
                                                 <td>{{ $item->full_name }}</td>
                                                 <td>
