@@ -707,5 +707,6 @@ return [
     "paid" => "Paid",
     "not_paid" => "Not Paid",
     "paid_purchased" => "Paid Purchased",
+    "levels" => "Levels",
 ]
     ?>

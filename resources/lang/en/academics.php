@@ -223,4 +223,5 @@ return [
     'course_name_en' => 'Course Name (English)',
     'course_name_ar' => 'Course Name (Arabic)',
     'no_availabe_students' => 'No students available',
+    'track_level' => 'Track Level',
 ];
