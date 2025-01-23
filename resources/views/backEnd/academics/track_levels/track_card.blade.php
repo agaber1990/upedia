@@ -181,8 +181,8 @@
         }
 
         /**
-                                                                                                                                                                                                                                                                * Nestable Extras
-                                                                                                                                                                                                                                                                */
+                                                                                                                                                                                                                                                                    * Nestable Extras
+                                                                                                                                                                                                                                                                    */
 
         .nestable-lists {
             display: block;
@@ -207,8 +207,8 @@
         }
 
         /**
-                                                                                                                                                                                                                                                                * Nestable Draggable Handles
-                                                                                                                                                                                                                                                                */
+                                                                                                                                                                                                                                                                    * Nestable Draggable Handles
+                                                                                                                                                                                                                                                                    */
 
         .dd3-content {
             display: block;
@@ -387,18 +387,8 @@
                 </div>
 
             </div>
-
-            <div class="col-lg-12" id="menuList">
-                @foreach ($levels as $level)
-                    @if (isset($groupedMenus[$level->id]) && count($groupedMenus[$level->id]) > 0)
-                        <div class="">
-                            @include('backEnd.academics.track_levels.collapse')
-                        </div>
-                    @endif
-                @endforeach
-            </div>
         </div>
-      
+
     </div>
     {{-- Delete Modal Start --}}
     <div class="modal fade admin-query" id="deleteSubmenuItem">
@@ -540,8 +530,5 @@
                 }
             });
         });
-
-
-       
     </script>
 @endpush

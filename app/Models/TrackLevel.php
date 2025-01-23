@@ -16,4 +16,9 @@ class TrackLevel extends Model
         'description_ar',
         'file',
     ];
+
+    public function track()
+    {
+        return $this->belongsTo(Track::class, 'track_id');
+    }
 }

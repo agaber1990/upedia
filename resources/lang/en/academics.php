@@ -224,4 +224,8 @@ return [
     'course_name_ar' => 'Course Name (Arabic)',
     'no_availabe_students' => 'No students available',
     'track_level' => 'Track Level',
+    'level_name_en' => 'Level Name (English)',
+    'level_name_ar' => 'Level Name (Arabic)',
+    'level_description_en' => 'Level Description (English)',
+    'level_description_ar' => 'Level Description (Arabic)',
 ];
