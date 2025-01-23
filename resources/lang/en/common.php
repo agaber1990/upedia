@@ -712,5 +712,6 @@ return [
     "file" => "File",
     "course_info" => "Course Info",
     "assigned_students" => "Assigned Students",
+    "levels" => "Levels",
 ]
     ?>

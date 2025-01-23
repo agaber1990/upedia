@@ -239,10 +239,15 @@
                                             <td>{{ $track->schedule }}</td>
                                             <td>
                                                 <x-drop-down>
-                                                    @if (userPermission('track_sessions'))
+                                                    {{-- @if (userPermission('track_sessions'))
                                                         <a class="dropdown-item"
                                                             href="{{ route('track_sessions', [$track->id]) }}">
                                                             @lang('common.track_sessions')</a>
+                                                    @endif --}}
+                                                    @if (userPermission('track_levels'))
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('track_levels', [$track->id]) }}">
+                                                            @lang('common.levels')</a>
                                                     @endif
                                                     @if (userPermission('assigned_pricing_plan'))
                                                         <a class="dropdown-item"
