@@ -259,7 +259,9 @@ class CalendarStaffController extends Controller
         $validated = $request->validate([
             'course_name_en' => 'required|string',
             'course_name_ar' => 'required|string',
+            'selected_slots' => 'required|array',
             'cat_id' => 'required|exists:categories,id',
+            'staff_id' => 'required|exists:sm_staffs,id',
             'track_id' => 'required|integer',
             'track_type_id' => 'required|integer',
             'session' => 'required|integer',
@@ -271,9 +273,12 @@ class CalendarStaffController extends Controller
             $schedule->update([
                 'course_name_en' => $validated['course_name_en'],
                 'course_name_ar' => $validated['course_name_ar'],
+                'slot_id' => json_encode($validated['selected_slots']),
                 'cat_id' => $validated['cat_id'],
-                'track_id' => $validated['track_id'],
+                'staff_id' => $validated['staff_id'],
                 'track_type_id' => $validated['track_type_id'],
+                'track_id' => $validated['track_id'],
+                'status' => 'scheduled',
                 'session' => $validated['session'],
                 'schedule' => $validated['schedule'],
                 'start_date' => $validated['start_date'],

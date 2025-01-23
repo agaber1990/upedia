@@ -55,9 +55,6 @@
             </div>
         </div>
 
-
-
-
         <div class="container-fluid p-0">
             <div class="">
                 <h3 class="mb-3">
@@ -172,12 +169,27 @@
                                 id="end_date" disabled>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-xl-3 d-flex align-items-center mt-1">
-                        <button class="primary-btn  fix-gr-bg" onclick="submitAssignedForm()">@lang('common.update_information')</button>
+                    <div class="col-lg-6 col-xl-3 mb-20">
+                        <div class="primary_input">
+                            <label class="primary_input_label" for="staff_id">@lang('hr.staff')</label>
+                            <select class="form-control staff_id" name="staff_id" id="staff_id">
 
+                            </select>
+                        </div>
                     </div>
 
+                    <div class="col-md-12 mb-20">
+                        <div id="slotContainer">
 
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 mb-20">
+                        <div id="submitAssignStaff">
+
+                        </div>
+
+                    </div>
                 </div>
 
             </div>
@@ -193,9 +205,6 @@
                     <span class="ti-plus pr-2"></span>
                     @lang('common.add')
                 </button>
-
-
-
             </div>
 
         </div>
@@ -277,7 +286,7 @@
         </div>
 
 
-        <div class="container-fluid p-0 mt-5">
+        {{-- <div class="container-fluid p-0 mt-5">
          
             <div class="white-box">
                 <div class="row">
@@ -329,7 +338,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
 
     </section>
@@ -342,6 +351,8 @@
     <script>
         var $locale = '{{ app()->getLocale() }}';
         var course_details = @json($course);
+        var courseSlotIds = JSON.parse(course_details.slot_id); // Parse JSON string into an array
+        console.log("Course Slot IDs:", courseSlotIds);
 
         function fetchTracksAndTrackType() {
             const catId = $('#cat_id').val();
@@ -409,6 +420,34 @@
 
                     $('#start_date').val(course_details.start_date);
                     $('#end_date').val(course_details.end_date);
+
+                    $('#staff_id').empty();
+
+                    // Check if the response contains staff data
+                    if (response && response.staff && response.staff.length > 0) {
+
+                        // Loop through the staff data and append each staff as an option
+                        $.each(response.staff, function(index, staff) {
+                            console.log(
+                                staff.id); // Log each staff to check its properties
+                            var staffName = staff
+                                .staff_name; // Access 'staff_name' from the staff object
+                            var staffId = staff
+                                .staff_id; // Access 'staff_id' from the staff object
+                            var selected_item = staff.id == course_details.staff_id ? 'selected' :
+                                ''; // Access 'staff_id' from the staff object
+                            $('#staff_id').append('<option ' + selected_item + 'value="' + staffId +
+                                '">' + staffName + '</option>');
+                        });
+                    } else {
+                        // If no staff found, add a default option
+                        $('#staff_id').append(
+                            '<option value="">@lang('academics.no_staff_found')</option>'
+                        );
+                    }
+
+                    getSlotsTime();
+
                 },
                 error: function() {
                     alert('Failed to fetch staff data.');
@@ -416,7 +455,115 @@
             });
         }
 
+        function getSlotsTime() {
+            let staff_id = course_details.staff_id;
 
+            $.ajax({
+                url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
+                method: 'GET',
+                data: {
+                    staff_id: staff_id,
+                },
+                success: function(response) {
+
+
+                    // Check if slots exist in the response
+                    if (response.slots && response.slots.length > 0) {
+                        // Group slots by day
+                        const days = [...new Set(response.slots.map(slot => slot
+                            .slot_day))]; // Get unique days
+                        const slotsByDay = {};
+                        days.forEach(day => {
+                            slotsByDay[day] = response.slots.filter(slot => slot
+                                .slot_day === day);
+                        });
+
+                        // Get unique time slots and convert to AM/PM
+                        const timeSlots = [...new Set(response.slots.map(slot =>
+                                `${slot.slot_start} - ${slot.slot_end}`))]
+                            .map(time => {
+                                const [start, end] = time.split(" - ");
+                                return `${convertToAmPm(start)} - ${convertToAmPm(end)}`;
+                            });
+                        // Create the Bootstrap layout dynamically
+                        let scheduleHTML =
+                            '<hr><div class="container-fluid"><div class="row">';
+
+                        days.forEach((day, index) => {
+                            // Add a column for each day
+                            scheduleHTML += `
+                                            <div class="col-md-2 mb-4">
+                                                <h5 class="mb-3">${day}</h5>
+                                                <div class="time-slots">
+                                        `;
+
+                            // Loop through time slots
+                            timeSlots.forEach(time => {
+                                const originalTime = time
+                                    .split(" - ")
+                                    .map(t => convertTo24Hour(t))
+                                    .join(" - ");
+
+                                const slot = slotsByDay[day]?.find(
+                                    s =>
+                                    `${s.slot_start} - ${s.slot_end}` === originalTime
+                                );
+
+                                const isChecked = slot && courseSlotIds.includes(slot.id
+                                    .toString()); // Check if slot.id exists in courseSlotIds
+                                const isDisabled = slot ? (slot.status === "scheduled" ?
+                                    "disabled" : "") : "disabled";
+
+                                scheduleHTML += `
+                                    <div class="form-check mb-2" style="
+                                    background-color: ${isChecked  ? "#fff4cb" : ""};
+                                    background-color: ${slot && slot.status !== "scheduled" ? "#fff4cb" : ""};
+                                    color: ${slot && slot.status !== "scheduled" ? "#000" : "#444"};"
+                                    >
+                                        <input 
+                                            class="form-check-input" 
+                                            type="checkbox" 
+                                            name="slot[${day}][]" 
+                                            data-slot-id="${slot ? slot.id : ''}" 
+                                            ${isChecked ? "checked" : ""} 
+                                            ${isChecked ? '' :isDisabled}
+                                        >
+                                        <label class="form-check-label">${time}</label>
+                                    </div>
+                                `;
+                            });
+
+                            // Close time-slots and column
+                            scheduleHTML += `
+                                                </div> <!-- End of time-slots -->
+                                            </div> <!-- End of col-md-3 -->
+                                        `;
+
+                            // Close and start a new row after every 4 columns
+                            if ((index + 1) % 6 === 0 && index !== days.length -
+                                1) {
+                                scheduleHTML += '</div><div class="row">';
+                            }
+                        });
+
+                        // Close the last row and container
+                        scheduleHTML += '</div></div><hr>';
+
+                        // Append the schedule to the DOM
+                        $("#slotContainer").html(scheduleHTML);
+                        $("#submitAssignStaff").html(
+                            `<button class="primary-btn fix-gr-bg" onclick="submitAssignedForm()">{{ __('common.update_information') }}</button>`
+                        );
+
+                    } else {
+                        console.warn("No slots found for the selected staff.");
+                    }
+                },
+                error: function() {
+                    alert('Failed to fetch staff data.');
+                }
+            });
+        }
 
         $(document).ready(function() {
 
@@ -550,7 +697,105 @@
                 });
             });
 
+            $('#staff_id').on('change', function() {
+                $.ajax({
+                    url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
+                    method: 'GET',
+                    data: {
+                        staff_id: $(this).val(),
+                    },
+                    success: function(response) {
 
+
+                        // Check if slots exist in the response
+                        if (response.slots && response.slots.length > 0) {
+                            // Group slots by day
+                            const days = [...new Set(response.slots.map(slot => slot
+                                .slot_day))]; // Get unique days
+                            const slotsByDay = {};
+                            days.forEach(day => {
+                                slotsByDay[day] = response.slots.filter(slot => slot
+                                    .slot_day === day);
+                            });
+
+                            // Get unique time slots and convert to AM/PM
+                            const timeSlots = [...new Set(response.slots.map(slot =>
+                                    `${slot.slot_start} - ${slot.slot_end}`))]
+                                .map(time => {
+                                    const [start, end] = time.split(" - ");
+                                    return `${convertToAmPm(start)} - ${convertToAmPm(end)}`;
+                                });
+                            // Create the Bootstrap layout dynamically
+                            let scheduleHTML =
+                                '<hr><div class="container-fluid"><div class="row">';
+
+                            days.forEach((day, index) => {
+                                // Add a column for each day
+                                scheduleHTML += `
+                                            <div class="col-md-2 mb-4">
+                                                <h5 class="mb-3">${day}</h5>
+                                                <div class="time-slots">
+                                        `;
+
+                                // Loop through time slots
+                                timeSlots.forEach(time => {
+                                    const originalTime = time
+                                        .split(" - ")
+                                        .map(t => convertTo24Hour(t))
+                                        .join(" - ");
+
+                                    const slot = slotsByDay[day]?.find(
+                                        s =>
+                                        `${s.slot_start} - ${s.slot_end}` ===
+                                        originalTime
+                                    );
+                                    scheduleHTML += `
+                                            <div class="form-check mb-2" style="background-color: ${slot && slot.status !== "scheduled" ? "#fff4cb" : "transparent"};
+                                            color: ${slot && slot.status !== "scheduled" ? "#000" : "#444"};">
+                                                <input 
+                                                    class="form-check-input" 
+                                                    type="checkbox" 
+                                                    name="slot[${day}][]" 
+                                                    data-slot-id="${slot ? slot.id : ''}" 
+                                                    ${slot ? (slot.status === "scheduled" ? "disabled" : "") : "disabled"}
+                                                >
+                                                <label class="form-check-label">${time}</label>
+                                            </div>
+                                        `;
+
+                                });
+
+                                // Close time-slots and column
+                                scheduleHTML += `
+                                                </div> <!-- End of time-slots -->
+                                            </div> <!-- End of col-md-3 -->
+                                        `;
+
+                                // Close and start a new row after every 4 columns
+                                if ((index + 1) % 6 === 0 && index !== days.length -
+                                    1) {
+                                    scheduleHTML += '</div><div class="row">';
+                                }
+                            });
+
+                            // Close the last row and container
+                            scheduleHTML += '</div></div><hr>';
+
+                            // Append the schedule to the DOM
+                            $("#slotContainer").html(scheduleHTML);
+                            $("#submitAssignStaff").html(
+                                `<button class="primary-btn fix-gr-bg" onclick="submitAssignedForm()">{{ __('common.update_information') }}</button>`
+                                );
+
+                        } else {
+                            console.warn("No slots found for the selected staff.");
+                        }
+                    },
+                    error: function() {
+                        alert('Failed to fetch staff data.');
+                    }
+                });
+            });
 
         });
         $(document).ready(function() {
@@ -634,7 +879,7 @@
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
             let staff_id = $('#staff_id').val();
-
+            
             // Fetch the selected slots (checkboxes with name like 'slot[day][]')
             let selectedSlots = [];
             $('input[name^="slot"]').each(function() {
@@ -746,5 +991,4 @@
         transform: translate(-50%, -50%);
         z-index: 999;
     }
-
 </style>
