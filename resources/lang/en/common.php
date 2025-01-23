@@ -710,5 +710,7 @@ return [
     "levels" => "Levels",
     "course_students_delete" => "Student Delete Assigned",
     "file" => "File",
+    "course_info" => "Course Info",
+    "assigned_students" => "Assigned Students",
 ]
     ?>

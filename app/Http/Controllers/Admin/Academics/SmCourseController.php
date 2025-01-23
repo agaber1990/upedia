@@ -88,9 +88,10 @@ class SmCourseController extends Controller
         ->with('student')
         ->with('course')
         ->get();
+        $categories = Category::get();
         $students = SmStudent::get();
 
-        return view('backEnd.academics.sm_courses.show', compact('course','course_students', 'students'));
+        return view('backEnd.academics.sm_courses.show', compact('categories','course','course_students', 'students'));
     }
 
     public function storeCourseToStudent(Request $request)
