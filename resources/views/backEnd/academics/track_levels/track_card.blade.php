@@ -387,6 +387,12 @@
                 </div>
 
             </div>
+
+            <div class="col-lg-12" id="menuList">
+                    <div class="">
+                        @include('backEnd.academics.track_levels.collapse')
+                    </div>
+            </div>
         </div>
 
     </div>

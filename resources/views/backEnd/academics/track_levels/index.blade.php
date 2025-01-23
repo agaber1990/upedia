@@ -2,6 +2,7 @@
 @section('title')
     @lang('academics.track_level')
 @endsection
+{{-- {{dd($menus )}} --}}
 @section('mainContent')
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
@@ -52,8 +53,9 @@
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
-                        <form action="{{ route('track_levels_store') }}" method="POST">
+                        <form action="{{ route('track_levels_store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
+
 
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -113,51 +115,86 @@
                 </div>
 
 
-                <!-- Modal update -->
+                <!-- Modal Update -->
                 <div class="modal fade" id="ModalUpdateLevel" tabindex="-1" aria-labelledby="ModalLabelUpdateLevel"
                     aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="ModalLabelUpdateLevel">@lang('academics.update_level')</h1>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+                        <form action="{{ route('track_level_update') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="ModalLabelUpdateLevel">@lang('common.update')</h1>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Hidden input for track ID -->
+                                    <input type="hidden" id="update_level_track_id" name="id">
+
+                                    <!-- Level Name (EN) -->
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="update_level_name_en">@lang('academics.level_name_en')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" name="name_en"
+                                            id="update_level_name_en" autocomplete="off">
+                                    </div>
+
+                                    <!-- Level Name (AR) -->
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="update_level_name_ar">@lang('academics.level_name_ar')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" name="name_ar"
+                                            id="update_level_name_ar" autocomplete="off">
+                                    </div>
+
+                                    <!-- Description (EN) -->
+                                    <div class="primary_input">
+                                        <label class="primary_input_label"
+                                            for="update_level_description_en">@lang('academics.level_description_en')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text"
+                                            name="description_en" id="update_level_description_en" autocomplete="off">
+                                    </div>
+
+                                    <!-- Description (AR) -->
+                                    <div class="primary_input">
+                                        <label class="primary_input_label"
+                                            for="update_level_description_ar">@lang('academics.level_description_ar')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text"
+                                            name="description_ar" id="update_level_description_ar" autocomplete="off">
+                                    </div>
+
+                                    <!-- File Upload -->
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="update_level_file">@lang('common.file')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="update_level_file"
+                                                name="file">
+                                            <label class="custom-file-label" for="update_level_file">Choose file</label>
+                                        </div>
+                                        <small class="form-text text-muted">Current file: <span id="current_file_name">No
+                                                file uploaded</span></small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" id="update_level_for_submit"
+                                        class="primary-btn fix-gr-bg text-nowrap">Update changes</button>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="update_level_name_en">@lang('academics.level_name_en')
-                                        <span class="text-danger"> *</span></label>
-                                    <input class="primary_input_field form-control" type="text" name="level_name_en"
-                                        id="update_level_name_en" autocomplete="off">
-                                </div>
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="update_level_name_ar">@lang('academics.level_name_ar')
-                                        <span class="text-danger"> *</span></label>
-                                    <input class="primary_input_field form-control" type="text" name="level_name_ar"
-                                        id="update_level_name_ar" autocomplete="off">
-                                </div>
-                                <div class="primary_input">
-                                    <label class="primary_input_label"
-                                        for="update_level_description_en">@lang('academics.level_description_en')
-                                        <span class="text-danger"> *</span></label>
-                                    <input class="primary_input_field form-control" type="text"
-                                        name="level_description_en" id="update_level_description_en" autocomplete="off">
-                                </div>
-                                <div class="primary_input">
-                                    <label class="primary_input_label"
-                                        for="update_level_description_ar">@lang('academics.level_description_ar')
-                                        <span class="text-danger"> *</span></label>
-                                    <input class="primary_input_field form-control" type="text"
-                                        name="level_description_ar" id="update_level_description_ar" autocomplete="off">
-                                </div>
-                                <input type="hidden" id="update_level_track_id">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" id="update_level_for_submit"
-                                    class="primary-btn fix-gr-bg text-nowrap">Update changes</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </section>

@@ -25,17 +25,7 @@ class TrackLevelController extends Controller
         return view('backEnd.academics.track_levels.index', compact('track',  'menus',));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
 
     public function store(Request $request)
     {
@@ -48,10 +38,13 @@ class TrackLevelController extends Controller
             'file' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
+        $filePath = 'No File';
+
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('uploads', $fileName, 'public');
+            $fileName = time() . '_' . $file->getClientOriginalName(); // 
+            $file->move(public_path('courses_student/'), $fileName);
+            $filePath = 'courses_student/' . $fileName;
         }
 
         TrackLevel::create([
@@ -60,7 +53,7 @@ class TrackLevelController extends Controller
             'name_ar' => $validated['name_ar'],
             'description_en' => $validated['description_en'],
             'description_ar' => $validated['description_ar'],
-            'file' => $filePath ?? 'No File',
+            'file' => $filePath,
         ]);
 
         Toastr::success('Created successfully', 'Success');
@@ -68,35 +61,44 @@ class TrackLevelController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TrackLevel $trackLevel)
+    public function update(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'track_id' => 'nullable|exists:tracks,id',
+            'name_en' => 'nullable|string',
+            'name_ar' => 'nullable|string',
+            'description_en' => 'nullable|string',
+            'description_ar' => 'nullable|string',
+            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+        ]);
+
+        $trackLevel = TrackLevel::findOrFail($request->id);
+
+        if ($request->hasFile('file')) {
+            $directory = 'courses_student';
+
+            if ($trackLevel->file && file_exists(public_path($trackLevel->file))) {
+                unlink(public_path($trackLevel->file));
+            }
+
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path($directory), $fileName);
+            $validated['file'] = $directory . '/' . $fileName;
+        } else {
+            $validated['file'] = $trackLevel->file;
+        }
+
+        $trackLevel->update($validated);
+
+        Toastr::success('Updated successfully', 'Success');
+        return redirect()->back();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TrackLevel $trackLevel)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TrackLevel $trackLevel)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TrackLevel $trackLevel)
-    {
-        //
+        $session = TrackLevel::findOrFail($id);
+        $session->delete();
     }
 }

@@ -1,19 +1,19 @@
     <div class="input-level mb-4">
         <div id="accordion" class="dd">
             <ol class="dd-list">
-                @foreach ($menu as $key => $element)
+                @foreach ($menus as $key => $element)
                     <li class="dd-item" data-id="{{ $element->id }}">
                         <div class="card accordion_card" id="accordion_{{ $element->id }}">
                             <div class=" item_header" id="heading_{{ $element->id }}">
                                 <div class="dd-handle">
                                     <div class="pull-left">
-                                        {{ $element->level_name_en }}
+                                        {{ $element->name_en }}
                                     </div>
                                 </div>
                                 <div class="pull-right btn_div">
                                     @if (userPermission('element-update'))
                                         <a href="javascript:void(0);"
-                                            onclick="updateLevel({{ $element->id }}, '{{ $element->level_name_en }}', '{{ $element->level_name_ar }}','{{ $element->level_id }}')"
+                                            onclick="updateLevel({{ $element->id }}, '{{ $element->name_en }}', '{{ $element->name_ar }}', '{{ $element->description_en }}', '{{ $element->description_ar }}', '{{ $element->file }}')"
                                             class="primary-btn btn_zindex panel-title">
                                             @lang('common.edit')
                                             <i class="ti-pencil-alt"></i>
@@ -83,14 +83,16 @@
     </style>
     @push('script')
         <script>
-            function updateLevel(id, level_name_en, level_name_ar, level_id) {
-                $('#update_level_name_en').val(level_name_en);
-                $('#update_level_name_ar').val(level_name_ar);
-                $('#update_level_id').val(level_id);
+            function updateLevel(id, name_en, name_ar, description_en, description_ar, file) {
+                $('#update_level_name_en').val(name_en);
+                $('#update_level_name_ar').val(name_ar);
+                $('#update_level_description_en').val(description_en);
+                $('#update_level_description_ar').val(description_ar);
                 $('#update_level_track_id').val(id);
+                $('#current_file_name').html(`
+                <a target="_blank" href="/${file}"><i class="fa fa-eye"></i> View File</a>
+                `);
                 $('#ModalUpdateLevel').modal('show');
-                console.log(level_id);
-
             }
         </script>
     @endpush
