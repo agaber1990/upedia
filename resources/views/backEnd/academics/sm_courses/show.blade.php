@@ -26,9 +26,9 @@
             <div class="">
                 <button class="primary-btn small fix-gr-bg"id="assign_student">
                     <span class="ti-plus pr-2"></span>
-                     @lang('common.add')
+                    @lang('common.add')
                 </button>
-             
+
 
 
             </div>
@@ -43,30 +43,29 @@
                         <h1 class="modal-title fs-5" id="assing_modalLabel">@lang('academics.add_new')</h1>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
-                    <div class="modal-body">
 
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="student_id">
-                                @lang('common.select_student') <span class="text-danger"> *</span>
-                            </label>
-                            <select class="primary_select form-control" name="student_id" id="student_id">
-                                @foreach ($students as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->full_name }}</option>
-                                @endforeach
-                            </select>
-
+                    <form action="{{ route('sm_courses_storeCourseToStudent') }}" method="POST">
+                        @csrf
+                        <input type="hidden" value="{{ $course->id }}" name="course_id">
+                        <div class="modal-body">
+                            <div class="primary_input">
+                                <label class="primary_input_label" for="student_id">
+                                    @lang('common.select_student') <span class="text-danger"> *</span>
+                                </label>
+                                <select class="primary_select form-control" name="student_id" id="student_id">
+                                    @foreach ($students as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->full_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-
-
-
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="button" id="add_course_student_for_submit" class="primary-btn fix-gr-bg text-nowrap">
-                            @lang('common.save_changes')
-                        </button>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="primary-btn fix-gr-bg text-nowrap">
+                                @lang('common.save_changes')
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

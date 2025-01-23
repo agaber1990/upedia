@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Academics;
 use App\Http\Controllers\Controller;
 use App\ApiBaseMethod;
 use App\Models\Category;
+use App\Models\CourseStudent;
 use App\Models\FinanaceStudentInvoice;
 use App\Models\Level;
 use Illuminate\Http\Request;
@@ -83,7 +84,21 @@ class SmCourseController extends Controller
     {
         $course = StaffScheduled::findOrFail($id);
         $students = SmStudent::get();
-        return view('backEnd.academics.sm_courses.show', compact('course','students'));
+        return view('backEnd.academics.sm_courses.show', compact('course', 'students'));
     }
-    
+
+    public function storeCourseToStudent(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:staff_scheduleds,id',
+            'student_id' => 'required|exists:sm_students,id',
+        ]);
+        $validated = [
+            'course_id' => $request->course_id,
+            'student_id' => $request->student_id,
+        ];
+        CourseStudent::create($validated);
+        Toastr::success('Created successfully', 'Success');
+        return redirect()->back();
+    }
 }
