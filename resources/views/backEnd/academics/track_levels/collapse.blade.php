@@ -28,6 +28,13 @@
                                             <i class="ti-angle-down"></i>
                                         </a>
                                     @endif
+                                    @if (userPermission('element-update'))
+                                    <a href=""
+                                        class="primary-btn btn_zindex panel-title">
+                                        @lang('common.sessions')
+                                        <i class="ti ti-eye"></i>
+                                    </a>
+                                @endif
                                     @if (env('APP_SYNC') == true)
                                         <a href="javascript:void(0);" class="primary-btn btn_zindex mb-3"
                                             title="Disable For Demo" data-toggle="tooltip">
