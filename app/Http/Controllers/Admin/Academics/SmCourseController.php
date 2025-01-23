@@ -125,4 +125,12 @@ class SmCourseController extends Controller
             return redirect()->back();
         }
     }
+
+
+    public function course_students_delete(Request $request, $id)
+    {
+        CourseStudent::destroy($request->id);
+        Toastr::success('Operation successful', 'Success');
+        return back();
+    }
 }
