@@ -709,5 +709,6 @@ return [
     "paid_purchased" => "Paid Purchased",
     "levels" => "Levels",
     "course_students_delete" => "Student Delete Assigned",
+    "file" => "File",
 ]
     ?>

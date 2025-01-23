@@ -52,52 +52,63 @@
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">@lang('academics.add_level')</h1>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
+                        <form action="{{ route('track_levels_store') }}" method="POST">
+                            @csrf
 
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="level_id">
-                                        @lang('common.select_student') <span class="text-danger"> *</span>
-                                    </label>
-                                    <select class="primary_select form-control" name="level_id" id="level_id">
-                                        @foreach ($levels as $level)
-                                            <option value="{{ $level->id }}">
-                                                {{ $level->level_number }}</option>
-                                        @endforeach
-                                    </select>
-
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">@lang('academics.add_level')</h1>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
 
-                                <div class="primary_input">
 
-                                    <label class="primary_input_label" for="level_name_en">@lang('academics.level_name_en')
-                                        <span class="text-danger"> *</span>
-                                    </label>
-                                    <input class="primary_input_field form-control" type="text" name="level_name_en"
-                                        id="level_name_en" autocomplete="off">
+
+                                <div class="modal-body">
                                     <input type="hidden" id="track_id" name="track_id" value="{{ $track->id }}">
-                                </div>
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="level_name_ar">@lang('academics.level_name_ar')
-                                        <span class="text-danger"> *</span>
-                                    </label>
-                                    <input class="primary_input_field form-control" type="text" id="level_name_ar"
-                                        name="level_name_ar" autocomplete="off">
-                                    <input type="hidden" id="track_id" name="track_id" value="{{ $track->id }}">
-                                </div>
 
-                            </div>
-                            <div class="modal-footer">
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="name_en">@lang('academics.level_name_en')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" name="name_en"
+                                            id="name_en" autocomplete="off">
+                                    </div>
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="name_ar">@lang('academics.level_name_ar')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" id="name_ar"
+                                            name="name_ar" autocomplete="off">
+                                    </div>
 
-                                <button type="button" id="add_level_for_submit" class="primary-btn fix-gr-bg text-nowrap">
-                                    @lang('common.save_changes')
-                                </button>
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="description_en">@lang('academics.level_description_en')
+                                            <span class="text-danger"> *</span></label>
+                                        <input class="primary_input_field form-control" type="text" name="description_en"
+                                            id="description_en" autocomplete="off">
+                                    </div>
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="description_ar">@lang('academics.level_description_ar')
+                                            <span class="text-danger"> *</span></label>
+                                        <input class="primary_input_field form-control" type="text" name="description_ar"
+                                            id="description_ar" autocomplete="off">
+                                    </div>
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="file">@lang('common.file')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="file" id="file"
+                                            name="file">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="submit" class="primary-btn fix-gr-bg text-nowrap">
+                                        @lang('common.submit')
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
@@ -112,19 +123,6 @@
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="update_level_id">
-                                        @lang('common.select_student') <span class="text-danger"> *</span>
-                                    </label>
-                                    <select class="primary_select form-control" name="level_id" id="update_level_id">
-                                        @foreach ($levels as $level)
-                                            <option value="{{ $level->id }}">
-                                                {{ $level->level_number }}</option>
-                                        @endforeach
-                                    </select>
-
-                                </div>
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="update_level_name_en">@lang('academics.level_name_en')
                                         <span class="text-danger"> *</span></label>
@@ -136,6 +134,20 @@
                                         <span class="text-danger"> *</span></label>
                                     <input class="primary_input_field form-control" type="text" name="level_name_ar"
                                         id="update_level_name_ar" autocomplete="off">
+                                </div>
+                                <div class="primary_input">
+                                    <label class="primary_input_label"
+                                        for="update_level_description_en">@lang('academics.level_description_en')
+                                        <span class="text-danger"> *</span></label>
+                                    <input class="primary_input_field form-control" type="text"
+                                        name="level_description_en" id="update_level_description_en" autocomplete="off">
+                                </div>
+                                <div class="primary_input">
+                                    <label class="primary_input_label"
+                                        for="update_level_description_ar">@lang('academics.level_description_ar')
+                                        <span class="text-danger"> *</span></label>
+                                    <input class="primary_input_field form-control" type="text"
+                                        name="level_description_ar" id="update_level_description_ar" autocomplete="off">
                                 </div>
                                 <input type="hidden" id="update_level_track_id">
                             </div>
@@ -219,91 +231,8 @@
                 event.preventDefault();
                 $('#exampleModal').modal('show');
             });
-            $('#add_level_for_submit').click(function(event) {
-                event.preventDefault();
-                let formData = {
-                    level_name_en: $('#level_name_en').val(),
-                    level_name_ar: $('#level_name_ar').val(),
-                    level_id: $('#level_id').val(),
-                    track_id: $('#track_id').val(),
-                    _token: '{{ csrf_token() }}'
-                };
-
-                $.ajax({
-                    url: "{{ route('track_levels_store') }}",
-                    method: "POST",
-                    data: formData,
-
-                    success: function(response) {
-                        $('#level_name_en').val('')
-                        $('#level_name_ar').val('')
-                        $('#level_id').val('')
-                        $('#exampleModal').modal('hide');
-                        window.location.reload()
-
-                    },
-
-                    error: function(xhr, status, error) {
-                        $('#exampleModal').modal('hide');
-
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Sorry! you can\'t add more levels.',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                });
-            });
 
 
-            $(document).ready(function() {
-                $('#update_level_for_submit').click(function(event) {
-                    event.preventDefault();
-                    const levelId = $('#update_level_track_id').val();
-
-                    const data = {
-                        level_name_en: $('#update_level_name_en').val(),
-                        level_name_ar: $('#update_level_name_ar').val(),
-                        level_id: $('#update_level_id').val(),
-                        track_id: $('#track_id').val(),
-                        _token: '{{ csrf_token() }}'
-                    };
-
-
-                    $.ajax({
-                        url: `/track_levels/${levelId}`,
-                        method: "PUT",
-                        data: data,
-                        // success: function(res) {
-                        //     $('#ModalUpdateLevel').modal('hide');
-                        //     Swal.fire({
-                        //         title: 'Success!',
-                        //         text: 'Level has been successfully updated.',
-                        //         icon: 'success',
-                        //         confirmButtonText: 'OK'
-                        //     });
-                        // },
-
-                        success: function(response) {
-                            $('#ModalUpdateLevel').modal('hide');
-                            window.location.reload()
-
-
-                        },
-                        error: function(xhr, status, error) {
-                            $('#ModalUpdateLevel').modal('hide');
-                            Swal.fire({
-                                title: 'Error!',
-                                text: 'Sorry! You can\'t update the level.',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                            console.error('Error:', error);
-                        }
-                    });
-                });
-            });
         });
     </script>
 @endpush

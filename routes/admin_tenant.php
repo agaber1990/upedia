@@ -1010,7 +1010,7 @@ Route::get('/reg', function () {});
 
            // track levels Routes
            Route::get('track_levels/{track_id}', 'Admin\Academics\TrackLevelController@index')->name('track_levels');
-           Route::post('track_levels/store', 'Admin\Academics\TrackLevelController@store')->name('track_levels_store');
+           Route::post('track_levels', 'Admin\Academics\TrackLevelController@store')->name('track_levels_store');
            Route::put('track_levels/{id}', 'Admin\Academics\TrackLevelController@update')->name('track_level_update');
            Route::delete('track_levels/{id}', 'Admin\Academics\TrackLevelController@destroy')->name('track_level_delete');
            Route::get('get_all_levels/{track_id}', 'Admin\Academics\TrackLevelController@fetchJsonData')->name('get_all_levels');
