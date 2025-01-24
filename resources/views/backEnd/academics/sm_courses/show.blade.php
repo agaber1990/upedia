@@ -439,7 +439,7 @@
                             $('#staff_id').append('<option ' + selected_item + 'value="' + staffId +
                                 '">' + staffName + '</option>');
                         });
-                    } else {
+                    } else {    
                         // If no staff found, add a default option
                         $('#staff_id').append(
                             '<option value="">@lang('academics.no_staff_found')</option>'
