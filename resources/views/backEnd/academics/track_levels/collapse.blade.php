@@ -66,7 +66,7 @@
                                         </div>
                                         <div class="col">
                                             <h4>@lang('academics.name_ar'):</h4>
-                                            <p>{{ $element->name_ar }}</p>
+                                            <p class="text-dark">{{ $element->name_ar }}</p>
                                         </div>
 
                                         <div class="col">
