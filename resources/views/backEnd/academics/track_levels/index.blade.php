@@ -96,7 +96,7 @@
                                             id="description_ar" autocomplete="off">
                                     </div>
                                     <div class="primary_input">
-                                        <label class="primary_input_label" for="file">@lang('common.file')
+                                        <label class="primary_input_label" for="file">@lang('common.material')
                                             <span class="text-danger"> *</span>
                                         </label>
                                         <input class="primary_input_field form-control" type="file" id="file"
@@ -173,16 +173,16 @@
 
                                     <!-- File Upload -->
                                     <div class="primary_input">
-                                        <label class="primary_input_label" for="update_level_file">@lang('common.file')
+                                        <label class="primary_input_label" for="update_level_file">@lang('common.material')
                                             <span class="text-danger"> *</span>
                                         </label>
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="update_level_file"
                                                 name="file">
-                                            <label class="custom-file-label" for="update_level_file">Choose file</label>
+                                            <label class="custom-file-label" for="update_level_file">@lang('common.choose_material')</label>
                                         </div>
-                                        <small class="form-text text-muted">Current file: <span id="current_file_name">No
-                                                file uploaded</span></small>
+                                        <small class="form-text text-muted">@lang('common.current_material'): <span id="current_file_name">No
+                                            @lang('common.material_upload')</span></small>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

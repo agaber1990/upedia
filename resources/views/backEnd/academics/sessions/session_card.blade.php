@@ -389,13 +389,14 @@
             </div>
 
             <div class="col-lg-12" id="menuList">
-                @foreach ($levels as $level)
-                    @if (isset($groupedMenus[$level->id]) && count($groupedMenus[$level->id]) > 0)
+                {{-- @foreach ($levels as $level) --}}
+                    {{-- @if (isset($groupedMenus[$level->id]) && count($groupedMenus[$level->id]) > 0) --}}
                         <div class="">
                             @include('backEnd.academics.sessions.collapse')
+                            
                         </div>
-                    @endif
-                @endforeach
+                    {{-- @endif --}}
+                {{-- @endforeach --}}
             </div>
         </div>
       
@@ -524,7 +525,7 @@
             };
 
             $.ajax({
-                url: "{{ route('track_session_delete', ['id' => ':id']) }}".replace(':id', id),
+                url: "{{ route('track_levels_sessions_delete', ['id' => ':id']) }}".replace(':id', id),
                 type: 'DELETE',
                 data: data,
                 success: function(response) {

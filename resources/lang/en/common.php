@@ -709,9 +709,15 @@ return [
     "paid_purchased" => "Paid Purchased",
     "levels" => "Levels",
     "course_students_delete" => "Student Delete Assigned",
-    "file" => "File",
+    "material" => "Material",
     "course_info" => "Course Info",
     "assigned_students" => "Assigned Students",
-    "levels" => "Levels",
+    "level" => "Level",
+    "existing_materials" => "Existing Materials",
+    "view_material" => "view Material",
+    "materials" => "Materials",
+    "no_material_available" => "No Material Available",
+    "current_material" => "Current Material",
+    "choose_material" => "Choose Material",
 ]
-    ?>
+?>

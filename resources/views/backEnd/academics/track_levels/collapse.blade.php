@@ -29,12 +29,12 @@
                                         </a>
                                     @endif
                                     @if (userPermission('element-update'))
-                                    <a href=""
-                                        class="primary-btn btn_zindex panel-title">
-                                        @lang('common.sessions')
-                                        <i class="ti ti-eye"></i>
-                                    </a>
-                                @endif
+                                        <a href="{{ route('track_levels_sessions', ['track_id' => $element->track_id, 'level_id' => $element->id]) }}"
+                                            class="primary-btn btn_zindex panel-title">
+                                            @lang('common.sessions')
+                                            <i class="ti ti-eye"></i>
+                                        </a>
+                                    @endif
                                     @if (env('APP_SYNC') == true)
                                         <a href="javascript:void(0);" class="primary-btn btn_zindex mb-3"
                                             title="Disable For Demo" data-toggle="tooltip">
@@ -54,15 +54,31 @@
                                 aria-labelledby="heading_{{ $element->id }}"
                                 data-parent="#accordion_{{ $element->id }}">
                                 <div class="card-body">
-                                    <form enctype="multipart/form-data" id="elementEditForm">
-                                        <div class="row">
-
+                                    <div class="row">
+                                        <div class="col">
+                                            <h4>@lang('academics.track'):</h4>
+                                            <p class="text-dark">{{ $element->track->track_name_en }}</p>
                                         </div>
-                                    </form>
+
+                                        <div class="col">
+                                            <h4>@lang('academics.name_en'):</h4>
+                                            <p class="text-dark">{{ $element->name_en }}</p>
+                                        </div>
+                                        <div class="col">
+                                            <h4>@lang('academics.name_ar'):</h4>
+                                            <p>{{ $element->name_ar }}</p>
+                                        </div>
+
+                                        <div class="col">
+                                            <h4>@lang('common.materials'):</h4>
+                                            <a href="/{{ $element->file }}" target="_blank" class="mx-1">
+                                                <i class="fa fa-eye"></i> @lang('common.view_material')
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </li>
                 @endforeach
             </ol>
         </div>
@@ -97,7 +113,7 @@
                 $('#update_level_description_ar').val(description_ar);
                 $('#update_level_track_id').val(id);
                 $('#current_file_name').html(`
-                <a target="_blank" href="/${file}"><i class="fa fa-eye"></i> View File</a>
+                <a target="_blank" href="/${file}"><i class="fa fa-eye"></i> View @lang('common.view_material')</a>
                 `);
                 $('#ModalUpdateLevel').modal('show');
             }

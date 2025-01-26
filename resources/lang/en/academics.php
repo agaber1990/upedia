@@ -229,4 +229,8 @@ return [
     'level_description_en' => 'Level Description (English)',
     'level_description_ar' => 'Level Description (Arabic)',
     'add_level' => 'Add Level',
+    'name_en' => 'Name (English)',
+    'name_ar' => 'Name (Arabic)',
+    'description_en' => 'Description (English)',
+    'description_ar' => 'Description (Arabic)',
 ];

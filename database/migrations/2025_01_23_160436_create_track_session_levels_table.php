@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name_ar');
             $table->string('description_en');
             $table->string('description_ar');
-            $table->string('file');
+            $table->json('file');
             $table->timestamps();
         });
     }

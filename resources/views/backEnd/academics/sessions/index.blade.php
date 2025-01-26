@@ -2,6 +2,8 @@
 @section('title')
     @lang('academics.track_session')
 @endsection
+
+{{-- {{dd($menus)}} --}}
 @section('mainContent')
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
@@ -35,12 +37,12 @@
                     <div class="d-flex align-items-center">
                         <div class="btnSelect">
 
-                            <button id="add_session_btn" class="circular-btn mx-2" aria-label="Toggle new session form">
+                            <button id="add_btn" class="circular-btn mx-2" aria-label="Toggle new session form">
                                 <i class="fas fa-plus" style="color: #fff"></i>
                             </button>
                         </div>
                         <div id="add_session" class="input-session" style="display: none;width:100%">
-                            <button id="session_modal_btn" class="session-btn">
+                            <button id="modal_btn" class="session-btn">
                                 <i class="fas fa-plus" style="color: #000000"></i> Session
                             </button>
                         </div>
@@ -52,100 +54,151 @@
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">@lang('academics.add_session')</h1>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
+                        <form action="{{ route('track_levels_sessions_store') }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
 
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="level_id">
-                                        @lang('common.select_student') <span class="text-danger"> *</span>
-                                    </label>
-                                    <select class="primary_select form-control" name="level_id" id="level_id">
-                                        @foreach ($levels as $level)
-                                            <option value="{{ $level->id }}">
-                                                {{ $level->level_number }}</option>
-                                        @endforeach
-                                    </select>
 
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">@lang('academics.add_session')</h1>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
+                                <div class="modal-body">
 
-                                <div class="primary_input">
-
-                                    <label class="primary_input_label" for="session_name_en">@lang('academics.session_name_en')
-                                        <span class="text-danger"> *</span>
-                                    </label>
-                                    <input class="primary_input_field form-control" type="text" name="session_name_en"
-                                        id="session_name_en" autocomplete="off">
                                     <input type="hidden" id="track_id" name="track_id" value="{{ $track->id }}">
-                                </div>
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="session_name_ar">@lang('academics.session_name_ar')
-                                        <span class="text-danger"> *</span>
-                                    </label>
-                                    <input class="primary_input_field form-control" type="text" id="session_name_ar"
-                                        name="session_name_ar" autocomplete="off">
-                                    <input type="hidden" id="track_id" name="track_id" value="{{ $track->id }}">
-                                </div>
+                                    <input type="hidden" id="level_id" name="level_id" value="{{ $level->id }}">
 
-                            </div>
-                            <div class="modal-footer">
 
-                                <button type="button" id="add_session_for_submit"
-                                    class="primary-btn fix-gr-bg text-nowrap"> @lang('common.save_changes')
-                                </button>
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="name_en">@lang('academics.name_en')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" name="name_en"
+                                            id="name_en" autocomplete="off">
+                                    </div>
+
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="name_ar">@lang('academics.name_ar')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" id="name_ar"
+                                            name="name_ar" autocomplete="off">
+                                    </div>
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="description_en">@lang('academics.description_en')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" name="description_en"
+                                            id="description_en" autocomplete="off">
+                                    </div>
+
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="description_ar">@lang('academics.description_ar')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" id="description_ar"
+                                            name="description_ar" autocomplete="off">
+                                    </div>
+
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="file">@lang('common.material')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" id="file" type="file"
+                                            multiple id="file" name="file[]" autocomplete="off">
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="submit" id="add_for_submit" class="primary-btn fix-gr-bg text-nowrap">
+                                        @lang('common.submit')
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
 
-                <!-- Modal update -->
+
+                <!-- Modal Update -->
                 <div class="modal fade" id="ModalUpdateSession" tabindex="-1" aria-labelledby="ModalLabelUpdateSession"
                     aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="ModalLabelUpdateSession">@lang('academics.update_session')</h1>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
+                        <form action="{{ route('track_levels_sessions_update') }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="ModalLabelUpdateSession">@lang('academics.update_session')</h1>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" id="update_track_id" name="track_id">
+                                    <input type="hidden" id="update_level_id" name="level_id">
+                                    <input type="hidden" id="update_session_id" name="id">
 
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="update_level_id">
-                                        @lang('common.select_student') <span class="text-danger"> *</span>
-                                    </label>
-                                    <select class="primary_select form-control" name="level_id" id="update_level_id">
-                                        @foreach ($levels as $level)
-                                            <option value="{{ $level->id }}">
-                                                {{ $level->level_number }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="update_name_en">@lang('academics.name_en')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" name="name_en"
+                                            id="update_name_en" autocomplete="off">
+                                    </div>
 
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="update_name_ar">@lang('academics.name_ar')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text" name="name_ar"
+                                            id="update_name_ar" autocomplete="off">
+                                    </div>
+
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="update_description_en">@lang('academics.description_en')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text"
+                                            name="description_en" id="update_description_en" autocomplete="off">
+                                    </div>
+
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="update_description_ar">@lang('academics.description_ar')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="text"
+                                            name="description_ar" id="update_description_ar" autocomplete="off">
+                                    </div>
+
+                                    <!-- Display existing files -->
+                                    <div class="primary_input">
+                                        <label class="primary_input_label">@lang('common.existing_materials')</label>
+                                        <div id="existing_files">
+                                            <!-- Files will be dynamically added here -->
+                                        </div>
+                                    </div>
+
+                                    <div class="primary_input">
+                                        <label class="primary_input_label" for="update_file">@lang('common.material')
+                                            <span class="text-danger"> *</span>
+                                        </label>
+                                        <input class="primary_input_field form-control" type="file" name="file[]"
+                                            id="update_file" multiple autocomplete="off">
+                                    </div>
                                 </div>
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="update_session_name_en">@lang('academics.session_name_en')
-                                        <span class="text-danger"> *</span></label>
-                                    <input class="primary_input_field form-control" type="text" name="session_name_en"
-                                        id="update_session_name_en" autocomplete="off">
+                                <div class="modal-footer">
+                                    <button type="submit"
+                                        class="primary-btn fix-gr-bg text-nowrap">@lang('common.update')</button>
                                 </div>
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="update_session_name_ar">@lang('academics.session_name_ar')
-                                        <span class="text-danger"> *</span></label>
-                                    <input class="primary_input_field form-control" type="text" name="session_name_ar"
-                                        id="update_session_name_ar" autocomplete="off">
-                                </div>
-                                <input type="hidden" id="update_session_track_id">
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" id="update_session_for_submit"
-                                    class="primary-btn fix-gr-bg text-nowrap">Update changes</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -206,7 +259,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#add_session_btn').click(function(event) {
+            $('#add_btn').click(function(event) {
                 event.preventDefault();
                 $('#add_session').toggle();
                 if ($('#add_session').is(':visible')) {
@@ -215,95 +268,12 @@
                     $(this).html('<i class="fas fa-plus " style="color: #fff"></i>');
                 }
             });
-            $('#session_modal_btn').click(function(event) {
+            $('#modal_btn').click(function(event) {
                 event.preventDefault();
                 $('#exampleModal').modal('show');
             });
-            $('#add_session_for_submit').click(function(event) {
-                event.preventDefault();
-                let formData = {
-                    session_name_en: $('#session_name_en').val(),
-                    session_name_ar: $('#session_name_ar').val(),
-                    level_id: $('#level_id').val(),
-                    track_id: $('#track_id').val(),
-                    _token: '{{ csrf_token() }}'
-                };
-
-                $.ajax({
-                    url: "{{ route('track_sessions_store') }}",
-                    method: "POST",
-                    data: formData,
-
-                    success: function(response) {
-                        $('#session_name_en').val('')
-                        $('#session_name_ar').val('')
-                        $('#level_id').val('')
-                        $('#exampleModal').modal('hide');
-                        window.location.reload()
-
-                    },
-
-                    error: function(xhr, status, error) {
-                        $('#exampleModal').modal('hide');
-
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Sorry! you can\'t add more sessions.',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                });
-            });
 
 
-            $(document).ready(function() {
-                $('#update_session_for_submit').click(function(event) {
-                    event.preventDefault();
-                    const sessionId = $('#update_session_track_id').val();
-
-                    const data = {
-                        session_name_en: $('#update_session_name_en').val(),
-                        session_name_ar: $('#update_session_name_ar').val(),
-                        level_id: $('#update_level_id').val(),
-                        track_id: $('#track_id').val(),
-                        _token: '{{ csrf_token() }}'
-                    };
-
-
-                    $.ajax({
-                        url: `/track_sessions/${sessionId}`,
-                        method: "PUT",
-                        data: data,
-                        // success: function(res) {
-                        //     $('#ModalUpdateSession').modal('hide');
-                        //     Swal.fire({
-                        //         title: 'Success!',
-                        //         text: 'Session has been successfully updated.',
-                        //         icon: 'success',
-                        //         confirmButtonText: 'OK'
-                        //     });
-                        // },
-
-                        success: function(response) {
-                            $('#ModalUpdateSession').modal('hide');
-                            window.location.reload()
-
-
-                        },
-                        error: function(xhr, status, error) {
-                            $('#ModalUpdateSession').modal('hide');
-                            Swal.fire({
-                                title: 'Error!',
-                                text: 'Sorry! You can\'t update the session.',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                            console.error('Error:', error);
-                        }
-                    });
-                });
-            });
         });
     </script>
 @endpush
