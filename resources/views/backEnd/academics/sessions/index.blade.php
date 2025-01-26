@@ -1,6 +1,6 @@
 @extends('backEnd.master')
 @section('title')
-    @lang('academics.track_session')
+    @lang('academics.sessions')
 @endsection
 
 {{-- {{dd($menus)}} --}}
