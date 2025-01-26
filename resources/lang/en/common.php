@@ -719,5 +719,7 @@ return [
     "no_material_available" => "No Material Available",
     "current_material" => "Current Material",
     "choose_material" => "Choose Material",
+    "no_levels" => "No Levels",
+    "no_sessions" => "No Sessions",
 ]
 ?>
