@@ -18,7 +18,7 @@
     </section>
 
     <section class="admin-visitor-area up_admin_visitor up_st_admin_visitor pl_22">
-
+       
 
         <!-- Modal -->
         <div class="modal fade" id="assing_modal" tabindex="-1" aria-labelledby="assing_modalLabel" aria-hidden="true">
@@ -61,8 +61,10 @@
                     @lang('common.course_info')</h3>
             </div>
             <div class="white-box">
-
-                <div class="row">
+                <div class="row loaderw">
+                    <div class="loadrer" id="loadrer">
+                        <img src="/loader.gif" alt="" width="80">
+                    </div>
                     <div class="col-md-6 ">
                         <div class="primary_input mb-2">
                             <label class="primary_input_label" for="">@lang('common.course_name_en')
@@ -178,6 +180,9 @@
                         </div>
                     </div>
 
+                  
+                </div>
+                <div class="row">
                     <div class="col-md-12 mb-20">
                         <div id="slotContainer">
 
@@ -191,7 +196,6 @@
 
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -554,6 +558,7 @@
                         $("#submitAssignStaff").html(
                             `<button class="primary-btn fix-gr-bg" onclick="submitAssignedForm()">{{ __('common.update_information') }}</button>`
                         );
+                        $('#loadrer').fadeOut(300)
 
                     } else {
                         console.warn("No slots found for the selected staff.");
@@ -800,7 +805,6 @@
         });
         $(document).ready(function() {
             fetchTracksAndTrackType();
-
             $('#assign_student').click(function(event) {
                 event.preventDefault();
                 $('#assing_modal').modal('show');
@@ -984,11 +988,20 @@
         color: #000 !important
     }
 
-    .loader {
+.loaderw {
+    position: relative;
+}
+    .loadrer {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 999;
+        background: #ffffffad;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     }
 </style>
