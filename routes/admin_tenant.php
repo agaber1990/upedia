@@ -1067,10 +1067,10 @@ Route::get('/reg', function () {});
         Route::get('sm_courses/{scheduledId}/assign-student/{id}', 'Admin\Academics\SmCourseController@assignStudent')->name('sales_assign_student');
 
         
-        // finances Routes
-        Route::get('finances/invoice/{id}', 'Admin\Finance\FinanceController@invoice')->name('finance_invoice');
-        Route::get('finances/download_pdf/{id}', 'Admin\Finance\FinanceController@download_pdf')->name('download_pdf');
-        Route::get('finances', 'Admin\Finance\FinanceController@index')->name('index.invoice');
+        // finance Routes
+        Route::get('finance/invoice/{id}', 'Admin\Finance\FinanceController@invoice')->name('finance_invoice');
+        Route::get('finance/download_pdf/{id}', 'Admin\Finance\FinanceController@download_pdf')->name('download_pdf');
+        Route::get('finance', 'Admin\Finance\FinanceController@index')->name('finance');
 
    
         

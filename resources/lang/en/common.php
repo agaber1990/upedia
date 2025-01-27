@@ -699,7 +699,6 @@ return [
     'save_changes'=>'Save Changes',
     'payment_status'=>'Payment Status',
     'finance'=>'Finance',
-    'finances'=>'Finance',
     'invoices'=>'Invoices',
     "pending" => "Pending",
     "billed" => "Billed",
