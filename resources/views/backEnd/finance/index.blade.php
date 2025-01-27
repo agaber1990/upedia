@@ -73,24 +73,26 @@
 
                                 <tbody>
                                     @foreach ($invoices as $item)
+                                        {{-- {{ dd($invoices) }} --}}
                                         <tr>
                                             <td>{{ $item->invoice_number }}</td>
                                             <td>
                                                 <span
                                                     class="badge @if ($item->bill_status === 'pending') badge-warning @elseif ($item->bill_status === 'billed')badge-success @elseif ($item->bill_status === 'cancelled')badge-danger @endif">
-                                                    {{ __('common.'.$item->bill_status) }}
+                                                    {{ __('common.' . $item->bill_status) }}
                                                 </span>
                                             </td>
                                             <td>
                                                 <span
                                                     class="badge @if ($item->payment_status === 'refunded') badge-refunded @elseif ($item->payment_status === 'paid')badge-success @elseif ($item->payment_status === 'not_paid')badge-danger  @elseif ($item->payment_status === 'paid_purchased')badge-purchased @endif ">
-                                                    {{ __('common.'.$item->payment_status) }}
+                                                    {{ __('common.' . $item->payment_status) }}
 
                                                 </span>
                                             </td>
                                             <td>{{ $item->delivery_note }}</td>
                                             <td>
-                                                <a href="" class="print_now">
+                                                <a href="{{ route('finance_invoice', ['id' => $item->staff_scheduled->id]) }}"
+                                                    class="print_now">
                                                     <i class="fas fa-print"></i>
                                                 </a>
                                             </td>
@@ -118,7 +120,7 @@
                     </h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'sales_management_store', 'method' => 'POST']) }}
+                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'sm_courses_store', 'method' => 'POST']) }}
 
                 <div class="modal-body pt-3">
 
@@ -158,6 +160,7 @@
     .badge-danger {
         background: rgb(255, 10, 10) !important;
     }
+
     .badge-refunded {
         background: rgb(134, 7, 207) !important;
 
@@ -167,7 +170,7 @@
         background: rgb(42, 146, 0) !important;
     }
 
-    
+
 
 
     .print_now {
