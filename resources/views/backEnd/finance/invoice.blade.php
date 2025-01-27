@@ -121,7 +121,7 @@
             <footer class="text-center mt-4">
 
                 <div class="btn-group btn-group-sm d-print-none">
-                    <a href="{{ route('download_pdf', $id) }}" class="btn btn-light border text-black-50 shadow-none"><i
+                    <a target="_blank" href="{{ route('download_pdf', $id) }}" class="btn btn-light border text-black-50 shadow-none"><i
                             class="fa fa-download"></i>
                         Download</a>
                 </div>

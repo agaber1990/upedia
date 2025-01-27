@@ -2,41 +2,27 @@
 <html lang="en">
 
 <head>
-    <title>@lang('exam.exam_schedule')</title>
-
-    @if (userRtlLtl() == 1)
-        <link rel="stylesheet" href="{{ asset('/backEnd/assets/css/rtl/bootstrap.rtl.min.css') }}" />
-    @else
-        <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/bootstrap.min.css') }}" />
-    @endif
-    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/jquery-ui.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/bootstrap-datepicker.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/font_awesome/css/all.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/themefy_icon/themify-icons.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/flaticon.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/fnt.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/nice-select.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/toastr.min.css') }}" />
-
-    @if (userRtlLtl() == 1)
-        <link rel="stylesheet" href="{{ asset('/backEnd/assets/css/rtl/bootstrap.rtl.min.css') }}" />
-        <link rel="stylesheet" href="{{ asset('/backEnd/assets/css/global_rtl.css') }}">
-    @else
-        <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/bootstrap.min.css') }}" />
-    @endif
-
+    <title>Student Invoice</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ asset('/backEnd/') }}/vendors/css/print/bootstrap.min.css" />
-    <script type="text/javascript" src="{{ asset('/backEnd/') }}/vendors/js/print/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ asset('/backEnd/') }}/vendors/js/print/bootstrap.min.js"></script>
+
 </head>
 <style>
     th {
         font-size: 14px !important;
 
     }
-
+    .d-flex{
+        display: flex;
+    }
+    .justify-content-between {
+        justify-content: space-between
+    }
+    .align-items-center {
+    -ms-flex-align: center !important;
+    align-items: center !important;
+}
     td {
         padding: 10px !important;
         font-size: 12px !important;
@@ -84,7 +70,7 @@
                 </div>
                 <!-- Header -->
                 <header>
-                    <div class="row align-items-center">
+                    <div class="row d-flex justify-content-between">
                         <div class="col-7 text-start mb-3 mb-sm-0">
                             <img src="{{ asset('/uploads/settings/logo.png') }}" width="150" alt="logo">
 
@@ -107,7 +93,7 @@
                             {{ $finance_invoice->invoice_number }}</div>
                     </div>
                     <hr>
-                    <div class="row">
+                    <div class="row d-flex justify-content-between">
                         <div class="col-6 text-end order-sm-1">
                             <strong class="main-title">Pay To:</strong>
                             <address>
@@ -190,10 +176,7 @@
             const element = document.getElementById('pdf');
             var opt = {
                 margin: 0.5,
-                pagebreak: {
-                    mode: ['avoid-all', 'css', 'legacy'],
-                    before: '#page2el'
-                },
+              
                 filename: 'invoice.pdf',
                 image: {
                     type: 'jpeg',

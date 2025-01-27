@@ -708,6 +708,7 @@ return [
     "not_paid" => "Not Paid",
     "paid_purchased" => "Paid Purchased",
     "levels" => "Levels",
+    "student_invoice" => "Student Invoice",
     "course_students_delete" => "Student Delete Assigned",
     "material" => "Material",
     "course_info" => "Course Info",

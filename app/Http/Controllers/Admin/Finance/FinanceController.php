@@ -65,10 +65,10 @@ class FinanceController extends Controller
         )->setPaper('A4', 'landscape');
     
         // Stream the PDF in the browser
-        // return $pdf->stream('invoice.pdf');
+        return $pdf->stream('invoice.pdf');
     
         // Alternatively, to download the PDF, uncomment the line below:
-        return $pdf->download('invoice.pdf');
+        // return $pdf->download('invoice.pdf');
 
         
     }
