@@ -32,7 +32,7 @@ class TrackSessionLevelController extends Controller
             'description_en' => 'required|string',
             'description_ar' => 'required|string',
             'file' => 'required|array',
-            'file.*' => 'file|mimes:pdf,doc,docx|max:2048',
+            'file.*' => 'file|mimes:pdf,doc,docx',
         ]);
 
         $fileData = [];
@@ -71,7 +71,7 @@ class TrackSessionLevelController extends Controller
             'description_en' => 'required|string',
             'description_ar' => 'required|string',
             'file' => 'nullable|array',
-            'file.*' => 'file|mimes:pdf,doc,docx|max:2048',
+            'file.*' => 'file|mimes:pdf,doc,docx',
         ]);
 
         $session = TrackSessionLevel::findOrFail($validated['id']);

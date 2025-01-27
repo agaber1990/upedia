@@ -35,7 +35,7 @@ class TrackLevelController extends Controller
             'name_ar' => 'required|string',
             'description_en' => 'required|string',
             'description_ar' => 'required|string',
-            'file' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'file' => 'required|file|mimes:pdf,doc,docx',
         ]);
 
         $filePath = 'No File';
@@ -69,7 +69,7 @@ class TrackLevelController extends Controller
             'name_ar' => 'nullable|string',
             'description_en' => 'nullable|string',
             'description_ar' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'file' => 'nullable|file|mimes:pdf,doc,docx',
         ]);
 
         $trackLevel = TrackLevel::findOrFail($request->id);
