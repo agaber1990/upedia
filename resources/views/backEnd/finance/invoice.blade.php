@@ -94,13 +94,24 @@
                 <div class="row">
                     <div class="col">
                         <div><strong class="main-title">Sub Total:</strong></div>
-                        <div> <strong class="main-title">Tax:</strong></div>
+                        <div> <strong class="main-title">Tax (14%):</strong></div>
                         <div> <strong class="main-title">Total:</strong></div>
                     </div>
                     <div class="col">
-                        <div class="">$1500.00</div>
-                        <div class="">$1500.00</div>
-                        <div class="">$1500.00</div>
+                        @php
+                            $total_price = $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price;
+                            $total_tax_amount = ($total_price * 14) / 100;
+                            $total_price_after_tax = $total_price - $total_tax_amount;
+                        @endphp
+                        <div class="">
+                            {{ $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price }}
+
+                        </div>
+                        <div class="">{{ $total_tax_amount }} </div>
+                        <div class="">
+                            {{ $total_price_after_tax }}
+
+                        </div>
                     </div>
                 </div>
             </main>
@@ -108,9 +119,10 @@
 
             <!-- Footer -->
             <footer class="text-center mt-4">
-        
+
                 <div class="btn-group btn-group-sm d-print-none">
-                    <a href="{{route('download_pdf', $id)}}" class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-download"></i>
+                    <a href="{{ route('download_pdf', $id) }}" class="btn btn-light border text-black-50 shadow-none"><i
+                            class="fa fa-download"></i>
                         Download</a>
                 </div>
             </footer>

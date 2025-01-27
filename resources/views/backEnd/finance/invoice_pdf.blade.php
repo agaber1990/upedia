@@ -4,26 +4,26 @@
 <head>
     <title>@lang('exam.exam_schedule')</title>
 
-    @if(userRtlLtl() ==1)
-    <link rel="stylesheet" href="{{ asset('/backEnd/assets/css/rtl/bootstrap.rtl.min.css') }}" />
-@else
-    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/bootstrap.min.css') }}" />
-@endif
-<link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/jquery-ui.css') }}" />
-<link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/bootstrap-datepicker.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('/backEnd/vendors/font_awesome/css/all.min.css') }}" />
-<link rel="stylesheet" href="{{asset('/backEnd/vendors/themefy_icon/themify-icons.css')}}" />
-<link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/flaticon.css') }}" />
-<link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/fnt.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/nice-select.css') }}" />
-<link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/toastr.min.css') }}" />
+    @if (userRtlLtl() == 1)
+        <link rel="stylesheet" href="{{ asset('/backEnd/assets/css/rtl/bootstrap.rtl.min.css') }}" />
+    @else
+        <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/bootstrap.min.css') }}" />
+    @endif
+    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/jquery-ui.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/bootstrap-datepicker.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/font_awesome/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/themefy_icon/themify-icons.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/flaticon.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/fnt.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/nice-select.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/toastr.min.css') }}" />
 
-@if(userRtlLtl() ==1)
-<link rel="stylesheet" href="{{ asset('/backEnd/assets/css/rtl/bootstrap.rtl.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('/backEnd/assets/css/global_rtl.css') }}">
-@else
-<link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/bootstrap.min.css') }}" />
-@endif
+    @if (userRtlLtl() == 1)
+        <link rel="stylesheet" href="{{ asset('/backEnd/assets/css/rtl/bootstrap.rtl.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('/backEnd/assets/css/global_rtl.css') }}">
+    @else
+        <link rel="stylesheet" href="{{ asset('/backEnd/vendors/css/bootstrap.min.css') }}" />
+    @endif
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -151,16 +151,30 @@
 
 
                     </div>
+
+
                     <div class="row">
                         <div class="col">
                             <div><strong class="main-title">Sub Total:</strong></div>
-                            <div> <strong class="main-title">Tax:</strong></div>
+                            <div> <strong class="main-title">Tax (14%):</strong></div>
                             <div> <strong class="main-title">Total:</strong></div>
                         </div>
                         <div class="col">
-                            <div class="">$1500.00</div>
-                            <div class="">14%</div>
-                            <div class="">$1500.00</div>
+                            @php
+                                $total_price =
+                                    $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price;
+                                $total_tax_amount = ($total_price * 14) / 100;
+                                $total_price_after_tax = $total_price - $total_tax_amount;
+                            @endphp
+                            <div class="">
+                                {{ $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price }}
+
+                            </div>
+                            <div class="">{{ $total_tax_amount }} </div>
+                            <div class="">
+                                {{ $total_price_after_tax }}
+
+                            </div>
                         </div>
                     </div>
                 </main>
