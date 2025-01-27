@@ -22,7 +22,7 @@ class PermissionsTableSeeder extends Seeder
                 'old_id' => null,
                 'section_id' => 1,
                 'parent_id' => 0,
-                'name' => 'finances',
+                'name' => 'finance_invoice',
                 'route' => 'finances',
                 'parent_route' => 'academics',
                 'type' => 2,
