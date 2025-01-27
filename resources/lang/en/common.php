@@ -721,5 +721,6 @@ return [
     "choose_material" => "Choose Material",
     "no_levels" => "No Levels",
     "no_sessions" => "No Sessions",
+    "request_invoice" => "Request Invoice",
 ]
 ?>

@@ -40,7 +40,7 @@ class SmCourseController extends Controller
         $tracks = Track::get();
         $categories = Category::get();
         $slotTime = SlotEmp::get();
-        $staffScheduleds = StaffScheduled::all();
+        $staffScheduleds = StaffScheduled::with('track')->get();
         $students = SmStudent::where('active_status', 1)->get();
 
         return view('backEnd.academics.sm_courses.index', compact('students', 'staff', 'slots', 'trackAssignedStaff', 'tracks', 'staffScheduleds', 'categories', 'slotTime'));
@@ -69,13 +69,20 @@ class SmCourseController extends Controller
     public function store(Request $request)
     {
 
+        $validated =  $request->validate([
+            'staff_scheduleds_id' => 'required',
+            'student_id' => 'required',
+            'levels_id' => 'required',
+        ]);
 
         $invoiceData = [
-            'staff_scheduleds_id' => $request['staff_scheduleds_id'],
-            'student_id' => $request['student_id'],
-            'levels_id' => $request['levels_id'],
+            'staff_scheduleds_id' => $validated['staff_scheduleds_id'],
+            'student_id' => $validated['student_id'],
+            'levels_id' => $validated['levels_id'],
             'invoice_number' => "NO" . time(),
         ];
+
+        // dd($invoiceData);
         FinanaceStudentInvoice::create($invoiceData);
         Toastr::success('Created successfully', 'Success');
         return redirect()->back();
@@ -87,21 +94,21 @@ class SmCourseController extends Controller
         $course = StaffScheduled::where('id', $id)
             ->with('staff')
             ->first();
-    
+
         if (!$course) {
             abort(404, 'Course not found');
         }
-    
+
         // Decode slot IDs and retrieve slot details
         $slotIds = json_decode($course->slot_id, true); // Assuming slot_id is a JSON array
         $slots = SlotEmp::whereIn('id', $slotIds)->get();
-    
+
         // Parse start_date and end_date
         $startDate = new \DateTime($course->start_date);
         $endDate = new \DateTime($course->end_date);
         $interval = new \DateInterval('P1D');
         $datePeriod = new \DatePeriod($startDate, $interval, $endDate->modify('+1 day'));
-    
+
         // Generate table data
         $tableData = [];
         foreach ($datePeriod as $date) {
@@ -118,20 +125,20 @@ class SmCourseController extends Controller
                 }
             }
         }
-    
+
         // Additional data
         $course_students = CourseStudent::where('course_id', $id)
             ->with('student')
             ->with('course')
             ->get();
-    
+
         $categories = Category::get();
         $students = SmStudent::get();
-    
+
         // Pass table data to the view
         return view('backEnd.academics.sm_courses.show', compact('categories', 'course', 'course_students', 'students', 'tableData'));
     }
-    
+
 
     public function storeCourseToStudent(Request $request)
     {
