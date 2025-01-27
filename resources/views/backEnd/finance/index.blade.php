@@ -91,7 +91,7 @@
                                             </td>
                                             <td>{{ $item->delivery_note }}</td>
                                             <td>
-                                                <a href="{{ route('finance_invoice', ['id' => $item->staff_scheduled->id]) }}"
+                                                <a href="{{ route('finance_invoice', ['id' => $item->id]) }}"
                                                     class="print_now">
                                                     <i class="fas fa-print"></i>
                                                 </a>
