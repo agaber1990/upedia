@@ -1069,6 +1069,7 @@ Route::get('/reg', function () {});
         
         // finance Routes
         Route::get('finance/invoice/{id}', 'Admin\Finance\FinanceController@invoice')->name('finance_invoice');
+        Route::get('finance/download_pdf/{id}', 'Admin\Finance\FinanceController@download_pdf')->name('download_pdf');
         Route::get('finance', 'Admin\Finance\FinanceController@index')->name('index.invoice');
 
    
