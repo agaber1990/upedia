@@ -122,44 +122,43 @@
                 </div>
                 {{-- {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'finance_store', 'method' => 'POST']) }} --}}
 
-                <form id="createInvoiceForm">
-                    @csrf
-                    <div class="modal-body pt-3">
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="student_id">
-                                @lang('common.select_student') <span class="text-danger">*</span>
-                            </label>
-                            <select class="primary_select form-control" name="student_id" id="student_id">
-                                <option selected>@lang('common.select_student')</option>
-                                @foreach ($students as $student)
-                                    <option value="{{ $student->id }}">{{ $student->full_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="track">
-                                @lang('common.select_track') <span class="text-danger">*</span>
-                            </label>
-                            <select class="primary_select form-control" name="track_id" id="track">
-                                <option selected>@lang('common.select_track')</option>
-                                @foreach ($tracks as $track)
-                                    <option value="{{ $track->id }}" data-level="{{ $track->level_number }}">
-                                        {{ $track->track_name_en }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="primary_input" id="track_staff_scheduled">
 
-                        </div>
+                <div class="modal-body pt-3">
+                    <div class="primary_input">
+                        <label class="primary_input_label" for="student_id">
+                            @lang('common.select_student') <span class="text-danger">*</span>
+                        </label>
+                        <select class="primary_select form-control" name="student_id" id="student_id">
+                            <option value="">@lang('common.select_student')</option>
+                            @foreach ($students as $student)
+                                <option value="{{ $student->id }}">{{ $student->full_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="primary_input">
+                        <label class="primary_input_label" for="track">
+                            @lang('common.select_track') <span class="text-danger">*</span>
+                        </label>
+                        <select class="primary_select form-control" name="track_id" id="track">
+                            <option value="">@lang('common.select_track')</option>
+                            @foreach ($tracks as $track)
+                                <option value="{{ $track->id }}" data-level="{{ $track->level_number }}">
+                                    {{ $track->track_name_en }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="primary_input" id="track_staff_scheduled">
 
-                        <input type="hidden" id="levels_id" name="levels_id" value="">
                     </div>
 
-                    <div class="modal-footer" id="add_btn">
-                        <button type="submit" class="primary-btn fix-gr-bg">@lang('common.submit')</button>
-                    </div>
-                </form>
+                    <input type="hidden" id="levels_id" name="levels_id" value="">
+                </div>
+
+                <div class="modal-footer" id="add_btn">
+                    <button id="createInvoiceForm" type="submit" class="primary-btn fix-gr-bg">@lang('common.submit')</button>
+                </div>
+
 
                 {{-- {{ Form::close() }} --}}
             </div>
@@ -228,7 +227,7 @@
                 @lang('common.select_course') <span class="text-danger">*</span>
             </label>
             <select class="primary_select form-control" name="staff_scheduleds_id" id="staff_scheduleds_id">
-                <option>@lang('common.select_course')</option>
+                <option value="">@lang('common.select_course')</option>
             </select>
         `);
 
@@ -246,8 +245,7 @@
 
             $('#track').trigger('change');
 
-            $('#createInvoiceForm').submit(function(e) {
-                e.preventDefault();
+            $('#createInvoiceForm').on('click', function() {
                 let staff_scheduleds_id = $('#staff_scheduleds_id').val();
                 let student_id = $('#student_id').val();
                 let levels_id = $('#levels_id').val();
@@ -256,36 +254,56 @@
                 console.log("Student ID:", student_id);
                 console.log("Levels ID:", levels_id);
 
-                // Correct validation logic
-                if (staff_scheduleds_id || student_id || levels_id > 0) {
-                    let formData = {
-                        '_token': '{{ csrf_token() }}',
-                        staff_scheduleds_id: staff_scheduleds_id,
-                        student_id: student_id,
-                        levels_id: levels_id,
-                    };
+                let formData = {
+                    '_token': '{{ csrf_token() }}',
+                    staff_scheduleds_id: staff_scheduleds_id,
+                    student_id: student_id,
+                    levels_id: levels_id,
+                };
 
-                    $.ajax({
-                        url: '{{ route('finance_store') }}',
-                        method: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            $('#createInvoice').modal('hide');
-                            toastr.success('Operation successfully.', 'Success', {
+                $.ajax({
+                    url: '{{ route('finance_store') }}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+
+                        $('#createInvoice').modal('hide');
+                 
+
+                        window.location.reload();
+                        toastr.success('Operation successfully.', 'Success', {
+                            timeOut: 5000,
+                        });
+                    },
+                    error: function(response) {
+                        if (response.responseJSON.errors['levels_id']) {
+                            toastr.error(response.responseJSON.errors['levels_id'][0],
+                            "Error", {
                                 timeOut: 5000,
                             });
-                        },
-                        error: function(response) {
-                            toastr.error("Operation failed", "Error", {
+                        }
+                        if (response.responseJSON.errors['staff_scheduleds_id']) {
+                            toastr.error(response.responseJSON.errors['staff_scheduleds_id'][0],
+                            "Error", {
                                 timeOut: 5000,
                             });
-                        },
-                    });
-                } else {
-                    toastr.error("Select All Required Data", "Error", {
-                        timeOut: 5000,
-                    });
-                }
+                        }
+                        if (response.responseJSON.errors['student_id']) {
+                            toastr.error(response.responseJSON.errors['student_id'][0],
+                            "Error", {
+                                timeOut: 5000,
+                            });
+                        }
+
+
+
+                    },
+                });
+                // toastr.error("Select All Required Data", "Error", {
+                //     timeOut: 5000,
+                // });
+
+
             });
         });
     </script>

@@ -53,8 +53,7 @@ class FinanceController extends Controller
             'invoice_number' => "NO" . time(),
         ];
         FinanaceStudentInvoice::create($invoiceData);
-        Toastr::success('Created successfully', 'Success');
-        return redirect()->back();
+        return response()->json("Success", 200);
     }
     /**
      * Display the specified resource.
