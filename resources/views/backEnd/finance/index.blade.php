@@ -414,6 +414,77 @@
 
 
             });
+
+            $(document).ready(function() {
+                $('[id^=changePaymentStatus]').on('click', function() {
+                    let id = $(this).data('id');
+                    let payment_status = $('#payment_status' + id)
+                        .val();
+
+                    let formData = {
+                        '_token': '{{ csrf_token() }}',
+                        payment_status: payment_status
+                    };
+
+                    $.ajax({
+                        url: '{{ url('change_payment_status') }}/' +
+                            id,
+                        method: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            $('#changePaymentStatus' + id).modal('hide');
+
+                            window.location.reload();
+                            toastr.success('Payment status updated successfully.',
+                                'Success', {
+                                    timeOut: 5000,
+                                });
+                        },
+                        error: function(response) {
+                            toastr.error('Operation failed. Please try again.',
+                                'Error', {
+                                    timeOut: 5000,
+                                });
+                        },
+                    });
+                });
+            });
+
+            $(document).ready(function() {
+                $('[id^=changeBillStatus]').on('click', function() {
+                    let id = $(this).data('id');
+                    let payment_status = $('#bill_status' + id)
+                        .val();
+
+                    let formData = {
+                        '_token': '{{ csrf_token() }}',
+                        bill_status: bill_status
+                    };
+
+                    $.ajax({
+                        url: '{{ url('change_bill_status') }}/' +
+                            id,
+                        method: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            $('#changeBillStatus' + id).modal('hide');
+
+                            window.location.reload();
+                            toastr.success('Bill status updated successfully.',
+                                'Success', {
+                                    timeOut: 5000,
+                                });
+                        },
+                        error: function(response) {
+                            toastr.error('Operation failed. Please try again.',
+                                'Error', {
+                                    timeOut: 5000,
+                                });
+                        },
+                    });
+                });
+            });
+
         });
     </script>
 @endpush

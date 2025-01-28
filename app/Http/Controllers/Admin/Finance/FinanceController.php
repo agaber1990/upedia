@@ -63,17 +63,38 @@ class FinanceController extends Controller
         $finance_invoice = FinanaceStudentInvoice::with('student', 'levels', 'staff_scheduled.track', 'staff_scheduled.trackType.track_pricing_plans')->findOrFail($id);
         return view('backEnd.finance.invoice', compact('finance_invoice', 'id'));
     }
+
     public function change_payment_status(Request $request, $id)
     {
-        dd($request->all(), $id);  
+        // dd($request->all(), $id);
         $finance_invoice = FinanaceStudentInvoice::findOrFail($id);
-        
+
+        $validated =  $request->validate([
+            'payment_status' => 'required',
+        ]);
+
+        $finance_invoice->payment_status =$validated['payment_status'];
+        $finance_invoice->update();
+
+        Toastr::success('Created successfully', 'Success');
+        return redirect()->back();
     }
+
+
     public function change_bill_status(Request $request, $id)
     {
-        dd($request->all(), $id);   
-        $finance_invoice = FinanaceStudentInvoice::findOrFail($id);
-        
+         // dd($request->all(), $id);
+         $finance_invoice = FinanaceStudentInvoice::findOrFail($id);
+
+         $validated =  $request->validate([
+             'bill_status' => 'required',
+         ]);
+ 
+         $finance_invoice->bill_status =$validated['bill_status'];
+         $finance_invoice->update();
+ 
+         Toastr::success('Created successfully', 'Success');
+         return redirect()->back();
     }
     public function download_pdf($id)
     {

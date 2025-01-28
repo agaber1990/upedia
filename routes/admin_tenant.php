@@ -1072,8 +1072,8 @@ Route::get('/reg', function () {});
         Route::get('finance/download_pdf/{id}', 'Admin\Finance\FinanceController@download_pdf')->name('download_pdf');
         Route::get('finance', 'Admin\Finance\FinanceController@index')->name('finance');
         Route::post('finance', 'Admin\Finance\FinanceController@store')->name('finance_store');
-        Route::post('change_payment_status', 'Admin\Finance\FinanceController@change_payment_status')->name('change_payment_status');
-        Route::post('change_bill_status', 'Admin\Finance\FinanceController@change_bill_status')->name('change_bill_status');
+        Route::post('change_payment_status/{id}', 'Admin\Finance\FinanceController@change_payment_status')->name('change_payment_status');
+        Route::post('change_bill_status/{id}', 'Admin\Finance\FinanceController@change_bill_status')->name('change_bill_status');
 
 
    
