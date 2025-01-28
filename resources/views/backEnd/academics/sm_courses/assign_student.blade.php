@@ -1,6 +1,6 @@
 @extends('backEnd.master')
 @section('title')
-    @lang('student.lets_assigned')
+    @lang('student.invoices')
 @endsection
 {{-- {{ dd($staff_scheduleds) }} --}}
 @push('css')
@@ -37,7 +37,7 @@
         <div class="container-fluid">
             <div class="row justify-content-between">
                 <h1>
-                    @lang('common.lets_assigned')
+                    @lang('common.invoices')
 
                 </h1>
 

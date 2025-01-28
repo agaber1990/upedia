@@ -122,9 +122,37 @@
                 </div>
                 {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'sm_courses_store', 'method' => 'POST']) }}
 
-                <div class="modal-body pt-3">
 
+                <div class="modal-body pt-3">
+                    <div class="primary_input">
+                        <label class="primary_input_label" for="studentDropdown">
+                            @lang('common.select_student') <span class="text-danger">*</span>
+                        </label>
+                        <select class="primary_select form-control" name="student_id" id="studentDropdown">
+                            @foreach ($students as $student)
+                                <option value="{{ $student->id }}">{{ $student->full_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="primary_input">
+                        <label class="primary_input_label" for="track">
+                            @lang('common.select_track') <span class="text-danger">*</span>
+                        </label>
+                        <select class="primary_select form-control" name="track_id" id="track">
+                            @foreach ($tracks as $track)
+                                <option value="{{ $track->id }}" data-level="{{ $track->level_number }}">
+                                    {{ $track->track_name_en }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="primary_input" id="track_staff_scheduled">
+
+                    </div>
+
+                    <input type="hidden" id="levels_id" name="levels_id" value="">
                 </div>
+
                 <div class="modal-footer" id="add_btn">
                     <button type="submit" class="primary-btn fix-gr-bg">@lang('common.submit')</button>
                 </div>
@@ -178,4 +206,42 @@
     }
 </style>
 @push('script')
+@endpush
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            const staffScheduledData = {!! json_encode($tracks->pluck('staff_scheduled', 'id')) !!};
+            $('#track').change(function() {
+                const selectedTrackId = $(this).val();
+                const selectedTrack = $(this).find('option:selected');
+                const levelNumber = selectedTrack.data('level');
+                $('#levels_id').val(levelNumber);
+
+                $('#track_staff_scheduled').html(`
+                <label class="primary_input_label" for="staff_scheduled">
+                    @lang('common.select_course') <span class="text-danger">*</span>
+                </label>
+                <select class="primary_select form-control" name="staff_scheduleds_id" id="staff_scheduled">
+                    <!-- Options will be populated dynamically -->
+                </select>
+            `);
+
+                const staffScheduledSelect = $('#staff_scheduled');
+
+                if (staffScheduledData[selectedTrackId]) {
+                    staffScheduledData[selectedTrackId].forEach(function(scheduled) {
+                        staffScheduledSelect.append(
+                            `<option value="${scheduled.id}">${scheduled.course_name_en}</option>`
+                        );
+                    });
+                } else {
+                    staffScheduledSelect.append('<option value="">@lang('common.no_courses_available')</option>');
+                }
+
+            });
+
+            $('#track').trigger('change');
+        });
+    </script>
 @endpush

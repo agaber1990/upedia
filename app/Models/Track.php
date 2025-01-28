@@ -19,4 +19,9 @@ class Track extends Model
     {
         return $this->hasMany(TrackPricingPlan::class);
     }
+
+    public function staff_scheduled()
+    {
+        return $this->hasMany(StaffScheduled::class);
+    }
 }

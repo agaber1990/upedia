@@ -723,5 +723,8 @@ return [
     "no_levels" => "No Levels",
     "no_sessions" => "No Sessions",
     "request_invoice" => "Request Invoice",
+    "select_track" => "Select Track",
+    "select_course" => "Select Course",
+
 ]
 ?>

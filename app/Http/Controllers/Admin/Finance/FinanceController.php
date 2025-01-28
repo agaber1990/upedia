@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\FinanaceStudentInvoice;
 use App\Models\Finance;
+use App\Models\Track;
+use App\SmStudent;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -17,6 +19,9 @@ class FinanceController extends Controller
     {
 
         $data['invoices'] = FinanaceStudentInvoice::with('student', 'levels', 'staff_scheduled')->get();
+        $data['students'] = SmStudent::get();
+        $data['tracks'] = Track::with('staff_scheduled')->get();
+
 
         return view('backEnd.finance.index', $data);
     }
@@ -43,7 +48,7 @@ class FinanceController extends Controller
     public function invoice($id)
     {
         $finance_invoice = FinanaceStudentInvoice::with('student', 'levels', 'staff_scheduled.track', 'staff_scheduled.trackType.track_pricing_plans')->findOrFail($id);
-        return view('backEnd.finance.invoice', compact('finance_invoice','id'));
+        return view('backEnd.finance.invoice', compact('finance_invoice', 'id'));
     }
     public function download_pdf($id)
     {
@@ -55,7 +60,7 @@ class FinanceController extends Controller
             'staff_scheduled.track',
             'staff_scheduled.trackType.track_pricing_plans'
         ])->findOrFail($id);
-    
+
         // Generate the PDF with the specified view and data
         $pdf = Pdf::loadView(
             'backEnd.finance.invoice_pdf',
@@ -63,18 +68,18 @@ class FinanceController extends Controller
                 'finance_invoice' => $finance_invoice,
             ]
         )->setPaper('A4', 'landscape');
-    
+
         // Stream the PDF in the browser
         return $pdf->stream('invoice.pdf');
-    
+
         // Alternatively, to download the PDF, uncomment the line below:
         // return $pdf->download('invoice.pdf');
 
-        
+
     }
-    
- 
-   /**
+
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Finance $finance)

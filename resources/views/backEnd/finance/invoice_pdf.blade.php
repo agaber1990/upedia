@@ -123,7 +123,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="col-3"> {{ $finance_invoice->staff_scheduled->track->track_name_en }}
+                                    <td class="col-3"> {{ $finance_invoice->staff_scheduled->course_name_en }}
                                     </td>
                                     <td class="col-1 text-end">{{ $finance_invoice->levels_id }}</td>
                                     <td class="col-2 text-end">

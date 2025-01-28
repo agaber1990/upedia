@@ -79,7 +79,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="col-3"> {{ $finance_invoice->staff_scheduled->track->track_name_en }}</td>
+                                <td class="col-3"> {{ $finance_invoice->staff_scheduled->course_name_en }}</td>
                                 <td class="col-1 text-end">{{ $finance_invoice->levels_id }}</td>
                                 <td class="col-2 text-end">
                                     {{ $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price }}</td>
@@ -121,8 +121,8 @@
             <footer class="text-center mt-4">
 
                 <div class="btn-group btn-group-sm d-print-none">
-                    <a target="_blank" href="{{ route('download_pdf', $id) }}" class="btn btn-light border text-black-50 shadow-none"><i
-                            class="fa fa-download"></i>
+                    <a target="_blank" href="{{ route('download_pdf', $id) }}"
+                        class="btn btn-light border text-black-50 shadow-none"><i class="fa fa-download"></i>
                         Download</a>
                 </div>
             </footer>
