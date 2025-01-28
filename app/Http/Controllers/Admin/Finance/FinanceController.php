@@ -63,6 +63,18 @@ class FinanceController extends Controller
         $finance_invoice = FinanaceStudentInvoice::with('student', 'levels', 'staff_scheduled.track', 'staff_scheduled.trackType.track_pricing_plans')->findOrFail($id);
         return view('backEnd.finance.invoice', compact('finance_invoice', 'id'));
     }
+    public function change_payment_status(Request $request, $id)
+    {
+        dd($request->all(), $id);  
+        $finance_invoice = FinanaceStudentInvoice::findOrFail($id);
+        
+    }
+    public function change_bill_status(Request $request, $id)
+    {
+        dd($request->all(), $id);   
+        $finance_invoice = FinanaceStudentInvoice::findOrFail($id);
+        
+    }
     public function download_pdf($id)
     {
         set_time_limit(300);

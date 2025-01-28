@@ -91,10 +91,118 @@
                                             </td>
                                             <td>{{ $item->delivery_note }}</td>
                                             <td>
-                                                <a href="{{ route('finance_invoice', ['id' => $item->id]) }}"
-                                                    class="print_now">
-                                                    <i class="fas fa-print"></i>
-                                                </a>
+
+                                                <x-drop-down>
+
+                                                    <a class="dropdown-item text-left"
+                                                        href="{{ route('finance_invoice', ['id' => $item->id]) }}"> <i
+                                                            class="fas fa-print"></i> @lang('common.print') </a>
+
+
+
+                                                    <a class="dropdown-item text-left" data-toggle="modal"
+                                                        data-target="#changePaymentStatus{{ $item->id }}"
+                                                        href="#"><i class="fas fa-wallet"></i> @lang('common.payment_status') </a>
+                                                    <a class="dropdown-item text-left" data-toggle="modal"
+                                                        data-target="#bill_status{{ $item->id }}" href="#">
+                                                        <i class="fas fa-wifi"></i> @lang('common.bill_status') </a>
+
+                                                </x-drop-down>
+
+
+                                                <div class="modal fade admin-query"
+                                                    id="changePaymentStatus{{ @$item->id }}">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <form action="{{ route('change_payment_status', [@$item->id]) }}"
+                                                            method="POST">
+                                                            {{ csrf_field() }}
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('common.payment_status')</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+
+                                                                <div class="modal-body">
+                                                                    <div class="form-group">
+                                                                        <label for="">@lang('common.payment_status')</label>
+                                                                        <select name="payment_status" id="payment_status"
+                                                                            class="primary_select">
+                                                                            <option value="paid"
+                                                                                @if ($item->payment_status == 'paid') selected @endif>
+                                                                                {{ __('common.paid') }}</option>
+                                                                            <option value="not_paid"
+                                                                                @if ($item->payment_status == 'not_paid') selected @endif>
+                                                                                {{ __('common.not_paid') }}</option>
+                                                                            <option value="refunded"
+                                                                                @if ($item->payment_status == 'refunded') selected @endif>
+                                                                                {{ __('common.refunded') }}</option>
+                                                                            <option value="paid_purchased"
+                                                                                @if ($item->payment_status == 'paid_purchased') selected @endif>
+                                                                                {{ __('common.paid_purchased') }}</option>
+                                                                        </select>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button" class="primary-btn tr-bg"
+                                                                            data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        <button class="primary-btn fix-gr-bg mx-1"
+                                                                            type="submit">@lang('common.submit')</button>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="modal fade admin-query" id="bill_status{{ @$item->id }}">
+                                                    <div class="modal-dialog modal-dialog-centered">
+
+                                                        <form action="{{ route('change_bill_status', [@$item->id]) }}"
+                                                            method="POST">
+                                                            {{ csrf_field() }}
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('common.bill_status')</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="form-group">
+                                                                        <label for="">@lang('common.bill_status')</label>
+                                                                        <select name="bill_status" id="bill_status"
+                                                                            class="primary_select">
+                                                                            <option value="pending"
+                                                                                @if ($item->bill_status == 'pending') selected @endif>
+                                                                                {{ __('common.pending') }}</option>
+                                                                            <option value="billed"
+                                                                                @if ($item->bill_status == 'billed') selected @endif>
+                                                                                {{ __('common.billed') }}</option>
+                                                                            <option value="cancelled"
+                                                                                @if ($item->bill_status == 'cancelled') selected @endif>
+                                                                                {{ __('common.cancelled') }}</option>
+
+                                                                        </select>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button" class="primary-btn tr-bg"
+                                                                            data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        <button class="primary-btn fix-gr-bg mx-1"
+                                                                            type="submit">@lang('common.submit')</button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -156,7 +264,8 @@
                 </div>
 
                 <div class="modal-footer" id="add_btn">
-                    <button id="createInvoiceForm" type="submit" class="primary-btn fix-gr-bg">@lang('common.submit')</button>
+                    <button id="createInvoiceForm" type="submit"
+                        class="primary-btn fix-gr-bg">@lang('common.submit')</button>
                 </div>
 
 
@@ -268,7 +377,7 @@
                     success: function(response) {
 
                         $('#createInvoice').modal('hide');
-                 
+
 
                         window.location.reload();
                         toastr.success('Operation successfully.', 'Success', {
@@ -278,21 +387,21 @@
                     error: function(response) {
                         if (response.responseJSON.errors['levels_id']) {
                             toastr.error(response.responseJSON.errors['levels_id'][0],
-                            "Error", {
-                                timeOut: 5000,
-                            });
+                                "Error", {
+                                    timeOut: 5000,
+                                });
                         }
                         if (response.responseJSON.errors['staff_scheduleds_id']) {
                             toastr.error(response.responseJSON.errors['staff_scheduleds_id'][0],
-                            "Error", {
-                                timeOut: 5000,
-                            });
+                                "Error", {
+                                    timeOut: 5000,
+                                });
                         }
                         if (response.responseJSON.errors['student_id']) {
                             toastr.error(response.responseJSON.errors['student_id'][0],
-                            "Error", {
-                                timeOut: 5000,
-                            });
+                                "Error", {
+                                    timeOut: 5000,
+                                });
                         }
 
 

@@ -705,6 +705,8 @@ return [
     "cancelled" => "Cancelled",
     "refunded" => "Refunded",
     "paid" => "Paid",
+    "payment_status" => "Payment Status",
+    "bill_status" => "Bill Status",
     "not_paid" => "Not Paid",
     "paid_purchased" => "Paid Purchased",
     "levels" => "Levels",
