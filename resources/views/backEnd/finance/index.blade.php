@@ -62,6 +62,7 @@
                             <table id="" class="table simple-table school-table" cellspacing="0">
                                 <thead>
                                     <tr>
+                                        <th>@lang('common.student_name')</th>
                                         <th>@lang('common.invoice_number')</th>
                                         <th>@lang('common.bill_status')</th>
                                         <th>@lang('common.payment_status')</th>
@@ -75,6 +76,7 @@
                                     @foreach ($invoices as $item)
                                         {{-- {{ dd($invoices) }} --}}
                                         <tr>
+                                            <td>{{ $item->student->full_name }}</td>
                                             <td>{{ $item->invoice_number }}</td>
                                             <td>
                                                 <span
