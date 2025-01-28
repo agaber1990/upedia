@@ -63,9 +63,9 @@
                                 <thead>
                                     <tr>
                                         <th>@lang('common.invoice_number')</th>
+                                        <th>@lang('common.bill_status')</th>
                                         <th>@lang('common.payment_status')</th>
 
-                                        <th>@lang('common.bill_status')</th>
                                         <th>@lang('common.delivery_note')</th>
                                         <th>@lang('common.action')</th>
                                     </tr>
