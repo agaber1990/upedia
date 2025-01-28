@@ -112,10 +112,10 @@
 
                                                 <div class="modal fade admin-query"
                                                     id="changePaymentStatus{{ @$item->id }}">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <form action="{{ route('change_payment_status', [@$item->id]) }}"
-                                                            method="POST">
-                                                            {{ csrf_field() }}
+                                                    <form action="{{ route('change_payment_status', [@$item->id]) }}"
+                                                        method="POST">
+                                                        {{ csrf_field() }}
+                                                        <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <h4 class="modal-title">@lang('common.payment_status')</h4>
@@ -155,15 +155,15 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </form>
-                                                    </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                                 <div class="modal fade admin-query" id="bill_status{{ @$item->id }}">
-                                                    <div class="modal-dialog modal-dialog-centered">
+                                                    <form action="{{ route('change_bill_status', [@$item->id]) }}"
+                                                        method="POST">
+                                                        {{ csrf_field() }}
+                                                        <div class="modal-dialog modal-dialog-centered">
 
-                                                        <form action="{{ route('change_bill_status', [@$item->id]) }}"
-                                                            method="POST">
-                                                            {{ csrf_field() }}
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <h4 class="modal-title">@lang('common.bill_status')</h4>
@@ -200,8 +200,8 @@
                                                                 </div>
 
                                                             </div>
-                                                        </form>
-                                                    </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
