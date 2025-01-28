@@ -8,6 +8,7 @@ use App\Models\Finance;
 use App\Models\Track;
 use App\SmStudent;
 use Illuminate\Http\Request;
+use Brian2694\Toastr\Facades\Toastr;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class FinanceController extends Controller
@@ -39,9 +40,22 @@ class FinanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validated =  $request->validate([
+            'staff_scheduleds_id' => 'required',
+            'student_id' => 'required',
+            'levels_id' => 'required',
+        ]);
 
+        $invoiceData = [
+            'staff_scheduleds_id' => $validated['staff_scheduleds_id'],
+            'student_id' => $validated['student_id'],
+            'levels_id' => $validated['levels_id'],
+            'invoice_number' => "NO" . time(),
+        ];
+        FinanaceStudentInvoice::create($invoiceData);
+        Toastr::success('Created successfully', 'Success');
+        return redirect()->back();
+    }
     /**
      * Display the specified resource.
      */

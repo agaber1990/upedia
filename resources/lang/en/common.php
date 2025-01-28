@@ -725,6 +725,7 @@ return [
     "request_invoice" => "Request Invoice",
     "select_track" => "Select Track",
     "select_course" => "Select Course",
+    "no_courses_available" => "No Course Available",
 
 ]
 ?>

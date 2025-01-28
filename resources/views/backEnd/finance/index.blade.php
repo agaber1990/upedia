@@ -55,7 +55,7 @@
 
                             </h3>
                             <button class="primary-btn-small-input primary-btn small fix-gr-bg" type="button"
-                                data-toggle="modal" data-target="#assignStudent"> <span class="ti-plus pr-2"></span>
+                                data-toggle="modal" data-target="#createInvoice"> <span class="ti-plus pr-2"></span>
                                 @lang('common.create_invoice')</button>
                         </div>
                         <div class="table-responsive">
@@ -111,7 +111,7 @@
     </section>
 
     <!-- assign class form modal start-->
-    <div class="modal fade admin-query" id="assignStudent">
+    <div class="modal fade admin-query" id="createInvoice">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -120,44 +120,48 @@
                     </h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'sm_courses_store', 'method' => 'POST']) }}
+                {{-- {{ Form::open(['class' => 'form-horizontal', 'files' => true, 'route' => 'finance_store', 'method' => 'POST']) }} --}}
 
+                <form id="createInvoiceForm">
+                    @csrf
+                    <div class="modal-body pt-3">
+                        <div class="primary_input">
+                            <label class="primary_input_label" for="student_id">
+                                @lang('common.select_student') <span class="text-danger">*</span>
+                            </label>
+                            <select class="primary_select form-control" name="student_id" id="student_id">
+                                <option selected>@lang('common.select_student')</option>
+                                @foreach ($students as $student)
+                                    <option value="{{ $student->id }}">{{ $student->full_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="primary_input">
+                            <label class="primary_input_label" for="track">
+                                @lang('common.select_track') <span class="text-danger">*</span>
+                            </label>
+                            <select class="primary_select form-control" name="track_id" id="track">
+                                <option selected>@lang('common.select_track')</option>
+                                @foreach ($tracks as $track)
+                                    <option value="{{ $track->id }}" data-level="{{ $track->level_number }}">
+                                        {{ $track->track_name_en }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="primary_input" id="track_staff_scheduled">
 
-                <div class="modal-body pt-3">
-                    <div class="primary_input">
-                        <label class="primary_input_label" for="studentDropdown">
-                            @lang('common.select_student') <span class="text-danger">*</span>
-                        </label>
-                        <select class="primary_select form-control" name="student_id" id="studentDropdown">
-                            @foreach ($students as $student)
-                                <option value="{{ $student->id }}">{{ $student->full_name }}</option>
-                            @endforeach
-                        </select>
+                        </div>
+
+                        <input type="hidden" id="levels_id" name="levels_id" value="">
                     </div>
-                    <div class="primary_input">
-                        <label class="primary_input_label" for="track">
-                            @lang('common.select_track') <span class="text-danger">*</span>
-                        </label>
-                        <select class="primary_select form-control" name="track_id" id="track">
-                            @foreach ($tracks as $track)
-                                <option value="{{ $track->id }}" data-level="{{ $track->level_number }}">
-                                    {{ $track->track_name_en }}
-                                </option>
-                            @endforeach
-                        </select>
+
+                    <div class="modal-footer" id="add_btn">
+                        <button type="submit" class="primary-btn fix-gr-bg">@lang('common.submit')</button>
                     </div>
-                    <div class="primary_input" id="track_staff_scheduled">
+                </form>
 
-                    </div>
-
-                    <input type="hidden" id="levels_id" name="levels_id" value="">
-                </div>
-
-                <div class="modal-footer" id="add_btn">
-                    <button type="submit" class="primary-btn fix-gr-bg">@lang('common.submit')</button>
-                </div>
-
-                {{ Form::close() }}
+                {{-- {{ Form::close() }} --}}
             </div>
         </div>
     </div>
@@ -212,6 +216,7 @@
     <script>
         $(document).ready(function() {
             const staffScheduledData = {!! json_encode($tracks->pluck('staff_scheduled', 'id')) !!};
+
             $('#track').change(function() {
                 const selectedTrackId = $(this).val();
                 const selectedTrack = $(this).find('option:selected');
@@ -219,16 +224,15 @@
                 $('#levels_id').val(levelNumber);
 
                 $('#track_staff_scheduled').html(`
-                <label class="primary_input_label" for="staff_scheduled">
-                    @lang('common.select_course') <span class="text-danger">*</span>
-                </label>
-                <select class="primary_select form-control" name="staff_scheduleds_id" id="staff_scheduled">
-                    <!-- Options will be populated dynamically -->
-                </select>
-            `);
+            <label class="primary_input_label" for="staff_scheduled">
+                @lang('common.select_course') <span class="text-danger">*</span>
+            </label>
+            <select class="primary_select form-control" name="staff_scheduleds_id" id="staff_scheduleds_id">
+                <option>@lang('common.select_course')</option>
+            </select>
+        `);
 
-                const staffScheduledSelect = $('#staff_scheduled');
-
+                const staffScheduledSelect = $('#staff_scheduleds_id');
                 if (staffScheduledData[selectedTrackId]) {
                     staffScheduledData[selectedTrackId].forEach(function(scheduled) {
                         staffScheduledSelect.append(
@@ -238,10 +242,51 @@
                 } else {
                     staffScheduledSelect.append('<option value="">@lang('common.no_courses_available')</option>');
                 }
-
             });
 
             $('#track').trigger('change');
+
+            $('#createInvoiceForm').submit(function(e) {
+                e.preventDefault();
+                let staff_scheduleds_id = $('#staff_scheduleds_id').val();
+                let student_id = $('#student_id').val();
+                let levels_id = $('#levels_id').val();
+
+                console.log("Staff Scheduled ID:", staff_scheduleds_id);
+                console.log("Student ID:", student_id);
+                console.log("Levels ID:", levels_id);
+
+                // Correct validation logic
+                if (staff_scheduleds_id || student_id || levels_id > 0) {
+                    let formData = {
+                        '_token': '{{ csrf_token() }}',
+                        staff_scheduleds_id: staff_scheduleds_id,
+                        student_id: student_id,
+                        levels_id: levels_id,
+                    };
+
+                    $.ajax({
+                        url: '{{ route('finance_store') }}',
+                        method: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            $('#createInvoice').modal('hide');
+                            toastr.success('Operation successfully.', 'Success', {
+                                timeOut: 5000,
+                            });
+                        },
+                        error: function(response) {
+                            toastr.error("Operation failed", "Error", {
+                                timeOut: 5000,
+                            });
+                        },
+                    });
+                } else {
+                    toastr.error("Select All Required Data", "Error", {
+                        timeOut: 5000,
+                    });
+                }
+            });
         });
     </script>
 @endpush
