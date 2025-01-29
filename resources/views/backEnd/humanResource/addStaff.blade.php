@@ -880,7 +880,7 @@
                                                                                 value="{{ $slot->id }}"
                                                                                 id="slot_start_{{ $slot->id }}"
                                                                                 data-slot-id="{{ $slot->id }}">
-                                                                            <label class="form-check-label">
+                                                                            <label for="slot_start_{{ $slot->id }}">
                                                                                 {{ formatTime($slot->slot_start) }} -
                                                                                 
                                                                                 {{ formatTime($slot->slot_end) }}

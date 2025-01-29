@@ -753,8 +753,8 @@
                                                                                     id="slot_start_{{ $slot->id }}"
                                                                                     data-slot-id="{{ $slot->id }}"
                                                                                     @if (in_array($slot->id, $selectedSlots)) checked @endif>
-                                                                                <label class="form-check-label">
-                                                                                    {{ formatTime($slot->slot_start) }} - {{ formatTime($slot->slot_end) }}
+                                                                                    <label for="slot_start_{{ $slot->id }}">
+                                                                                        {{ formatTime($slot->slot_start) }} - {{ formatTime($slot->slot_end) }}
                                                                                 </label>
                                                                             </div>
                                                                         @endforeach
