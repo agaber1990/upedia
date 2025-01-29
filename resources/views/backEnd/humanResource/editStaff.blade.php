@@ -736,62 +736,32 @@
                                             <div class="row pt-4 row-gap-24">
                                                 <div class="col-lg-12 p-0">
                                                     <div class="form-section">
-                                                        <div class="row mb-20">
-
-                                                            <div class="table-responsive">
-                                                                <table class="table " id="slots_table">
-                                                                    <thead class="thead-light">
-                                                                        <tr>
-                                                                            <th>@lang('hr.slot_day')</th>
-                                                                            <th>@lang('hr.slotemployee') <i
-                                                                                    class="fa fa-clock"></i></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @php
-                                                                            $groupedSlots = $slots_emp->groupBy(
-                                                                                'slot_day',
-                                                                            );
-                                                                        @endphp
-                                                                        @foreach ($groupedSlots as $day => $slots)
-                                                                            <tr>
-                                                                                <td class="p-4">
-                                                                                    {{ $day }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="d-flex flex-column gap-2">
-                                                                                        @foreach ($slots as $slot)
-                                                                                            <div
-                                                                                                class="d-flex align-items-center gap-2">
-                                                                                                <!-- Start Time with Checkbox -->
-                                                                                                <div>
-                                                                                                    <input
-                                                                                                        class="form-check-input"
-                                                                                                        type="checkbox"
-                                                                                                        name="selected_slots[]"
-                                                                                                        value="{{ $slot->id }}"
-                                                                                                        id="slot_start_{{ $slot->id }}"
-                                                                                                        @if (in_array($slot->id, $selectedSlots)) checked @endif>
-                                                                                                    <label
-                                                                                                        class="form-check-label px-2"
-                                                                                                        for="slot_start_{{ $slot->id }}">
-                                                                                                        {{ formatTime($slot->slot_start) }}
-                                                                                                    </label>
-                                                                                                </div>
-                                                                                                <!-- End Time as Badge -->
-                                                                                                <span class="px-2">
-                                                                                                    {{ formatTime($slot->slot_end) }}
-                                                                                                </span>
-                                                                                            </div>
-                                                                                        @endforeach
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
+                                                        <div class="row">
+                                                            @php
+                                                                $groupedSlots = $slots_emp->groupBy('slot_day');
+                                                            @endphp
+                                                            @foreach ($groupedSlots as $day => $slots)
+                                                                <div class="col-md-2 mb-4">
+                                                                    <h5 class="mb-3">{{ $day }} <i class="fa fa-clock"></i></h5>
+                                                                    <div class="time-slots">
+                                                                        @foreach ($slots as $slot)
+                                                                            <div class="form-check mb-2">
+                                                                                <input class="form-check-input"
+                                                                                    type="checkbox"
+                                                                                    name="selected_slots[]"
+                                                                                    value="{{ $slot->id }}"
+                                                                                    id="slot_start_{{ $slot->id }}"
+                                                                                    data-slot-id="{{ $slot->id }}"
+                                                                                    @if (in_array($slot->id, $selectedSlots)) checked @endif>
+                                                                                <label class="form-check-label">
+                                                                                    {{ formatTime($slot->slot_start) }} - {{ formatTime($slot->slot_end) }}
+                                                                                </label>
+                                                                            </div>
                                                                         @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
+                                                                    </div> <!-- End of time-slots -->
+                                                                </div> <!-- End of col -->
+                                                            @endforeach
+                                                        </div> <!-- End of row -->
                                                     </div>
                                                 </div>
                                             </div>

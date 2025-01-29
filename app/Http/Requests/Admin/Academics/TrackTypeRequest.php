@@ -24,8 +24,18 @@ class TrackTypeRequest extends FormRequest
      */
     public function rules()
     {
+        $trackTypeId = $this->route('track_type'); // Ensure this matches the route model binding
+
         return [
-            'name' => ['required', 'max:200', Rule::unique('track_types')]
+            'name' => [
+                'required',
+                'max:200',
+                Rule::unique('track_types')->ignore($this->id), // Ensure this matches hidden input field
+            ],
+            'count_of_students' => [
+                'nullable', // Allow null if the same value is submitted
+                'integer'
+            ],
         ];
     }
 }

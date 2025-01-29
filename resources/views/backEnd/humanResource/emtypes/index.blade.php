@@ -78,6 +78,7 @@
                                                 @endif
                                             </div>
                                         </div>
+                        
                                     </div>
                                     @php
                                         $tooltip = '';

@@ -34,7 +34,7 @@ return [
     "actions" => "Actions",
     "created_by" => "Created By",
     "class" => "Class",
-    "role_types" => "Role Types",
+    "role_types" => "Job Classification",
     "section" => "Section",
     "teacher" => "Teacher",
     "staff" => "Staff",

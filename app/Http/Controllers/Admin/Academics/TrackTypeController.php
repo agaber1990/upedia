@@ -49,6 +49,7 @@ class TrackTypeController extends Controller
         try {
             $track_types = new TrackType();
             $track_types->name = $request->name;
+            $track_types->count_of_students = $request->count_of_students;
             $result = $track_types->save();
 
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {
@@ -107,6 +108,7 @@ class TrackTypeController extends Controller
         try {
             $track_types = TrackType::find($request->id);
             $track_types->name = $request->name;
+            $track_types->count_of_students = $request->count_of_students;
             $result = $track_types->save();
 
             if (ApiBaseMethod::checkUrl($request->fullUrl())) {

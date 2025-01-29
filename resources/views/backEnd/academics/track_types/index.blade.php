@@ -48,6 +48,7 @@
                                     ]) }}
                                 @endif
                             @endif
+                            <input type="hidden" name="id" value="{{ isset($track_type) ? $track_type->id : '' }}">
                             <div class="white-box">
                                 <div class="main-title">
                                     <h3 class="mb-15">
@@ -74,6 +75,24 @@
                                                 @if ($errors->has('name'))
                                                     <span class="text-danger">
                                                         {{ $errors->first('name') }}
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="primary_input">
+                                                <label class="primary_input_label" for="">@lang('hr.count_of_students')
+                                                    <span class="text-danger"> *</span></label>
+                                                <input
+                                                    class="primary_input_field form-control{{ $errors->has('count_of_students') ? ' is-invalid' : '' }}"
+                                                    type="text" name="count_of_students" autocomplete="off"
+                                                    value="{{ isset($track_type) ? $track_type->count_of_students : Request::old('count_of_students') }}">
+                                                <input type="hidden" name="id"
+                                                    value="{{ isset($track_type) ? $track_type->id : '' }}">
+
+                                                @if ($errors->has('count_of_students'))
+                                                    <span class="text-danger">
+                                                        {{ $errors->first('count_of_students') }}
                                                     </span>
                                                 @endif
                                             </div>
@@ -131,6 +150,7 @@
 
                                             <tr>
                                                 <th>@lang('academics.track_types')</th>
+                                                <th>@lang('hr.count_of_students')</th>
                                                 <th>@lang('common.action')</th>
                                             </tr>
                                         </thead>
@@ -139,6 +159,7 @@
                                             @foreach ($track_types as $track_type)
                                                 <tr>
                                                     <td>{{ $track_type->name }}</td>
+                                                    <td>{{ $track_type->count_of_students }}</td>
                                                     <td>
                                                         <x-drop-down>
                                                             @if (userPermission('track_types_edit'))
