@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Hr;
 
-use App\Models\{TrackType, EmType};
+use App\Models\{TrackType, EmType, StaffWorkExperience};
 use App\Models\Track;
 use App\Models\TrackAssignedStaff;
 use App\Models\SlotEmp;
@@ -77,7 +77,6 @@ class SmStaffController extends Controller
                 ->get();
 
             return view('backEnd.humanResource.staff_list', compact('roles'));
-
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -108,7 +107,6 @@ class SmStaffController extends Controller
             } else {
                 return view('backEnd.humanResource.staff_list', compact('staffs', 'roles'));
             }
-
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
@@ -126,7 +124,6 @@ class SmStaffController extends Controller
 
                 Toastr::error('Your staff limit has been crossed.', 'Failed');
                 return redirect()->back();
-
             }
         }
         try {
@@ -371,6 +368,26 @@ class SmStaffController extends Controller
                     }
                 }
 
+                if (isset($request->company_name)) {
+                    foreach ($request->company_name as $index => $company) {
+                        if (!empty($company) && !empty($request->title[$index]) && !empty($request->from[$index]) && !empty($request->to[$index])) {
+                            $fromDate = \Carbon\Carbon::parse($request->from[$index]);
+                            $toDate = \Carbon\Carbon::parse($request->to[$index]);
+                            if ($fromDate->lt($toDate)) {
+                                StaffWorkExperience::create([
+                                    'staff_id' => $staff->id,
+                                    'company_name' => $company,
+                                    'title' => $request->title[$index],
+                                    'from' => $request->from[$index],
+                                    'to' => $request->to[$index],
+                                ]);
+                            } else {
+                                Toastr::error('Add Valid Data In Your Work Experience', 'Failed');
+                                return redirect()->back();
+                            }
+                        }
+                    }
+                }
 
 
 
@@ -419,6 +436,20 @@ class SmStaffController extends Controller
         }
     }
 
+    public function deleteWorkExperience($id)
+    {
+        $workExperience = StaffWorkExperience::find($id);
+
+        if (!$workExperience) {
+            return response()->json(['status' => 'error', 'message' => 'Record not found'], 404);
+        }
+
+        $workExperience->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Work experience deleted successfully']);
+    }
+
+
     public function editStaff($id)
     {
         if (auth()->user()->staff->id != $id) {
@@ -436,6 +467,7 @@ class SmStaffController extends Controller
             }
 
             $max_staff_no = SmStaff::withOutGlobalScopes()->where('is_saas', 0)->where('school_id', Auth::user()->school_id)->max('staff_no');
+            $work_experience = StaffWorkExperience::where('staff_id', $editData->id)->get();
 
             $roles = InfixRole::where('is_saas', 0)->where('active_status', '=', 1)
                 ->where(function ($q) {
@@ -498,7 +530,8 @@ class SmStaffController extends Controller
                 'custom_filed_values',
                 'student',
                 'is_required',
-                'has_permission'
+                'has_permission',
+                'work_experience'
             ));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -985,7 +1018,6 @@ class SmStaffController extends Controller
                 $staff->where(function ($q) use ($request) {
                     $q->where('role_id', $request->role_id)->orWhere('previous_role_id', $request->role_id);
                 });
-
             }
             if ($request->staff_no != "") {
                 $staff->where('staff_no', $request->staff_no);
@@ -1385,7 +1417,6 @@ class SmStaffController extends Controller
             return response()->json(['message' => 'Operation Success']);
         }
         return response()->json(['error' => 'Operation Failed']);
-
     }
 
     public function teacherFieldView(Request $request)

@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\TrackType;
 use App\Models\StaffSlot;
+use App\Models\StaffWorkExperience;
 use App\Models\TeacherEvaluation;
 use Illuminate\Support\Facades\Auth;
 use App\Scopes\ActiveStatusSchoolScope;
@@ -16,8 +17,13 @@ class SmStaff extends Model
     protected $casts = [
         'id' => 'integer',
         'full_name' => 'string',
-        'user_id' => 'integer'
+        'user_id' => 'integer',
     ];
+
+    public function workExperience()
+    {
+        return $this->hasMany(StaffWorkExperience::class);
+    }
 
 
     public function emp_type_id()

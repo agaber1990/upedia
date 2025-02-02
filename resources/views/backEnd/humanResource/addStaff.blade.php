@@ -1205,26 +1205,45 @@
                                                     <div class="row">
                                                         <div class="col-md-3">@lang('common.company_name')</div>
                                                         <div class="col-md-3">@lang('common.title')</div>
-                                                        <div class="col-md-3">@lang('common.from')</div>
-                                                        <div class="col-md-3">@lang('common.to')</div>
+                                                        <div class="col-md-2">@lang('common.from')</div>
+                                                        <div class="col-md-2">@lang('common.to')</div>
+                                                        <div class="col-md-2">@lang('common.action')</div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-3">
                                                             <div class="primary_input">
-                                                                <input class="primary_input_field form-control" type="text" name="company_name" value="">
+                                                                <input class="primary_input_field form-control"
+                                                                    type="text" name="company_name[]" value="">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="primary_input">
-                                                                <input class="primary_input_field form-control" type="text" name="title" value="">
+                                                                <input class="primary_input_field form-control"
+                                                                    type="text" name="title[]" value="">
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3">@lang('common.from')</div>
-                                                        <div class="col-md-3">@lang('common.to')</div>
+                                                        <div class="col-md-2">
+                                                            <div class="primary_input">
+                                                                <input class="primary_input_field form-control"
+                                                                    type="date" name="from[]" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="primary_input">
+                                                                <input class="primary_input_field form-control"
+                                                                    type="date" name="to[]" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button class="primary-btn fix-gr-bg" id="addMoreBtn">
+                                                                <i class="fas fa-plus"></i> @lang('common.more')
+                                                            </button>
+                                                        </div>
                                                     </div>
 
-                                                    
+                                                    <div id="newRow" class="mt-2"></div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -1245,6 +1264,51 @@
 @section('script')
     <script>
         var $locale = '{{ app()->getLocale() }}';
+
+
+        $(document).ready(function() {
+            $('#addMoreBtn').on('click', function(e) {
+                e.preventDefault();
+
+                let newRaw = `
+        <div class="row new-entry mt-2">
+            <div class="col-md-3">
+                <div class="primary_input">
+                    <input class="primary_input_field form-control" type="text" name="company_name[]" value="">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="primary_input">
+                    <input class="primary_input_field form-control" type="text" name="title[]" value="">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="primary_input">
+                    <input class="primary_input_field form-control" type="date" name="from[]" value="">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="primary_input">
+                    <input class="primary_input_field form-control" type="date" name="to[]" value="">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button class="primary-btn fix-gr-bg removeRow">
+                    <i class="fas fa-minus"></i> @lang('common.remove')
+                </button>
+            </div>
+        </div>
+        `;
+
+                $('#newRow').append(newRaw);
+            });
+
+            $(document).on('click', '.removeRow', function(e) {
+                e.preventDefault();
+                $(this).closest('.new-entry').remove();
+            });
+        });
+
 
         $(document).ready(function() {
 

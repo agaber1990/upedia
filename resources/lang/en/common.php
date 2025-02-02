@@ -729,6 +729,7 @@ return [
     "select_course" => "Select Course",
     "no_courses_available" => "No Course Available",
     "company_name" => "Company Name",
+    "more" => "more",
 
 ]
 ?>

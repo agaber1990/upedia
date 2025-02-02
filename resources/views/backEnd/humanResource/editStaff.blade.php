@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/backEnd/') }}/css/croppie.css">
 @endsection
 @section('mainContent')
+    {{-- {{dd($work_experience)}} --}}
     <style type="text/css">
         .form-control:disabled {
             background-color: #FFFFFF;
@@ -102,6 +103,10 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="#specilization" role="tab"
                                             data-toggle="tab">@lang('hr.specilization')</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#work_experience" role="tab"
+                                            data-toggle="tab">@lang('hr.work_experience')</a>
                                     </li>
 
                                 </ul>
@@ -621,7 +626,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                                                                                </div> -->
+                                                                                                                                </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
@@ -742,7 +747,8 @@
                                                             @endphp
                                                             @foreach ($groupedSlots as $day => $slots)
                                                                 <div class="col-md-2 mb-4">
-                                                                    <h5 class="mb-3">{{ $day }} <i class="fa fa-clock"></i></h5>
+                                                                    <h5 class="mb-3">{{ $day }} <i
+                                                                            class="fa fa-clock"></i></h5>
                                                                     <div class="time-slots">
                                                                         @foreach ($slots as $slot)
                                                                             <div class="form-check mb-2">
@@ -753,8 +759,10 @@
                                                                                     id="slot_start_{{ $slot->id }}"
                                                                                     data-slot-id="{{ $slot->id }}"
                                                                                     @if (in_array($slot->id, $selectedSlots)) checked @endif>
-                                                                                    <label for="slot_start_{{ $slot->id }}">
-                                                                                        {{ formatTime($slot->slot_start) }} - {{ formatTime($slot->slot_end) }}
+                                                                                <label
+                                                                                    for="slot_start_{{ $slot->id }}">
+                                                                                    {{ formatTime($slot->slot_start) }} -
+                                                                                    {{ formatTime($slot->slot_end) }}
                                                                                 </label>
                                                                             </div>
                                                                         @endforeach
@@ -1275,6 +1283,68 @@
                                             </div>
                                         </div>
 
+                                        <div role="tabpanel" class="tab-pane fade" id="work_experience">
+                                            <div class="row pt-4 row-gap-24">
+                                                <div class="col-lg-12 p-0">
+                                                    <div class="form-section">
+                                                        <div class="row">
+                                                            <div class="col-md-3">@lang('common.company_name')</div>
+                                                            <div class="col-md-3">@lang('common.title')</div>
+                                                            <div class="col-md-2">@lang('common.from')</div>
+                                                            <div class="col-md-2">@lang('common.to')</div>
+                                                            <div class="col-md-2">@lang('common.action')</div>
+                                                        </div>
+
+
+                                                        @if (isset($work_experience))
+                                                            @foreach ($work_experience as $index => $work)
+                                                                <div class="row mt-3 work-experience-row"
+                                                                    id="work-experience-row-{{ $work->id }}">
+                                                                    <div class="col-md-3">
+                                                                        <input type="text" name="company_name[]"
+                                                                            value="{{ $work->company_name }}"
+                                                                            class="form-control"
+                                                                            placeholder="@lang('common.company_name')" />
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <input type="text" name="title[]"
+                                                                            value="{{ $work->title }}"
+                                                                            class="form-control"
+                                                                            placeholder="@lang('common.title')" />
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input type="date" name="from[]"
+                                                                            value="{{ $work->from }}"
+                                                                            class="form-control" />
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <input type="date" name="to[]"
+                                                                            value="{{ $work->to }}"
+                                                                            class="form-control" />
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <button type="button"
+                                                                            class="btn btn-danger remove-work-experience"
+                                                                            data-id="{{ $work->id }}">@lang('common.remove')</button>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+
+
+                                                        <div class="row mt-3" id="new-work-experience">
+
+                                                        </div>
+                                                        <div class="row mt-3">
+                                                            <div class="col-md-12">
+                                                                <button type="button" class="btn btn-primary"
+                                                                    id="add-more-work-experience">@lang('common.more')</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1314,14 +1384,72 @@
 @endsection
 @include('backEnd.partials.date_picker_css_js')
 @section('script')
-
     <script src="{{ asset('/backEnd/') }}/js/croppie.js"></script>
     <script src="{{ asset('/backEnd/') }}/js/editStaff.js"></script>
     <script>
+       
+       
+       $(document).ready(function() {
+    $('#add-more-work-experience').click(function() {
+        let newIndex = $('.work-experience-row').length;
+        $('#new-work-experience').before(`
+            <div class="row mt-3 work-experience-row">
+                <div class="col-md-3">
+                    <input type="text" name="company_name[]" class="form-control" placeholder="@lang('common.company_name')" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="title[]" class="form-control" placeholder="@lang('common.title')" />
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="from[]" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="to[]" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger remove-work-experience" data-id="">@lang('common.remove')</button>
+                </div>
+            </div>
+        `);
+    });
+
+    $(document).on('click', '.remove-work-experience', function() {
+        let button = $(this);
+        let row = button.closest('.row');
+        let workId = button.data('id');
+        console.log(workId);
+        
+
+        if (workId) {
+            $.ajax({
+                url: `/staff_work_experience_delete/${workId}`,
+                method: 'DELETE',
+                token:"csrf-token",
+                
+                success: function(response) {
+                    if (response.status === 'success') {
+                        row.remove();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Failed to delete the record.');
+                }
+            });
+        } else {
+            row.remove();
+        }
+    });
+});
+
+
+
+
         $(document).ready(function() {
 
-          
-            
+
+
 
 
             $('#cat_id').on('change', function() {
@@ -1420,7 +1548,7 @@
                         <div class="row" id="track-${trackId}-levels"></div>
                     `;
                         $checkboxContainer.append(trackHeader);
-                    
+
                         const $trackLevelContainer = $(`#track-${trackId}-levels`);
 
                         // Generate checkboxes for levels from 1 to levelNumber
@@ -1481,16 +1609,16 @@
                 }
             });
 
-            var hour_rate = '{{$editData->hourly_rate}}';
+            var hour_rate = '{{ $editData->hourly_rate }}';
             console.log(hour_rate);
-            
-            if(hour_rate !== null) {
+
+            if (hour_rate !== null) {
                 $('#hourly_rate').html(`
                     <div class="primary_input">
                         <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
                         <input type="text" name="hourly_rate" value="${hour_rate}" class="primary_input_field form-control">
                     </div>
-                `); 
+                `);
                 $('#hourly_rate').removeClass('d-none');
             }
 
@@ -1513,7 +1641,7 @@
                 $('#hourly_rate').html(`
             <div class="primary_input">
                 <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
-                <input type="text" name="hourly_rate" value="{{$editData->hourly_rate}}" class="primary_input_field form-control">
+                <input type="text" name="hourly_rate" value="{{ $editData->hourly_rate }}" class="primary_input_field form-control">
             </div>
         `);
                 $('#hourly_rate').removeClass('d-none');
