@@ -290,7 +290,7 @@
         </div>
 
 
-        {{-- <div class="container-fluid p-0 mt-5">
+        <div class="container-fluid p-0 mt-5">
          
             <div class="white-box">
                 <div class="row">
@@ -342,7 +342,7 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
 
     </section>

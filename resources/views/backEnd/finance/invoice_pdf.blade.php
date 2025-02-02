@@ -5,206 +5,186 @@
     <title>Student Invoice</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ asset('/backEnd/') }}/vendors/css/print/bootstrap.min.css" />
 
-</head>
-<style>
-    th {
-        font-size: 14px !important;
-
-    }
-    .d-flex{
-        display: flex;
-    }
-    .justify-content-between {
-        justify-content: space-between
-    }
-    .align-items-center {
-    -ms-flex-align: center !important;
-    align-items: center !important;
-}
-    td {
-        padding: 10px !important;
-        font-size: 12px !important;
-        color: #333 !important;
-
-    }
-
-    .Billig-container {
-
-        background: #ffff;
-        padding: 30px;
-    }
-
-    .main-title {
-        font-size: 14px !important;
-        color: #3c4e7a;
-    }
-
-    address,
-    p,
-    h4 {
-
-        color: #333 !important;
-    }
-
-    .water-mark {
-        position: absolute;
-        bottom: 50px;
-    }
-
-    .water-mark img {
-        width: 100%;
-        opacity: 0.1;
-        transform: rotate(15deg);
-    }
-</style>
-
-<body style="font-family: 'dejavu sans', sans-serif;">
-    <div class="container-fluid" id="pdf">
-        <section class="admin-visitor-area up_admin_visitor up_st_admin_visitor pl_22">
-            <div class="container-fluid Billig-container shadow-sm">
-                <div class="water-mark">
-                    <img src="{{ asset('/uploads/settings/logo.png') }}" alt="logo">
-
-                </div>
-                <!-- Header -->
-                <header>
-                    <div class="row d-flex justify-content-between">
-                        <div class="col-7 text-start mb-3 mb-sm-0">
-                            <img src="{{ asset('/uploads/settings/logo.png') }}" width="150" alt="logo">
-
-                        </div>
-                        <div class="col-5 text-end">
-                            <h4 class="mb-0 text-uppercase">Invoice NO.</h4>
-                            <p class="mb-0">{{ $finance_invoice->invoice_number }}</p>
-                        </div>
-                    </div>
-                    <hr>
-                </header>
-                <!-- Main Content -->
-                <main>
-
-                    <div class="row">
-                        <div class="col-6"><strong class="main-title">Date: </strong>
-                            {{ $finance_invoice->created_at->format('Y-m-d') }}
-                        </div>
-                        <div class="col-6 text-end"> <strong class="main-title">Invoice No: </strong>
-                            {{ $finance_invoice->invoice_number }}</div>
-                    </div>
-                    <hr>
-                    <div class="row d-flex justify-content-between">
-                        <div class="col-6 text-end order-sm-1">
-                            <strong class="main-title">Pay To:</strong>
-                            <address>
-                                Easy Teach It Solution<br>
-                                1348 Columbia Road, Denver<br>
-                                Pin : 80265
-                            </address>
-                        </div>
-                        <div class="col-6 order-sm-0">
-                            <strong class="main-title">Invoiced To:</strong>
-                            <address>
-                                Full Name: {{ $finance_invoice->student->full_name }}<br>
-                                Email: {{ $finance_invoice->student->email }}<br>
-                                Phone: {{ $finance_invoice->student->mobile }}<br>
-                                Address: {{ $finance_invoice->student->current_address }}<br>
-                            </address>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <td class="col-3"><strong class="main-title">Course Name</strong></td>
-                                    <td class="col-1 text-end"><strong class="main-title">Levels</strong></td>
-                                    <td class="col-2 text-end"><strong class="main-title">Amount</strong></td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="col-3"> {{ $finance_invoice->staff_scheduled->course_name_en }}
-                                    </td>
-                                    <td class="col-1 text-end">{{ $finance_invoice->levels_id }}</td>
-                                    <td class="col-2 text-end">
-                                        {{ $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price }}
-                                    </td>
-                                </tr>
-
-
-                            </tbody>
-                        </table>
-
-
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col">
-                            <div><strong class="main-title">Sub Total:</strong></div>
-                            <div> <strong class="main-title">Tax (14%):</strong></div>
-                            <div> <strong class="main-title">Total:</strong></div>
-                        </div>
-                        <div class="col">
-                            @php
-                                $total_price =
-                                    $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price;
-                                $total_tax_amount = ($total_price * 14) / 100;
-                                $total_price_after_tax = $total_price - $total_tax_amount;
-                            @endphp
-                            <div class="">
-                                {{ $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price }}
-
-                            </div>
-                            <div class="">{{ $total_tax_amount }} </div>
-                            <div class="">
-                                {{ $total_price_after_tax }}
-
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-        </section>
-    </div>
-    <script src="{{ asset('/vendor/spondonit/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('/backEnd/js/pdf/html2pdf.bundle.min.js') }}"></script>
-    <script src="{{ asset('/backEnd/js/pdf/html2canvas.min.js') }}"></script>
-
-    <script>
-        function generatePDF() {
-            const element = document.getElementById('pdf');
-            var opt = {
-                margin: 0.5,
-              
-                filename: 'invoice.pdf',
-                image: {
-                    type: 'jpeg',
-                    quality: 50
-                },
-                html2canvas: {
-                    scale: 5
-                },
-                jsPDF: {
-                    unit: 'in',
-                    format: 'a4',
-                    orientation: 'landscape'
-                }
-            };
-
-            html2pdf().set(opt).from(element).save().then(function() {
-                // window.close();
-            });
+    <style>
+        body {
+            font-family: 'dejavu sans', sans-serif;
         }
 
+        .container {
+            width: 100%;
+            padding: 30px;
+            background: #fff;
+        }
 
+        .text-start {
+            text-align: left;
+        }
 
-        $(document).ready(function() {
-            generatePDF();
+        .text-end {
+            text-align: right;
+        }
 
-        })
-    </script>
+        .text-center {
+            text-align: center;
+        }
 
+        .main-title {
+            font-size: 14px;
+            color: #3c4e7a;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .table th {
+            background: #f5f5f5;
+        }
+
+        .invoice-header {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .invoice-header td {
+            padding: 5px 0;
+        }
+
+        .water-mark {
+            position: absolute;
+            bottom: 50px;
+            opacity: 0.1;
+            transform: rotate(15deg);
+            width: 100%;
+        }
+
+        .water-mark img {
+            width: 100%;
+        }
+
+        .summary-table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .summary-table td {
+            padding: 8px;
+        }
+
+        .summary-table .text-end {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="">
+        <div class="water-mark">
+            <img src="{{ asset('/uploads/settings/logo.png') }}" alt="logo">
+        </div>
+
+        <!-- Invoice Header -->
+        <table class="invoice-header">
+            <tr>
+                <td class="text-start">
+                    <img src="{{ asset('/uploads/settings/logo.png') }}" width="150" alt="logo">
+                </td>
+                <td class="text-end">
+                    <h4 class="mb-0 text-uppercase">Invoice NO.</h4>
+                    <p class="mb-0">{{ $finance_invoice->invoice_number }}</p>
+                </td>
+            </tr>
+        </table>
+
+        <hr>
+
+        <!-- Invoice Details -->
+        <table class="invoice-header">
+            <tr>
+                <td class="text-start"><strong class="main-title">Date:</strong> {{ $finance_invoice->created_at->format('Y-m-d') }}</td>
+                <td class="text-end"><strong class="main-title">Invoice No:</strong> {{ $finance_invoice->invoice_number }}</td>
+            </tr>
+        </table>
+
+        <hr>
+
+        <!-- Billing Information -->
+        <table class="invoice-header">
+            <tr>
+                <td class="text-start">
+                    <strong class="main-title">Invoiced To:</strong>
+                    <address>
+                        Full Name: {{ $finance_invoice->student->full_name }}<br>
+                        Email: {{ $finance_invoice->student->email }}<br>
+                        Phone: {{ $finance_invoice->student->mobile }}<br>
+                        Address: {{ $finance_invoice->student->current_address }}<br>
+                    </address>
+                </td>
+                <td class="text-end">
+                    <strong class="main-title">Refund Policy:</strong>
+                    <address>
+                    
+                        - Full refund if cancellation is made 7 days before the course start date.<br>
+                        - 50% refund if within the first 7 days of the course.<br>
+                        - No refund after the first week of the course.<br>
+                        - Non-refundable registration, administrative, and material fees.<br>
+                    </address>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Invoice Table -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-start">Course Name</th>
+                    <th class="text-end">Levels</th>
+                    <th class="text-end">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-start">{{ $finance_invoice->staff_scheduled->course_name_en }}</td>
+                    <td class="text-end">{{ $finance_invoice->levels_id }}</td>
+                    <td class="text-end">
+                        {{ $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Summary Section -->
+        @php
+            $total_price = $finance_invoice->staff_scheduled->trackType->track_pricing_plans[0]->price;
+            $total_tax_amount = ($total_price * 14) / 100;
+            $total_price_after_tax = $total_price + $total_tax_amount;
+        @endphp
+
+        <table class="summary-table">
+            <tr>
+                <td><strong class="main-title">Sub Total:</strong></td>
+                <td class="text-end">{{ $total_price }}</td>
+            </tr>
+            <tr>
+                <td><strong class="main-title">Tax (14%):</strong></td>
+                <td class="text-end">{{ $total_tax_amount }}</td>
+            </tr>
+            <tr>
+                <td><strong class="main-title">Total:</strong></td>
+                <td class="text-end">{{ $total_price_after_tax }}</td>
+            </tr>
+        </table>
+    </div>
 </body>
 
 </html>

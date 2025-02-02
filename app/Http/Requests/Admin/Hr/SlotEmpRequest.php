@@ -24,18 +24,33 @@ class SlotEmpRequest extends FormRequest
      */
     public function rules()
     {
-        $school_id = auth()->user()->school_id;
-
+        $slotId = $this->id; // Fetch the 'id' parameter from the route
+    
         return [
             'slot_day' => [
-                'required', // slot name is required
+                'required',
+                Rule::unique('slot_emps', 'slot_day')->ignore($slotId),
             ],
             'slot_start' => [
                 'required',
+                Rule::unique('slot_emps', 'slot_start')->ignore($slotId),
             ],
             'slot_end' => [
                 'required',
-                ]
+                Rule::unique('slot_emps', 'slot_end')->ignore($slotId),
+            ],
+        ];
+    }
+
+    /**
+     * Custom messages for validation.
+     */
+    public function messages()
+    {
+        return [
+            'slot_day.unique' => 'This slot day has already been taken.',
+            'slot_start.unique' => 'This slot start time has already been taken.',
+            'slot_end.unique' => 'This slot end time has already been taken.',
         ];
     }
 }
