@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\FinanaceStudentInvoice;
 use App\Models\Finance;
-use App\Models\Track;
+use App\Models\{Track,TrackType};
+use App\Models\PricingPlanType;
 use App\SmStudent;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
@@ -20,19 +21,21 @@ class FinanceController extends Controller
     {
 
         $data['invoices'] = FinanaceStudentInvoice::with('student', 'levels', 'staff_scheduled')->get();
-        $data['students'] = SmStudent::get();
-        $data['tracks'] = Track::with('staff_scheduled')->get();
+
 
 
         return view('backEnd.finance.index', $data);
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        $data['students'] = SmStudent::get();
+        $data['tracks'] = Track::with('staff_scheduled')->get();        
+        $data['pricing_types'] = PricingPlanType::get();        
+        return view('backEnd.finance.create', $data);
     }
 
     /**

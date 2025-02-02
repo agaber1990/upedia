@@ -123,6 +123,7 @@ return [
     'reserved' => 'Reserved',
     'started' => 'Started',
     'ended' => 'Ended',
+    'create_invoice' => 'Create Invoice',
 
     'add_slotemployee' => 'Add Slot Time',
     'edit_slotemployee' => 'Edit Slot Time',
