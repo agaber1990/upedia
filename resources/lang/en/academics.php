@@ -233,4 +233,9 @@ return [
     'name_ar' => 'Name (Arabic)',
     'description_en' => 'Description (English)',
     'description_ar' => 'Description (Arabic)',
+    'id' => 'ID',
+    'days_criteria' => 'Days Criteria',
+    'capicity' => 'Capicity',
+    'instructor' => 'Instructor',
+    'track_name' => 'Track Name',
 ];

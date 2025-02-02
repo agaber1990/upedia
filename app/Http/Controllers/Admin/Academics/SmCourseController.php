@@ -40,7 +40,7 @@ class SmCourseController extends Controller
         $tracks = Track::get();
         $categories = Category::get();
         $slotTime = SlotEmp::get();
-        $staffScheduleds = StaffScheduled::with('track')->get();
+        $staffScheduleds = StaffScheduled::with('track','staff','trackType')->get();
         $students = SmStudent::where('active_status', 1)->get();
 
         return view('backEnd.academics.sm_courses.index', compact('students', 'staff', 'slots', 'trackAssignedStaff', 'tracks', 'staffScheduleds', 'categories', 'slotTime'));

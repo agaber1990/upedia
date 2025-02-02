@@ -16,6 +16,8 @@
         </div>
     </section>
 
+
+
     <section class="admin-visitor-area up_admin_visitor up_st_admin_visitor pl_22">
         <div class="container-fluid p-0">
             <div class="row">
@@ -27,9 +29,16 @@
                                 <table id="table_id" class="table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>@lang('academics.id')</th>
                                             <th>@lang('academics.course_name_en')</th>
                                             <th>@lang('academics.start_date')</th>
                                             <th>@lang('academics.end_date')</th>
+                                            <th>@lang('academics.days_criteria')</th>
+                                            <th>@lang('academics.track_type')</th>
+                                            <th>@lang('academics.capicity')</th>
+                                            <th>@lang('academics.instructor')</th>
+                                            <th>@lang('academics.track_name')</th>
+                                            <th>@lang('academics.levels')</th>
 
                                             <th>@lang('common.action')</th>
 
@@ -38,10 +47,25 @@
                                     <tbody>
                                         @foreach ($staffScheduleds as $scheduled)
                                             {{-- {{ dd($staffScheduleds) }} --}}
+                                            {{-- {{ dd($scheduled->slots()) }} --}}
+
                                             <tr>
+                                                <td>{{ $scheduled->id }}</td>
                                                 <td>{{ $scheduled->course_name_en }}</td>
                                                 <td>{{ $scheduled->start_date }}</td>
                                                 <td>{{ $scheduled->end_date }}</td>
+                                                <td>
+                                                    @foreach ($scheduled->slots->unique('slot_day') as $slot)
+                                                        {{ $slot->slot_day }}<br>
+                                                    @endforeach
+                                                </td>
+
+                                                <td>{{ $scheduled->trackType->name }}</td>
+                                                <td>{{ $scheduled->trackType->count_of_students }}</td>
+                                                <td>{{ $scheduled->staff->full_name }}</td>
+                                                <td>{{ $scheduled->track->track_name_en }}</td>
+                                                <td>{{ $scheduled->track->level_number }}</td>
+
                                                 <td>
                                                     <x-drop-down>
                                                         @if (userPermission('view_calendar'))
