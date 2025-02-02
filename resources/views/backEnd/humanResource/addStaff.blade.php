@@ -1165,20 +1165,21 @@
                                                 <div class="form-section">
                                                     <div class="row">
                                                         <div class="col-lg-6 col-xl-3 ">
-                                                                <div class="primary_input">
-                                                                    <label class="primary_input_label"
-                                                                        for="">@lang('hr.activities') *
-                                                                    </label>
-                                                                    <select class="primary_select " name="" id="">
-                                                                        <option data-display="@lang('hr.activities') *"
-                                                                            value="">@lang('hr.activities')
-                                                                            *</option>
-                                                                            <option>*</option>
-                                                                            <option>*</option>
-                                                                            <option>*</option>
-                                                                            <option>*</option>
-                                                                    </select>
-                                                                </div>
+                                                            <div class="primary_input">
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('hr.activities') *
+                                                                </label>
+                                                                <select class="primary_select " name=""
+                                                                    id="">
+                                                                    <option data-display="@lang('hr.activities') *"
+                                                                        value="">@lang('hr.activities')
+                                                                        *</option>
+                                                                    <option>*</option>
+                                                                    <option>*</option>
+                                                                    <option>*</option>
+                                                                    <option>*</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1202,9 +1203,27 @@
                                             <div class="col-lg-12 p-0">
                                                 <div class="form-section">
                                                     <div class="row">
-                                                        <div class="col-lg-6 col-xl-3 ">
-                                                        </div>
+                                                        <div class="col-md-3">@lang('common.company_name')</div>
+                                                        <div class="col-md-3">@lang('common.title')</div>
+                                                        <div class="col-md-3">@lang('common.from')</div>
+                                                        <div class="col-md-3">@lang('common.to')</div>
                                                     </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="primary_input">
+                                                                <input class="primary_input_field form-control" type="text" name="company_name" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="primary_input">
+                                                                <input class="primary_input_field form-control" type="text" name="title" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">@lang('common.from')</div>
+                                                        <div class="col-md-3">@lang('common.to')</div>
+                                                    </div>
+
+                                                    
                                                 </div>
                                             </div>
                                         </div>

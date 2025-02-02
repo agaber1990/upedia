@@ -728,6 +728,7 @@ return [
     "select_track" => "Select Track",
     "select_course" => "Select Course",
     "no_courses_available" => "No Course Available",
+    "company_name" => "Company Name",
 
 ]
 ?>
