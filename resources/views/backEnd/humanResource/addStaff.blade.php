@@ -93,6 +93,18 @@
                                 <a class="nav-link" href="#specilization" role="tab"
                                     data-toggle="tab">@lang('hr.specilization')</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#activities" role="tab"
+                                    data-toggle="tab">@lang('hr.activities')</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#educations" role="tab"
+                                    data-toggle="tab">@lang('hr.educations')</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#work_experience" role="tab"
+                                    data-toggle="tab">@lang('hr.work_experience')</a>
+                            </li>
 
                             <li class="nav-item flex-grow-1 text-right">
                                 <div class="row">
@@ -143,40 +155,8 @@
                                                         </div>
                                                     @endif
                                                     <div class="row">
-                                                        <div class="col-lg-6 col-xl-2 mb-20">
-                                                            <div class="primary_input">
-                                                                <label class="primary_input_label"
-                                                                    for="">@lang('common.role_types') *
-                                                                </label>
-                                                                <select
-                                                                    class="primary_select  form-control{{ $errors->has('role_type') ? ' is-invalid' : '' }}"
-                                                                    name="role_type" id="role_type"
-                                                                    onchange="getRoleTypeVal(this)">
-                                                                    <option data-display="@lang('common.role_types') *"
-                                                                        value="">@lang('common.role_types')
-                                                                        *</option>
-                                                                    @foreach ($role_types as $item)
-                                                                        <option value="{{ $item->id }}"
-                                                                            data-name="{{ $item->title }}">
-                                                                            {{ $item->title }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
 
-                                                                @if ($errors->has('role_type'))
-                                                                    <span class="text-danger invalid-select"
-                                                                        role="alert">
-                                                                        {{ $errors->first('role_type') }}
-                                                                    </span>
-                                                                @endif
-                                                            </div>
-
-
-
-
-
-                                                        </div>
-                                                        <div class="col-lg-6 col-xl-2 mb-20">
+                                                        <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label"
                                                                     for="">@lang('hr.staff_no')
@@ -227,7 +207,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-lg-6 col-xl-2 mb-20">
+                                                        <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label"
                                                                     for="">@lang('hr.department')
@@ -694,6 +674,34 @@
                                             <div class="col-lg-12 p-0">
                                                 <div class="form-section">
                                                     <div class="row mb-20">
+                                                        <div class="col-lg-6 col-xl-2 mb-20">
+                                                            <div class="primary_input">
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('common.role_types') *
+                                                                </label>
+                                                                <select
+                                                                    class="primary_select  form-control{{ $errors->has('role_type') ? ' is-invalid' : '' }}"
+                                                                    name="role_type" id="role_type"
+                                                                    onchange="getRoleTypeVal(this)">
+                                                                    <option data-display="@lang('common.role_types') *"
+                                                                        value="">@lang('common.role_types')
+                                                                        *</option>
+                                                                    @foreach ($role_types as $item)
+                                                                        <option value="{{ $item->id }}"
+                                                                            data-name="{{ $item->title }}">
+                                                                            {{ $item->title }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+
+                                                                @if ($errors->has('role_type'))
+                                                                    <span class="text-danger invalid-select"
+                                                                        role="alert">
+                                                                        {{ $errors->first('role_type') }}
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label"
@@ -869,20 +877,20 @@
                                                         @endphp
                                                         @foreach ($groupedSlots as $day => $slots)
                                                             <div class="col-md-2 mb-4">
-                                                                <h5 class="mb-3">{{ $day }} <i class="fa fa-clock"></i>
+                                                                <h5 class="mb-3">{{ $day }} <i
+                                                                        class="fa fa-clock"></i>
                                                                 </h5>
                                                                 <div class="time-slots">
                                                                     @foreach ($slots as $slot)
                                                                         <div class="form-check mb-2">
                                                                             <input class="form-check-input"
-                                                                                type="checkbox"
-                                                                                name="selected_slots[]"
+                                                                                type="checkbox" name="selected_slots[]"
                                                                                 value="{{ $slot->id }}"
                                                                                 id="slot_start_{{ $slot->id }}"
                                                                                 data-slot-id="{{ $slot->id }}">
                                                                             <label for="slot_start_{{ $slot->id }}">
                                                                                 {{ formatTime($slot->slot_start) }} -
-                                                                                
+
                                                                                 {{ formatTime($slot->slot_end) }}
                                                                             </label>
                                                                         </div>
@@ -1135,10 +1143,6 @@
                                                                 @endif
                                                             </div>
                                                         </div>
-
-
-
-
                                                         <!-- Container for dynamically generated checkboxes -->
                                                         <div id="checkbox-container" class="col-md-12 d-none mt-2"
                                                             class="col-lg-12 mt-20 border rounded p-3 bg-light">
@@ -1147,6 +1151,58 @@
                                                             <div id="checkbox-row">
                                                                 <!-- Checkboxes will be added here -->
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div role="tabpanel" class="tab-pane fade" id="activities">
+                                        <div class="row pt-4 row-gap-24">
+                                            <div class="col-lg-12 p-0">
+                                                <div class="form-section">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-xl-3 ">
+                                                                <div class="primary_input">
+                                                                    <label class="primary_input_label"
+                                                                        for="">@lang('hr.activities') *
+                                                                    </label>
+                                                                    <select class="primary_select " name="" id="">
+                                                                        <option data-display="@lang('hr.activities') *"
+                                                                            value="">@lang('hr.activities')
+                                                                            *</option>
+                                                                            <option>*</option>
+                                                                            <option>*</option>
+                                                                            <option>*</option>
+                                                                            <option>*</option>
+                                                                    </select>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="educations">
+                                        <div class="row pt-4 row-gap-24">
+                                            <div class="col-lg-12 p-0">
+                                                <div class="form-section">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-xl-3 ">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="work_experience">
+                                        <div class="row pt-4 row-gap-24">
+                                            <div class="col-lg-12 p-0">
+                                                <div class="form-section">
+                                                    <div class="row">
+                                                        <div class="col-lg-6 col-xl-3 ">
                                                         </div>
                                                     </div>
                                                 </div>

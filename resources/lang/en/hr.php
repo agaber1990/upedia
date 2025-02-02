@@ -262,5 +262,8 @@ return [
     'slots_emp' => "Slots Employee",
     'slots' => "Slots Time",
     'date' => "Date",
-    "hourly_rate"=>"Hourly Rate"
+    "hourly_rate"=>"Hourly Rate",
+    "activities"=>"Activities",
+    "educations"=>"Educations",
+    "work_experience"=>"Work Experience"
 ];
