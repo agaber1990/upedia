@@ -19,7 +19,17 @@
         <div class="container-fluid p-0">
            
             <div class="row">
-               
+                <div class="primary_input col-md-4">
+                    <label class="primary_input_label" for="student_id">
+                        @lang('common.select_student') <span class="text-danger">*</span>
+                    </label>
+                    <select class="primary_select form-control" name="student_id" id="student_id">
+                        <option value="">@lang('common.select_student')</option>
+                        @foreach ($students as $student)
+                            <option value="{{ $student->id }}">{{ $student->full_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="primary_input col-md-4">
                     <label class="primary_input_label" for="track">
                         @lang('common.pricing_plan_type') <span class="text-danger">*</span>
@@ -34,31 +44,90 @@
                     </select>
                 </div>
                 <div class="primary_input col-md-4">
-                    <label class="primary_input_label" for="track">
-                        @lang('common.select_track') <span class="text-danger">*</span>
-                    </label>
-                    <select class="primary_select form-control" name="track_id" id="track">
-                        <option value="">@lang('common.select_track')</option>
-                        @foreach ($tracks as $track)
-                            <option value="{{ $track->id }}" data-level="{{ $track->level_number }}">
-                                {{ $track->track_name_en }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="primary_input col-md-4" id="track_staff_scheduled">
+                    <label class="primary_input_label" for="">@lang('common.due_date')
+                        <span class="text-danger"> *</span></label>
 
+                        
+                    <input class="primary_input_field  inputs" type="date" value="{{ date('Y-m-d')}}" min="{{ date('Y-m-d')}}"
+                        name="due_date" id="due_date" />
                 </div>
-                <div class="primary_input col-md-4">
-                    <label class="primary_input_label" for="student_id">
-                        @lang('common.select_student') <span class="text-danger">*</span>
-                    </label>
-                    <select class="primary_select form-control" name="student_id" id="student_id">
-                        <option value="">@lang('common.select_student')</option>
-                        @foreach ($students as $student)
-                            <option value="{{ $student->id }}">{{ $student->full_name }}</option>
-                        @endforeach
-                    </select>
+                <div class="primary_input col-md-4 mt-2">
+                    <div class="d-flex">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="track" name="">
+                            <label class="form-check-label text-dark fw-bold" for="track">
+                                <i class="bi bi-check-circle-fill text-success me-1"></i> 
+                            </label>
+                        </div>
+                        <label class="primary_input_label" for="">@lang('common.posting_date')
+                            <span class="text-danger"> *</span></label>
+                    </div>
+                    <input class="primary_input_field  inputs" type="date" disabled
+                        name="posting_date" id="posting_date" />
+                </div>
+          
+                <div class="primary_input col-md-12 mt-2" >
+                    <hr>
+                    {{-- <div style="text-align: end">
+                        <button type="button" class="primary-btn fix-gr-bg  mb-2 p-3">
+                        <i class="fas fa-plus mx-0"></i>   
+                         </button>
+                    </div> --}}
+                    <table class="table table-bordered bg-white">
+                        <thead>
+                            <tr>
+                                <th style="    width: 110px;">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="track" name="">
+                                        <label class="form-check-label text-dark fw-bold" for="track">
+                                            <i class="bi bi-check-circle-fill text-success me-1"></i> 
+                                        </label>
+                                        {{__('common.check_all')}}
+                                    </div>
+                                </th>
+                                <th>{{__('common.select_tack_name')}}</th>
+                                <th>{{__('common.levels_qty')}}</th>
+                                <th>{{__('common.price')}}</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="track" name="">
+                                        <label class="form-check-label text-dark fw-bold" for="track">
+                                            <i class="bi bi-check-circle-fill text-success me-1"></i> 
+                                        </label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <label class="primary_input_label" for="track">
+                                        @lang('common.select_track') <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="primary_select form-control" name="track_id" id="track">
+                                        <option value="">@lang('common.select_track')</option>
+                                        @foreach ($tracks as $track)
+                                            <option value="{{ $track->id }}" data-level="{{ $track->level_number }}">
+                                                {{ $track->track_name_en }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="primary_input mb-2">
+                                        <label class="primary_input_label" for="">@lang('common.levels')
+                                            <span class="text-danger"> *</span></label>
+                                        <input class="primary_input_field form-control "
+                                            name="levels" id="levels" />
+                                    </div>
+                                </td>
+                                <td>
+                                    350 EGP
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <input type="hidden" id="levels_id" name="levels_id" value="">
             </div>
@@ -66,39 +135,21 @@
     </section>
 @endsection
 
+<style>
+      .table thead th,
+    .table tbody td {
+        padding: 10px !important 
+    }
 
+    .inputs {
+        font-size: 12px !important;
+        min-height: 45px;
+        color: #415094 !important;
+        border: 1px solid #d4d4d4 !important;
+    }
+</style>
 @push('scripts')
     <script>
-        const staffScheduledData = {!! json_encode($tracks->pluck('staff_scheduled', 'id')) !!};
-
-        $('#track').change(function() {
-            const selectedTrackId = $(this).val();
-            const selectedTrack = $(this).find('option:selected');
-            const levelNumber = selectedTrack.data('level');
-            $('#levels_id').val(levelNumber);
-
-            $('#track_staff_scheduled').html(`
-                <label class="primary_input_label" for="staff_scheduled">
-                    @lang('common.select_course') <span class="text-danger">*</span>
-                </label>
-                <select class="primary_select form-control" name="staff_scheduleds_id" id="staff_scheduleds_id">
-                    <option value="">@lang('common.select_course')</option>
-                </select>
-                `);
-
-            const staffScheduledSelect = $('#staff_scheduleds_id');
-            if (staffScheduledData[selectedTrackId]) {
-                staffScheduledData[selectedTrackId].forEach(function(scheduled) {
-                    staffScheduledSelect.append(
-                        `<option value="${scheduled.id}">${scheduled.course_name_en}</option>`
-                    );
-                });
-            } else {
-                staffScheduledSelect.append('<option value="">@lang('common.no_courses_available')</option>');
-            }
-        });
-
-        $('#track').trigger('change');
 
         $('#createInvoiceForm').on('click', function() {
             let staff_scheduleds_id = $('#staff_scheduleds_id').val();
