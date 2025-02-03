@@ -598,7 +598,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                                                                                                                </div> -->
+                                                                                                                                                    </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
