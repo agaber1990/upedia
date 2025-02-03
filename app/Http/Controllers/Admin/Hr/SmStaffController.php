@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Hr;
 
-use App\Models\{TrackType, EmType, StaffWorkExperience};
+use App\Models\{TrackType, EmType, StaffEducation, StaffWorkExperience};
 use App\Models\Track;
 use App\Models\TrackAssignedStaff;
 use App\Models\SlotEmp;
@@ -390,6 +390,20 @@ class SmStaffController extends Controller
                         }
                     }
                 }
+                if (isset($request->university)) {
+                    foreach ($request->university as $index => $item) {
+                        if (!empty($item) && !empty($request->degree[$index]) && !empty($request->specialization[$index]) && !empty($request->date_of_completion[$index])) {
+                            StaffEducation::create([
+                                'staff_id' => $staff->id,
+                                'university' => $item,
+                                'degree' => $request->degree[$index],
+                                'specialization' => $request->specialization[$index],
+                                'date_of_completion' => $request->date_of_completion[$index],
+                                'notes' => $request->notes[$index],
+                            ]);
+                        }
+                    }
+                }
 
 
 
@@ -458,6 +472,7 @@ class SmStaffController extends Controller
 
             $max_staff_no = SmStaff::withOutGlobalScopes()->where('is_saas', 0)->where('school_id', Auth::user()->school_id)->max('staff_no');
             $work_experience = StaffWorkExperience::where('staff_id', $editData->id)->get();
+            $education = StaffEducation::where('staff_id', $editData->id)->get();
 
             $roles = InfixRole::where('is_saas', 0)->where('active_status', '=', 1)
                 ->where(function ($q) {
@@ -521,7 +536,8 @@ class SmStaffController extends Controller
                 'student',
                 'is_required',
                 'has_permission',
-                'work_experience'
+                'work_experience',
+                'education'
             ));
         } catch (\Exception $e) {
             Toastr::error('Operation Failed', 'Failed');
@@ -816,6 +832,21 @@ class SmStaffController extends Controller
                             Toastr::error('Add Valid Data In Your Work Experience', 'Failed');
                             return redirect()->back();
                         }
+                    }
+                }
+            }
+            if ($request->has('university') && is_array($request->university)) {
+                StaffEducation::where('staff_id', $staff->id)->delete();
+                foreach ($request->university as $index => $item) {
+                    if (!empty($item) && !empty($request->degree[$index]) && !empty($request->specialization[$index]) && !empty($request->date_of_completion[$index])) {
+                        StaffEducation::create([
+                            'staff_id' => $staff->id,
+                            'university' => $item,
+                            'degree' => $request->degree[$index],
+                            'specialization' => $request->specialization[$index],
+                            'date_of_completion' => $request->date_of_completion[$index],
+                            'notes' => $request->notes[$index],
+                        ]);
                     }
                 }
             }

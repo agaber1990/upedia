@@ -108,6 +108,10 @@
                                         <a class="nav-link" href="#work_experience" role="tab"
                                             data-toggle="tab">@lang('hr.work_experience')</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#education" role="tab"
+                                            data-toggle="tab">@lang('hr.educations')</a>
+                                    </li>
 
                                 </ul>
                             </div>
@@ -598,7 +602,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                                                                                                                        </div> -->
+                                                                                                                                                            </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
@@ -1283,8 +1287,133 @@
                                             </div>
                                         </div>
 
+                                        <div role="tabpanel" class="tab-pane fade" id="education">
+                                            <div class="row pt-4 row-gap-24">
+                                                <div class="col-lg-12 p-0">
+                                                    <div class="form-section">
+                                                        <div class="row">
+                                                            <div class="col-md-2">@lang('common.university')/@lang('common.institute')</div>
+                                                            <div class="col-md-2">@lang('common.degree')/@lang('common.diploma')</div>
+                                                            <div class="col-md-2">@lang('common.major')/@lang('common.specialization')</div>
+                                                            <div class="col-md-2">@lang('common.date_of_completion')</div>
+                                                            <div class="col-md-2">@lang('common.additional_notes')</div>
+                                                            <div class="col-md-2">@lang('common.action')</div>
+                                                        </div>
 
+                                                        @if (isset($education) && count($education) > 0)
+                                                            @foreach ($education as $index => $item)
+                                                                <div class="row {{ $index == 0 ? 'first-education-row' : 'new-education-entry' }} mt-2"
+                                                                    id="{{ $index == 0 ? 'firstEducationRow' : '' }}">
+                                                                    <div class="col-md-2">
+                                                                        <div class="primary_input">
+                                                                            <input type="text" name="university[]"
+                                                                                value="{{ $item->university }}"
+                                                                                class="primary_input_field form-control"
+                                                                                placeholder="@lang('common.university')" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <div class="primary_input">
+                                                                            <input type="text" name="degree[]"
+                                                                                value="{{ $item->degree }}"
+                                                                                class="primary_input_field form-control"
+                                                                                placeholder="@lang('common.degree')" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <div class="primary_input">
+                                                                            <input type="text" name="specialization[]"
+                                                                                value="{{ $item->specialization }}"
+                                                                                class="primary_input_field form-control"
+                                                                                placeholder="@lang('common.specialization')" />
+                                                                        </div>
+                                                                    </div>
+                                                                   
+                                                                    
+                                                                    <div class="col-md-2">
+                                                                        <div class="primary_input">
+                                                                            <input class="primary_input_field form-control"
+                                                                                value="{{ $item->date_of_completion }}"
+                                                                                type="date" name="date_of_completion[]">
+                                                                        </div>
+                                                                    </div>
 
+                                                                    <div class="col-md-2">
+                                                                        <div class="primary_input">
+                                                                            <input type="text" name="notes[]"
+                                                                                value="{{ $item->notes }}"
+                                                                                class="primary_input_field form-control"
+                                                                                placeholder="@lang('common.notes')" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-2">
+                                                                        @if ($index == 0)
+                                                                            <button class="primary-btn fix-gr-bg"
+                                                                                id="addMoreEducationBtn">
+                                                                                <i class="fas fa-plus"></i>
+                                                                                @lang('common.more')
+                                                                            </button>
+                                                                        @else
+                                                                            <button
+                                                                                class="primary-btn fix-gr-bg removeEducationRow">
+                                                                                <i class="fas fa-minus"></i>
+                                                                                @lang('common.remove')
+                                                                            </button>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        @else
+                                                            <div class="row first-education-row" id="firstEducationRow">
+                                                                <div class="col-md-2">
+                                                                    <div class="primary_input">
+                                                                        <input type="text" name="university[]"
+                                                                            class="primary_input_field form-control"
+                                                                            placeholder="@lang('common.university')" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="primary_input">
+                                                                        <input type="text" name="degree[]"
+                                                                            class="primary_input_field form-control"
+                                                                            placeholder="@lang('common.degree')" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="primary_input">
+                                                                        <input type="text" name="specialization[]"
+                                                                            class="primary_input_field form-control"
+                                                                            placeholder="@lang('common.specialization')" />
+                                                                    </div>
+                                                                </div>
+                                                               
+                                                                <div class="col-md-2">
+                                                                    <div class="primary_input">
+                                                                        <input class="primary_input_field form-control"
+                                                                            type="date" name="date_of_completion[]">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="primary_input">
+                                                                        <input type="text" name="notes[]"
+                                                                            class="primary_input_field form-control"
+                                                                            placeholder="@lang('common.notes')" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <button class="primary-btn fix-gr-bg" id="addMoreEducationBtn">
+                                                                        <i class="fas fa-plus"></i> @lang('common.more')
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
+                                                        <div id="newEducationRow" class="mt-2"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div role="tabpanel" class="tab-pane fade" id="work_experience">
                                             <div class="row pt-4 row-gap-24">
                                                 <div class="col-lg-12 p-0">
@@ -1432,6 +1561,54 @@
     <script src="{{ asset('/backEnd/') }}/js/croppie.js"></script>
     <script src="{{ asset('/backEnd/') }}/js/editStaff.js"></script>
     <script>
+        $(document).ready(function() {
+            $('#addMoreEducationBtn').click(function(e) {
+                e.preventDefault();
+                $('#newEducationRow').append(`
+            <div class="row new-education-entry mt-2">
+                <div class="col-md-2">
+                    <div class="primary_input">
+                        <input class="primary_input_field form-control" type="text" name="university[]" value="">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="primary_input">
+                        <input class="primary_input_field form-control" type="text" name="degree[]" value="">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="primary_input">
+                        <input class="primary_input_field form-control" type="text" name="specialization[]" value="">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="primary_input">
+                        <input class="primary_input_field form-control" type="date" name="date_of_completion[]" value="">
+                    </div>
+                </div>
+                 <div class="col-md-2">
+                    <div class="primary_input">
+                        <input class="primary_input_field form-control" type="text" name="notes[]" value="">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="primary-btn fix-gr-bg removeEducationRow">
+                        <i class="fas fa-minus"></i> @lang('common.remove')
+                    </button>
+                </div>
+            </div>
+        `);
+            });
+
+            $(document).on('click', '.removeEducationRow', function(e) {
+                e.preventDefault();
+                if ($('.new-education-entry').length > 0) {
+                    $(this).closest('.new-education-entry').remove();
+                } else {
+                    alert('At least one work experience field is required.');
+                }
+            });
+        });
         $(document).ready(function() {
             $('#addMoreBtn').click(function(e) {
                 e.preventDefault();
@@ -1639,7 +1816,7 @@
 
 
 
-       
+
         function getRoleTypeVal(val) {
             var selectedOption = $(val).find('option:selected');
             var selectedRoleName = selectedOption.data('name').toLowerCase();

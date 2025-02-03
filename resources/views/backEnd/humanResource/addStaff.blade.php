@@ -1186,14 +1186,57 @@
                                             </div>
                                         </div>
                                     </div>
+                                 
                                     <div role="tabpanel" class="tab-pane fade" id="educations">
                                         <div class="row pt-4 row-gap-24">
                                             <div class="col-lg-12 p-0">
                                                 <div class="form-section">
                                                     <div class="row">
-                                                        <div class="col-lg-6 col-xl-3 ">
+                                                        <div class="col-md-2">@lang('common.university')/@lang('common.institute')</div>
+                                                        <div class="col-md-2">@lang('common.degree')/@lang('common.diploma')</div>
+                                                        <div class="col-md-2">@lang('common.major')/@lang('common.specialization')</div>
+                                                        <div class="col-md-2">@lang('common.date_of_completion')</div>
+                                                        <div class="col-md-2">@lang('common.additional_notes')</div>
+                                                        <div class="col-md-2">@lang('common.action')</div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <div class="primary_input">
+                                                                <input class="primary_input_field form-control"
+                                                                    type="text" name="university[]" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="primary_input">
+                                                                <input class="primary_input_field form-control"
+                                                                    type="text" name="degree[]" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="primary_input">
+                                                                <input class="primary_input_field form-control"
+                                                                    type="text" name="specialization[]" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="primary_input">
+                                                                <input class="primary_input_field form-control"
+                                                                    type="date" name="date_of_completion[]" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="primary_input">
+                                                                <input class="primary_input_field form-control"
+                                                                    type="text" name="notes[]" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button class="primary-btn fix-gr-bg" id="addMoreEducationBtn">
+                                                                <i class="fas fa-plus"></i> @lang('common.more')
+                                                            </button>
                                                         </div>
                                                     </div>
+                                                    <div id="newEducationRow" class="mt-2"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1262,6 +1305,56 @@
     <script>
         var $locale = '{{ app()->getLocale() }}';
 
+
+        $(document).ready(function() {
+            $('#addMoreEducationBtn').on('click', function(e) {
+                e.preventDefault();
+                $('#newEducationRow').append(`
+                    <div class="row new-Educationentry mt-2">
+                        <div class="col-md-2">
+                            <div class="primary_input">
+                                <input class="primary_input_field form-control"
+                                    type="text" name="university[]" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="primary_input">
+                                <input class="primary_input_field form-control"
+                                    type="text" name="degree[]" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="primary_input">
+                                <input class="primary_input_field form-control"
+                                    type="text" name="specialization[]" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="primary_input">
+                                <input class="primary_input_field form-control"
+                                    type="date" name="date_of_completion[]" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="primary_input">
+                                <input class="primary_input_field form-control"
+                                    type="text" name="notes[]" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                          <button class="primary-btn fix-gr-bg removeEducationRow">
+                                <i class="fas fa-minus"></i> @lang('common.remove')
+                            </button>
+                        </div>
+                    </div>
+                `);
+            });
+
+            $(document).on('click', '.removeEducationRow', function(e) {
+                e.preventDefault();
+                $(this).closest('.new-Educationentry').remove();
+            });
+        });
 
         $(document).ready(function() {
             $('#addMoreBtn').on('click', function(e) {
