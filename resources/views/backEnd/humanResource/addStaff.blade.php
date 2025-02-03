@@ -55,7 +55,7 @@
 
                 <div class="row">
                     <div class="col-lg-12 form_tab">
-                        <ul class="nav nav-tabs tabs_scroll_nav px-0" role="tablist">
+                        <ul class="nav nav-tabs tabs_scroll_nav no-scroll px-0" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" href="#basic_info" role="tab"
                                     data-toggle="tab">@lang('hr.basic_info')</a>
