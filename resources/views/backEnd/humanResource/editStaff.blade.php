@@ -811,10 +811,16 @@
                                                             @endif
 
 
-                                                            <div class="col-lg-6 col-xl-3 mb-20 d-none" id="hourly_rate">
+                                                            {{-- <div class="col-lg-6 col-xl-3 mb-20 d-none" id="hourly_rate">
                                                                 <!-- Second select box to display the selected role name -->
                                                                 <!-- Text input that will be displayed when "Freelancer" is selected -->
 
+                                                            </div> --}}
+                                                            <div class="col-lg-6 col-xl-3 mb-20">
+                                                                <div class="primary_input">
+                                                                    <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
+                                                                    <input type="text" name="hourly_rate" value="{{ $editData->hourly_rate }}" class="primary_input_field form-control">
+                                                                </div>
                                                             </div>
 
 

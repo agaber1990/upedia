@@ -747,6 +747,13 @@ return [
     "no_courses_available" => "No Course Available",
     "company_name" => "Company Name",
     "more" => "more",
+    "level_info" => "Level Info",
+    "session_info" => "Session Info",
+    "certification" => "Certification",
+    "extra" => "Extra",
+    "assignment" => "Assignment",
+    "lesson" => "Lesson",
+    "quiz" => "Quiz",
 
 ]
 ?>

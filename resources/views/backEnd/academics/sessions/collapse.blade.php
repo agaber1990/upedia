@@ -50,43 +50,91 @@
                                 aria-labelledby="heading_{{ $element->id }}"
                                 data-parent="#accordion_{{ $element->id }}">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col">
-                                            <h4>@lang('academics.track'):</h4>
-                                            <p class="text-dark">{{ $element->track->track_name_en }}</p>
-                                        </div>
-                                        <div class="col">
-                                            <h4>@lang('common.level'):</h4>
-                                            <p class="text-dark">{{ $element->level->name_en }}</p>
-                                        </div>
-                                        <div class="col">
-                                            <h4>@lang('academics.name_en'):</h4>
-                                            <p class="text-dark">{{ $element->name_en }}</p>
-                                        </div>
-                                        <div class="col">
-                                            <h4>@lang('academics.name_ar'):</h4>
-                                            <p class="text-dark">{{ $element->name_ar }}</p>
-                                        </div>
 
-                                        <div class="col">
-                                            <h4>@lang('common.materials'):</h4>
-                                            @if (is_array($element->file) || is_object($element->file))
-                                                <div class="row">
-                                                    @foreach ($element->file as $index => $file)
-                                                        <div class="co-md-4">
-                                                            <a href="/{{ $file }}" target="_blank"
-                                                                class="mx-1">
-                                                                <i class="fa fa-eye"></i> @lang('common.view_material')
-                                                                {{ $index + 1 }}
-                                                            </a>
+
+                                    <div class="row">
+                                        <div class="col-lg-12 form_tab">
+                                            
+                                            
+                                            <ul class="nav nav-tabs tabs_scroll_nav px-0" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" href="#session_info_{{ $element->id }}" role="tab"
+                                                        data-toggle="tab">@lang('common.session_info')</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#quiz_{{ $element->id }}" role="tab"
+                                                        data-toggle="tab">@lang('common.quiz')</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#lesson_{{ $element->id }}" role="tab"
+                                                        data-toggle="tab">@lang('common.lesson')</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#assignment_{{ $element->id }}" role="tab"
+                                                        data-toggle="tab">@lang('common.assignment')</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="#extra_{{ $element->id }}" role="tab"
+                                                        data-toggle="tab">@lang('common.extra')</a>
+                                                </li>
+                                            </ul>
+                                            
+
+
+                                            <div class="col-lg-12">
+                                                <div class="form-tab-container">
+                                                    <div class="tab-content">
+                                                        <div role="tabpanel" class="tab-pane fade show active" id="session_info_{{ $element->id }}">
+                                                            <div class="row pt-4 row-gap-24">
+                                                                <div class="col-lg-12 p-0">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            <h4>@lang('academics.track'):</h4>
+                                                                            <p class="text-dark">{{ $element->track->track_name_en }}</p>
+                                                                        </div>
+                                                                        <div class="col">
+                                                                            <h4>@lang('common.level'):</h4>
+                                                                            <p class="text-dark">{{ $element->level->name_en }}</p>
+                                                                        </div>
+                                                                        <div class="col">
+                                                                            <h4>@lang('academics.name_en'):</h4>
+                                                                            <p class="text-dark">{{ $element->name_en }}</p>
+                                                                        </div>
+                                                                        <div class="col">
+                                                                            <h4>@lang('academics.name_ar'):</h4>
+                                                                            <p class="text-dark">{{ $element->name_ar }}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    @endforeach
+                                                    
+                                                        <div role="tabpanel" class="tab-pane fade" id="quiz_{{ $element->id }}">
+                                                            <div class="row pt-4 row-gap-24">
+                                                                <div class="col-lg-12 p-0">Quiz</div>
+                                                            </div>
+                                                        </div>
+                                                    
+                                                        <div role="tabpanel" class="tab-pane fade" id="lesson_{{ $element->id }}">
+                                                            <div class="row pt-4 row-gap-24">
+                                                                <div class="col-lg-12 p-0">Lesson</div>
+                                                            </div>
+                                                        </div>
+                                                    
+                                                        <div role="tabpanel" class="tab-pane fade" id="assignment_{{ $element->id }}">
+                                                            <div class="row pt-4 row-gap-24">
+                                                                <div class="col-lg-12 p-0">Assignment</div>
+                                                            </div>
+                                                        </div>
+                                                    
+                                                        <div role="tabpanel" class="tab-pane fade" id="extra_{{ $element->id }}">
+                                                            <div class="row pt-4 row-gap-24">
+                                                                <div class="col-lg-12 p-0">Extra</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>                                                   
                                                 </div>
-                                            @else
-                                                <span>
-                                                    @lang('common.no_material_available')
-                                                </span>
-                                            @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +152,7 @@
                 @lang('common.no_sessions')
             </h4>
         </div>
-        
+
     </div>
 @endif
 

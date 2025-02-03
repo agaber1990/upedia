@@ -181,8 +181,8 @@
         }
 
         /**
-                                                                                                                                                                                                                                                                    * Nestable Extras
-                                                                                                                                                                                                                                                                    */
+                                                                                                                                                                                                                                                                        * Nestable Extras
+                                                                                                                                                                                                                                                                        */
 
         .nestable-lists {
             display: block;
@@ -207,8 +207,8 @@
         }
 
         /**
-                                                                                                                                                                                                                                                                    * Nestable Draggable Handles
-                                                                                                                                                                                                                                                                    */
+                                                                                                                                                                                                                                                                        * Nestable Draggable Handles
+                                                                                                                                                                                                                                                                        */
 
         .dd3-content {
             display: block;
@@ -386,16 +386,71 @@
                     <h3>@lang('common.sessions')</h3>
                 </div>
 
-            </div>
 
-            <div class="col-lg-12" id="menuList">
+                <div class="row">
+                    <div class="col-lg-12 form_tab">
 
-                <div class="">
-                    @include('backEnd.academics.sessions.collapse')
+                        <ul class="nav nav-tabs tabs_scroll_nav px-0" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#session_info" role="tab"
+                                    data-toggle="tab">@lang('common.session_info')</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#exam" role="tab"
+                                    data-toggle="tab">@lang('common.exam')</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#certification" role="tab"
+                                    data-toggle="tab">@lang('common.certification')</a>
+                            </li>
+                           
+                        </ul>
 
+
+                        <div class="col-lg-12">
+                            <div class="form-tab-container">
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade show active" id="session_info">
+                                        <div class="row pt-4 row-gap-24">
+                                            <div class="col-lg-12 p-0">
+                                                <div class="row">
+                                                    <div class="col-lg-12" id="menuList">
+
+                                                        <div class="">
+                                                            @include('backEnd.academics.sessions.collapse')
+                                        
+                                                        </div>
+                                        
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                    <div role="tabpanel" class="tab-pane fade" id="exam">
+                                        <div class="row pt-4 row-gap-24">
+                                            <div class="col-lg-12 p-0">Exam</div>
+                                        </div>
+                                    </div>
+                                
+                                    <div role="tabpanel" class="tab-pane fade" id="certification">
+                                        <div class="row pt-4 row-gap-24">
+                                            <div class="col-lg-12 p-0">Certification</div>
+                                        </div>
+                                    </div>
+                    
+                                </div>                                                   
+                            </div>
+                        </div>
+
+
+                    </div>
                 </div>
 
             </div>
+
+            
         </div>
 
     </div>

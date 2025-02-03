@@ -43,9 +43,9 @@
                         </div>
                         <div id="add_session" class="input-session" style="display: none;width:100%">
                             <button id="modal_btn" class="session-btn">
-                                <i class="fas fa-plus" style="color: #000000"></i> Session
-                            </button>
-                        </div>
+                                <i class="fas fa-plus" style="color: #000000"></i> @lang('academics.session')
+                            </button>                    
+                       </div>
                     </div>
                 </div>
 
