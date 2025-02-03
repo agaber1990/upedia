@@ -1516,8 +1516,6 @@ Route::get('/reg', function () {});
         Route::post('staff-store', ['as' => 'staffStore', 'uses' => 'Admin\Hr\SmStaffController@staffStore']);
         Route::post('staff-pic-store', ['as' => 'staffPicStore', 'uses' => 'Admin\Hr\SmStaffController@staffPicStore']);
 
-        Route::delete('/staff-work-experience/{id}',['Admin\Hr\SmStaffController@deleteWorkExperience'])->name('staff_work_experience_delete');
-
         Route::get('edit-staff/{id}', ['as' => 'editStaff', 'uses' => 'Admin\Hr\SmStaffController@editStaff']);
         Route::post('update-staff', ['as' => 'staffUpdate', 'uses' => 'Admin\Hr\SmStaffController@staffUpdate']);
         Route::post('staff-profile-update/{id}', ['as' => 'staffProfileUpdate', 'uses' => 'Admin\Hr\SmStaffController@staffProfileUpdate']);

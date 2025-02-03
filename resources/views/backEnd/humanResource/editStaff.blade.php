@@ -122,35 +122,7 @@
                                                             <input type="hidden" name="staff_id"
                                                                 value="{{ @$editData->id }}" id="_id">
 
-                                                            <div class="col-lg-6 col-xl-2 mb-20">
-                                                                <div class="primary_input">
-                                                                    <label class="primary_input_label"
-                                                                        for="">@lang('common.role_types')
-                                                                    </label>
-                                                                    <select
-                                                                        class="primary_select  form-control{{ $errors->has('role_type') ? ' is-invalid' : '' }}"
-                                                                        name="role_type" id="role_type"
-                                                                        onchange="getRoleTypeVal(this)">
-                                                                        <option data-display="@lang('common.role_types') *"
-                                                                            value="">@lang('common.role_types')
-                                                                            *</option>
-                                                                        @foreach ($role_types as $item)
-                                                                            <option value="{{ $item->id }}"
-                                                                                {{ $item->id == $editData->role_type ? 'selected' : '' }}
-                                                                                data-name="{{ $item->title }}">
-                                                                                {{ $item->title }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
 
-                                                                    @if ($errors->has('role_type'))
-                                                                        <span class="text-danger invalid-select"
-                                                                            role="alert">
-                                                                            {{ $errors->first('role_type') }}
-                                                                        </span>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
                                                             @if (in_array('staff_no', $has_permission))
                                                                 <div class="col-lg-6 col-xl-3 mb-20">
                                                                     <div class="primary_input">
@@ -626,7 +598,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                                                                                                </div> -->
+                                                                                                                                                </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
@@ -781,6 +753,36 @@
                                                     <div class="form-section">
                                                         <div class="row">
                                                             @if (in_array('epf_no', $has_permission))
+
+                                                                <div class="col-lg-6 col-xl-2 mb-20">
+                                                                    <div class="primary_input">
+                                                                        <label class="primary_input_label"
+                                                                            for="">@lang('common.role_types')
+                                                                        </label>
+                                                                        <select
+                                                                            class="primary_select  form-control{{ $errors->has('role_type') ? ' is-invalid' : '' }}"
+                                                                            name="role_type" id="role_type"
+                                                                            onchange="getRoleTypeVal(this)">
+                                                                            <option data-display="@lang('common.role_types') *"
+                                                                                value="">@lang('common.role_types')
+                                                                                *</option>
+                                                                            @foreach ($role_types as $item)
+                                                                                <option value="{{ $item->id }}"
+                                                                                    {{ $item->id == $editData->role_type ? 'selected' : '' }}
+                                                                                    data-name="{{ $item->title }}">
+                                                                                    {{ $item->title }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+
+                                                                        @if ($errors->has('role_type'))
+                                                                            <span class="text-danger invalid-select"
+                                                                                role="alert">
+                                                                                {{ $errors->first('role_type') }}
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                                 <div class="col-lg-6 col-xl-3 mb-20">
                                                                     <div class="primary_input">
                                                                         <label class="primary_input_label"
@@ -856,8 +858,6 @@
                                                                                 > @lang('hr.contract')
                                                                             </option>
                                                                         </select>
-
-
                                                                     </div>
                                                                 </div>
                                                             @endif
@@ -1283,6 +1283,8 @@
                                             </div>
                                         </div>
 
+
+
                                         <div role="tabpanel" class="tab-pane fade" id="work_experience">
                                             <div class="row pt-4 row-gap-24">
                                                 <div class="col-lg-12 p-0">
@@ -1295,52 +1297,94 @@
                                                             <div class="col-md-2">@lang('common.action')</div>
                                                         </div>
 
-
-                                                        @if (isset($work_experience))
+                                                        @if (isset($work_experience) && count($work_experience) > 0)
                                                             @foreach ($work_experience as $index => $work)
-                                                                <div class="row mt-3 work-experience-row"
-                                                                    id="work-experience-row-{{ $work->id }}">
+                                                                <div class="row {{ $index == 0 ? 'first-row' : 'new-entry' }} mt-2"
+                                                                    id="{{ $index == 0 ? 'firstRow' : '' }}">
                                                                     <div class="col-md-3">
-                                                                        <input type="text" name="company_name[]"
-                                                                            value="{{ $work->company_name }}"
-                                                                            class="form-control"
-                                                                            placeholder="@lang('common.company_name')" />
+                                                                        <div class="primary_input">
+                                                                            <input type="text" name="company_name[]"
+                                                                                value="{{ $work->company_name }}"
+                                                                                class="primary_input_field form-control"
+                                                                                placeholder="@lang('common.company_name')" />
+                                                                        </div>
                                                                     </div>
                                                                     <div class="col-md-3">
-                                                                        <input type="text" name="title[]"
-                                                                            value="{{ $work->title }}"
-                                                                            class="form-control"
-                                                                            placeholder="@lang('common.title')" />
+                                                                        <div class="primary_input">
+                                                                            <input type="text" name="title[]"
+                                                                                value="{{ $work->title }}"
+                                                                                class="primary_input_field form-control"
+                                                                                placeholder="@lang('common.title')" />
+                                                                        </div>
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        <input type="date" name="from[]"
-                                                                            value="{{ $work->from }}"
-                                                                            class="form-control" />
+                                                                        <div class="primary_input">
+                                                                            <input type="date" name="from[]"
+                                                                                value="{{ $work->from }}"
+                                                                                class="primary_input_field form-control" />
+                                                                        </div>
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        <input type="date" name="to[]"
-                                                                            value="{{ $work->to }}"
-                                                                            class="form-control" />
+                                                                        <div class="primary_input">
+                                                                            <input class="primary_input_field form-control"
+                                                                                value="{{ $work->to }}"
+                                                                                type="date" name="to[]">
+                                                                        </div>
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        <button type="button"
-                                                                            class="btn btn-danger remove-work-experience"
-                                                                            data-id="{{ $work->id }}">@lang('common.remove')</button>
+                                                                        @if ($index == 0)
+                                                                            <button class="primary-btn fix-gr-bg"
+                                                                                id="addMoreBtn">
+                                                                                <i class="fas fa-plus"></i>
+                                                                                @lang('common.more')
+                                                                            </button>
+                                                                        @else
+                                                                            <button
+                                                                                class="primary-btn fix-gr-bg removeRow">
+                                                                                <i class="fas fa-minus"></i>
+                                                                                @lang('common.remove')
+                                                                            </button>
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                             @endforeach
+                                                        @else
+                                                            <div class="row first-row" id="firstRow">
+                                                                <div class="col-md-3">
+                                                                    <div class="primary_input">
+                                                                        <input type="text" name="company_name[]"
+                                                                            class="primary_input_field form-control"
+                                                                            placeholder="@lang('common.company_name')" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="primary_input">
+                                                                        <input type="text" name="title[]"
+                                                                            class="primary_input_field form-control"
+                                                                            placeholder="@lang('common.title')" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="primary_input">
+                                                                        <input type="date" name="from[]"
+                                                                            class="primary_input_field form-control" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="primary_input">
+                                                                        <input class="primary_input_field form-control"
+                                                                            type="date" name="to[]">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <button class="primary-btn fix-gr-bg" id="addMoreBtn">
+                                                                        <i class="fas fa-plus"></i> @lang('common.more')
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         @endif
 
-
-                                                        <div class="row mt-3" id="new-work-experience">
-
-                                                        </div>
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-12">
-                                                                <button type="button" class="btn btn-primary"
-                                                                    id="add-more-work-experience">@lang('common.more')</button>
-                                                            </div>
-                                                        </div>
+                                                        <div id="newRow" class="mt-2"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1352,6 +1396,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         </div>
         {{ Form::close() }}
@@ -1387,64 +1432,49 @@
     <script src="{{ asset('/backEnd/') }}/js/croppie.js"></script>
     <script src="{{ asset('/backEnd/') }}/js/editStaff.js"></script>
     <script>
-       
-       
-       $(document).ready(function() {
-    $('#add-more-work-experience').click(function() {
-        let newIndex = $('.work-experience-row').length;
-        $('#new-work-experience').before(`
-            <div class="row mt-3 work-experience-row">
+        $(document).ready(function() {
+            $('#addMoreBtn').click(function(e) {
+                e.preventDefault();
+                $('#newRow').append(`
+            <div class="row new-entry mt-2">
                 <div class="col-md-3">
-                    <input type="text" name="company_name[]" class="form-control" placeholder="@lang('common.company_name')" />
+                    <div class="primary_input">
+                        <input class="primary_input_field form-control" type="text" name="company_name[]" value="">
+                    </div>
                 </div>
                 <div class="col-md-3">
-                    <input type="text" name="title[]" class="form-control" placeholder="@lang('common.title')" />
+                    <div class="primary_input">
+                        <input class="primary_input_field form-control" type="text" name="title[]" value="">
+                    </div>
                 </div>
                 <div class="col-md-2">
-                    <input type="date" name="from[]" class="form-control" />
+                    <div class="primary_input">
+                        <input class="primary_input_field form-control" type="date" name="from[]" value="">
+                    </div>
                 </div>
                 <div class="col-md-2">
-                    <input type="date" name="to[]" class="form-control" />
+                    <div class="primary_input">
+                        <input class="primary_input_field form-control" type="date" name="to[]" value="">
+                    </div>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-danger remove-work-experience" data-id="">@lang('common.remove')</button>
+                    <button class="primary-btn fix-gr-bg removeRow">
+                        <i class="fas fa-minus"></i> @lang('common.remove')
+                    </button>
                 </div>
             </div>
         `);
-    });
+            });
 
-    $(document).on('click', '.remove-work-experience', function() {
-        let button = $(this);
-        let row = button.closest('.row');
-        let workId = button.data('id');
-        console.log(workId);
-        
-
-        if (workId) {
-            $.ajax({
-                url: `/staff_work_experience_delete/${workId}`,
-                method: 'DELETE',
-                token:"csrf-token",
-                
-                success: function(response) {
-                    if (response.status === 'success') {
-                        row.remove();
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
-                },
-                error: function() {
-                    alert('Failed to delete the record.');
+            $(document).on('click', '.removeRow', function(e) {
+                e.preventDefault();
+                if ($('.new-entry').length > 0) {
+                    $(this).closest('.new-entry').remove();
+                } else {
+                    alert('At least one work experience field is required.');
                 }
             });
-        } else {
-            row.remove();
-        }
-    });
-});
-
-
-
+        });
 
         $(document).ready(function() {
 

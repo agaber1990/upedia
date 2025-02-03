@@ -45,6 +45,8 @@ use App\SmLeaveDefine;
 use Illuminate\Validation\ValidationException;
 use Modules\RolePermission\Entities\InfixRole;
 
+use Carbon\Carbon;
+
 class SmStaffController extends Controller
 {
     use CustomFields;
@@ -436,18 +438,6 @@ class SmStaffController extends Controller
         }
     }
 
-    public function deleteWorkExperience($id)
-    {
-        $workExperience = StaffWorkExperience::find($id);
-
-        if (!$workExperience) {
-            return response()->json(['status' => 'error', 'message' => 'Record not found'], 404);
-        }
-
-        $workExperience->delete();
-
-        return response()->json(['status' => 'success', 'message' => 'Work experience deleted successfully']);
-    }
 
 
     public function editStaff($id)
@@ -803,6 +793,33 @@ class SmStaffController extends Controller
                     $staffSlot->save();
                 }
             }
+
+
+
+
+
+            if ($request->has('company_name') && is_array($request->company_name)) {
+                StaffWorkExperience::where('staff_id', $staff->id)->delete();
+                foreach ($request->company_name as $index => $company) {
+                    if (!empty($company) && !empty($request->title[$index]) && !empty($request->from[$index]) && !empty($request->to[$index])) {
+                        $fromDate = Carbon::parse($request->from[$index]);
+                        $toDate = Carbon::parse($request->to[$index]);
+                        if ($fromDate->lt($toDate)) {
+                            StaffWorkExperience::create([
+                                'staff_id' => $staff->id,
+                                'company_name' => $company,
+                                'title' => $request->title[$index],
+                                'from' => $request->from[$index],
+                                'to' => $request->to[$index],
+                            ]);
+                        } else {
+                            Toastr::error('Add Valid Data In Your Work Experience', 'Failed');
+                            return redirect()->back();
+                        }
+                    }
+                }
+            }
+
 
 
 

@@ -1240,17 +1240,14 @@
                                                             </button>
                                                         </div>
                                                     </div>
-
                                                     <div id="newRow" class="mt-2"></div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -1269,38 +1266,35 @@
         $(document).ready(function() {
             $('#addMoreBtn').on('click', function(e) {
                 e.preventDefault();
-
-                let newRaw = `
-        <div class="row new-entry mt-2">
-            <div class="col-md-3">
-                <div class="primary_input">
-                    <input class="primary_input_field form-control" type="text" name="company_name[]" value="">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="primary_input">
-                    <input class="primary_input_field form-control" type="text" name="title[]" value="">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="primary_input">
-                    <input class="primary_input_field form-control" type="date" name="from[]" value="">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="primary_input">
-                    <input class="primary_input_field form-control" type="date" name="to[]" value="">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <button class="primary-btn fix-gr-bg removeRow">
-                    <i class="fas fa-minus"></i> @lang('common.remove')
-                </button>
-            </div>
-        </div>
-        `;
-
-                $('#newRow').append(newRaw);
+                $('#newRow').append(`
+                    <div class="row new-entry mt-2">
+                        <div class="col-md-3">
+                            <div class="primary_input">
+                                <input class="primary_input_field form-control" type="text" name="company_name[]" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="primary_input">
+                                <input class="primary_input_field form-control" type="text" name="title[]" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="primary_input">
+                                <input class="primary_input_field form-control" type="date" name="from[]" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="primary_input">
+                                <input class="primary_input_field form-control" type="date" name="to[]" value="">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="primary-btn fix-gr-bg removeRow">
+                                <i class="fas fa-minus"></i> @lang('common.remove')
+                            </button>
+                        </div>
+                    </div>
+                `);
             });
 
             $(document).on('click', '.removeRow', function(e) {
