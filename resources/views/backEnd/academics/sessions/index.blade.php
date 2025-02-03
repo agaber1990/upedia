@@ -11,8 +11,10 @@
                 <h1>@lang('academics.track_session')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="#">@lang('academics.academics')</a>
-                    <a href="#">@lang('academics.track_session')</a>
+                    <a>@lang('academics.academics')</a>
+                    <a href="{{ route('tracks') }}">@lang('academics.track')</a>
+                    <a href="{{ route('track_levels', ['track_id' => $track->id]) }}">@lang('academics.levels')</a>
+                    <a>@lang('common.session')</a>
                 </div>
             </div>
         </div>
@@ -44,8 +46,8 @@
                         <div id="add_session" class="input-session" style="display: none;width:100%">
                             <button id="modal_btn" class="session-btn">
                                 <i class="fas fa-plus" style="color: #000000"></i> @lang('academics.session')
-                            </button>                    
-                       </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

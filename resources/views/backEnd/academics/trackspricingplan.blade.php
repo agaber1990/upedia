@@ -6,10 +6,12 @@
     <section class="sms-breadcrumb mb-20">
         <div class="container-fluid">
             <div class="row justify-content-between">
+                <h1>@lang('academics.pricing_plan')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('academics.dashboard')</a>
-                    <a href="#">@lang('academics.academics')</a>
-                    <a href="#">@lang('academics.pricing_plan')</a>
+                    <a>@lang('academics.academics')</a>
+                    <a href="{{ route('tracks') }}">@lang('academics.tracks')</a>
+                    <a>@lang('academics.pricing_plan')</a>
                 </div>
             </div>
         </div>

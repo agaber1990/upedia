@@ -9,8 +9,8 @@
                 <h1>@lang('hr.slotemployee')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="#">@lang('hr.human_resource')</a>
-                    <a href="#">@lang('hr.slotemployee')</a>
+                    <a>@lang('hr.human_resource')</a>
+                    <a>@lang('hr.slotemployee')</a>
                 </div>
             </div>
         </div>

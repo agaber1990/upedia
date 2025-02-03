@@ -9,8 +9,8 @@
                 <h1>@lang('academics.category')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="#">@lang('academics.academics')</a>
-                    <a href="#">@lang('academics.category')</a>
+                    <a>@lang('academics.academics')</a>
+                    <a>@lang('academics.category')</a>
                 </div>
             </div>
         </div>

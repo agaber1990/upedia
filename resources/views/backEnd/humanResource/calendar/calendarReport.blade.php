@@ -14,8 +14,8 @@
                 <h1>@lang('hr.calendar_report')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="#">@lang('hr.human_resource')</a>
-                    <a href="#">@lang('hr.calendar_report')</a>
+                    <a>@lang('hr.human_resource')</a>
+                    <a>@lang('hr.calendar_report')</a>
                 </div>
             </div>
         </div>

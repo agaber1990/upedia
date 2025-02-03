@@ -40,8 +40,8 @@
                 <h1>@lang('common.invoices')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="#">@lang('academics.academics')</a>
-                    <a href="#">@lang('common.invoices')</a>
+                    <a>@lang('academics.academics')</a>
+                    <a>@lang('common.invoices')</a>
                 </div>
             </div>
         </div>
