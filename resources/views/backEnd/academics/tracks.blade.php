@@ -200,7 +200,7 @@
 
                             <div class="row mt-40">
                                 <div class="col-lg-12 text-center">
-                                    <button class="primary-btn fix-gr-bg submit" data-toggle="tooltip" title="">
+                                    <button type="submit" class="primary-btn fix-gr-bg submit" data-toggle="tooltip" title="">
                                         <span class="ti-check"></span>
                                         @if (isset($track))
                                             @lang('academics.update_track')

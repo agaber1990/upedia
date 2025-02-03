@@ -10,6 +10,16 @@ class Track extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'cat_id',
+        'track_name_en',
+        'track_name_ar',
+        'level_number',
+        'session',
+        'schedule',
+        'valid_for',
+    ];
+
     public function levels()
     {
         return $this->belongsTo(Level::class, 'level_number');

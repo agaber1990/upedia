@@ -238,4 +238,10 @@ return [
     'capicity' => 'Capicity',
     'instructor' => 'Instructor',
     'track_name' => 'Track Name',
+    'track_name_en_required' => 'Track Name (English) Required',
+    'track_name_ar_required' => 'Track Name (Arabic) Required',
+    'level_number_required' => 'Level Number Required',
+    'schedule_required' => 'Schedule Required',
+    'categories_required' => 'Category Required',
+    'valid_for_required' => 'Valid For Required',
 ];

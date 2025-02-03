@@ -29,35 +29,40 @@ class TrackLevelController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'track_id' => 'required|exists:tracks,id',
-            'name_en' => 'required|string',
-            'name_ar' => 'required|string',
-            'description_en' => 'required|string',
-            'description_ar' => 'required|string',
-            'file' => 'required|file|mimes:pdf,doc,docx',
-        ]);
+        try {
+            $validated = $request->validate([
+                'track_id' => 'required|exists:tracks,id',
+                'name_en' => 'required|string',
+                'name_ar' => 'required|string',
+                'description_en' => 'required|string',
+                'description_ar' => 'required|string',
+                'file' => 'required|file|mimes:pdf,doc,docx',
+            ]);
 
-        $filePath = 'No File';
+            $filePath = 'No File';
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName(); // 
-            $file->move(public_path('courses_student/'), $fileName);
-            $filePath = 'courses_student/' . $fileName;
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName(); // 
+                $file->move(public_path('courses_student/'), $fileName);
+                $filePath = 'courses_student/' . $fileName;
+            }
+
+            TrackLevel::create([
+                'track_id' => $validated['track_id'],
+                'name_en' => $validated['name_en'],
+                'name_ar' => $validated['name_ar'],
+                'description_en' => $validated['description_en'],
+                'description_ar' => $validated['description_ar'],
+                'file' => $filePath,
+            ]);
+
+            Toastr::success('Created successfully', 'Success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
         }
-
-        TrackLevel::create([
-            'track_id' => $validated['track_id'],
-            'name_en' => $validated['name_en'],
-            'name_ar' => $validated['name_ar'],
-            'description_en' => $validated['description_en'],
-            'description_ar' => $validated['description_ar'],
-            'file' => $filePath,
-        ]);
-
-        Toastr::success('Created successfully', 'Success');
-        return redirect()->back();
     }
 
 

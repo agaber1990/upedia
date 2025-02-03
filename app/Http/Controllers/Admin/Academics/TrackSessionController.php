@@ -51,37 +51,44 @@ class TrackSessionController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'track_id' => 'required|exists:tracks,id',
-            'level_id' => 'required|exists:levels,id',
-            'session_name_en' => 'required|string',
-            'session_name_ar' => 'required|string',
-        ]);
-        $existingSessionsCount = 0;
-        // Fetch the track and its existing sessions
-        $track = Track::findOrFail($validated['track_id']);
-        $trackSessions = TrackSession::where('track_id', $validated['track_id'])->get();
-        $existingSessionsCount = count($trackSessions);
+        try {
+            $validated = $request->validate([
+                'track_id' => 'required|exists:tracks,id',
+                'level_id' => 'required|exists:levels,id',
+                'session_name_en' => 'required|string',
+                'session_name_ar' => 'required|string',
+            ]);
+            $existingSessionsCount = 0;
+            // Fetch the track and its existing sessions
+            $track = Track::findOrFail($validated['track_id']);
+            $trackSessions = TrackSession::where('track_id', $validated['track_id'])->get();
+            $existingSessionsCount = count($trackSessions);
 
-        if ($existingSessionsCount >= $track->session) {
-            return response()->json(['error' => 'Sorry, you cannot add more sessions.'], 422);
+            if ($existingSessionsCount >= $track->session) {
+                return response()->json(['error' => 'Sorry, you cannot add more sessions.'], 422);
+            }
+
+            // Create the track session
+            TrackSession::create([
+                'track_id' => $validated['track_id'],
+                'level_id' => $validated['level_id'],
+                'session_number' => $existingSessionsCount + 1,
+                'session_name_en' => $validated['session_name_en'],
+                'session_name_ar' => $validated['session_name_ar'],
+                'session_ref' => "TRS" . time()
+            ]);
+
+
+            return response()->json([
+                'message' => 'Track session added successfully.',
+                'data' => $trackSessions
+            ], 200);
+            Toastr::success('Created successfully', 'Success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
         }
-
-        // Create the track session
-        TrackSession::create([
-            'track_id' => $validated['track_id'],
-            'level_id' => $validated['level_id'],
-            'session_number' => $existingSessionsCount + 1,
-            'session_name_en' => $validated['session_name_en'],
-            'session_name_ar' => $validated['session_name_ar'],
-            'session_ref' => "TRS" . time()
-        ]);
-
-
-        return response()->json([
-            'message' => 'Track session added successfully.',
-            'data' => $trackSessions
-        ], 200);
     }
 
     /**

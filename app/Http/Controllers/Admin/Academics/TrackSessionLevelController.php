@@ -24,6 +24,7 @@ class TrackSessionLevelController extends Controller
 
     public function store(Request $request)
     {
+        try{
         $validated = $request->validate([
             'track_id' => 'required|exists:tracks,id',
             'level_id' => 'required|exists:levels,id',
@@ -55,8 +56,14 @@ class TrackSessionLevelController extends Controller
             'description_ar' => $validated['description_ar'],
             'file' => $fileData,
         ]);
+  
+
         Toastr::success('Created successfully', 'Success');
         return redirect()->back();
+    } catch (\Exception $e) {
+        Toastr::error('Operation Failed', 'Failed');
+        return redirect()->back();
+    }
     }
 
 

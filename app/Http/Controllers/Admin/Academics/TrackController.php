@@ -43,22 +43,30 @@ class TrackController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+
     public function store(TrackRequest $request)
     {
-        // Create a new track instance and save the data
-        $track = new Track();
-        $track->cat_id = $request->cat_id;
-        $track->track_name_en = $request->track_name_en;
-        $track->track_name_ar = $request->track_name_ar;
-        $track->level_number = $request->level_number;
-        $track->session = $request->session;
-        $track->schedule = $request->schedule;
-        $track->valid_for = json_encode($request->valid_for); // Store valid_for as JSON
-        $track->save();
+        try {
+            $track = new Track();
+            $track->cat_id = $request->cat_id;
+            $track->track_name_en = $request->track_name_en;
+            $track->track_name_ar = $request->track_name_ar;
+            $track->level_number = $request->level_number;
+            $track->session = $request->session;
+            $track->schedule = $request->schedule;
+            $track->valid_for = json_encode($request->valid_for);
+            $track->save();
 
-        // Redirect back with success message
-        return redirect()->route('tracks')->with('success', __('academics.track_added_success'));
+            Toastr::success('Created successfully', 'Success');
+            return redirect()->route('tracks')->with('success', __('academics.track_added_success'));
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
+        }
     }
+
+
 
 
     /**
