@@ -598,7 +598,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                                                                                                                    </div> -->
+                                                                                                                                                        </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
@@ -1612,73 +1612,48 @@
         });
     </script>
 
+
+
+
     <script>
         $(document).ready(function() {
-            $('#track_level').on('change', function() {
-                const selectedOption = $(this).find(':selected'); // Get the selected option
-                const levelNumber = selectedOption.data('level'); // Get the data-level attribute
-                const $checkboxContainer = $('#checkbox-row'); // Target the checkbox row
-
-                // Clear existing checkboxes
-                $checkboxContainer.empty();
-
-                // Generate checkboxes if levelNumber exists
-                if (levelNumber) {
-                    for (let i = 1; i <= levelNumber; i++) {
-                        const checkboxHTML = `
-                        <div class="col-lg-4 col-md-4">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="level${i}" name="levels[]" value="${i}">
-                                <label class="form-check-label text-dark fw-bold" for="level${i}">
-                                    <i class="bi bi-check-circle-fill text-success me-1"></i> Level ${i}
-                                </label>
-                            </div>
-                        </div>`;
-                        $checkboxContainer.append(checkboxHTML); // Append checkbox to the container
-                    }
-                }
-            });
-
+            var selectedRole = $('#role_type option:selected').data('name');
+            var $hourlyRateDiv = $('#hourly_rate');
             var hour_rate = '{{ $editData->hourly_rate }}';
-            console.log(hour_rate);
 
-            if (hour_rate !== null) {
-                $('#hourly_rate').html(`
-                    <div class="primary_input">
-                        <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
-                        <input type="text" name="hourly_rate" value="${hour_rate}" class="primary_input_field form-control">
-                    </div>
-                `);
-                $('#hourly_rate').removeClass('d-none');
+            if (selectedRole && selectedRole.toLowerCase() === 'freelancer') {
+                if (hour_rate !== 'null' && hour_rate !== '') {
+                    $hourlyRateDiv.html(`
+                <div class="primary_input">
+                    <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
+                    <input type="text" name="hourly_rate" value="${hour_rate}" class="primary_input_field form-control">
+                </div>
+            `).removeClass('d-none');
+                } else {
+                    $hourlyRateDiv.addClass('d-none').empty();
+                }
+            } else {
+                $hourlyRateDiv.addClass('d-none').empty();
             }
-
         });
 
 
+
+       
         function getRoleTypeVal(val) {
-
-            // Get the selected option element
-
             var selectedOption = $(val).find('option:selected');
+            var selectedRoleName = selectedOption.data('name').toLowerCase();
+            var $hourlyRateDiv = $('#hourly_rate');
 
-            // Get the 'data-name' attribute of the selected option
-            var selectedRoleName = selectedOption.data('name');
-            // Clear the hourly rate section
-            $('#hourly_rate').html('');
-
-            // If the selected role is 'Freelancer', show the input field for hourly rate
-            if (selectedRoleName.toLowerCase() === 'freelancer') {
-                $('#hourly_rate').html(`
+            if (selectedRoleName === 'freelancer') {
+                $hourlyRateDiv.html(`
             <div class="primary_input">
                 <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
                 <input type="text" name="hourly_rate" value="{{ $editData->hourly_rate }}" class="primary_input_field form-control">
             </div>
-        `);
-                $('#hourly_rate').removeClass('d-none');
+        `).removeClass('d-none');
             } else {
-                // Hide the hourly rate section if the role is not 'Freelancer'
-                $('#hourly_rate').addClass('d-none');
-                $('#hourly_rate').html('');
+                $hourlyRateDiv.addClass('d-none').empty();
             }
         }
     </script>
