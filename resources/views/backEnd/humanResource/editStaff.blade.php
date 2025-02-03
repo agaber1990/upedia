@@ -1707,7 +1707,7 @@
                         success: function(data) {
                             // Clear the tracks dropdown
                             trackSelect.empty();
-                            trackTypeSelect.empty();
+                            // trackTypeSelect.empty();
 
                             // Populate the dropdown with the fetched tracks
                             data.tracks.forEach(function(track) {
@@ -1721,11 +1721,11 @@
                                     optionText + '</option>'
                                 );
                             });
-                            data.valid_for.forEach(function(validFor) {
-                                trackTypeSelect.append(
-                                    `<option value="${validFor.id}">${validFor.name}</option>`
-                                );
-                            });
+                            // data.valid_for.forEach(function(validFor) {
+                            //     trackTypeSelect.append(
+                            //         `<option value="${validFor.id}">${validFor.name}</option>`
+                            //     );
+                            // });
                             trackSelect.niceSelect('update');
                             trackTypeSelect.niceSelect('update');
 
