@@ -63,7 +63,6 @@
                         </div>
 
                         <div class="row">
-
                             <div class="col-lg-12 form_tab">
                                 <ul class="nav nav-tabs tabs_scroll_nav px-0" role="tablist">
                                     <li class="nav-item">
@@ -103,6 +102,10 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="#specilization" role="tab"
                                             data-toggle="tab">@lang('hr.specilization')</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#activities" role="tab"
+                                            data-toggle="tab">@lang('hr.activities')</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#work_experience" role="tab"
@@ -1514,6 +1517,30 @@
                                                         @endif
 
                                                         <div id="newRow" class="mt-2"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div role="tabpanel" class="tab-pane fade" id="activities">
+                                            <div class="row pt-4 row-gap-24">
+                                                <div class="col-lg-12 p-0">
+                                                    <div class="form-section">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-xl-3 ">
+                                                                <div class="primary_input">
+                                                                    <label class="primary_input_label"
+                                                                        for="">@lang('hr.activities') *</label>
+                                                                    <select class="primary_select " name=""
+                                                                        id="" multiple>
+                                                                        <option>Gift Call</option>
+                                                                        <option>English Club</option>
+                                                                        <option>Cover Up Sessions</option>
+                                                                        <option>Practice Sessions</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

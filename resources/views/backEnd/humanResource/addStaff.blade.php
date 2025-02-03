@@ -55,7 +55,7 @@
 
                 <div class="row">
                     <div class="col-lg-12 form_tab">
-                        <ul class="nav nav-tabs tabs_scroll_nav no-scroll px-0" role="tablist">
+                        <ul class="nav nav-tabs tabs_scroll_nav px-0" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" href="#basic_info" role="tab"
                                     data-toggle="tab">@lang('hr.basic_info')</a>
@@ -1167,17 +1167,13 @@
                                                         <div class="col-lg-6 col-xl-3 ">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label"
-                                                                    for="">@lang('hr.activities') *
-                                                                </label>
+                                                                    for="">@lang('hr.activities') *</label>
                                                                 <select class="primary_select " name=""
-                                                                    id="">
-                                                                    <option data-display="@lang('hr.activities') *"
-                                                                        value="">@lang('hr.activities')
-                                                                        *</option>
-                                                                    <option>*</option>
-                                                                    <option>*</option>
-                                                                    <option>*</option>
-                                                                    <option>*</option>
+                                                                    id="" multiple>
+                                                                    <option>Gift Call</option>
+                                                                    <option>English Club</option>
+                                                                    <option>Cover Up Sessions</option>
+                                                                    <option>Practice Sessions</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -1186,7 +1182,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                 
+
                                     <div role="tabpanel" class="tab-pane fade" id="educations">
                                         <div class="row pt-4 row-gap-24">
                                             <div class="col-lg-12 p-0">
@@ -1215,13 +1211,15 @@
                                                         <div class="col-md-2">
                                                             <div class="primary_input">
                                                                 <input class="primary_input_field form-control"
-                                                                    type="text" name="specialization[]" value="">
+                                                                    type="text" name="specialization[]"
+                                                                    value="">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <div class="primary_input">
                                                                 <input class="primary_input_field form-control"
-                                                                    type="date" name="date_of_completion[]" value="">
+                                                                    type="date" name="date_of_completion[]"
+                                                                    value="">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
@@ -1231,7 +1229,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <button class="primary-btn fix-gr-bg" id="addMoreEducationBtn">
+                                                            <button class="primary-btn fix-gr-bg"
+                                                                id="addMoreEducationBtn">
                                                                 <i class="fas fa-plus"></i> @lang('common.more')
                                                             </button>
                                                         </div>
