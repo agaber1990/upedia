@@ -64,7 +64,7 @@
 
                         <div class="row">
                             <div class="col-lg-12 form_tab">
-                                <ul class="nav nav-tabs tabs_scroll_nav px-0" role="tablist">
+                                <ul class="nav nav-tabs tabs_scroll_nav no-scroll px-0" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active" href="#basic_info" role="tab"
                                             data-toggle="tab">@lang('hr.basic_info')</a>
@@ -95,14 +95,7 @@
                                         <a class="nav-link" href="#custom_field" role="tab"
                                             data-toggle="tab">@lang('hr.custom_field')</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#slots" role="tab"
-                                            data-toggle="tab">@lang('hr.slots')</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#specilization" role="tab"
-                                            data-toggle="tab">@lang('hr.specilization')</a>
-                                    </li>
+                                  
                                     <li class="nav-item">
                                         <a class="nav-link" href="#activities" role="tab"
                                             data-toggle="tab">@lang('hr.activities')</a>
@@ -114,6 +107,15 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="#education" role="tab"
                                             data-toggle="tab">@lang('hr.educations')</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link d-none" id="slots_tab" href="#slots" role="tab"
+                                            data-toggle="tab">@lang('hr.slots')</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link d-none" id="specilization_tab" href="#specilization"
+                                            role="tab" data-toggle="tab">@lang('hr.specilization')</a>
                                     </li>
 
                                 </ul>
@@ -605,7 +607,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                                                                                                                            </div> -->
+                                                                                                                                                                </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
@@ -818,8 +820,11 @@
                                                             </div> --}}
                                                             <div class="col-lg-6 col-xl-3 mb-20">
                                                                 <div class="primary_input">
-                                                                    <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
-                                                                    <input type="text" name="hourly_rate" value="{{ $editData->hourly_rate }}" class="primary_input_field form-control">
+                                                                    <label class="primary_input_label"
+                                                                        for="hourly_rate">@lang('hr.hourly_rate')</label>
+                                                                    <input type="text" name="hourly_rate"
+                                                                        value="{{ $editData->hourly_rate }}"
+                                                                        class="primary_input_field form-control">
                                                                 </div>
                                                             </div>
 
@@ -874,7 +879,7 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
-                                                            @if (in_array('location', $has_permission))
+                                                            {{-- @if (in_array('location', $has_permission))
                                                                 <div class="col-lg-6 col-xl-3 mb-20">
                                                                     <div class="primary_input">
                                                                         <label class="primary_input_label"
@@ -893,7 +898,7 @@
                                                                         @endif
                                                                     </div>
                                                                 </div>
-                                                            @endif
+                                                            @endif --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1301,9 +1306,12 @@
                                                 <div class="col-lg-12 p-0">
                                                     <div class="form-section">
                                                         <div class="row">
-                                                            <div class="col-md-2">@lang('common.university')/@lang('common.institute')</div>
-                                                            <div class="col-md-2">@lang('common.degree')/@lang('common.diploma')</div>
-                                                            <div class="col-md-2">@lang('common.major')/@lang('common.specialization')</div>
+                                                            <div class="col-md-2">@lang('common.university')/@lang('common.institute')
+                                                            </div>
+                                                            <div class="col-md-2">@lang('common.degree')/@lang('common.diploma')
+                                                            </div>
+                                                            <div class="col-md-2">@lang('common.major')/@lang('common.specialization')
+                                                            </div>
                                                             <div class="col-md-2">@lang('common.date_of_completion')</div>
                                                             <div class="col-md-2">@lang('common.additional_notes')</div>
                                                             <div class="col-md-2">@lang('common.action')</div>
@@ -1337,13 +1345,14 @@
                                                                                 placeholder="@lang('common.specialization')" />
                                                                         </div>
                                                                     </div>
-                                                                   
-                                                                    
+
+
                                                                     <div class="col-md-2">
                                                                         <div class="primary_input">
                                                                             <input class="primary_input_field form-control"
                                                                                 value="{{ $item->date_of_completion }}"
-                                                                                type="date" name="date_of_completion[]">
+                                                                                type="date"
+                                                                                name="date_of_completion[]">
                                                                         </div>
                                                                     </div>
 
@@ -1396,7 +1405,7 @@
                                                                             placeholder="@lang('common.specialization')" />
                                                                     </div>
                                                                 </div>
-                                                               
+
                                                                 <div class="col-md-2">
                                                                     <div class="primary_input">
                                                                         <input class="primary_input_field form-control"
@@ -1411,7 +1420,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-2">
-                                                                    <button class="primary-btn fix-gr-bg" id="addMoreEducationBtn">
+                                                                    <button class="primary-btn fix-gr-bg"
+                                                                        id="addMoreEducationBtn">
                                                                         <i class="fas fa-plus"></i> @lang('common.more')
                                                                     </button>
                                                                 </div>
@@ -1594,6 +1604,28 @@
     <script src="{{ asset('/backEnd/') }}/js/croppie.js"></script>
     <script src="{{ asset('/backEnd/') }}/js/editStaff.js"></script>
     <script>
+        $(document).ready(function() {
+            function checkDepartment() {
+                var teacherDepartmentId = $("#department_id option").filter(function() {
+                    return $(this).text().trim().toLowerCase() === "teacher";
+                }).val();
+
+                var selectedValue = $("#department_id").val();
+
+                if (selectedValue == teacherDepartmentId) {
+                    $('#slots_tab, #specilization_tab').removeClass('d-none');
+                } else {
+                    $('#slots_tab, #specilization_tab').addClass('d-none');
+                }
+            }
+
+            checkDepartment();
+            $('#department_id').change(function() {
+                checkDepartment();
+            });
+        });
+
+
         $(document).ready(function() {
             $('#addMoreEducationBtn').click(function(e) {
                 e.preventDefault();

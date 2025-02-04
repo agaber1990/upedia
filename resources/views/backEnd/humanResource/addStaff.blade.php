@@ -86,13 +86,7 @@
                                 <a class="nav-link" href="#custom_field" role="tab"
                                     data-toggle="tab">@lang('hr.custom_field')</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#slots" role="tab" data-toggle="tab">@lang('hr.slots')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#specilization" role="tab"
-                                    data-toggle="tab">@lang('hr.specilization')</a>
-                            </li>
+                            
                             <li class="nav-item">
                                 <a class="nav-link" href="#activities" role="tab"
                                     data-toggle="tab">@lang('hr.activities')</a>
@@ -104,6 +98,14 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#work_experience" role="tab"
                                     data-toggle="tab">@lang('hr.work_experience')</a>
+                            </li>
+
+                            <li class="nav-item d-none" id="slots_tab">
+                                <a class="nav-link" href="#slots" role="tab" data-toggle="tab">@lang('hr.slots')</a>
+                            </li>
+                            <li class="nav-item d-none" id="specilization_tab">
+                                <a class="nav-link" href="#specilization" role="tab"
+                                    data-toggle="tab">@lang('hr.specilization')</a>
                             </li>
 
                             <li class="nav-item flex-grow-1 text-right">
@@ -727,12 +729,14 @@
                                                             <!-- Text input that will be displayed when "Freelancer" is selected -->
 
                                                         </div> --}}
-                                                        <div class="col-lg-6 col-xl-3 mb-20">
-                                                            <div class="primary_input">
-                                                                <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
-                                                                <input type="text" name="hourly_rate" class="primary_input_field form-control">
+                                                            <div class="col-lg-6 col-xl-3 mb-20">
+                                                                <div class="primary_input">
+                                                                    <label class="primary_input_label"
+                                                                        for="hourly_rate">@lang('hr.hourly_rate')</label>
+                                                                    <input type="text" name="hourly_rate"
+                                                                        class="primary_input_field form-control">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
@@ -775,7 +779,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-lg-6 col-xl-3 mb-20">
+                                                        {{-- <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
                                                                 <label class="primary_input_label"
                                                                     for="">@lang('hr.location')
@@ -784,15 +788,13 @@
                                                                     class="primary_input_field form-control{{ $errors->has('location') ? ' is-invalid' : '' }}"
                                                                     type="text" value="{{ old('location') }}"
                                                                     name="location">
-
-
                                                                 @if ($errors->has('location'))
                                                                     <span class="text-danger">
                                                                         {{ $errors->first('location') }}
                                                                     </span>
                                                                 @endif
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -1311,7 +1313,26 @@
         var $locale = '{{ app()->getLocale() }}';
 
 
+
+
         $(document).ready(function() {
+
+            var teacherDepartmentId = $("#department_id option").filter(function() {
+                return $(this).text().trim().toLowerCase() === "teacher";
+            }).val();
+
+            $('#department_id').change(function() {
+                var selectedValue = $(this).val();
+
+                if (selectedValue == teacherDepartmentId) {
+                    $('#slots_tab, #specilization_tab').removeClass('d-none');
+                } else {
+                    $('#slots_tab, #specilization_tab').addClass('d-none');
+                }
+            });
+
+
+
             $('#addMoreEducationBtn').on('click', function(e) {
                 e.preventDefault();
                 $('#newEducationRow').append(`
@@ -1595,5 +1616,6 @@
                 $('#hourly_rate').html('');
             }
         }
+        
     </script>
 @endsection

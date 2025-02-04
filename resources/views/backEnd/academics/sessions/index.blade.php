@@ -263,19 +263,27 @@
         $(document).ready(function() {
             $('#add_btn').click(function(event) {
                 event.preventDefault();
+                event.stopPropagation();
                 $('#add_session').toggle();
                 if ($('#add_session').is(':visible')) {
-                    $(this).html('<i class="fas fa-times " style="color: #fff"></i>');
+                    $(this).html('<i class="fas fa-times" style="color: #fff"></i>');
                 } else {
-                    $(this).html('<i class="fas fa-plus " style="color: #fff"></i>');
+                    $(this).html('<i class="fas fa-plus" style="color: #fff"></i>');
                 }
             });
+
+            $(document).on('click', function(event) {
+                if (!$(event.target).closest('#add_session').length && !$(event.target).closest(
+                        '#add_btn').length) {
+                    $('#add_session').hide();
+                    $('#add_btn').html('<i class="fas fa-plus" style="color: #fff"></i>');
+                }
+            });
+
             $('#modal_btn').click(function(event) {
                 event.preventDefault();
                 $('#exampleModal').modal('show');
             });
-
-
         });
     </script>
 @endpush

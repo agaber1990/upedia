@@ -244,4 +244,10 @@ return [
     'schedule_required' => 'Schedule Required',
     'categories_required' => 'Category Required',
     'valid_for_required' => 'Valid For Required',
+    'add_lesson' => 'Add Lesson',
+    'lesson_name' => 'Lesson Name',
+    'host' => 'Host',
+    'host' => 'Host',
+    'description' => 'Description',
+    'duration_in_minute' => 'Duration (In Minute) ',
 ];
