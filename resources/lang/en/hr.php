@@ -266,5 +266,6 @@ return [
     "hourly_rate"=>"Hourly Rate",
     "activities"=>"Activities",
     "educations"=>"Educations",
+    "overtime_rate"=>"Overtime Rate",
     "work_experience"=>"Work Experience"
 ];

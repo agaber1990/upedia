@@ -86,7 +86,7 @@
                                 <a class="nav-link" href="#custom_field" role="tab"
                                     data-toggle="tab">@lang('hr.custom_field')</a>
                             </li>
-                            
+
                             <li class="nav-item">
                                 <a class="nav-link" href="#activities" role="tab"
                                     data-toggle="tab">@lang('hr.activities')</a>
@@ -729,14 +729,14 @@
                                                             <!-- Text input that will be displayed when "Freelancer" is selected -->
 
                                                         </div> --}}
-                                                            <div class="col-lg-6 col-xl-3 mb-20">
-                                                                <div class="primary_input">
-                                                                    <label class="primary_input_label"
-                                                                        for="hourly_rate">@lang('hr.hourly_rate')</label>
-                                                                    <input type="text" name="hourly_rate"
-                                                                        class="primary_input_field form-control">
-                                                                </div>
+                                                        <div class="col-lg-6 col-xl-3 mb-20">
+                                                            <div class="primary_input">
+                                                                <label id="rate_label" class="primary_input_label"
+                                                                    for="hourly_rate">@lang('hr.hourly_rate')</label>
+                                                                <input type="text" name="hourly_rate"
+                                                                    class="primary_input_field form-control">
                                                             </div>
+                                                        </div>
 
                                                         <div class="col-lg-6 col-xl-3 mb-20">
                                                             <div class="primary_input">
@@ -1589,33 +1589,63 @@
         });
 
 
+        function getRoleTypeVal(select) {
+            // Get the selected option
+            var selectedOption = select.options[select.selectedIndex];
+            var selectedText = selectedOption.text.toLowerCase(); // Get the text of the selected option
 
+            // Define the labels
+            var hourlyRateLabel = "@lang('hr.hourly_rate')";
+            var overtimeRateLabel = "@lang('hr.overtime_rate')";
 
-
-        function getRoleTypeVal(val) {
-            // Get the selected option element
-            var selectedOption = $(val).find('option:selected');
-
-            // Get the 'data-name' attribute of the selected option
-            var selectedRoleName = selectedOption.data('name');
-            // Clear the hourly rate section
-            $('#hourly_rate').html('');
-
-            // If the selected role is 'Freelancer', show the input field for hourly rate
-            if (selectedRoleName.toLowerCase() === 'freelancer') {
-                $('#hourly_rate').html(`
-            <div class="primary_input">
-                <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
-                <input type="text" name="hourly_rate" class="primary_input_field form-control">
-            </div>
-        `);
-                $('#hourly_rate').removeClass('d-none');
+            // Check if the selected option is "Part Time" or "Full Time"
+            if (
+                selectedText.includes("part time") ||
+                selectedText.includes("part-time") ||
+                selectedText.includes("full time") ||
+                selectedText.includes("full-time")
+            ) {
+                // Change the label to "Overtime Rate"
+                document.getElementById("rate_label").innerText = overtimeRateLabel;
             } else {
-                // Hide the hourly rate section if the role is not 'Freelancer'
-                $('#hourly_rate').addClass('d-none');
-                $('#hourly_rate').html('');
+                // Change the label back to "Hourly Rate"
+                document.getElementById("rate_label").innerText = hourlyRateLabel;
             }
         }
-        
+
+         // Trigger the function on page load
+         window.onload = function() {
+            var roleTypeDropdown = document.getElementById("role_type");
+            if (roleTypeDropdown) {
+                getRoleTypeVal(roleTypeDropdown); // Check the pre-selected value and update the label
+            }
+        };
+
+
+
+        // function getRoleTypeVal(val) {
+        //     // Get the selected option element
+        //     var selectedOption = $(val).find('option:selected');
+
+        //     // Get the 'data-name' attribute of the selected option
+        //     var selectedRoleName = selectedOption.data('name');
+        //     // Clear the hourly rate section
+        //     $('#hourly_rate').html('');
+
+        //     // If the selected role is 'Freelancer', show the input field for hourly rate
+        //     if (selectedRoleName.toLowerCase() === 'freelancer') {
+        //         $('#hourly_rate').html(`
+    //     <div class="primary_input">
+    //         <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
+    //         <input type="text" name="hourly_rate" class="primary_input_field form-control">
+    //     </div>
+    // `);
+        //         $('#hourly_rate').removeClass('d-none');
+        //     } else {
+        //         // Hide the hourly rate section if the role is not 'Freelancer'
+        //         $('#hourly_rate').addClass('d-none');
+        //         $('#hourly_rate').html('');
+        //     }
+        // }
     </script>
 @endsection

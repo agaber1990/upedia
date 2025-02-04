@@ -95,7 +95,7 @@
                                         <a class="nav-link" href="#custom_field" role="tab"
                                             data-toggle="tab">@lang('hr.custom_field')</a>
                                     </li>
-                                  
+
                                     <li class="nav-item">
                                         <a class="nav-link" href="#activities" role="tab"
                                             data-toggle="tab">@lang('hr.activities')</a>
@@ -607,7 +607,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                                                                                                                                </div> -->
+                                                                                                                                                                    </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
@@ -820,7 +820,7 @@
                                                             </div> --}}
                                                             <div class="col-lg-6 col-xl-3 mb-20">
                                                                 <div class="primary_input">
-                                                                    <label class="primary_input_label"
+                                                                    <label id="rate_label" class="primary_input_label"
                                                                         for="hourly_rate">@lang('hr.hourly_rate')</label>
                                                                     <input type="text" name="hourly_rate"
                                                                         value="{{ $editData->hourly_rate }}"
@@ -1879,25 +1879,56 @@
             }
         });
 
+        function getRoleTypeVal(select) {
+            // Get the selected option
+            var selectedOption = select.options[select.selectedIndex];
+            var selectedText = selectedOption.text.toLowerCase(); // Get the text of the selected option
 
+            // Define the labels
+            var hourlyRateLabel = "@lang('hr.hourly_rate')";
+            var overtimeRateLabel = "@lang('hr.overtime_rate')";
 
-
-        function getRoleTypeVal(val) {
-            var selectedOption = $(val).find('option:selected');
-            var selectedRoleName = selectedOption.data('name').toLowerCase();
-            var $hourlyRateDiv = $('#hourly_rate');
-
-            if (selectedRoleName === 'freelancer') {
-                $hourlyRateDiv.html(`
-            <div class="primary_input">
-                <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
-                <input type="text" name="hourly_rate" value="{{ $editData->hourly_rate }}" class="primary_input_field form-control">
-            </div>
-        `).removeClass('d-none');
+            // Check if the selected option is "Part Time" or "Full Time"
+            if (
+                selectedText.includes("part time") ||
+                selectedText.includes("part-time") ||
+                selectedText.includes("full time") ||
+                selectedText.includes("full-time")
+            ) {
+                // Change the label to "Overtime Rate"
+                document.getElementById("rate_label").innerText = overtimeRateLabel;
             } else {
-                $hourlyRateDiv.addClass('d-none').empty();
+                // Change the label back to "Hourly Rate"
+                document.getElementById("rate_label").innerText = hourlyRateLabel;
             }
         }
+
+        // Trigger the function on page load
+        window.onload = function() {
+            var roleTypeDropdown = document.getElementById("role_type");
+            if (roleTypeDropdown) {
+                getRoleTypeVal(roleTypeDropdown); // Check the pre-selected value and update the label
+            }
+        };
+
+
+
+        // function getRoleTypeVal(val) {
+        //     var selectedOption = $(val).find('option:selected');
+        //     var selectedRoleName = selectedOption.data('name').toLowerCase();
+        //     var $hourlyRateDiv = $('#hourly_rate');
+
+        //     if (selectedRoleName === 'freelancer') {
+        //         $hourlyRateDiv.html(`
+    //     <div class="primary_input">
+    //         <label class="primary_input_label" for="hourly_rate">@lang('hr.hourly_rate')</label>
+    //         <input type="text" name="hourly_rate" value="{{ $editData->hourly_rate }}" class="primary_input_field form-control">
+    //     </div>
+    // `).removeClass('d-none');
+        //     } else {
+        //         $hourlyRateDiv.addClass('d-none').empty();
+        //     }
+        // }
     </script>
 @endsection
 @push('script')
