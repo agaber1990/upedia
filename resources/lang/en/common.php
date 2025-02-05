@@ -13,6 +13,8 @@ return [
     "date_of_publication_of_result" => "Date of publication of result",
     "all" => "All",
     "add" => "Add",
+    "url" => "Url",
+    "youtube" => "Youtube",
     "edit" => "Edit",
     "view" => "View",
     "close" => "Close",

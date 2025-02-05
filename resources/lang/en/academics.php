@@ -250,4 +250,5 @@ return [
     'host' => 'Host',
     'description' => 'Description',
     'duration_in_minute' => 'Duration (In Minute) ',
+    'privacy' => 'Privacy',
 ];

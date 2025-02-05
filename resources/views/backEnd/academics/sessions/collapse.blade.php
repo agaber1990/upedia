@@ -224,6 +224,9 @@
                             </label>
                             <select class="primary_select form-control" name="host" id="host">
                                 <option value="">@lang('common.select')</option>
+                                <option value="youtube">@lang('common.youtube')</option>
+                                <option value="pdf">@lang('common.pdf')</option>
+                                <option value="image">@lang('common.image')</option>
                                 {{-- @foreach ($departments as $key => $value)
                                     <option value="{{ $value->id }}"
                                         {{ old('department_id') == $value->id ? 'selected' : '' }}>
@@ -231,6 +234,10 @@
                                 @endforeach --}}
                             </select>
                         </div>
+
+                        <div class="primary_input" id="hostValue">
+                        </div>
+
                         <div class="primary_input">
                             <label class="primary_input_label" for="">@lang('academics.privacy')
                             </label>
@@ -308,6 +315,36 @@
 @push('script')
     <script>
         $(document).ready(function() {
+
+            function updateInputField() {
+                const selectedValue = $('#host').val();
+                let inputHtml = '';
+
+                if (selectedValue === 'youtube') {
+                    inputHtml =
+                        `
+                         <label class="primary_input_label" for="">@lang('common.url')
+                            </label>
+                        <input class="primary_input_field form-control " type="text" name="youtube_url" placeholder="Enter YouTube URL" autocomplete="off">
+                        
+                        `;
+                } else if (selectedValue === 'image' || selectedValue === 'pdf') {
+                    inputHtml =
+                        `
+  <label class="primary_input_label" for="">@lang('common.file')
+                            </label>
+                        <input class="primary_input_field form-control" type="file" name="file" accept="${selectedValue === 'image' ? 'image/*' : 'application/pdf'}">
+                        
+                        `;
+                }
+
+                $('#hostValue').html(inputHtml);
+            }
+
+            updateInputField();
+            $('#host').on('change', updateInputField);
+
+
             $('#add_btn_session').click(function(event) {
                 event.preventDefault();
                 event.stopPropagation();
