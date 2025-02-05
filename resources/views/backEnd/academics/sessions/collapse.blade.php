@@ -208,22 +208,8 @@
                                             </label>
                                             <textarea name="" class="primary_input_field form-control" name="description" id="description"
                                                 rows="5">
-                                </textarea>
+                                            </textarea>
                                         </div>
-
-
-
-
-
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="file">@lang('common.material')
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input class="primary_input_field form-control" id="file"
-                                                type="file" multiple id="file" name="file[]"
-                                                autocomplete="off">
-                                        </div>
-
                                     </div>
                                     <div class="modal-footer">
 
