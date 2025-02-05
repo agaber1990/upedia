@@ -251,4 +251,12 @@ return [
     'description' => 'Description',
     'duration_in_minute' => 'Duration (In Minute) ',
     'privacy' => 'Privacy',
+    'add_quiz' => 'Add Quiz',
+    'quiz_name' => 'Quiz Name',
+    'add_assignment' => 'Add Assignment',
+    'title' => 'Title',
+    'marks' => 'Marks',
+    'min_percentage' => 'Min Percentage',
+    'submit_date' => 'Submit Date',
+    'attachment' => 'Attachment',
 ];
