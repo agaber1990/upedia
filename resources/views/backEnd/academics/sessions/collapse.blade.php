@@ -1,7 +1,6 @@
 @if (isset($menus) && count($menus) > 0)
     <div class="input-session mb-4">
 
-
         <div id="accordion" class="dd">
             <ol class="dd-list">
                 @foreach ($menus as $key => $element)
@@ -137,241 +136,272 @@
 
 
 
-                     <!-- Add Lesson Modal -->
-    <div class="modal fade" id="add_lesson_modal_{{ $element->id }}" tabindex="-1" aria-labelledby="add_lesson_modal_label"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form action="" method="POST" enctype="multipart/form-data">
-                @csrf
+                    <!-- Add Lesson Modal -->
+                    <div class="modal fade" id="add_lesson_modal_{{ $element->id }}" tabindex="-1"
+                        aria-labelledby="add_lesson_modal_label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                @csrf
 
 
-                <div class="modal-content">
+                                <div class="modal-content">
 
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="add_lesson_modal_label">@lang('academics.add_lesson')</h1>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="add_lesson_modal_label">@lang('academics.add_lesson')
+                                        </h1>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
 
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="name">@lang('academics.lesson_name')
-                                <span class="text-danger"> *</span>
-                            </label>
-                            <input class="primary_input_field form-control" type="text" name="name"
-                                id="name" autocomplete="off">
-                        </div>
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="duration">@lang('academics.duration_in_minute')
-                                <span class="text-danger"> *</span>
-                            </label>
-                            <input class="primary_input_field form-control" type="text" name="duration"
-                                id="duration" autocomplete="off">
-                        </div>
+                                        <div class="primary_input">
+                                            <label class="primary_input_label" for="name">@lang('academics.lesson_name')
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <input class="primary_input_field form-control" type="text"
+                                                name="name" id="name" autocomplete="off">
+                                        </div>
+                                        <div class="primary_input">
+                                            <label class="primary_input_label" for="duration">@lang('academics.duration_in_minute')
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <input class="primary_input_field form-control" type="text"
+                                                name="duration" id="duration" autocomplete="off">
+                                        </div>
 
 
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="">@lang('academics.host')
-                            </label>
-                            <select class="primary_select form-control" name="host" id="host">
-                                <option value="">@lang('common.select')</option>
-                                <option value="youtube">@lang('common.youtube')</option>
-                                <option value="pdf">@lang('common.pdf')</option>
-                                <option value="image">@lang('common.image')</option>
-                                {{-- @foreach ($departments as $key => $value)
-                                    <option value="{{ $value->id }}"
-                                        {{ old('department_id') == $value->id ? 'selected' : '' }}>
-                                        {{ $value->name }}</option>
-                                @endforeach --}}
-                            </select>
-                        </div>
+                                        <div class="primary_input">
+                                            <label class="primary_input_label" for="">@lang('academics.host')
+                                            </label>
+                                            <select class="primary_select form-control" name="host"
+                                                id="host_{{ $element->id }}">
+                                                <option value="">@lang('common.select')</option>
+                                                <option value="youtube">@lang('common.youtube')</option>
+                                                <option value="pdf">@lang('common.pdf')</option>
+                                                <option value="image">@lang('common.image')</option>
+                                                {{-- @foreach ($departments as $key => $value)
+                                                        <option value="{{ $value->id }}"
+                                                            {{ old('department_id') == $value->id ? 'selected' : '' }}>
+                                                            {{ $value->name }}</option>
+                                                    @endforeach --}}
+                                            </select>
+                                        </div>
 
-                        <div class="primary_input" id="hostValue">
-                        </div>
+                                        <div id="hostValue_{{ $element->id }}"></div>
 
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="">@lang('academics.privacy')
-                            </label>
-                            <select class="primary_select form-control" name="privacy" id="privacy">
-                                <option value="">@lang('common.select')</option>
-                                <option value="">@lang('common.locked')</option>
-                                <option value="">@lang('common.unlock')</option>
 
-                            </select>
-                        </div>
 
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="description">@lang('academics.description')
-                                <span class="text-danger"> *</span>
-                            </label>
-                            <textarea name="" class="primary_input_field form-control" name="description" id="description"
-                                rows="5">
+                                        <div class="primary_input">
+                                            <label class="primary_input_label" for="">@lang('academics.privacy')
+                                            </label>
+                                            <select class="primary_select form-control" name="privacy"
+                                                id="privacy">
+                                                <option value="">@lang('common.select')</option>
+                                                <option value="">@lang('common.locked')</option>
+                                                <option value="">@lang('common.unlock')</option>
+
+                                            </select>
+                                        </div>
+
+                                        <div class="primary_input">
+                                            <label class="primary_input_label" for="description">@lang('academics.description')
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <textarea name="" class="primary_input_field form-control" name="description" id="description"
+                                                rows="5">
                                 </textarea>
-                        </div>
-
-
-
-
-
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="file">@lang('common.material')
-                                <span class="text-danger"> *</span>
-                            </label>
-                            <input class="primary_input_field form-control" id="file" type="file" multiple
-                                id="file" name="file[]" autocomplete="off">
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="submit" id="add_for_submit" class="primary-btn fix-gr-bg text-nowrap">
-                            @lang('common.submit')
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Add Quiz Modal -->
-    <div class="modal fade" id="add_quiz_modal_{{ $element->id }}" tabindex="-1" aria-labelledby="add_quiz_modal_label"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form action="" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="add_quiz_modal_label">@lang('academics.add_quiz')</h1>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-
-                        <div id="choose_quiz_type">
-                            <div class="row">
-                                <div class="col-lg-12 radio-btn-flex">
-                                    <div class="row">
-                                        <div class="col-lg-5 primary_input sm_mb_20">
-                                            <input type="radio" name="quiz_option" id="exist_quiz"
-                                                class="common-radio" value="1">
-                                            <label for="exist_quiz">@lang('common.existing')</label>
                                         </div>
-                                        <div class="col-lg-7 primary_input sm_mb_20">
-                                            <input type="radio" name="quiz_option" id="new_quiz"
-                                                class="common-radio" value="0">
-                                            <label for="new_quiz">@lang('common.new')</label>
+
+
+
+
+
+                                        <div class="primary_input">
+                                            <label class="primary_input_label" for="file">@lang('common.material')
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <input class="primary_input_field form-control" id="file"
+                                                type="file" multiple id="file" name="file[]"
+                                                autocomplete="off">
                                         </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+
+                                        <button type="submit" id="add_for_submit"
+                                            class="primary-btn fix-gr-bg text-nowrap">
+                                            @lang('common.submit')
+                                        </button>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div id="additional_inputs"></div>
+                            </form>
                         </div>
-
                     </div>
-                    <div class="modal-footer">
+                    <!-- Add Quiz Modal -->
+                    <div class="modal fade" id="add_quiz_modal_{{ $element->id }}" tabindex="-1"
+                        aria-labelledby="add_quiz_modal_label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-content">
 
-                        <button type="submit" id="add_for_submit" class="primary-btn fix-gr-bg text-nowrap">
-                            @lang('common.submit')
-                        </button>
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="add_quiz_modal_label">@lang('academics.add_quiz')</h1>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        {{-- <div id="choose_quiz_type">
+                                            <div class="row">
+                                                <div class="col-lg-12 radio-btn-flex">
+                                                    <div class="row">
+                                                        <div class="col-lg-5 primary_input sm_mb_20">
+                                                            <input type="radio" name="quiz_option" id="exist_quiz"
+                                                                class="common-radio" value="1">
+                                                            <label for="exist_quiz">@lang('common.existing')</label>
+                                                        </div>
+                                                        <div class="col-lg-7 primary_input sm_mb_20">
+                                                            <input type="radio" name="quiz_option" id="new_quiz"
+                                                                class="common-radio" value="0">
+                                                            <label for="new_quiz">@lang('common.new')</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div id="additional_inputs"></div>
+                                        </div> --}}
+
+
+                                        <div id="choose_quiz_type_{{ $element->id }}">
+                                            <div class="row">
+                                                <div class="col-lg-12 radio-btn-flex">
+                                                    <div class="row">
+                                                        <div class="col-lg-5 primary_input sm_mb_20">
+                                                            <input type="radio"
+                                                                name="quiz_option_{{ $element->id }}"
+                                                                id="exist_quiz_{{ $element->id }}"
+                                                                class="common-radio" value="1">
+                                                            <label
+                                                                for="exist_quiz_{{ $element->id }}">@lang('common.existing')</label>
+                                                        </div>
+                                                        <div class="col-lg-7 primary_input sm_mb_20">
+                                                            <input type="radio"
+                                                                name="quiz_option_{{ $element->id }}"
+                                                                id="new_quiz_{{ $element->id }}"
+                                                                class="common-radio" value="0">
+                                                            <label
+                                                                for="new_quiz_{{ $element->id }}">@lang('common.new')</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="additional_inputs_{{ $element->id }}"></div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+
+                                        <button type="submit" id="add_for_submit"
+                                            class="primary-btn fix-gr-bg text-nowrap">
+                                            @lang('common.submit')
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Add Assignment Modal -->
-    <div class="modal fade" id="add_assignment_modal_{{ $element->id }}" tabindex="-1" aria-labelledby="add_assignment_modal_label"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form action="" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-content">
+                    <!-- Add Assignment Modal -->
+                    <div class="modal fade" id="add_assignment_modal_{{ $element->id }}" tabindex="-1"
+                        aria-labelledby="add_assignment_modal_label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <form action="" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-content">
 
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="add_assignment_modal_label">@lang('academics.add_assignment')</h1>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="add_assignment_modal_label">
+                                            @lang('academics.add_assignment')</h1>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
 
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="name">@lang('academics.title')
-                                <span class="text-danger"> *</span>
-                            </label>
-                            <input class="primary_input_field form-control" type="text" name="title"
-                                id="title" autocomplete="off">
-                        </div>
-                        <div class="row">
-                            <div class="col primary_input">
-                                <label class="primary_input_label" for="name">@lang('academics.marks')
-                                    <span class="text-danger"> *</span>
-                                </label>
-                                <input class="primary_input_field form-control" type="text" name="marks"
-                                    id="marks" autocomplete="off">
-                            </div>
-                            <div class="col primary_input">
-                                <label class="primary_input_label" for="name">@lang('academics.min_percentage')
-                                    <span class="text-danger"> *</span>
-                                </label>
-                                <input class="primary_input_field form-control" type="text" name="min_percentage"
-                                    id="min_percentage" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col primary_input">
-                                <label class="primary_input_label" for="name">@lang('academics.attachment')
-                                    <span class="text-danger"> *</span>
-                                </label>
-                                <input class="primary_input_field form-control" id="attachment" type="file"
-                                    id="attachment" name="attachment" autocomplete="off">
-                            </div>
-                            <div class="col primary_input">
-                                <label class="primary_input_label" for="name">@lang('academics.submit_date')
-                                    <span class="text-danger"> *</span>
-                                </label>
-                                <input class="primary_input_field form-control" type="date" name="submit_date"
-                                    id="submit_date" autocomplete="off">
-                            </div>
-                        </div>
+                                        <div class="primary_input">
+                                            <label class="primary_input_label" for="name">@lang('academics.title')
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <input class="primary_input_field form-control" type="text"
+                                                name="title" id="title" autocomplete="off">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col primary_input">
+                                                <label class="primary_input_label" for="name">@lang('academics.marks')
+                                                    <span class="text-danger"> *</span>
+                                                </label>
+                                                <input class="primary_input_field form-control" type="text"
+                                                    name="marks" id="marks" autocomplete="off">
+                                            </div>
+                                            <div class="col primary_input">
+                                                <label class="primary_input_label" for="name">@lang('academics.min_percentage')
+                                                    <span class="text-danger"> *</span>
+                                                </label>
+                                                <input class="primary_input_field form-control" type="text"
+                                                    name="min_percentage" id="min_percentage" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col primary_input">
+                                                <label class="primary_input_label" for="name">@lang('academics.attachment')
+                                                    <span class="text-danger"> *</span>
+                                                </label>
+                                                <input class="primary_input_field form-control" id="attachment"
+                                                    type="file" id="attachment" name="attachment"
+                                                    autocomplete="off">
+                                            </div>
+                                            <div class="col primary_input">
+                                                <label class="primary_input_label" for="name">@lang('academics.submit_date')
+                                                    <span class="text-danger"> *</span>
+                                                </label>
+                                                <input class="primary_input_field form-control" type="date"
+                                                    name="submit_date" id="submit_date" autocomplete="off">
+                                            </div>
+                                        </div>
 
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="description">@lang('academics.description')
-                                <span class="text-danger"> *</span>
-                            </label>
-                            <textarea name="" class="primary_input_field form-control" name="description" id="description"
-                                rows="5">
+                                        <div class="primary_input">
+                                            <label class="primary_input_label" for="description">@lang('academics.description')
+                                                <span class="text-danger"> *</span>
+                                            </label>
+                                            <textarea name="" class="primary_input_field form-control" name="description" id="description"
+                                                rows="5">
                             </textarea>
+                                        </div>
+                                        <div class="primary_input">
+                                            <label class="primary_input_label" for="">@lang('academics.privacy')
+                                            </label>
+                                            <select class="primary_select form-control" name="privacy"
+                                                id="privacy">
+                                                <option value="">@lang('common.select')</option>
+                                                <option value="">@lang('common.locked')</option>
+                                                <option value="">@lang('common.unlock')</option>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+
+                                        <button type="submit" id="add_for_submit"
+                                            class="primary-btn fix-gr-bg text-nowrap">
+                                            @lang('common.submit')
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="primary_input">
-                            <label class="primary_input_label" for="">@lang('academics.privacy')
-                            </label>
-                            <select class="primary_select form-control" name="privacy" id="privacy">
-                                <option value="">@lang('common.select')</option>
-                                <option value="">@lang('common.locked')</option>
-                                <option value="">@lang('common.unlock')</option>
-
-                            </select>
-                        </div>
-
                     </div>
-                    <div class="modal-footer">
-
-                        <button type="submit" id="add_for_submit" class="primary-btn fix-gr-bg text-nowrap">
-                            @lang('common.submit')
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-
                 @endforeach
             </ol>
         </div>
     </div>
-
-
-
-   
 @else
     <div>
         <div class="text-center">
@@ -409,11 +439,15 @@
     <script>
         $(document).ready(function() {
 
+
+
             $(document).ready(function() {
-                // Function to handle the display of fields based on the selected radio button
-                function handleQuizOption() {
-                    if ($('#exist_quiz').prop('checked')) {
-                        $('#additional_inputs').html(`
+                function handleQuizOption(modalId) {
+                    const existQuiz = $('#exist_quiz_' + modalId).prop('checked');
+                    const newQuiz = $('#new_quiz_' + modalId).prop('checked');
+
+                    if (existQuiz) {
+                        $('#additional_inputs_' + modalId).html(`
                 <div class="primary_input">
                     <label class="primary_input_label" for="">@lang('academics.quiz')</label>
                     <select class="primary_select form-control" name="quiz" id="quiz">
@@ -432,8 +466,8 @@
                     </select>
                 </div>
             `);
-                    } else if ($('#new_quiz').prop('checked')) {
-                        $('#additional_inputs').html(`
+                    } else if (newQuiz) {
+                        $('#additional_inputs_' + modalId).html(`
                 <div class="primary_input">
                     <label class="primary_input_label" for="name">@lang('academics.title')
                         <span class="text-danger"> *</span>
@@ -464,64 +498,68 @@
                     }
                 }
 
-                // Call the function on page load
-                handleQuizOption();
+                // Bind event listeners when a quiz modal is opened
+                $(document).on('click', '[id^="add_quiz_modal_btn_"]', function(event) {
+                    event.preventDefault();
+                    const modalTarget = $(this).data('modal-target');
+                    $(modalTarget).modal('show');
 
-                // Event listener for when the "Existing" quiz option is selected
-                $('#exist_quiz').change(function() {
-                    handleQuizOption();
-                });
+                    // Extract the modal ID
+                    const modalId = modalTarget.split('_').pop();
 
-                // Event listener for when the "New" quiz option is selected
-                $('#new_quiz').change(function() {
-                    handleQuizOption();
+                    // Bind change event to the radio buttons
+                    $(`#exist_quiz_${modalId}, #new_quiz_${modalId}`).change(function() {
+                        handleQuizOption(modalId);
+                    });
+
+                    // Initialize the quiz options
+                    handleQuizOption(modalId);
                 });
             });
 
 
-
-
-            function updateInputField() {
-                const selectedValue = $('#host').val();
+            function updateInputField(id) {
+                const selectedValue = $('#host_' + id).val();
                 let inputHtml = '';
 
                 if (selectedValue === 'youtube') {
-                    inputHtml =
-                        `
-                         <label class="primary_input_label" for="">@lang('common.url')
-                            </label>
-                        <input class="primary_input_field form-control " type="text" name="youtube_url" placeholder="Enter YouTube URL" autocomplete="off">
-                        
-                        `;
+                    inputHtml = `
+            <label class="primary_input_label" for="">@lang('common.url')</label>
+            <input class="primary_input_field form-control" type="text" name="youtube_url" placeholder="Enter YouTube URL" autocomplete="off">
+        `;
                 } else if (selectedValue === 'image' || selectedValue === 'pdf') {
-                    inputHtml =
-                        `
-                        <label class="primary_input_label" for="">@lang('common.file')
-                            </label>
-                        <input class="primary_input_field form-control" type="file" name="file" accept="${selectedValue === 'image' ? 'image/*' : 'application/pdf'}">
-                        
-                        `;
+                    inputHtml = `
+            <label class="primary_input_label" for="">@lang('common.file')</label>
+            <input class="primary_input_field form-control" type="file" name="file" accept="${selectedValue === 'image' ? 'image/*' : 'application/pdf'}">
+        `;
                 }
 
-                $('#hostValue').html(inputHtml);
+                $('#hostValue_' + id).html(inputHtml);
             }
 
-            updateInputField();
-            $('#host').on('change', updateInputField);
+
+
+            $(document).ready(function() {
+                $('[id^="host_"]').each(function() {
+                    const modalId = $(this).attr('id').split('_')[1];
+                    updateInputField(modalId);
+                });
+            });
+
+            $(document).on('change', '[id^="host_"]', function() {
+                const modalId = $(this).attr('id').split('_')[1];
+                updateInputField(modalId);
+            });
 
 
             $(document).on('click', '[id^="add_btn_session_"]', function(event) {
                 event.preventDefault();
                 event.stopPropagation();
 
-                // Get the unique session ID from the button's ID
                 var elementId = $(this).attr('id').split('_')[
-                    3]; // Get the ID part after 'add_btn_session_'
+                    3];
 
-                // Toggle the session form for this specific element
                 $('#add_session_session_' + elementId).toggle();
-
-                // Change the button icon based on visibility
                 if ($('#add_session_session_' + elementId).is(':visible')) {
                     $(this).html('<i class="fas fa-times" style="color: #fff"></i>');
                 } else {
@@ -533,78 +571,23 @@
                 '[id^="add_lesson_modal_btn_"], [id^="add_quiz_modal_btn_"], [id^="add_assignment_modal_btn_"]',
                 function(event) {
                     event.preventDefault();
-
-                    // Get the target modal from the data attribute
                     var modalTarget = $(this).data('modal-target');
-
-                    // Show the modal associated with the button
                     $(modalTarget).modal('show');
                 });
 
             $(document).on('click', function(event) {
-                // Check if the clicked target is outside the button and session form
                 if (!$(event.target).closest('[id^="add_session_session_"]').length && !$(event.target)
                     .closest('[id^="add_btn_session_"]').length) {
-                    // Hide all session forms and reset the button icons
                     $('[id^="add_session_session_"]').hide();
                     $('[id^="add_btn_session_"]').html('<i class="fas fa-plus" style="color: #fff"></i>');
                 }
             });
 
-
-
-
-            // $(document).on('click', '[id^="add_btn_session_"]', function(event) {
-            //     event.preventDefault();
-            //     event.stopPropagation();
-
-            //     // Get the unique session ID from the button's ID
-            //     var elementId = $(this).attr('id').split('_')[
-            //         3]; // Get the ID part after 'add_btn_session_'
-
-            //     // Toggle the session form for this specific element
-            //     $('#add_session_session_' + elementId).toggle();
-
-            //     // Change the button icon based on visibility
-            //     if ($('#add_session_session_' + elementId).is(':visible')) {
-            //         $(this).html('<i class="fas fa-times" style="color: #fff"></i>');
-            //     } else {
-            //         $(this).html('<i class="fas fa-plus" style="color: #fff"></i>');
-            //     }
-            // });
-
-            // $(document).on('click', function(event) {
-            //     // Check if the clicked target is outside the button and session form
-            //     if (!$(event.target).closest('[id^="add_session_session_"]').length && !$(event.target)
-            //         .closest('[id^="add_btn_session_"]').length) {
-            //         // Hide all session forms and reset the button icons
-            //         $('[id^="add_session_session_"]').hide();
-            //         $('[id^="add_btn_session_"]').html('<i class="fas fa-plus" style="color: #fff"></i>');
-            //     }
-            // });
-
-
-
-
-            // $('#add_lesson_modal_btn').click(function(event) {
-            //     event.preventDefault();
-            //     $('#add_lesson_modal').modal('show');
-            // });
-            // $('#add_quiz_modal_btn').click(function(event) {
-            //     event.preventDefault();
-            //     $('#add_quiz_modal').modal('show');
-            // });
-            // $('#add_assignment_modal_btn').click(function(event) {
-            //     event.preventDefault();
-            //     $('#add_assignment_modal').modal('show');
-            // });
         });
 
 
 
         function updateSession(id, name_en, name_ar, description_en, description_ar, level_id, track_id, files) {
-
-
             $('#update_session_id').val(id);
             $('#update_name_en').val(name_en);
             $('#update_name_ar').val(name_ar);
