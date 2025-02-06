@@ -10,14 +10,22 @@ class SessionLesson extends Model
     use HasFactory;
     protected $fillable = [
         'session_id',
+        'level_id',
         'name',
-        'duration',
         'duration',
         'privacy',
         'host_type',
-        'hose_path',
+        'host_path',
         'description',
     ];
 
-    
+
+    public function session()
+    {
+        return $this->belongsTo(TrackSessionLevel::class, 'session_id');
+    }
+    public function level()
+    {
+        return $this->belongsTo(TrackLevel::class, 'level_id');
+    }
 }

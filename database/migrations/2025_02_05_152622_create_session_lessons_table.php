@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('session_lessons', function (Blueprint $table) {
             $table->id();
             $table->integer('session_id');
+            $table->integer('level_id');
             $table->string('name');
-            $table->string('duration');
             $table->string('duration');
             $table->enum('privacy', ['locked', 'unlocked']);
             $table->enum('host_type', ['image', 'youtube', 'video', 'pdf', 'word', 'excel']);
-            $table->string('hose_path');
+            $table->string('host_path');
             $table->string('description');
             $table->timestamps();
         });

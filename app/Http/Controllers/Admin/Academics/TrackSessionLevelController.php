@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin\Academics;
 
 use App\Http\Controllers\Controller;
+use App\Models\SessionLesson;
 use App\Models\Track;
 use App\Models\TrackLevel;
 use App\Models\TrackSessionLevel;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
-
+use Illuminate\Support\Facades\DB;
 
 class TrackSessionLevelController extends Controller
 {
@@ -17,53 +18,54 @@ class TrackSessionLevelController extends Controller
         $level = TrackLevel::where('id', $level_id)->first();
         $track = Track::where('id', $track_id)->first();
         $menus = TrackSessionLevel::where('track_id', $track_id)->where('level_id', $level_id)->with('track', 'level')->get();
+        $lessons = SessionLesson::where('level_id', $level_id)->get();
 
-        return view('backEnd.academics.sessions.index', compact('track', 'menus', 'level'));
+        return view('backEnd.academics.sessions.index', compact('track', 'menus', 'level', 'lessons'));
     }
 
 
     public function store(Request $request)
     {
-        try{
-        $validated = $request->validate([
-            'track_id' => 'required|exists:tracks,id',
-            'level_id' => 'required|exists:levels,id',
-            'name_en' => 'required|string',
-            'name_ar' => 'required|string',
-            'description_en' => 'required|string',
-            'description_ar' => 'required|string',
-            'file' => 'required|array',
-            'file.*' => 'file|mimes:pdf,doc,docx',
-        ]);
+        try {
+            $validated = $request->validate([
+                'track_id' => 'required|exists:tracks,id',
+                'level_id' => 'required|exists:levels,id',
+                'name_en' => 'required|string',
+                'name_ar' => 'required|string',
+                'description_en' => 'required|string',
+                'description_ar' => 'required|string',
+                'file' => 'required|array',
+                'file.*' => 'file|mimes:pdf,doc,docx',
+            ]);
 
-        $fileData = [];
+            $fileData = [];
 
-        if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $file) {
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('courses_student_sessions/'), $fileName);
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move(public_path('courses_student_sessions/'), $fileName);
 
-                $fileData[] = 'courses_student_sessions/' . $fileName;
+                    $fileData[] = 'courses_student_sessions/' . $fileName;
+                }
             }
+
+            TrackSessionLevel::create([
+                'track_id' => $validated['track_id'],
+                'level_id' => $validated['level_id'],
+                'name_en' => $validated['name_en'],
+                'name_ar' => $validated['name_ar'],
+                'description_en' => $validated['description_en'],
+                'description_ar' => $validated['description_ar'],
+                'file' => $fileData,
+            ]);
+
+
+            Toastr::success('Created successfully', 'Success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
         }
-
-        TrackSessionLevel::create([
-            'track_id' => $validated['track_id'],
-            'level_id' => $validated['level_id'],
-            'name_en' => $validated['name_en'],
-            'name_ar' => $validated['name_ar'],
-            'description_en' => $validated['description_en'],
-            'description_ar' => $validated['description_ar'],
-            'file' => $fileData,
-        ]);
-  
-
-        Toastr::success('Created successfully', 'Success');
-        return redirect()->back();
-    } catch (\Exception $e) {
-        Toastr::error('Operation Failed', 'Failed');
-        return redirect()->back();
-    }
     }
 
 

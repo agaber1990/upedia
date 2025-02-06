@@ -1019,7 +1019,9 @@ Route::get('/reg', function () {});
         Route::post('track_levels_sessions', 'Admin\Academics\TrackSessionLevelController@store')->name('track_levels_sessions_store');
         Route::put('track_levels_sessions', 'Admin\Academics\TrackSessionLevelController@update')->name('track_levels_sessions_update');
         Route::delete('track_levels_sessions/{id}', 'Admin\Academics\TrackSessionLevelController@destroy')->name('track_levels_sessions_delete');
-   
+        
+        // track levels sessions lessons Routes
+        Route::post('track_levels_sessions_lessons', 'Admin\Academics\SessionLessonController@store')->name('track_levels_sessions_lessons');
 
         // Tracks Routes
         Route::get('tracks', 'Admin\Academics\TrackController@index')->name('tracks')->middleware('userRolePermission:tracks');

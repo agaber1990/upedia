@@ -43,7 +43,7 @@ class TrackLevelController extends Controller
 
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // 
+                $fileName = time() . '_' . $file->getClientOriginalName(); 
                 $file->move(public_path('courses_student/'), $fileName);
                 $filePath = 'courses_student/' . $fileName;
             }
