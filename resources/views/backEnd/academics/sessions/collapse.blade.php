@@ -109,13 +109,13 @@
                                         <div class="col-lg-12">
 
                                             @foreach ($lessons->where('session_id', $element->id) as $item)
-                                                <div class="row align-items-center mt-4">
+                                                <div class="row align-items-center mt-2">
                                                     <div class="col-md-10 col-9">
-                                                        <h4>
+                                                        <h5>
                                                             {{ $item->name }} [{{ $item->duration }}]
                                                             [{{ $item->privacy }}] [lesson]
 
-                                                        </h4>
+                                                        </h5>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <x-drop-down>
@@ -164,11 +164,11 @@
 
 
                                             @foreach ($assignments->where('session_id', $element->id) as $item)
-                                                <div class="row align-items-center mt-4">
+                                                <div class="row align-items-center mt-2">
                                                     <div class="col-md-10 col-9">
-                                                        <h4>
+                                                        <h5>
                                                             {{ $item->title }} [{{ $item->privacy }}] [Assignment]
-                                                        </h4>
+                                                        </h5>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <x-drop-down>
@@ -216,11 +216,11 @@
                                             @endforeach
 
                                             @foreach ($quiz->where('session_id', $element->id) as $item)
-                                                <div class="row align-items-center mt-4">
+                                                <div class="row align-items-center mt-2">
                                                     <div class="col-md-10 col-9">
-                                                        <h4>
+                                                        <h5>
                                                             {{ $item->title }} [{{ $item->privacy }}] [Quiz]
-                                                        </h4>
+                                                        </h5>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <x-drop-down>
