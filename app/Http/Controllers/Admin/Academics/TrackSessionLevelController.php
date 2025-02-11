@@ -24,7 +24,10 @@ class TrackSessionLevelController extends Controller
         $assignments = SessionAssignment::where('level_id', $level_id)->get();
         $quiz = SessionQuiz::where('level_id', $level_id)->get();
 
-        return view('backEnd.academics.sessions.index', compact('track', 'menus', 'level', 'lessons', 'assignments','quiz'));
+        $sessionQuiz = TrackSessionLevel::where('level_id',$level_id)->with('SessionQuizzes')->get();
+
+        // dd($sessionQuiz);
+        return view('backEnd.academics.sessions.index', compact('track', 'menus', 'level', 'lessons', 'assignments', 'quiz', 'sessionQuiz'));
     }
 
 

@@ -16,6 +16,9 @@
                      <input type="hidden" name="session_id" id="lesson_session_id" value="{{ $element->id }}">
                      <input type="hidden" name="level_id" id="lesson_level_id" value="{{ $level->id }}">
 
+                     <!-- Add this div to store quiz options -->
+                     <div id="quizOptions_{{ $element->id }}" data-quiz-options='@json($quiz->where('session_id', $element->id)->toArray())'>
+                     </div>
 
                      <div id="choose_quiz_type_{{ $element->id }}">
                          <div class="row">
@@ -40,7 +43,8 @@
                  </div>
                  <div class="modal-footer">
 
-                     <button type="submit" id="sessionQuizFormBtn_{{$element->id}}" class="primary-btn fix-gr-bg text-nowrap">
+                     <button type="submit" id="sessionQuizFormBtn_{{ $element->id }}"
+                         class="primary-btn fix-gr-bg text-nowrap">
                          @lang('common.submit')
                      </button>
                  </div>
@@ -53,7 +57,6 @@
 
 
  <style>
-    
      .item_header {
          background: #415094;
 
@@ -79,31 +82,34 @@
              function handleQuizOption(modalId) {
                  const existQuiz = $('#exist_quiz_' + modalId).prop('checked');
                  const newQuiz = $('#new_quiz_' + modalId).prop('checked');
-                 if (existQuiz) {
-                     $('#additional_inputs_' + modalId).html(`
+
+                 const quizOptions = $('#quizOptions_' + modalId).data('quiz-options');
+                 const quizOptionsArray = Array.isArray(quizOptions) ? quizOptions : Object.values(quizOptions);
+
+                 if (Array.isArray(quizOptionsArray)) {
+                     let optionsHtml = '<option value="">@lang('academics.add_quiz')</option>';
+                     quizOptionsArray.forEach(option => {
+                         optionsHtml += `<option value="${option.id}">${option.title}</option>`;
+                     });
+
+
+                     if (existQuiz) {
+                         $('#additional_inputs_' + modalId).html(`
                            <div class="primary_input">
-                                   <label class="primary_input_label" for="">@lang('academics.quiz')</label>
+                                   <label class="primary_input_label" for="">@lang('common.existing')</label>
                                    <select class="primary_select form-control" name="quiz" id="quiz">
-                                       <option value="">@lang('common.select')</option>
-                                      @foreach ( $quiz as $item)
-                                       <option value="{{$item->id}}">{{$item->title}}</option>
-                                      @endforeach
+                                        ${optionsHtml}
                                    </select>
                                </div>
                                <div class="primary_input">
-                                   <label class="primary_input_label" for="">@lang('academics.privacy')</label>
+                                   <label class="primary_input_label" for="">@lang('common.new')</label>
                                    <select class="primary_select form-control" name="privacy" id="privacy">
                                        <option value="">@lang('common.select')</option>
                                        @php
-                                 $enumValues = DB::select(
-                                     "SHOW COLUMNS FROM session_quizzes WHERE Field = 'privacy'",
-                                 )[0]->Type;
-                                 preg_match('/^enum\((.*)\)$/', $enumValues, $matches);
-                                 $privacyOptions = array_map(
-                                     fn($value) => trim($value, "'"),
-                                     explode(',', $matches[1]),
-                                 );
-                             @endphp
+                                           $enumValues = DB::select("SHOW COLUMNS FROM session_quizzes WHERE Field = 'privacy'")[0]->Type;
+                                           preg_match('/^enum\((.*)\)$/', $enumValues, $matches);
+                                           $privacyOptions = array_map(fn($value) => trim($value, "'"), explode(',', $matches[1]));
+                                       @endphp
 
                              @foreach ($privacyOptions as $option)
                                  <option value="{{ $option }}">{{ ucfirst($option) }}
@@ -112,8 +118,8 @@
                                    </select>
                                </div>
                            `);
-                 } else if (newQuiz) {
-                     $('#additional_inputs_' + modalId).html(`
+                     } else if (newQuiz) {
+                         $('#additional_inputs_' + modalId).html(`
                            <div class="primary_input">
                                <label class="primary_input_label" for="name">@lang('academics.title')
                                    <span class="text-danger"> *</span>
@@ -154,9 +160,11 @@
                                </select>
                            </div>
                        `);
+                     }
+                 } else {
+                     console.error("Quiz options are not an array:", quizOptions);
                  }
              }
-
              // Bind event listeners when a quiz modal is opened
              $(document).on('click', '[id^="add_quiz_modal_btn_"]', function(event) {
                  event.preventDefault();
@@ -178,50 +186,50 @@
 
 
              $('[id^="sessionQuizForm_"]').off('submit').on('submit', function(event) {
-                event.preventDefault(); // Prevent the default form submission
+                 event.preventDefault(); // Prevent the default form submission
 
-                var form = $(this);
-                var formData = new FormData(this); // Create FormData object
-        
-                var submitButton = form.find('[id^="sessionQuizFormBtn_"]');
+                 var form = $(this);
+                 var formData = new FormData(this); // Create FormData object
 
-                // Disable submit button to prevent multiple clicks
-                submitButton.prop('disabled', true);
+                 var submitButton = form.find('[id^="sessionQuizFormBtn_"]');
 
-                // Send AJAX request
-                $.ajax({
-                    url: form.attr('action'), // Use the form's action attribute
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        toastr.success(response.message,
-                            'Success'); // Show success message
-                        form[0].reset(); // Reset the form
-                        setTimeout(function() {
-                            location
-                                .reload(); // Reload the page after a delay (optional)
-                        }, 1000);
-                    },
-                    error: function(xhr) {
-                        if (xhr.responseJSON && xhr.responseJSON.errors) {
-                            var errors = xhr.responseJSON.errors;
-                            $.each(errors, function(key, value) {
-                                toastr.error(value[0],
-                                    key); // Show validation errors
-                            });
-                        } else {
-                            toastr.error(
-                                'Something went wrong. Please try again later.',
-                                'Failed'
-                            );
-                        }
-                        submitButton.prop('disabled',
-                            false); // Re-enable submit button on failure
-                    }
-                });
-            });
+                 // Disable submit button to prevent multiple clicks
+                 submitButton.prop('disabled', true);
+
+                 // Send AJAX request
+                 $.ajax({
+                     url: form.attr('action'), // Use the form's action attribute
+                     type: "POST",
+                     data: formData,
+                     processData: false,
+                     contentType: false,
+                     success: function(response) {
+                         toastr.success(response.message,
+                             'Success'); // Show success message
+                         form[0].reset(); // Reset the form
+                         setTimeout(function() {
+                             location
+                                 .reload(); // Reload the page after a delay (optional)
+                         }, 1000);
+                     },
+                     error: function(xhr) {
+                         if (xhr.responseJSON && xhr.responseJSON.errors) {
+                             var errors = xhr.responseJSON.errors;
+                             $.each(errors, function(key, value) {
+                                 toastr.error(value[0],
+                                     key); // Show validation errors
+                             });
+                         } else {
+                             toastr.error(
+                                 'Something went wrong. Please try again later.',
+                                 'Failed'
+                             );
+                         }
+                         submitButton.prop('disabled',
+                             false); // Re-enable submit button on failure
+                     }
+                 });
+             });
          });
      </script>
  @endpush

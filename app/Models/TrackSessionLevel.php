@@ -33,4 +33,8 @@ class TrackSessionLevel extends Model
     {
         return $this->hasMany(SessionLesson::class);
     }
+    public function SessionQuizzes()
+    {
+        return $this->hasMany(SessionQuiz::class, 'session_id');
+    }
 }
