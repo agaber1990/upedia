@@ -21,6 +21,7 @@ return [
     "word" => "Word",
     "video" => "Video",
     "excel" => "Excel",
+    "view_file" => "View File",
     "edit" => "Edit",
     "view" => "View",
     "close" => "Close",

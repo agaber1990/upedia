@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin\Academics;
 
 use App\Http\Controllers\Controller;
+use App\Models\SessionAssignment;
 use App\Models\SessionLesson;
+use App\Models\SessionQuiz;
 use App\Models\Track;
 use App\Models\TrackLevel;
 use App\Models\TrackSessionLevel;
@@ -19,8 +21,10 @@ class TrackSessionLevelController extends Controller
         $track = Track::where('id', $track_id)->first();
         $menus = TrackSessionLevel::where('track_id', $track_id)->where('level_id', $level_id)->with('track', 'level')->get();
         $lessons = SessionLesson::where('level_id', $level_id)->get();
+        $assignments = SessionAssignment::where('level_id', $level_id)->get();
+        $quiz = SessionQuiz::where('level_id', $level_id)->get();
 
-        return view('backEnd.academics.sessions.index', compact('track', 'menus', 'level', 'lessons'));
+        return view('backEnd.academics.sessions.index', compact('track', 'menus', 'level', 'lessons', 'assignments','quiz'));
     }
 
 

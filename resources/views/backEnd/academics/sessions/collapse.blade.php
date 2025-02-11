@@ -59,7 +59,6 @@
                                                 </button>
                                             </div>
 
-
                                             <div id="add_session_session_{{ $element->id }}" class="input-session"
                                                 style="display: none;width:100%">
                                                 <button id="add_lesson_modal_btn_{{ $element->id }}"
@@ -80,7 +79,6 @@
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="row mt-4">
                                         <div class="col-lg-12">
@@ -114,30 +112,169 @@
                                                 <div class="row align-items-center mt-4">
                                                     <div class="col-md-10 col-9">
                                                         <h4>
-                                                            {{ $item->name }}
-                                                            [{{ $item->duration }}][{{ $item->privacy }}][lesson]
+                                                            {{ $item->name }} [{{ $item->duration }}]
+                                                            [{{ $item->privacy }}] [lesson]
 
                                                         </h4>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <x-drop-down>
-                                                            <a class="dropdown-item"
-                                                                href="">@lang('common.edit')</a>
                                                             <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#update_lesson_modal_{{ $item->id }}"
+                                                                href="#">@lang('common.edit')</a>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#deleteAssignmentModal{{ $item->id }}"
                                                                 href="#">@lang('common.delete')</a>
                                                         </x-drop-down>
+                                                    </div>
+
+                                                    <!-- Update Lesson Modal -->
+                                                    @include('backEnd.academics.sessions.modals.update_lesson_modal')
+
+                                                    {{-- delete modal --}}
+                                                    <div class="modal fade admin-query"
+                                                        id="deleteAssignmentModal{{ $item->id }}">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('academics.delete_lesson')</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                    </div>
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button"
+                                                                            class="primary-btn tr-bg"
+                                                                            data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        {{ Form::open(['route' => ['track_levels_sessions_lessons_delete', $item->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                        <button class="primary-btn fix-gr-bg"
+                                                                            type="submit">@lang('common.delete')</button>
+                                                                        {{ Form::close() }}
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endforeach
 
+
+                                            @foreach ($assignments->where('session_id', $element->id) as $item)
+                                                <div class="row align-items-center mt-4">
+                                                    <div class="col-md-10 col-9">
+                                                        <h4>
+                                                            {{ $item->title }} [{{ $item->privacy }}] [Assignment]
+                                                        </h4>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <x-drop-down>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#update_assignment_modal_{{ $item->id }}"
+                                                                href="#">@lang('common.edit')</a>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#deleteAssignmentModal{{ $item->id }}"
+                                                                href="#">@lang('common.delete')</a>
+                                                        </x-drop-down>
+                                                    </div>
+
+                                                    <!-- Update assignment Modal -->
+                                                    @include('backEnd.academics.sessions.modals.update_assignment_modal')
+
+                                                    {{-- delete assignment modal --}}
+                                                    <div class="modal fade admin-query"
+                                                        id="deleteAssignmentModal{{ $item->id }}">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('academics.delete_assignment')</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                    </div>
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button"
+                                                                            class="primary-btn tr-bg"
+                                                                            data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        {{ Form::open(['route' => ['track_levels_sessions_assignment_delete', $item->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                        <button class="primary-btn fix-gr-bg"
+                                                                            type="submit">@lang('common.delete')</button>
+                                                                        {{ Form::close() }}
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+                                            @foreach ($quiz->where('session_id', $element->id) as $item)
+                                                <div class="row align-items-center mt-4">
+                                                    <div class="col-md-10 col-9">
+                                                        <h4>
+                                                            {{ $item->title }} [{{ $item->privacy }}] [Quiz]
+                                                        </h4>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <x-drop-down>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#update_quiz_modal_{{ $item->id }}"
+                                                                href="#">@lang('common.edit')</a>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#deleteQuizModal{{ $item->id }}"
+                                                                href="#">@lang('common.delete')</a>
+                                                        </x-drop-down>
+                                                    </div>
+
+
+                                                    <!-- Update quiz Modal -->
+                                                    @include('backEnd.academics.sessions.modals.update_quiz_modal')
+
+                                                    {{-- delete quiz modal --}}
+                                                    <div class="modal fade admin-query"
+                                                        id="deleteQuizModal{{ $item->id }}">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('academics.delete_quiz')</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                    </div>
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button"
+                                                                            class="primary-btn tr-bg"
+                                                                            data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        {{ Form::open(['route' => ['track_levels_sessions_quiz_delete', $item->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                        <button class="primary-btn fix-gr-bg"
+                                                                            type="submit">@lang('common.delete')</button>
+                                                                        {{ Form::close() }}
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
                     </li>
+
+
 
 
                     <!-- Add Lesson Modal -->
@@ -162,6 +299,16 @@
 
     </div>
 @endif
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -205,6 +352,10 @@
                     $(this).html('<i class="fas fa-plus" style="color: #fff"></i>');
                 }
             });
+
+
+
+
 
             $(document).on('click',
                 '[id^="add_lesson_modal_btn_"], [id^="add_quiz_modal_btn_"], [id^="add_assignment_modal_btn_"]',

@@ -2,7 +2,8 @@
  <div class="modal fade" id="add_quiz_modal_{{ $element->id }}" tabindex="-1" aria-labelledby="add_quiz_modal_label"
      aria-hidden="true">
      <div class="modal-dialog modal-lg">
-         <form action="" method="POST" enctype="multipart/form-data">
+         <form id="sessionQuizForm_{{ $element->id }}" action="{{ route('track_levels_sessions_quiz') }}" method="POST"
+             enctype="multipart/form-data">
              @csrf
              <div class="modal-content">
 
@@ -11,6 +12,10 @@
                      <button type="button" class="close" data-dismiss="modal">&times;</button>
                  </div>
                  <div class="modal-body">
+                     <meta name="csrf-token" content="{{ csrf_token() }}">
+                     <input type="hidden" name="session_id" id="lesson_session_id" value="{{ $element->id }}">
+                     <input type="hidden" name="level_id" id="lesson_level_id" value="{{ $level->id }}">
+
 
                      <div id="choose_quiz_type_{{ $element->id }}">
                          <div class="row">
@@ -35,7 +40,7 @@
                  </div>
                  <div class="modal-footer">
 
-                     <button type="submit" id="add_for_submit" class="primary-btn fix-gr-bg text-nowrap">
+                     <button type="submit" id="sessionQuizFormBtn_{{$element->id}}" class="primary-btn fix-gr-bg text-nowrap">
                          @lang('common.submit')
                      </button>
                  </div>
@@ -48,6 +53,7 @@
 
 
  <style>
+    
      .item_header {
          background: #415094;
 
@@ -73,24 +79,36 @@
              function handleQuizOption(modalId) {
                  const existQuiz = $('#exist_quiz_' + modalId).prop('checked');
                  const newQuiz = $('#new_quiz_' + modalId).prop('checked');
-
                  if (existQuiz) {
                      $('#additional_inputs_' + modalId).html(`
                            <div class="primary_input">
                                    <label class="primary_input_label" for="">@lang('academics.quiz')</label>
                                    <select class="primary_select form-control" name="quiz" id="quiz">
                                        <option value="">@lang('common.select')</option>
-                                       <option value="">static quiz 1</option>
-                                       <option value="">static quiz 2</option>
-                                       <option value="">static quiz 3</option>
+                                      @foreach ( $quiz as $item)
+                                       <option value="{{$item->id}}">{{$item->title}}</option>
+                                      @endforeach
                                    </select>
                                </div>
                                <div class="primary_input">
                                    <label class="primary_input_label" for="">@lang('academics.privacy')</label>
                                    <select class="primary_select form-control" name="privacy" id="privacy">
                                        <option value="">@lang('common.select')</option>
-                                       <option value="">@lang('common.locked')</option>
-                                       <option value="">@lang('common.unlock')</option>
+                                       @php
+                                 $enumValues = DB::select(
+                                     "SHOW COLUMNS FROM session_quizzes WHERE Field = 'privacy'",
+                                 )[0]->Type;
+                                 preg_match('/^enum\((.*)\)$/', $enumValues, $matches);
+                                 $privacyOptions = array_map(
+                                     fn($value) => trim($value, "'"),
+                                     explode(',', $matches[1]),
+                                 );
+                             @endphp
+
+                             @foreach ($privacyOptions as $option)
+                                 <option value="{{ $option }}">{{ ucfirst($option) }}
+                                 </option>
+                             @endforeach
                                    </select>
                                </div>
                            `);
@@ -100,26 +118,39 @@
                                <label class="primary_input_label" for="name">@lang('academics.title')
                                    <span class="text-danger"> *</span>
                                </label>
-                               <input class="primary_input_field form-control" type="text" name="title" id="title" autocomplete="off">
+                               <input class="primary_input_field form-control" type="text" name="title" required id="title" autocomplete="off">
                            </div>
                            <div class="primary_input">
                                <label class="primary_input_label" for="name">@lang('academics.instruction')
                                    <span class="text-danger"> *</span>
                                </label>
-                               <input class="primary_input_field form-control" type="text" name="instruction" id="instruction" autocomplete="off">
+                               <input class="primary_input_field form-control" type="text" required name="instruction" id="instruction" autocomplete="off">
                            </div>
                            <div class="primary_input">
                                <label class="primary_input_label" for="name">@lang('academics.min_percentage')
                                    <span class="text-danger"> *</span>
                                </label>
-                               <input class="primary_input_field form-control" type="text" name="min_percentage" id="min_percentage" autocomplete="off">
+                               <input class="primary_input_field form-control" type="text" name="min_percentage" required id="min_percentage" autocomplete="off">
                            </div>
                            <div class="primary_input">
                                <label class="primary_input_label" for="">@lang('academics.privacy')</label>
                                <select class="primary_select form-control" name="privacy" id="privacy">
                                    <option value="">@lang('common.select')</option>
-                                   <option value="">@lang('common.locked')</option>
-                                   <option value="">@lang('common.unlock')</option>
+                                   @php
+                                 $enumValues = DB::select(
+                                     "SHOW COLUMNS FROM session_quizzes WHERE Field = 'privacy'",
+                                 )[0]->Type;
+                                 preg_match('/^enum\((.*)\)$/', $enumValues, $matches);
+                                 $privacyOptions = array_map(
+                                     fn($value) => trim($value, "'"),
+                                     explode(',', $matches[1]),
+                                 );
+                             @endphp
+
+                             @foreach ($privacyOptions as $option)
+                                 <option value="{{ $option }}">{{ ucfirst($option) }}
+                                 </option>
+                             @endforeach
                                </select>
                            </div>
                        `);
@@ -143,6 +174,54 @@
                  // Initialize the quiz options
                  handleQuizOption(modalId);
              });
+
+
+
+             $('[id^="sessionQuizForm_"]').off('submit').on('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var form = $(this);
+                var formData = new FormData(this); // Create FormData object
+        
+                var submitButton = form.find('[id^="sessionQuizFormBtn_"]');
+
+                // Disable submit button to prevent multiple clicks
+                submitButton.prop('disabled', true);
+
+                // Send AJAX request
+                $.ajax({
+                    url: form.attr('action'), // Use the form's action attribute
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        toastr.success(response.message,
+                            'Success'); // Show success message
+                        form[0].reset(); // Reset the form
+                        setTimeout(function() {
+                            location
+                                .reload(); // Reload the page after a delay (optional)
+                        }, 1000);
+                    },
+                    error: function(xhr) {
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            var errors = xhr.responseJSON.errors;
+                            $.each(errors, function(key, value) {
+                                toastr.error(value[0],
+                                    key); // Show validation errors
+                            });
+                        } else {
+                            toastr.error(
+                                'Something went wrong. Please try again later.',
+                                'Failed'
+                            );
+                        }
+                        submitButton.prop('disabled',
+                            false); // Re-enable submit button on failure
+                    }
+                });
+            });
          });
      </script>
  @endpush

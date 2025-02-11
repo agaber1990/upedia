@@ -259,4 +259,11 @@ return [
     'min_percentage' => 'Min Percentage',
     'submit_date' => 'Submit Date',
     'attachment' => 'Attachment',
+    'delete_lesson' => 'Delete Lesson',
+    'update_lesson' => 'Update Lesson',
+    'update_assignment' => 'Update Assignment',
+    'sessions' => 'Sessions',
+    'instruction' => 'Instruction',
+    'update_quiz' => 'Update Quiz',
+    'quiz' => 'Quiz',
 ];
