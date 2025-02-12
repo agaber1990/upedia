@@ -1,6 +1,6 @@
 @if (isset($menus) && count($menus) > 0)
     <div class="input-session mb-4">
-
+        {{-- {{dd($lessons)}} --}}
         <div id="accordion" class="dd">
             <ol class="dd-list">
                 @foreach ($menus as $key => $element)
@@ -59,7 +59,6 @@
                                                 </button>
                                             </div>
 
-
                                             <div id="add_session_session_{{ $element->id }}" class="input-session"
                                                 style="display: none;width:100%">
                                                 <button id="add_lesson_modal_btn_{{ $element->id }}"
@@ -80,7 +79,6 @@
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="row mt-4">
                                         <div class="col-lg-12">
@@ -110,25 +108,167 @@
                                         </div>
                                         <div class="col-lg-12">
 
-                                            <div class="row align-items-center mt-4">
-                                                <div class="col-md-10 col-9">
-                                                    <h4>Static text [50min][unlock][lesson]</h4>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <x-drop-down>
-                                                        <a class="dropdown-item" href="">@lang('common.levels')</a>
-                                                        <a class="dropdown-item" href="">@lang('common.pricing_plan')</a>
-                                                        <a class="dropdown-item" href="">@lang('common.edit')</a>
-                                                        <a class="dropdown-item" data-toggle="modal"
-                                                            href="#">@lang('common.delete')</a>
-                                                    </x-drop-down>
-                                                </div>
-                                            </div>
+                                            @foreach ($lessons->where('session_id', $element->id) as $item)
+                                                <div class="row align-items-center mt-2">
+                                                    <div class="col-md-10 col-9">
+                                                        <h5>
+                                                            {{ $item->name }} [{{ $item->duration }}]
+                                                            [{{ $item->privacy }}] [lesson]
 
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <x-drop-down>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#update_lesson_modal_{{ $item->id }}"
+                                                                href="#">@lang('common.edit')</a>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#deleteAssignmentModal{{ $item->id }}"
+                                                                href="#">@lang('common.delete')</a>
+                                                        </x-drop-down>
+                                                    </div>
+
+                                                    <!-- Update Lesson Modal -->
+                                                    @include('backEnd.academics.sessions.modals.update_lesson_modal')
+
+                                                    {{-- delete modal --}}
+                                                    <div class="modal fade admin-query"
+                                                        id="deleteAssignmentModal{{ $item->id }}">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('academics.delete_lesson')</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                    </div>
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button"
+                                                                            class="primary-btn tr-bg"
+                                                                            data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        {{ Form::open(['route' => ['track_levels_sessions_lessons_delete', $item->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                        <button class="primary-btn fix-gr-bg"
+                                                                            type="submit">@lang('common.delete')</button>
+                                                                        {{ Form::close() }}
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+
+                                            @foreach ($assignments->where('session_id', $element->id) as $item)
+                                                <div class="row align-items-center mt-2">
+                                                    <div class="col-md-10 col-9">
+                                                        <h5>
+                                                            {{ $item->title }} [{{ $item->privacy }}] [Assignment]
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <x-drop-down>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#update_assignment_modal_{{ $item->id }}"
+                                                                href="#">@lang('common.edit')</a>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#deleteAssignmentModal{{ $item->id }}"
+                                                                href="#">@lang('common.delete')</a>
+                                                        </x-drop-down>
+                                                    </div>
+
+                                                    <!-- Update assignment Modal -->
+                                                    @include('backEnd.academics.sessions.modals.update_assignment_modal')
+
+                                                    {{-- delete assignment modal --}}
+                                                    <div class="modal fade admin-query"
+                                                        id="deleteAssignmentModal{{ $item->id }}">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('academics.delete_assignment')</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                    </div>
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button"
+                                                                            class="primary-btn tr-bg"
+                                                                            data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        {{ Form::open(['route' => ['track_levels_sessions_assignment_delete', $item->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                        <button class="primary-btn fix-gr-bg"
+                                                                            type="submit">@lang('common.delete')</button>
+                                                                        {{ Form::close() }}
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+                                            @foreach ($quiz->where('session_id', $element->id) as $item)
+                                                <div class="row align-items-center mt-2">
+                                                    <div class="col-md-10 col-9">
+                                                        <h5>
+                                                            {{ $item->title }} [{{ $item->privacy }}] [Quiz]
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <x-drop-down>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#update_quiz_modal_{{ $item->id }}"
+                                                                href="#">@lang('common.edit')</a>
+                                                            <a class="dropdown-item" data-toggle="modal"
+                                                                data-target="#deleteQuizModal{{ $item->id }}"
+                                                                href="#">@lang('common.delete')</a>
+                                                        </x-drop-down>
+                                                    </div>
+
+
+                                                    <!-- Update quiz Modal -->
+                                                    @include('backEnd.academics.sessions.modals.update_quiz_modal')
+
+                                                    {{-- delete quiz modal --}}
+                                                    <div class="modal fade admin-query"
+                                                        id="deleteQuizModal{{ $item->id }}">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">@lang('academics.delete_quiz')</h4>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        <h4>@lang('common.are_you_sure_to_delete')</h4>
+                                                                    </div>
+                                                                    <div class="mt-40 d-flex justify-content-between">
+                                                                        <button type="button"
+                                                                            class="primary-btn tr-bg"
+                                                                            data-dismiss="modal">@lang('common.cancel')</button>
+                                                                        {{ Form::open(['route' => ['track_levels_sessions_quiz_delete', $item->id], 'method' => 'DELETE', 'enctype' => 'multipart/form-data']) }}
+                                                                        <button class="primary-btn fix-gr-bg"
+                                                                            type="submit">@lang('common.delete')</button>
+                                                                        {{ Form::close() }}
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -136,268 +276,15 @@
 
 
 
+
                     <!-- Add Lesson Modal -->
-                    <div class="modal fade" id="add_lesson_modal_{{ $element->id }}" tabindex="-1"
-                        aria-labelledby="add_lesson_modal_label" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <form action="" method="POST" enctype="multipart/form-data">
-                                @csrf
+                    @include('backEnd.academics.sessions.modals.add_lesson_modal')
 
-
-                                <div class="modal-content">
-
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="add_lesson_modal_label">@lang('academics.add_lesson')
-                                        </h1>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="name">@lang('academics.lesson_name')
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input class="primary_input_field form-control" type="text"
-                                                name="name" id="name" autocomplete="off">
-                                        </div>
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="duration">@lang('academics.duration_in_minute')
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input class="primary_input_field form-control" type="text"
-                                                name="duration" id="duration" autocomplete="off">
-                                        </div>
-
-
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="">@lang('academics.host')
-                                            </label>
-                                            <select class="primary_select form-control" name="host"
-                                                id="host_{{ $element->id }}">
-                                                <option value="">@lang('common.select')</option>
-                                                <option value="youtube">@lang('common.youtube')</option>
-                                                <option value="pdf">@lang('common.pdf')</option>
-                                                <option value="image">@lang('common.image')</option>
-                                                {{-- @foreach ($departments as $key => $value)
-                                                        <option value="{{ $value->id }}"
-                                                            {{ old('department_id') == $value->id ? 'selected' : '' }}>
-                                                            {{ $value->name }}</option>
-                                                    @endforeach --}}
-                                            </select>
-                                        </div>
-
-                                        <div id="hostValue_{{ $element->id }}"></div>
-
-
-
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="">@lang('academics.privacy')
-                                            </label>
-                                            <select class="primary_select form-control" name="privacy"
-                                                id="privacy">
-                                                <option value="">@lang('common.select')</option>
-                                                <option value="">@lang('common.locked')</option>
-                                                <option value="">@lang('common.unlock')</option>
-
-                                            </select>
-                                        </div>
-
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="description">@lang('academics.description')
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <textarea name="" class="primary_input_field form-control" name="description" id="description"
-                                                rows="5">
-                                </textarea>
-                                        </div>
-
-
-
-
-
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="file">@lang('common.material')
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input class="primary_input_field form-control" id="file"
-                                                type="file" multiple id="file" name="file[]"
-                                                autocomplete="off">
-                                        </div>
-
-                                    </div>
-                                    <div class="modal-footer">
-
-                                        <button type="submit" id="add_for_submit"
-                                            class="primary-btn fix-gr-bg text-nowrap">
-                                            @lang('common.submit')
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                     <!-- Add Quiz Modal -->
-                    <div class="modal fade" id="add_quiz_modal_{{ $element->id }}" tabindex="-1"
-                        aria-labelledby="add_quiz_modal_label" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <form action="" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <div class="modal-content">
+                    @include('backEnd.academics.sessions.modals.add_quiz_modal')
 
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="add_quiz_modal_label">@lang('academics.add_quiz')</h1>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-
-                                        {{-- <div id="choose_quiz_type">
-                                            <div class="row">
-                                                <div class="col-lg-12 radio-btn-flex">
-                                                    <div class="row">
-                                                        <div class="col-lg-5 primary_input sm_mb_20">
-                                                            <input type="radio" name="quiz_option" id="exist_quiz"
-                                                                class="common-radio" value="1">
-                                                            <label for="exist_quiz">@lang('common.existing')</label>
-                                                        </div>
-                                                        <div class="col-lg-7 primary_input sm_mb_20">
-                                                            <input type="radio" name="quiz_option" id="new_quiz"
-                                                                class="common-radio" value="0">
-                                                            <label for="new_quiz">@lang('common.new')</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div id="additional_inputs"></div>
-                                        </div> --}}
-
-
-                                        <div id="choose_quiz_type_{{ $element->id }}">
-                                            <div class="row">
-                                                <div class="col-lg-12 radio-btn-flex">
-                                                    <div class="row">
-                                                        <div class="col-lg-5 primary_input sm_mb_20">
-                                                            <input type="radio"
-                                                                name="quiz_option_{{ $element->id }}"
-                                                                id="exist_quiz_{{ $element->id }}"
-                                                                class="common-radio" value="1">
-                                                            <label
-                                                                for="exist_quiz_{{ $element->id }}">@lang('common.existing')</label>
-                                                        </div>
-                                                        <div class="col-lg-7 primary_input sm_mb_20">
-                                                            <input type="radio"
-                                                                name="quiz_option_{{ $element->id }}"
-                                                                id="new_quiz_{{ $element->id }}"
-                                                                class="common-radio" value="0">
-                                                            <label
-                                                                for="new_quiz_{{ $element->id }}">@lang('common.new')</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id="additional_inputs_{{ $element->id }}"></div>
-                                        </div>
-
-                                    </div>
-                                    <div class="modal-footer">
-
-                                        <button type="submit" id="add_for_submit"
-                                            class="primary-btn fix-gr-bg text-nowrap">
-                                            @lang('common.submit')
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                     <!-- Add Assignment Modal -->
-                    <div class="modal fade" id="add_assignment_modal_{{ $element->id }}" tabindex="-1"
-                        aria-labelledby="add_assignment_modal_label" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <form action="" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <div class="modal-content">
-
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="add_assignment_modal_label">
-                                            @lang('academics.add_assignment')</h1>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="name">@lang('academics.title')
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <input class="primary_input_field form-control" type="text"
-                                                name="title" id="title" autocomplete="off">
-                                        </div>
-                                        <div class="row">
-                                            <div class="col primary_input">
-                                                <label class="primary_input_label" for="name">@lang('academics.marks')
-                                                    <span class="text-danger"> *</span>
-                                                </label>
-                                                <input class="primary_input_field form-control" type="text"
-                                                    name="marks" id="marks" autocomplete="off">
-                                            </div>
-                                            <div class="col primary_input">
-                                                <label class="primary_input_label" for="name">@lang('academics.min_percentage')
-                                                    <span class="text-danger"> *</span>
-                                                </label>
-                                                <input class="primary_input_field form-control" type="text"
-                                                    name="min_percentage" id="min_percentage" autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col primary_input">
-                                                <label class="primary_input_label" for="name">@lang('academics.attachment')
-                                                    <span class="text-danger"> *</span>
-                                                </label>
-                                                <input class="primary_input_field form-control" id="attachment"
-                                                    type="file" id="attachment" name="attachment"
-                                                    autocomplete="off">
-                                            </div>
-                                            <div class="col primary_input">
-                                                <label class="primary_input_label" for="name">@lang('academics.submit_date')
-                                                    <span class="text-danger"> *</span>
-                                                </label>
-                                                <input class="primary_input_field form-control" type="date"
-                                                    name="submit_date" id="submit_date" autocomplete="off">
-                                            </div>
-                                        </div>
-
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="description">@lang('academics.description')
-                                                <span class="text-danger"> *</span>
-                                            </label>
-                                            <textarea name="" class="primary_input_field form-control" name="description" id="description"
-                                                rows="5">
-                            </textarea>
-                                        </div>
-                                        <div class="primary_input">
-                                            <label class="primary_input_label" for="">@lang('academics.privacy')
-                                            </label>
-                                            <select class="primary_select form-control" name="privacy"
-                                                id="privacy">
-                                                <option value="">@lang('common.select')</option>
-                                                <option value="">@lang('common.locked')</option>
-                                                <option value="">@lang('common.unlock')</option>
-
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                    <div class="modal-footer">
-
-                                        <button type="submit" id="add_for_submit"
-                                            class="primary-btn fix-gr-bg text-nowrap">
-                                            @lang('common.submit')
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                    @include('backEnd.academics.sessions.modals.add_assignment_modal')
                 @endforeach
             </ol>
         </div>
@@ -412,6 +299,16 @@
 
     </div>
 @endif
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -441,117 +338,6 @@
 
 
 
-            $(document).ready(function() {
-                function handleQuizOption(modalId) {
-                    const existQuiz = $('#exist_quiz_' + modalId).prop('checked');
-                    const newQuiz = $('#new_quiz_' + modalId).prop('checked');
-
-                    if (existQuiz) {
-                        $('#additional_inputs_' + modalId).html(`
-                <div class="primary_input">
-                    <label class="primary_input_label" for="">@lang('academics.quiz')</label>
-                    <select class="primary_select form-control" name="quiz" id="quiz">
-                        <option value="">@lang('common.select')</option>
-                        <option value="">static quiz 1</option>
-                        <option value="">static quiz 2</option>
-                        <option value="">static quiz 3</option>
-                    </select>
-                </div>
-                <div class="primary_input">
-                    <label class="primary_input_label" for="">@lang('academics.privacy')</label>
-                    <select class="primary_select form-control" name="privacy" id="privacy">
-                        <option value="">@lang('common.select')</option>
-                        <option value="">@lang('common.locked')</option>
-                        <option value="">@lang('common.unlock')</option>
-                    </select>
-                </div>
-            `);
-                    } else if (newQuiz) {
-                        $('#additional_inputs_' + modalId).html(`
-                <div class="primary_input">
-                    <label class="primary_input_label" for="name">@lang('academics.title')
-                        <span class="text-danger"> *</span>
-                    </label>
-                    <input class="primary_input_field form-control" type="text" name="title" id="title" autocomplete="off">
-                </div>
-                <div class="primary_input">
-                    <label class="primary_input_label" for="name">@lang('academics.instruction')
-                        <span class="text-danger"> *</span>
-                    </label>
-                    <input class="primary_input_field form-control" type="text" name="instruction" id="instruction" autocomplete="off">
-                </div>
-                <div class="primary_input">
-                    <label class="primary_input_label" for="name">@lang('academics.min_percentage')
-                        <span class="text-danger"> *</span>
-                    </label>
-                    <input class="primary_input_field form-control" type="text" name="min_percentage" id="min_percentage" autocomplete="off">
-                </div>
-                <div class="primary_input">
-                    <label class="primary_input_label" for="">@lang('academics.privacy')</label>
-                    <select class="primary_select form-control" name="privacy" id="privacy">
-                        <option value="">@lang('common.select')</option>
-                        <option value="">@lang('common.locked')</option>
-                        <option value="">@lang('common.unlock')</option>
-                    </select>
-                </div>
-            `);
-                    }
-                }
-
-                // Bind event listeners when a quiz modal is opened
-                $(document).on('click', '[id^="add_quiz_modal_btn_"]', function(event) {
-                    event.preventDefault();
-                    const modalTarget = $(this).data('modal-target');
-                    $(modalTarget).modal('show');
-
-                    // Extract the modal ID
-                    const modalId = modalTarget.split('_').pop();
-
-                    // Bind change event to the radio buttons
-                    $(`#exist_quiz_${modalId}, #new_quiz_${modalId}`).change(function() {
-                        handleQuizOption(modalId);
-                    });
-
-                    // Initialize the quiz options
-                    handleQuizOption(modalId);
-                });
-            });
-
-
-            function updateInputField(id) {
-                const selectedValue = $('#host_' + id).val();
-                let inputHtml = '';
-
-                if (selectedValue === 'youtube') {
-                    inputHtml = `
-            <label class="primary_input_label" for="">@lang('common.url')</label>
-            <input class="primary_input_field form-control" type="text" name="youtube_url" placeholder="Enter YouTube URL" autocomplete="off">
-        `;
-                } else if (selectedValue === 'image' || selectedValue === 'pdf') {
-                    inputHtml = `
-            <label class="primary_input_label" for="">@lang('common.file')</label>
-            <input class="primary_input_field form-control" type="file" name="file" accept="${selectedValue === 'image' ? 'image/*' : 'application/pdf'}">
-        `;
-                }
-
-                $('#hostValue_' + id).html(inputHtml);
-            }
-
-
-
-            $(document).ready(function() {
-                $('[id^="host_"]').each(function() {
-                    const modalId = $(this).attr('id').split('_')[1];
-                    updateInputField(modalId);
-                });
-            });
-
-            $(document).on('change', '[id^="host_"]', function() {
-                const modalId = $(this).attr('id').split('_')[1];
-                updateInputField(modalId);
-            });
-
-
             $(document).on('click', '[id^="add_btn_session_"]', function(event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -566,6 +352,10 @@
                     $(this).html('<i class="fas fa-plus" style="color: #fff"></i>');
                 }
             });
+
+
+
+
 
             $(document).on('click',
                 '[id^="add_lesson_modal_btn_"], [id^="add_quiz_modal_btn_"], [id^="add_assignment_modal_btn_"]',

@@ -18,7 +18,7 @@ class TrackSessionLevel extends Model
         'file'
     ];
     protected $casts = [
-        'file' => 'array', 
+        'file' => 'array',
     ];
     public function track()
     {
@@ -27,5 +27,14 @@ class TrackSessionLevel extends Model
     public function level()
     {
         return $this->belongsTo(TrackLevel::class, 'level_id');
+    }
+
+    public function SessionLessons()
+    {
+        return $this->hasMany(SessionLesson::class);
+    }
+    public function SessionQuizzes()
+    {
+        return $this->hasMany(SessionQuiz::class, 'session_id');
     }
 }

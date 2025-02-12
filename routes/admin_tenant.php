@@ -1019,7 +1019,21 @@ Route::get('/reg', function () {});
         Route::post('track_levels_sessions', 'Admin\Academics\TrackSessionLevelController@store')->name('track_levels_sessions_store');
         Route::put('track_levels_sessions', 'Admin\Academics\TrackSessionLevelController@update')->name('track_levels_sessions_update');
         Route::delete('track_levels_sessions/{id}', 'Admin\Academics\TrackSessionLevelController@destroy')->name('track_levels_sessions_delete');
-   
+        
+        // track levels sessions lessons Routes
+        Route::post('track_levels_sessions_lessons', 'Admin\Academics\SessionLessonController@store')->name('track_levels_sessions_lessons');
+        Route::delete('track_levels_sessions_lessons/{id}', 'Admin\Academics\SessionLessonController@destroy')->name('track_levels_sessions_lessons_delete');
+        Route::put('track_levels_sessions_lessons/{id}', 'Admin\Academics\SessionLessonController@update')->name('track_levels_sessions_lessons_update');
+       
+        // track levels sessions assignment Routes
+        Route::post('track_levels_sessions_assignment', 'Admin\Academics\SessionAssignmentController@store')->name('track_levels_sessions_assignment');
+        Route::delete('track_levels_sessions_assignment/{id}', 'Admin\Academics\SessionAssignmentController@destroy')->name('track_levels_sessions_assignment_delete');
+        Route::put('track_levels_sessions_assignment/{id}', 'Admin\Academics\SessionAssignmentController@update')->name('track_levels_sessions_assignment_update');
+    
+        // track levels sessions quiz Routes
+        Route::post('track_levels_sessions_quiz', 'Admin\Academics\SessionQuizController@store')->name('track_levels_sessions_quiz');
+        Route::delete('track_levels_sessions_quiz/{id}', 'Admin\Academics\SessionQuizController@destroy')->name('track_levels_sessions_quiz_delete');
+        Route::put('track_levels_sessions_quiz/{id}', 'Admin\Academics\SessionQuizController@update')->name('track_levels_sessions_quiz_update');
 
         // Tracks Routes
         Route::get('tracks', 'Admin\Academics\TrackController@index')->name('tracks')->middleware('userRolePermission:tracks');
