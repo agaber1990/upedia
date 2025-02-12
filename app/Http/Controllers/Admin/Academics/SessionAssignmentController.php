@@ -58,13 +58,13 @@ class SessionAssignmentController extends Controller
     {
         try {
             $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'marks' => 'required|integer',
-                'min_percentage' => 'required|integer',
+                'title' => 'nullable|string|max:255',
+                'marks' => 'nullable|integer',
+                'min_percentage' => 'nullable|integer',
                 'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,png,jpeg|max:2048',
-                'submit_date' => 'required',
-                'description' => 'required|string',
-                'privacy' => 'required|in:locked,unlocked',
+                'submit_date' => 'nullable',
+                'description' => 'nullable|string',
+                'privacy' => 'nullable|in:locked,unlocked',
             ]);
 
             $assignment = SessionAssignment::findOrFail($id);
