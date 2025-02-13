@@ -9,12 +9,15 @@
                 <h1>@lang('hr.create_invoice')</h1>
                 <div class="bc-pages">
                     <a href="{{ route('dashboard') }}">@lang('common.dashboard')</a>
-                    <a href="#">@lang('hr.human_resource')</a>
-                    <a href="#">@lang('hr.create_invoice')</a>
+                    <a>@lang('hr.human_resource')</a>
+                    <a href="{{ route('finance') }}">@lang('common.invoices')</a>
+                    <a>@lang('hr.create_invoice')</a>
                 </div>
             </div>
         </div>
     </section>
+
+    {{-- {{dd($track_pricing_plan)}} --}}
     <section class="admin-visitor-area up_admin_visitor up_st_admin_visitor pl_22">
         <div class="container-fluid p-0">
 
@@ -24,13 +27,25 @@
                         <h5 class="mb-0 create-title" data-toggle="collapse" data-target="#collapseOne"
                             aria-expanded="false" aria-controls="collapseOne">
                             <button class="btn btn-link add_btn_link">
-                               info
+                                info
                             </button>
                         </h5>
                     </div>
-                    <div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordion">
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                         <div class="card-body">
                             <div class="row">
+                                <div class="primary_input col-md-4">
+                                    <label class="primary_input_label" for="series">
+                                        @lang('common.series') <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="primary_select form-control" name="series" id="series">
+                                        <option value="">@lang('common.select')</option>
+                                        <option value="">@lang('common.select')</option>
+                                        <option value="">@lang('common.select')</option>
+                                        <option value="">@lang('common.select')</option>
+
+                                    </select>
+                                </div>
                                 <div class="primary_input col-md-4">
                                     <label class="primary_input_label" for="student_id">
                                         @lang('common.select_student') <span class="text-danger">*</span>
@@ -46,7 +61,8 @@
                                     <label class="primary_input_label" for="track">
                                         @lang('common.pricing_plan_type') <span class="text-danger">*</span>
                                     </label>
-                                    <select class="primary_select form-control" name="pricing_plan_type" id="pricing_plan_type">
+                                    <select class="primary_select form-control" name="pricing_plan_type"
+                                        id="pricing_plan_type">
                                         <option value="">@lang('common.select')</option>
                                         @foreach ($pricing_types as $type)
                                             <option value="{{ $type->id }}">
@@ -56,109 +72,87 @@
                                     </select>
                                 </div>
                                 <div class="primary_input col-md-4">
-                                    <label class="primary_input_label" for="">@lang('common.due_date')
+                                    <label class="primary_input_label" for="">@lang('common.date')
                                         <span class="text-danger"> *</span></label>
-                
-                
                                     <input class="primary_input_field  inputs" type="date" value="{{ date('Y-m-d') }}"
-                                        min="{{ date('Y-m-d') }}" name="due_date" id="due_date" />
+                                        min="{{ date('Y-m-d') }}" name="date" id="date" readonly />
                                 </div>
                                 <div class="primary_input col-md-4 mt-2">
-                                    <div class="d-flex">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="track" name="">
-                                            <label class="form-check-label text-dark fw-bold" for="track">
-                                                <i class="bi bi-check-circle-fill text-success me-1"></i>
-                                            </label>
-                                        </div>
-                                        <label class="primary_input_label" for="">@lang('common.posting_date')
+                                    <label class="primary_input_label" for="">@lang('common.posting_date')
+                                        <span class="text-danger"> *</span></label>
+                                    <input class="primary_input_field  inputs" type="datetime-local" disabled
+                                        name="posting_date" id="posting_date" />
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="checkPostingDate"
+                                            name="">
+                                        <label class="primary_input_label" for="checkPostingDate">@lang('common.posting_date')
                                             <span class="text-danger"> *</span></label>
+
                                     </div>
-                                    <input class="primary_input_field  inputs" type="date" disabled name="posting_date"
-                                        id="posting_date" />
                                 </div>
-                
-                             
+                                <div class="primary_input col-md-4 mt-2">
+                                    <label class="primary_input_label" for="payment_due_date">@lang('common.payment_due_date')
+                                        <span class="text-danger"> *</span></label>
+                                    <input class="primary_input_field inputs" type="date" name="payment_due_date"
+                                        id="payment_due_date" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                
+
                 </div>
                 <div class="card mt-2">
                     <div class="card-header pt-0 pb-0" id="headingTwo">
                         <h5 class="mb-0 create-title" data-toggle="collapse" data-target="#collapseTwo"
                             aria-expanded="false" aria-controls="collapseTwo">
                             <button class="btn btn-link add_btn_link">
-                               Tracks and levels
+                                Tracks and levels
                             </button>
                         </h5>
                     </div>
 
-              
-                    <div id="collapseTwo" class="collapse " aria-labelledby="headingTwo" data-parent="#accordion">
-                        <div class="table-responsive">
-                             
-                            <table class="table table-bordered bg-white">
-                                <thead>
-                                    <tr>
-                                        <th style="    width: 110px;">
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="track" name="">
-                                                <label class="form-check-label text-dark fw-bold" for="track">
-                                                    <i class="bi bi-check-circle-fill text-success me-1"></i>
-                                                </label>
-                                                {{ __('common.check_all') }}
-                                            </div>
-                                        </th>
-                                        <th>{{ __('common.select_tack_name') }}</th>
-                                        <th>{{ __('common.levels_qty') }}</th>
-                                        <th>{{ __('common.price') }}</th>
-        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="track" name="">
-                                                <label class="form-check-label text-dark fw-bold" for="track">
-                                                    <i class="bi bi-check-circle-fill text-success me-1"></i>
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <label class="primary_input_label" for="track">
-                                                @lang('common.select_track') <span class="text-danger">*</span>
-                                            </label>
-                                            <select class="primary_select form-control" name="track_id" id="track">
-                                                <option value="">@lang('common.select_track')</option>
-                                                @foreach ($tracks as $track)
-                                                    <option value="{{ $track->id }}" data-level="{{ $track->level_number }}">
-                                                        {{ $track->track_name_en }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <div class="primary_input mb-2">
-                                                <label class="primary_input_label" for="">@lang('common.levels')
-                                                    <span class="text-danger"> *</span></label>
-                                                <input class="primary_input_field form-control " name="levels" id="levels" />
-                                            </div>
-                                        </td>
-                                        <td>
-                                            350 EGP
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="row">
+
+
+
+                                <div class="primary_input col-md-4">
+                                    <label class="primary_input_label" for="track">
+                                        @lang('common.select_track') <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="primary_select form-control" name="track_id" id="track">
+                                        <option value="">@lang('common.select_track')</option>
+                                        @foreach ($tracks as $track)
+                                            <option value="{{ $track->id }}" data-levels="{{ $track->level_number }}">
+                                                {{ $track->track_name_en }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="primary_input col-md-4" id="levels_track">
+                                    <label class="primary_input_label d-none" for="levels" id="levels_track_label">
+                                        @lang('common.select_levels') <span class="text-danger">*</span>
+                                    </label>
+                                </div>
+
+                                <div class="primary_input col-md-4 d-none" id="price">
+                                    <div class="primary_input_label" for="levels">
+                                        @lang('common.price') <span class="text-danger">*</span>
+                                    </div>
+                                    <div class="mt-3" id="badge_price">
+
+                                    </div>
+                                </div>
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-      
-        </div>
     </section>
 @endsection
 
@@ -174,23 +168,213 @@
         color: #415094 !important;
         border: 1px solid #d4d4d4 !important;
     }
-    .card-header{
+
+    .card-header {
         background: #f9f9f9;
     }
+
     .card-header h5 {
         font-size: 14px !important
     }
+
     .card-header button {
-        color: #415094  !important;
-        text-decoration: none  !important;
+        color: #415094 !important;
+        text-decoration: none !important;
     }
+
     .add_btn_link {
         font-size: 14px !important
-
     }
 </style>
 @push('scripts')
     <script>
+        // $(document).ready(function() {
+        //     let selected_pricing_plan_type = null;
+        //     let selectedTrack = null;
+
+        //     $('#pricing_plan_type').on('change', function() {
+        //         selected_pricing_plan_type = $(this).val();
+        //         $('#track').val('').trigger('change');
+        //     });
+
+        //     $('#track').on('change', function() {
+        //         selectedTrack = $(this).find(':selected');
+        //         const levelsCount = selectedTrack.data('levels');
+
+        //         $('#levels_track_label').removeClass('d-none');
+        //         $('#levels_track select').remove();
+
+        //         const selectElement = $('<select>', {
+        //             class: 'primary_select form-control',
+        //             name: 'levels_id',
+        //             id: 'levels_track_select'
+        //         });
+
+        //         selectElement.append($('<option>', {
+        //             value: '',
+        //             text: '@lang('common.select_levels')'
+        //         }));
+
+        //         if (levelsCount && levelsCount > 0) {
+        //             for (let i = 1; i <= levelsCount; i++) {
+        //                 selectElement.append($('<option>', {
+        //                     value: i,
+        //                     text: `Level ${i}`
+        //                 }));
+        //             }
+        //         } else {
+        //             selectElement.append($('<option>', {
+        //                 value: '',
+        //                 text: '@lang('common.no_levels')'
+        //             }));
+        //         }
+
+        //         $('#levels_track').append(selectElement);
+        //     });
+
+        //     $(document).on('change', '#levels_track_select', function() {
+        //         const selectedLevel = $(this).val();
+
+        //         if (!selectedTrack || !selectedTrack.val() || !selected_pricing_plan_type) {
+        //             $('#badge_price').html(
+        //                 `<h1><span class="badge badge-warning">Please select a track and pricing plan type first.</span></h1>`
+        //             );
+        //             return;
+        //         }
+
+        //         let trackPricingPlans = @json($track_pricing_plan);
+
+        //         let foundPlan = trackPricingPlans.find(plan =>
+        //             plan.track_id == selectedTrack.val() &&
+        //             plan.pricing_plan_type_id == selected_pricing_plan_type
+        //         );
+
+        //         if (foundPlan) {
+        //             if (selectedLevel) {
+        //                 let result = selectedLevel * parseFloat(foundPlan.price).toFixed(2);
+        //                 $('#price').removeClass('d-none');
+        //                 $('#badge_price').html(
+        //                     `<h1><span class="badge badge-success">${result} </span></h1>`
+        //                 );
+        //             } else {
+        //                 $('#price').removeClass('d-none');
+        //                 $('#badge_price').html(
+        //                     `<h1><span class="badge badge-warning">No Level Selected</span></h1>`
+        //                 );
+        //             }
+        //         } else {
+        //             console.warn('No Matching Price Found');
+        //             $('#price').removeClass('d-none');
+        //             $('#badge_price').html(
+        //                 `<h1><span class="badge badge-warning">No Matching Price Found</span></h1>`
+        //             );
+        //         }
+        //     });
+        // });
+
+
+        $(document).ready(function() {
+            let selected_pricing_plan_type = null;
+            let selectedTrack = null;
+
+            // تحويل متغير $levels من PHP إلى JavaScript
+            let levels = @json($levels);
+
+            $('#pricing_plan_type').on('change', function() {
+                selected_pricing_plan_type = $(this).val();
+                $('#track').val('').trigger('change');
+            });
+
+            $('#track').on('change', function() {
+                selectedTrack = $(this).find(':selected');
+
+                $('#levels_track_label').removeClass('d-none');
+                $('#levels_track select').remove();
+
+                const selectElement = $('<select>', {
+                    class: 'primary_select form-control',
+                    name: 'levels_id',
+                    id: 'levels_track_select'
+                });
+
+                selectElement.append($('<option>', {
+                    value: '',
+                    text: '@lang('common.select_levels')'
+                }));
+
+                // تعبئة الخيارات من متغير levels
+                if (levels && levels.length > 0) {
+                    levels.forEach(level => {
+                        selectElement.append($('<option>', {
+                            value: level.id,
+                            text: `Level ${level.level_number}`
+                        }));
+                    });
+                } else {
+                    selectElement.append($('<option>', {
+                        value: '',
+                        text: '@lang('common.no_levels')'
+                    }));
+                }
+
+                $('#levels_track').append(selectElement);
+            });
+
+            $(document).on('change', '#levels_track_select', function() {
+                const selectedLevel = $(this).val();
+
+                if (!selectedTrack || !selectedTrack.val() || !selected_pricing_plan_type) {
+                    console.warn('Please select a track and pricing plan type first.');
+                    $('#badge_price').html(
+                        `<h1><span class="badge badge-warning">Please select a track and pricing plan type first.</span></h1>`
+                    );
+                    return;
+                }
+
+                let trackPricingPlans = @json($track_pricing_plan);
+
+                let foundPlan = trackPricingPlans.find(plan =>
+                    plan.track_id == selectedTrack.val() &&
+                    plan.pricing_plan_type_id == selected_pricing_plan_type
+                );
+
+                if (foundPlan) {
+                    console.log('Matching Plan Found:', foundPlan);
+
+                    if (selectedLevel) {
+                        let result = selectedLevel * parseFloat(foundPlan.price).toFixed(2);
+
+                        $('#price').removeClass('d-none');
+                        $('#badge_price').html(
+                            `<h1><span class="badge badge-success">${result}</span></h1>`
+                        );
+                    } else {
+                        $('#price').removeClass('d-none');
+                        $('#badge_price').html(
+                            `<h1><span class="badge badge-warning">No Level Selected</span></h1>`
+                        );
+                    }
+                } else {
+                    console.warn('No Matching Price Found');
+                    $('#price').removeClass('d-none');
+                    $('#badge_price').html(
+                        `<h1><span class="badge badge-warning">No Matching Price Found</span></h1>`
+                    );
+                }
+            });
+        });
+
+
+        $(document).ready(function() {
+            $('#checkPostingDate').on('change', function() {
+                if ($(this).prop('checked')) {
+                    $('#posting_date').prop('disabled', false);
+                } else {
+                    $('#posting_date').prop('disabled', true);
+                }
+            });
+        });
+
         $('#createInvoiceForm').on('click', function() {
             let staff_scheduleds_id = $('#staff_scheduleds_id').val();
             let student_id = $('#student_id').val();

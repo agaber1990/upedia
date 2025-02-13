@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Finance;
 use App\Http\Controllers\Controller;
 use App\Models\FinanaceStudentInvoice;
 use App\Models\Finance;
-use App\Models\{Track,StaffScheduled};
+use App\Models\{Track,StaffScheduled, TrackPricingPlan};
 use App\Models\Level;
 use App\Models\PricingPlanType;
 use App\SmStudent;
@@ -36,6 +36,7 @@ class FinanceController extends Controller
         $data['courses'] = StaffScheduled::get();
         $data['tracks'] = Track::with('staff_scheduled')->get();        
         $data['pricing_types'] = PricingPlanType::get();        
+        $data['track_pricing_plan'] = TrackPricingPlan::get();        
         return view('backEnd.finance.create', $data);
     }
 
