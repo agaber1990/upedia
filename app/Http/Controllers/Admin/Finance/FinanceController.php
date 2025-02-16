@@ -21,7 +21,7 @@ class FinanceController extends Controller
     public function index()
     {
 
-        $data['invoices'] = FinanaceStudentInvoice::with('student', 'levels', 'staff_scheduled')->get();
+        $data['invoices'] = FinanaceStudentInvoice::with('student', 'levels.track', 'staff_scheduled')->get();
 
         return view('backEnd.finance.index', $data);
     }

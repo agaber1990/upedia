@@ -116,8 +116,6 @@
                         <div class="card-body">
                             <div class="row">
 
-
-
                                 <div class="primary_input col-md-4">
                                     <label class="primary_input_label" for="track">
                                         @lang('common.select_track') <span class="text-danger">*</span>
@@ -125,7 +123,8 @@
                                     <select class="primary_select form-control" name="track_id" id="track">
                                         <option value="">@lang('common.select_track')</option>
                                         @foreach ($tracks as $track)
-                                            <option value="{{ $track->id }}" data-levels="{{ $track->level_number }}">
+                                            <option value="{{ $track->id }}"
+                                                data-level-number="{{ $track->level_number }}">
                                                 {{ $track->track_name_en }}
                                             </option>
                                         @endforeach
@@ -188,96 +187,9 @@
 </style>
 @push('scripts')
     <script>
-        // $(document).ready(function() {
-        //     let selected_pricing_plan_type = null;
-        //     let selectedTrack = null;
-
-        //     $('#pricing_plan_type').on('change', function() {
-        //         selected_pricing_plan_type = $(this).val();
-        //         $('#track').val('').trigger('change');
-        //     });
-
-        //     $('#track').on('change', function() {
-        //         selectedTrack = $(this).find(':selected');
-        //         const levelsCount = selectedTrack.data('levels');
-
-        //         $('#levels_track_label').removeClass('d-none');
-        //         $('#levels_track select').remove();
-
-        //         const selectElement = $('<select>', {
-        //             class: 'primary_select form-control',
-        //             name: 'levels_id',
-        //             id: 'levels_track_select'
-        //         });
-
-        //         selectElement.append($('<option>', {
-        //             value: '',
-        //             text: '@lang('common.select_levels')'
-        //         }));
-
-        //         if (levelsCount && levelsCount > 0) {
-        //             for (let i = 1; i <= levelsCount; i++) {
-        //                 selectElement.append($('<option>', {
-        //                     value: i,
-        //                     text: `Level ${i}`
-        //                 }));
-        //             }
-        //         } else {
-        //             selectElement.append($('<option>', {
-        //                 value: '',
-        //                 text: '@lang('common.no_levels')'
-        //             }));
-        //         }
-
-        //         $('#levels_track').append(selectElement);
-        //     });
-
-        //     $(document).on('change', '#levels_track_select', function() {
-        //         const selectedLevel = $(this).val();
-
-        //         if (!selectedTrack || !selectedTrack.val() || !selected_pricing_plan_type) {
-        //             $('#badge_price').html(
-        //                 `<h1><span class="badge badge-warning">Please select a track and pricing plan type first.</span></h1>`
-        //             );
-        //             return;
-        //         }
-
-        //         let trackPricingPlans = @json($track_pricing_plan);
-
-        //         let foundPlan = trackPricingPlans.find(plan =>
-        //             plan.track_id == selectedTrack.val() &&
-        //             plan.pricing_plan_type_id == selected_pricing_plan_type
-        //         );
-
-        //         if (foundPlan) {
-        //             if (selectedLevel) {
-        //                 let result = selectedLevel * parseFloat(foundPlan.price).toFixed(2);
-        //                 $('#price').removeClass('d-none');
-        //                 $('#badge_price').html(
-        //                     `<h1><span class="badge badge-success">${result} </span></h1>`
-        //                 );
-        //             } else {
-        //                 $('#price').removeClass('d-none');
-        //                 $('#badge_price').html(
-        //                     `<h1><span class="badge badge-warning">No Level Selected</span></h1>`
-        //                 );
-        //             }
-        //         } else {
-        //             console.warn('No Matching Price Found');
-        //             $('#price').removeClass('d-none');
-        //             $('#badge_price').html(
-        //                 `<h1><span class="badge badge-warning">No Matching Price Found</span></h1>`
-        //             );
-        //         }
-        //     });
-        // });
-
-
         $(document).ready(function() {
             let selected_pricing_plan_type = null;
             let selectedTrack = null;
-
-            // تحويل متغير $levels من PHP إلى JavaScript
             let levels = @json($levels);
 
             $('#pricing_plan_type').on('change', function() {
@@ -287,6 +199,8 @@
 
             $('#track').on('change', function() {
                 selectedTrack = $(this).find(':selected');
+                let trackLevelNumber = selectedTrack.data('level-number');
+
 
                 $('#levels_track_label').removeClass('d-none');
                 $('#levels_track select').remove();
@@ -302,19 +216,23 @@
                     text: '@lang('common.select_levels')'
                 }));
 
-                // تعبئة الخيارات من متغير levels
-                if (levels && levels.length > 0) {
-                    levels.forEach(level => {
+                if (trackLevelNumber && levels.length > 0) {
+                    const filteredLevels = levels.filter(level => level.id <= trackLevelNumber);
+
+
+                    if (filteredLevels.length > 0) {
+                        filteredLevels.forEach(level => {
+                            selectElement.append($('<option>', {
+                                value: level.id,
+                                text: `Level ${level.level_number}`
+                            }));
+                        });
+                    } else {
                         selectElement.append($('<option>', {
-                            value: level.id,
-                            text: `Level ${level.level_number}`
+                            value: '',
+                            text: '@lang('common.no_levels')'
                         }));
-                    });
-                } else {
-                    selectElement.append($('<option>', {
-                        value: '',
-                        text: '@lang('common.no_levels')'
-                    }));
+                    }
                 }
 
                 $('#levels_track').append(selectElement);
@@ -324,7 +242,6 @@
                 const selectedLevel = $(this).val();
 
                 if (!selectedTrack || !selectedTrack.val() || !selected_pricing_plan_type) {
-                    console.warn('Please select a track and pricing plan type first.');
                     $('#badge_price').html(
                         `<h1><span class="badge badge-warning">Please select a track and pricing plan type first.</span></h1>`
                     );
@@ -339,10 +256,8 @@
                 );
 
                 if (foundPlan) {
-                    console.log('Matching Plan Found:', foundPlan);
-
                     if (selectedLevel) {
-                        let result = selectedLevel * parseFloat(foundPlan.price).toFixed(2);
+                        let result = selectedLevel * parseFloat(foundPlan.price).toFixed(3);
 
                         $('#price').removeClass('d-none');
                         $('#badge_price').html(
@@ -355,7 +270,6 @@
                         );
                     }
                 } else {
-                    console.warn('No Matching Price Found');
                     $('#price').removeClass('d-none');
                     $('#badge_price').html(
                         `<h1><span class="badge badge-warning">No Matching Price Found</span></h1>`
@@ -363,6 +277,9 @@
                 }
             });
         });
+
+
+
 
 
         $(document).ready(function() {
