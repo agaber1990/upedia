@@ -86,12 +86,12 @@
                 "settings": {
                     "footer_menu_image": {
                         "value": [
-                            "{\"type\":\"image\",\"name\":\"1.jpg\",\"path\":\"backEnd\\\/img\\\/logo.png\",\"mime\":\"jpg\",\"size\":36474,\"thumbnail\":\"https:\/\/infixedu.ischooll.com\/public\\\/backEnd\\\/img\\\/logo.png\"}"
+                            "{\"type\":\"image\",\"name\":\"1.jpg\",\"path\":\"backEnd\\\/img\\\/logo.png\",\"mime\":\"jpg\",\"size\":36474,\"thumbnail\":\"https:\/\/upedia.ischooll.com\/public\\\/backEnd\\\/img\\\/logo.png\"}"
                         ],
                         "is_array": "1"
                     },
                     "footer-right-content-text": {
-                        "value": "InfixEdu's School Management Software simplifies school tasks, allowing teachers to efficiently manage attendance and grades. By streamlining their work, teachers can focus more on helping students succeed.",
+                        "value": "upedia's School Management Software simplifies school tasks, allowing teachers to efficiently manage attendance and grades. By streamlining their work, teachers can focus more on helping students succeed.",
                         "is_array": "0"
                     },
                     "footer-content-bg-color": {
@@ -177,7 +177,7 @@
             "3674574c2c": {
                 "settings": {
                     "footer-copy-right-text": {
-                        "value": "\u00a9 2024 InfixEdu. All rights reserved. Made By CodeThemes.",
+                        "value": "\u00a9 2024 upedia. All rights reserved. Made By CodeThemes.",
                         "is_array": "0"
                     },
                     "footer-social-icons": {

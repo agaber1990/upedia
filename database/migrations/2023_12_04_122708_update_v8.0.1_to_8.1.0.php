@@ -80,8 +80,8 @@ return new class extends Migration
             }
         });
 
-        Schema::table('infixedu__pages', function (Blueprint $table) {
-            if (!Schema::hasColumn('infixedu__pages', 'is_default')) {
+        Schema::table('upedia__pages', function (Blueprint $table) {
+            if (!Schema::hasColumn('upedia__pages', 'is_default')) {
                 $table->boolean('is_default')->default(0);
             }
         });
@@ -413,9 +413,9 @@ return new class extends Migration
                 $file_data = json_decode($file_content, true);
                 $this->replace_array_recursive("[App_url]", (url('/')), $file_data);
                 if ($file_data) {
-                    $check_exist  = DB::table(config('pagebuilder.db_prefix', 'infixedu__') . 'pages')->where('school_id', 1)->where('slug', $file_data['slug'])->first();
+                    $check_exist  = DB::table(config('pagebuilder.db_prefix', 'upedia__') . 'pages')->where('school_id', 1)->where('slug', $file_data['slug'])->first();
                     if (!$check_exist) {
-                        DB::table(config('pagebuilder.db_prefix', 'infixedu__') . 'pages')->insert(
+                        DB::table(config('pagebuilder.db_prefix', 'upedia__') . 'pages')->insert(
                             [
                                 'name' => $file_data['name'],
                                 'title' => $file_data['title'],

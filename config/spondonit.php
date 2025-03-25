@@ -10,5 +10,5 @@ return [
 
     'user_model' => App\User::class,
     'settings_table' => 'sm_general_settings',
-    'database_file' => 'infixeduV6.sql',
+    'database_file' => 'upediaV6.sql',
 ];

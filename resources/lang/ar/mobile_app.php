@@ -1,7 +1,7 @@
 <?php
 return [
     "Welcome to"=> "Welcome to",
-    "InfixEdu"=> "InfixEdu",
+    "upedia"=> "upedia",
     "Students"=> "Students",
     "Leave"=> "Leave",
     "Staff"=> "Staff",

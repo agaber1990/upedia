@@ -281,7 +281,7 @@ return [
     "select_package" => "Select Package",
     "purchase_date" => "Purchase Date",
     "expaire_date" => "Expaire Date",
-    "infix_edu" => "Infix Edu",
+    "infix_edu" => "upedia",
     "infix_clasified" => "Infix Classified",
     "date_|_day" => "Date | Day",
     "purchase_list" => "Purchase List",

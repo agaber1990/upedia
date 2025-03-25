@@ -74,53 +74,53 @@ class CreateSmCustomLinksTable extends Migration
         $s->title4 = 'Resources';
 
         $s->link_label1 = 'About Infix';
-        $s->link_href1  = 'http://infixedu.com';
+        $s->link_href1  = 'http://upedia.com';
 
         $s->link_label2 = 'Infix Home';
-        $s->link_href2  = 'http://infixedu.com/home';
+        $s->link_href2  = 'http://upedia.com/home';
 
         $s->link_label3 = 'Business';
-        $s->link_href3  = 'http://infixedu.com';
+        $s->link_href3  = 'http://upedia.com';
 
         $s->link_label4 = 'link_label4';
-        $s->link_href4  = 'http://infixedu.com';
+        $s->link_href4  = 'http://upedia.com';
 
         $s->link_label5 = 'link_label5';
-        $s->link_href5  = 'http://infixedu.com';
+        $s->link_href5  = 'http://upedia.com';
 
         $s->link_label6 = 'link_label6';
-        $s->link_href6  = 'http://infixedu.com';
+        $s->link_href6  = 'http://upedia.com';
 
         $s->link_label7 = 'link_label7';
-        $s->link_href7  = 'http://infixedu.com';
+        $s->link_href7  = 'http://upedia.com';
 
         $s->link_label8 = 'link_label8';
-        $s->link_href8  = 'http://infixedu.com';
+        $s->link_href8  = 'http://upedia.com';
 
         $s->link_label9  = 'Home';
-        $s->link_href9   = 'http://infixedu.com/home';
+        $s->link_href9   = 'http://upedia.com/home';
 
         $s->link_label10 = 'About';
-        $s->link_href10  = 'http://infixedu.com/about';
+        $s->link_href10  = 'http://upedia.com/about';
 
 
         $s->link_label11 = 'Contact';
-        $s->link_href11  = 'http://infixedu.com/contact';
+        $s->link_href11  = 'http://upedia.com/contact';
 
         $s->link_label12 = 'link_label12';
-        $s->link_href12  = 'http://infixedu.com';
+        $s->link_href12  = 'http://upedia.com';
 
         $s->link_label13 = 'link_label13';
-        $s->link_href13  = 'http://infixedu.com';
+        $s->link_href13  = 'http://upedia.com';
 
         $s->link_label14 = 'link_label14';
-        $s->link_href14  = 'http://infixedu.com';
+        $s->link_href14  = 'http://upedia.com';
 
         $s->link_label15 = 'link_label15';
-        $s->link_href15  = 'http://infixedu.com';
+        $s->link_href15  = 'http://upedia.com';
 
         $s->link_label16 = 'link_label16';
-        $s->link_href16  = 'http://infixedu.com';
+        $s->link_href16  = 'http://upedia.com';
 
         // $s->facebook_url = 'https://www.facebook.com/SchoolManagementSoftwarePro/';
         // $s->twitter_url  = 'https://twitter.com/infix_official';

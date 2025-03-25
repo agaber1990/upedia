@@ -31,7 +31,7 @@
           "@context" : "http://schema.org",
           "@type" : "SoftwareApplication",
           "name" : "INFIX - Best School Management software system",
-          "url" : "http://infixedu.com/",
+          "url" : "http://upedia.com/",
           "author" : {
             "@type" : "Company",
             "name" : "Spondon IT"
@@ -42,10 +42,10 @@
             "name" : "Infix"
           },
           "applicationCategory" : "ERP Software",
-          "downloadUrl" : "http://infixedu.com",
+          "downloadUrl" : "http://upedia.com",
           "operatingSystem" : "2019",
           "requirements" : "in a complete",
-          "screenshot" : "http://infixedu.com/public/landing/img/dashboard_preview.png",
+          "screenshot" : "http://upedia.com/public/landing/img/dashboard_preview.png",
           "softwareVersion" : "2.0",
 
           "review" : {
@@ -64,24 +64,24 @@
 
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary"/>
-    <meta name="twitter:site" content="@InfixEdu"/>
-    <meta name="twitter:creator" content="@InfixEdu"/>
+    <meta name="twitter:site" content="@upedia"/>
+    <meta name="twitter:creator" content="@upedia"/>
     <meta name="twitter:url" content="//infix.com/"/>
     <meta name="twitter:title" The Ultimate Education Management System For School,  Institute & Academy"/>
     <meta name="twitter:description" content="Infix is a well known School management system and its ERP based Software. So try the free demo today!. Cause Infix offers 100+  featured, well-documented and latest academic management software system.. By this multipurpose software system, you can easily manage your school,  university or any kind of organization educational institute. So we can provide you speedy, Secure and clean coded Flexible academy and school management system at affordable prices!"/>
-    <meta property="og:image" content="http://infixedu.com/public/landing/img/dashboard_preview.png"/>
+    <meta property="og:image" content="http://upedia.com/public/landing/img/dashboard_preview.png"/>
 
 
     <!-- Open Graph data -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="//infixedu.com/"/>
-    <meta property="og:image" content="//infixedu.com/public/landing/img/dashboard_preview.png"/>
+    <meta property="og:url" content="//upedia.com/"/>
+    <meta property="og:image" content="//upedia.com/public/landing/img/dashboard_preview.png"/>
     <meta property="og:title" content="School Management ERP Software & School Management System - Infix"/>
 
     <meta property="og:description" content="Infix is a well known School management system and its ERP based Software. So try the free demo today!. Cause Infix offers 100+  featured, well-documented and latest academic management software system.. By this multipurpose software system, you can easily manage your school,  university or any kind of organization educational institute. So we can provide you speedy, Secure and clean coded Flexible academy and school management system at affordable prices!"/>
     <meta property="og:site_name" content="Infix" />
 
-    <link rel="canonical" href="http://infixedu.com" hreflang="en-us" />
+    <link rel="canonical" href="http://upedia.com" hreflang="en-us" />
 
     <link rel="icon" href="{{asset('/landing/img/favicon.png')}}">
     <!-- Bootstrap CSS -->
@@ -111,7 +111,7 @@
                             savior with this INFIX and Give your valued time to your institute that will
                             increase next generation productivity for our society.</p>
                         @if(!moduleStatusCheck('Saas'))
-                            <a  class="btn_1" target="_blank" href="mailto:hello@aorasoft.com?subject=Request for InfixEdu SaaS Application Demo!&body=Could you please arrange a demo for the InfixEdu SaaS application at your earliest convenience?"> <i class="ti-email"></i> For Saas Demo</a>
+                            <a  class="btn_1" target="_blank" href="mailto:hello@aorasoft.com?subject=Request for upedia SaaS Application Demo!&body=Could you please arrange a demo for the upedia SaaS application at your earliest convenience?"> <i class="ti-email"></i> For Saas Demo</a>
                         @endif
                         <a href="{{url('/home')}}" class="btn_2" target="_blank"> <i class="ti-package"></i> Try Live Demo</a>
                     </div>
@@ -156,7 +156,7 @@
                             </li>
                         </ul>
                     </div>
-                    <!-- <a class="btn_1 d-none d-lg-block" target="_blank" href="http://salespanel.infixedu.com/">Purchase</a> -->
+                    <!-- <a class="btn_1 d-none d-lg-block" target="_blank" href="http://salespanel.upedia.com/">Purchase</a> -->
                     <a class="btn_1 d-none d-lg-block" target="_blank" href="https://aorasoft.com">Purchase</a>
                 </nav>
             </div>
@@ -667,7 +667,7 @@
         <div class="row justify-content-center">
 
             <div class="col-md-6">
-                <a href="https://ticket.aorasoft.com/infixedu" target="_blank">
+                <a href="https://ticket.aorasoft.com/upedia" target="_blank">
                     <div class="single_feature">
                         <div class="single_feature_part">
                                 <span class="single_feature_icon"><i class="ti-headphone-alt"></i>
@@ -677,7 +677,7 @@
                 </a>
             </div>
             <div class="col-md-6">
-                <a class="support-link" target="_blank" href="https://ticket.aorasoft.com/infixedu">
+                <a class="support-link" target="_blank" href="https://ticket.aorasoft.com/upedia">
                     <div class="single_feature">
                         <div class="single_feature_part">
                             <span class="single_feature_icon"><i class="ti-write"></i></span>
@@ -702,7 +702,7 @@
                     <img src="{{asset('/landing/img/logo.png')}}" alt="">
                     <h2>So Finally You Are Here! Now, All You Know About Our Features.</h2>
                     <p>We Believe! It won’t a wrong decision in Purchasing our INFIX for your Institute.</p>
-                    <!-- <a href="http://salespanel.infixedu.com/" class="footer_btn"> <i class="ti-shopping-cart-full"></i> -->
+                    <!-- <a href="http://salespanel.upedia.com/" class="footer_btn"> <i class="ti-shopping-cart-full"></i> -->
                     <a href="https://aorasoft.com" target="_blank" class="footer_btn"> <i class="ti-shopping-cart-full"></i>
                         <h3>Purchase infix</h3>
                         <p>The Ultimate Education ERP</p>
@@ -713,7 +713,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="copyright_text">
-                    <p> <img src="{{asset('/landing/img/copyright.svg')}}" alt="#"> 2019-2020 InfixEdu - Ultimate Education ERP. All Rights
+                    <p> <img src="{{asset('/landing/img/copyright.svg')}}" alt="#"> 2019-2020 upedia - Ultimate Education ERP. All Rights
                         Reserved to <a href="#">Codetheme </a> .</p>
                 </div>
             </div>

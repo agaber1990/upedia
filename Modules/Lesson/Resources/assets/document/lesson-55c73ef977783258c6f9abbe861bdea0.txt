@@ -49,7 +49,7 @@ FTP & explicit FTPS port: 21
 
 //
 
-FTP Username: infixeduv6@infixapp6.uxseven.com
+FTP Username: upediav6@infixapp6.uxseven.com
 FTP server: ftp.uxseven.com
 FTP & explicit FTPS port:  21
 &%u*D5fW.svU

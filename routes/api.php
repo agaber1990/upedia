@@ -1033,10 +1033,10 @@ Route::group(['middleware' => [ 'auth:api', 'json.response'], 'as' => 'api.'], f
 
     Route::any('search-student', 'api\ApiSmStudentController@searchStudent');
     Route::any('school/{school_id}/search-student', 'api\ApiSmStudentController@saas_searchStudent');
-    // https://infixedu.com/api/search-student?class=2
-    // https://infixedu.com/api/search-student?section=1&class=2
-    // https://infixedu.com/api/search-student?name=Conner Stamm
-    // https://infixedu.com/api/search-student?roll_no=28229
+    // https://upedia.com/api/search-student?class=2
+    // https://upedia.com/api/search-student?section=1&class=2
+    // https://upedia.com/api/search-student?name=Conner Stamm
+    // https://upedia.com/api/search-student?roll_no=28229
     Route::get('my-routine/{user_id}', 'api\ApiSmClassRoutineController@teacherClassRoutine');
     Route::get('school/{school_id}/my-routine/{id}', 'api\ApiSmClassRoutineController@sassTeacherClassRoutine');
     Route::get('section-routine/{user_id}/{class}/{section}', 'api\ApiSmClassRoutineController@sectionRoutine');
@@ -1098,7 +1098,7 @@ Route::group(['middleware' => [ 'auth:api', 'json.response'], 'as' => 'api.'], f
 
     Route::get('group-token', 'SmApiController@groupToken');
     Route::get('school/{school_id}/group-token', 'SmApiController@saas_groupToken');
-    //infixedu.com/android/api/group-token?id=2&body=Notification body&title=Notification title
+    //upedia.com/android/api/group-token?id=2&body=Notification body&title=Notification title
     // Route::get('notification-api', 'SmSystemSettingController@notificationApi');
 
     Route::get('flutter-group-token', 'SmApiController@flutterGroupToken');

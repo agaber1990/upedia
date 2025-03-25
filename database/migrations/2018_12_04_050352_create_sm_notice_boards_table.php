@@ -48,7 +48,7 @@ class CreateSmNoticeBoardsTable extends Migration
             ],
             [
                 'notice_title'      => 'Upcoming Events',
-                'notice_message'    => "Stay tuned for exciting upcoming events at InfixEdu School, including Book Fair, Sports, and Debate competition. We encourage all students and parents to actively participate and make these events memorable experiences for the entire school community.",
+                'notice_message'    => "Stay tuned for exciting upcoming events at upedia School, including Book Fair, Sports, and Debate competition. We encourage all students and parents to actively participate and make these events memorable experiences for the entire school community.",
                 'notice_date'       => date("Y-m-d"),
                 'publish_on'        => date("Y-m-d"),
                 'inform_to'         => "[1]",
@@ -80,7 +80,7 @@ class CreateSmNoticeBoardsTable extends Migration
             ],
             [
                 'notice_title'      => 'Winter Break',
-                'notice_message'    => "InfixEdu School will be closed for the winter break from 15/12/2024 to 31/12/2024. We wish all our students and their families a joyful and restful holiday season.",
+                'notice_message'    => "upedia School will be closed for the winter break from 15/12/2024 to 31/12/2024. We wish all our students and their families a joyful and restful holiday season.",
                 'notice_date'       => date("Y-m-d"),
                 'publish_on'        => date("Y-m-d"),
                 'inform_to'         => "[1]",

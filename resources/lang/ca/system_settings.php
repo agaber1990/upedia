@@ -69,7 +69,7 @@
         'sl'=> 'SL',
         'purchase_list'=> 'Purchase List',
         'infix_clasified'=> 'Infix Clasified',
-        'infix_edu'=> 'Infix Edu',
+        'infix_edu'=> 'upedia',
         'select_package'=> 'Select Package',
         'thanks'=> 'Thanks',
         'team'=> 'Team',
