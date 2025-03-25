@@ -64,22 +64,19 @@ trait SidebarDataStore
             }
 
             Cache::forget($cache_key);
-
-
         } else {
             $this->resetSidebarStore($role_id);
         }
 
         if ($role_id == 2 || $role_id == 3) {
-            Sidebar::whereNull('parent')->when(!$is_role_based_sidebar, function ($q){
+            Sidebar::whereNull('parent')->when(!$is_role_based_sidebar, function ($q) {
                 $q->where('user_id', auth()->user()->id);
-            }, function ($q) use($role_id){
+            }, function ($q) use ($role_id) {
                 $q->where('role_id', $role_id);
             })->where('permission_id', '!=', 1)->update(['parent' => 1]);
         }
 
         Cache::forget($cache_key);
-
     }
 
     function resetSidebarStore($role_id = null)
@@ -87,7 +84,7 @@ trait SidebarDataStore
         $is_role_based_sidebar = is_role_based_sidebar();
 
         $user = auth()->user();
-        if(!$role_id){
+        if (!$role_id) {
             $role_id = $user->role_id;
         }
 
@@ -109,7 +106,10 @@ trait SidebarDataStore
         $settings_sections = ["general_settings", "fees_settings", "exam_settings", "frontend_cms", "custom_field"];
 
         //permission section
-        $permissionSections = include './resources/var/permission/permission_section_sidebar.php';
+        // $permissionSections = include './resources/var/permission/permission_section_sidebar.php';
+
+        $filePath = resource_path('var/permission/permission_section_sidebar.php');
+        $permissionSections = file_exists($filePath) ? include($filePath) : [];
 
         $permissionSectionRoutes = [];
         foreach ($permissionSections as $item) {
@@ -117,7 +117,7 @@ trait SidebarDataStore
         }
         // end
         $userPermissionSections = Permission::where('permission_section', 1)
-            ->when(!$is_role_based_sidebar, function($q) use($user){
+            ->when(!$is_role_based_sidebar, function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             }, function ($q) use ($role_id) {
                 $q->where('role_id', $role_id)->whereNull('user_id');
@@ -128,12 +128,12 @@ trait SidebarDataStore
         foreach ($userPermissionSections as $key => $userSection) {
             $parent = $userSection->parent_route != null
                 ? Permission::where('route', $userSection->parent_route)
-                    ->when($role_id == 2 || $role_id == GlobalVariable::isAlumni(), function ($q) {
-                        $q->where('is_student', 1);
-                    })->when($role_id == 3, function ($q) {
-                        $q->where('is_parent', 1);
-                    })->where('is_menu', 1)
-                    ->value('id') : null;
+                ->when($role_id == 2 || $role_id == GlobalVariable::isAlumni(), function ($q) {
+                    $q->where('is_student', 1);
+                })->when($role_id == 3, function ($q) {
+                    $q->where('is_parent', 1);
+                })->where('is_menu', 1)
+                ->value('id') : null;
             $this->storeSidebar($userSection, $key, $parent, $role_id);
         }
         $permissionInfos = $this->permissions($role_id);
@@ -143,15 +143,15 @@ trait SidebarDataStore
 
             if (in_array($sidebar->route, $dashboardSections)) {
                 $parent_id = Permission::where('route', 'dashboard_section')
-                    ->when(!$is_role_based_sidebar, function($q) use($user) {
+                    ->when(!$is_role_based_sidebar, function ($q) use ($user) {
                         $q->where('user_id', $user->id);
                     }, function ($q) use ($role_id) {
                         $q->where('role_id', $role_id);
                     })
-                   ->value('id');
+                    ->value('id');
             }
             if (in_array($sidebar->route, $administration_sections)) {
-                $parent_id = Permission::where('route', 'administration_section')->when(!$is_role_based_sidebar, function($q) use($user) {
+                $parent_id = Permission::where('route', 'administration_section')->when(!$is_role_based_sidebar, function ($q) use ($user) {
                     $q->where('user_id', $user->id);
                 }, function ($q) use ($role_id) {
                     $q->where('role_id', $role_id)->whereNull('user_id');
@@ -159,7 +159,7 @@ trait SidebarDataStore
             }
             if (in_array($sidebar->route, $student_sections)) {
                 $parent_id = Permission::where('route', 'student_section')
-                    ->when(!$is_role_based_sidebar, function($q) use($user) {
+                    ->when(!$is_role_based_sidebar, function ($q) use ($user) {
                         $q->where('user_id', $user->id);
                     }, function ($q) use ($role_id) {
                         $q->where('role_id', $role_id)->whereNull('user_id');
@@ -170,47 +170,47 @@ trait SidebarDataStore
             //     ->where('user_id', $user->id)->value('id');
             // }
             if (in_array($sidebar->route, $exam_sections)) {
-                $parent_id = Permission::where('route', 'exam_section')->when(!$is_role_based_sidebar, function($q) use($user) {
-                        $q->where('user_id', $user->id);
-                    }, function ($q) use ($role_id) {
-                        $q->where('role_id', $role_id)->whereNull('user_id');
-                    })->value('id');
+                $parent_id = Permission::where('route', 'exam_section')->when(!$is_role_based_sidebar, function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                }, function ($q) use ($role_id) {
+                    $q->where('role_id', $role_id)->whereNull('user_id');
+                })->value('id');
             }
             if (in_array($sidebar->route, $hr_sections)) {
-                $parent_id = Permission::where('route', 'hr_section')->when(!$is_role_based_sidebar, function($q) use($user) {
-                        $q->where('user_id', $user->id);
-                    }, function ($q) use ($role_id) {
-                        $q->where('role_id', $role_id)->whereNull('user_id');
-                    })->value('id');
+                $parent_id = Permission::where('route', 'hr_section')->when(!$is_role_based_sidebar, function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                }, function ($q) use ($role_id) {
+                    $q->where('role_id', $role_id)->whereNull('user_id');
+                })->value('id');
             }
             if (in_array($sidebar->route, $account_sections)) {
-                $parent_id = Permission::where('route', 'accounts_section')->when(!$is_role_based_sidebar, function($q) use($user) {
-                        $q->where('user_id', $user->id);
-                    }, function ($q) use ($role_id) {
-                        $q->where('role_id', $role_id)->whereNull('user_id');
-                    })->value('id');
+                $parent_id = Permission::where('route', 'accounts_section')->when(!$is_role_based_sidebar, function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                }, function ($q) use ($role_id) {
+                    $q->where('role_id', $role_id)->whereNull('user_id');
+                })->value('id');
             }
             if (in_array($sidebar->route, $utilities_sections)) {
-                $parent_id = Permission::where('route', 'utilities_section')->when(!$is_role_based_sidebar, function($q) use($user) {
-                        $q->where('user_id', $user->id);
-                    }, function ($q) use ($role_id) {
-                        $q->where('role_id', $role_id)->whereNull('user_id');
-                    })->value('id');
+                $parent_id = Permission::where('route', 'utilities_section')->when(!$is_role_based_sidebar, function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                }, function ($q) use ($role_id) {
+                    $q->where('role_id', $role_id)->whereNull('user_id');
+                })->value('id');
             }
             if (in_array($sidebar->route, $report_sections)) {
                 $parent_id = Permission::where('route', 'report_section')
-                    ->when(!$is_role_based_sidebar, function($q) use($user) {
+                    ->when(!$is_role_based_sidebar, function ($q) use ($user) {
                         $q->where('user_id', $user->id);
                     }, function ($q) use ($role_id) {
                         $q->where('role_id', $role_id)->whereNull('user_id');
                     })->value('id');
             }
             if (in_array($sidebar->route, $settings_sections)) {
-                $parent_id = Permission::where('route', 'settings_section')->when(!$is_role_based_sidebar, function($q) use($user) {
-                        $q->where('user_id', $user->id);
-                    }, function ($q) use ($role_id) {
-                        $q->where('role_id', $role_id)->whereNull('user_id');
-                    })->value('id');
+                $parent_id = Permission::where('route', 'settings_section')->when(!$is_role_based_sidebar, function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                }, function ($q) use ($role_id) {
+                    $q->where('role_id', $role_id)->whereNull('user_id');
+                })->value('id');
             }
 
             if (!$sidebar->route && !$sidebar->parent_route) {
@@ -221,21 +221,21 @@ trait SidebarDataStore
         $ignorePermissionRoutes = ['reports', 'fees.fees-report', 'exam-setting'];
         $getIgnoreIds = Permission::whereIn('route', $ignorePermissionRoutes)->pluck('id')->toArray();
         Cache::forget(sidebar_cache_key($role_id));
-        Sidebar::whereIn('permission_id', $getIgnoreIds)->when(!$is_role_based_sidebar, function($q) use($user) {
+        Sidebar::whereIn('permission_id', $getIgnoreIds)->when(!$is_role_based_sidebar, function ($q) use ($user) {
             $q->where('user_id', $user->id)->where('role_id', $user->role_id);
         }, function ($q) use ($role_id) {
             $q->where('role_id', $role_id)->whereNull('user_id');
         })->update(['active_status' => 0, 'ignore' => 1]);
         $this->deActiveForSaas();
 
-         # Delete exra route menu from permission table
-         $fees_setting    = Permission::where('route','fees_settings')->where('parent_route','settings_section')->where('type',null)->whereNull('user_id')->where('role_id',1)->where('school_id',1)->delete();
-         $exam_settings   = Permission::where('route','exam_settings')->where('parent_route','settings_section')->where('type',null)->whereNull('user_id')->where('role_id',1)->where('school_id',1)->delete();
-         $student_report  = Permission::where('route','students_report')->where('parent_route','report_section')->where('type',null)->whereNull('user_id')->where('role_id',1)->where('school_id',1)->delete();
-         $exam_report     = Permission::where('route','exam_report')->where('parent_route','report_section')->where('type',null)->whereNull('user_id')->where('role_id',1)->where('school_id',1)->delete();
-         $staff_report    = Permission::where('route','staff_report')->where('parent_route','report_section')->where('type',null)->whereNull('user_id')->where('role_id',1)->where('school_id',1)->delete();
-         $fees_report     = Permission::where('route','fees_report')->where('parent_route','report_section')->where('type',null)->whereNull('user_id')->where('role_id',1)->where('school_id',1)->delete();
-         $accounts_report = Permission::where('route','accounts_report')->where('parent_route','report_section')->where('type',null)->whereNull('user_id')->where('role_id',1)->where('school_id',1)->delete();
+        # Delete exra route menu from permission table
+        $fees_setting    = Permission::where('route', 'fees_settings')->where('parent_route', 'settings_section')->where('type', null)->whereNull('user_id')->where('role_id', 1)->where('school_id', 1)->delete();
+        $exam_settings   = Permission::where('route', 'exam_settings')->where('parent_route', 'settings_section')->where('type', null)->whereNull('user_id')->where('role_id', 1)->where('school_id', 1)->delete();
+        $student_report  = Permission::where('route', 'students_report')->where('parent_route', 'report_section')->where('type', null)->whereNull('user_id')->where('role_id', 1)->where('school_id', 1)->delete();
+        $exam_report     = Permission::where('route', 'exam_report')->where('parent_route', 'report_section')->where('type', null)->whereNull('user_id')->where('role_id', 1)->where('school_id', 1)->delete();
+        $staff_report    = Permission::where('route', 'staff_report')->where('parent_route', 'report_section')->where('type', null)->whereNull('user_id')->where('role_id', 1)->where('school_id', 1)->delete();
+        $fees_report     = Permission::where('route', 'fees_report')->where('parent_route', 'report_section')->where('type', null)->whereNull('user_id')->where('role_id', 1)->where('school_id', 1)->delete();
+        $accounts_report = Permission::where('route', 'accounts_report')->where('parent_route', 'report_section')->where('type', null)->whereNull('user_id')->where('role_id', 1)->where('school_id', 1)->delete();
     }
 
     function permissions($role_id = null)
@@ -248,7 +248,7 @@ trait SidebarDataStore
                 $permissionInfos = Permission::where('is_admin', 1)->where('is_menu', 1)
                     ->where('is_saas', 0)
                     ->where(function ($q) {
-                        $q->whereNull('role_id')->where(function($q){
+                        $q->whereNull('role_id')->where(function ($q) {
                             $q->where('user_id', auth()->user()->id)->orWhereNull('user_id');
                         });
                     })
@@ -278,7 +278,7 @@ trait SidebarDataStore
             $permissionInfos = Permission::where('is_admin', 1)->where('is_menu', 1)
                 ->where('is_saas', 0)
                 ->where(function ($q) use ($role_id) {
-                    $q->where('role_id', $role_id)->orWhere(function($q){
+                    $q->where('role_id', $role_id)->orWhere(function ($q) {
                         $q->whereNull('role_id')->whereNull('user_id');
                     });
                 })
@@ -289,7 +289,7 @@ trait SidebarDataStore
                 ->when(!in_array($role_id, [2, 3, GlobalVariable::isAlumni()]), function ($q) {
                     $q->where('is_admin', 1);
                 })->when($role_id == 4, function ($q) {
-                    $q->where(function($q){
+                    $q->where(function ($q) {
                         $q->where('is_admin', 1)->orWhere('is_teacher', 1);
                     });
                 })->when($role_id == 2, function ($q) {
@@ -297,9 +297,9 @@ trait SidebarDataStore
                 })->when($role_id == 3, function ($q) {
                     $q->where('is_parent', 1);
                 })->where(function ($q) use ($role_id) {
-                    $q->where(function($q) use($role_id){
+                    $q->where(function ($q) use ($role_id) {
                         $q->where('role_id', $role_id);
-                    })->orWhere(function($q){
+                    })->orWhere(function ($q) {
                         $q->whereNull('role_id')->whereNull('user_id');
                     });
                 })->when($role_id == GlobalVariable::isAlumni(), function ($q) {
@@ -309,7 +309,6 @@ trait SidebarDataStore
                 ->get(['id', 'name', 'type', 'route', 'parent_route', 'position', 'permission_section']);
         }
         return $permissionInfos;
-
     }
 
     function storeSidebar($sidebar, $key, $parent_id, $role_id)
@@ -342,10 +341,10 @@ trait SidebarDataStore
 
         $permissionIds = $this->permissions($role_id)->whereNotNull('route')->pluck('id')->toArray();
 
-        $sidebarPermissionIds = Sidebar::when(!$is_role_based_sidebar, function($q) use($user){
+        $sidebarPermissionIds = Sidebar::when(!$is_role_based_sidebar, function ($q) use ($user) {
             $q->where('user_id', $user->id)->where('role_id', $user->role_id);
-        }, function($q) use($role_id){
-            $q->where('role_id', $role_id)->orWhere(function($q){
+        }, function ($q) use ($role_id) {
+            $q->where('role_id', $role_id)->orWhere(function ($q) {
                 $q->whereNull('role_id')->whereNull('user_id');
             });
         })->pluck('permission_id')->toArray();
@@ -365,35 +364,34 @@ trait SidebarDataStore
                 }
                 $this->storeSidebar($sidebar, $key, $parent_id, $role_id);
             }
-            if($role_id == 2 || $role_id == 3){
-                Sidebar::whereNull('parent')->when(!$is_role_based_sidebar, function ($q){
+            if ($role_id == 2 || $role_id == 3) {
+                Sidebar::whereNull('parent')->when(!$is_role_based_sidebar, function ($q) {
                     $q->where('user_id', auth()->user()->id);
-                }, function ($q) use($role_id){
+                }, function ($q) use ($role_id) {
                     $q->where('role_id', $role_id);
                 })->where('permission_id', '!=', 1)->update(['parent' => 1]);
             }
             Cache::forget(sidebar_cache_key($role_id));
         }
-
     }
 
     function parentId($sidebar, $role_id = null)
     {
 
         $is_role_based_sidebar = is_role_based_sidebar();
-        if(!$role_id){
+        if (!$role_id) {
             $role_id = auth()->user()->role_id;
         }
 
         $parent = $sidebar->parent_route != null
             ? Permission::where('route', $sidebar->parent_route)
-                ->when($role_id == 2, function ($q) {
-                    $q->where('is_student', 1);
-                })->when($role_id == 3, function ($q) {
-                    $q->where('is_parent', 1);
-                })->where('is_menu', 1)
-                // ->where('menu_status', 1)
-                ->first(['id', 'permission_section']) : null;
+            ->when($role_id == 2, function ($q) {
+                $q->where('is_student', 1);
+            })->when($role_id == 3, function ($q) {
+                $q->where('is_parent', 1);
+            })->where('is_menu', 1)
+            // ->where('menu_status', 1)
+            ->first(['id', 'permission_section']) : null;
 
         if ($parent && $parent->permission_section == 1 && $sidebar->permission_section) {
             $parent_id = null;
@@ -409,9 +407,9 @@ trait SidebarDataStore
         }
 
         if (in_array($sidebar->route, $this->paidModuleRoutes())) {
-            $parent_id = Permission::where('route', 'module_section')->when(!$is_role_based_sidebar, function($q){
+            $parent_id = Permission::where('route', 'module_section')->when(!$is_role_based_sidebar, function ($q) {
                 $q->where('user_id', auth()->id());
-            }, function ($q) use($role_id) {
+            }, function ($q) use ($role_id) {
                 $q->where('role_id', $role_id)->whereNull('user_id');
             })->value('id');
         }
@@ -426,7 +424,7 @@ trait SidebarDataStore
         $modules = InfixModuleManager::whereNotNull('purchase_code')->where('is_default', false)->where('name', '!=', 'OnlineExam')->pluck('name')->toArray();
         foreach ($modules as $module) {
             if (moduleStatusCheck($module)) {
-                $activeModules [] = $module;
+                $activeModules[] = $module;
             }
         }
         return $activeModules;
@@ -460,6 +458,5 @@ trait SidebarDataStore
                 Permission::whereIn('route', $saasSettingsRoutes)->update(['is_menu' => 1, 'menu_status' => 1, 'status' => 1, 'is_saas' => 0]);
             }
         }
-
     }
 }

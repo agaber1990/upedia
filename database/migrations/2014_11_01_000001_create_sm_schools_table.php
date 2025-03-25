@@ -43,7 +43,7 @@ class CreateSmSchoolsTable extends Migration
                 'updated_by' => 1,
                 'active_status' => 1,
                 'is_enabled' => "yes",
-                'email'=>'admin@infixedu.com',
+                'email'=>'admin@example.com',
                 'starting_date'=>date('Y-m-d')
             ],
         ]);

@@ -67,10 +67,10 @@ class CreateUsersTable extends Migration
             $user->school_id   = 1;
             $user->role_id   = 1;
             $user->full_name = 'admin';
-            $user->email     = 'admin@infixedu.com';
+            $user->email     = 'admin@example.com';
             $user->is_administrator     = 'yes';
-            $user->username  = 'admin@infixedu.com';
-            $user->password  = Hash::make('123456');
+            $user->username  = 'admin@example.com';
+            $user->password  = Hash::make('12345678');
             $user->created_at = date('Y-m-d h:i:s');
             $user->save();
         }
