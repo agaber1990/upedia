@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin\Leave;
+
 use App\SmLeaveType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,101 +12,107 @@ use App\Http\Requests\Admin\Leave\SmLeaveTypeRequest;
 class SmLeaveTypeController extends Controller
 {
     public function __construct()
-	{
+    {
         $this->middleware('PM');
-	}
+    }
 
     public function index(Request $request)
     {
-        try{
+        try {
             $leave_types = SmLeaveType::get();
             return view('backEnd.humanResource.leave_type', compact('leave_types'));
-        }catch (\Exception $e) {
-           Toastr::error('Operation Failed', 'Failed');
-           return redirect()->back();
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
         }
     }
 
     public function store(SmLeaveTypeRequest $request)
     {
-        try{
+        try {
             $leave_type = new SmLeaveType();
             $leave_type->type = $request->type;
+            $leave_type->max_leaves_allowed = $request->max_leaves_allowed;
+            $leave_type->applicable_after_work_days = $request->applicable_after_work_days;
+            $leave_type->is_leave_without_pay = $request->has('is_leave_without_pay') ? 1 : 0;
+
             $leave_type->school_id = Auth::user()->school_id;
-            if(moduleStatusCheck('University')){
+            if (moduleStatusCheck('University')) {
                 $leave_type->un_academic_id = getAcademicId();
-            }else{
+            } else {
                 $leave_type->academic_id = getAcademicId();
             }
             $leave_type->save();
 
             Toastr::success('Operation successful', 'Success');
             return redirect()->back();
-        }catch (\Exception $e) {
-           Toastr::error('Operation Failed', 'Failed');
-           return redirect()->back();
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
         }
     }
 
     public function show(Request $request, $id)
     {
-        try{
+        try {
             if (checkAdmin()) {
                 $leave_type = SmLeaveType::find($id);
-            }else{
-                $leave_type = SmLeaveType::where('id',$id)->where('school_id',Auth::user()->school_id)->first();
+            } else {
+                $leave_type = SmLeaveType::where('id', $id)->where('school_id', Auth::user()->school_id)->first();
             }
             $leave_types = SmLeaveType::get();
             return view('backEnd.humanResource.leave_type', compact('leave_types', 'leave_type'));
-        }catch (\Exception $e) {
-           Toastr::error('Operation Failed', 'Failed');
-           return redirect()->back();
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
         }
     }
 
     public function update(SmLeaveTypeRequest $request, $id)
     {
-        try{
+        try {
             if (checkAdmin()) {
                 $leave_type = SmLeaveType::find($request->id);
-            }else{
-                $leave_type = SmLeaveType::where('id',$request->id)->where('school_id',Auth::user()->school_id)->first();
+            } else {
+                $leave_type = SmLeaveType::where('id', $request->id)->where('school_id', Auth::user()->school_id)->first();
             }
             $leave_type->type = $request->type;
+            $leave_type->max_leaves_allowed = $request->max_leaves_allowed;
+            $leave_type->applicable_after_work_days = $request->applicable_after_work_days;
+            $leave_type->is_leave_without_pay = $request->has('is_leave_without_pay') ? 1 : 0;
             $leave_type->total_days = $request->total_days;
-            if(moduleStatusCheck('University')){
+            if (moduleStatusCheck('University')) {
                 $leave_type->un_academic_id = getAcademicId();
             }
             $leave_type->save();
 
             Toastr::success('Operation successful', 'Success');
             return redirect('leave-type');
-        }catch (\Exception $e) {
-           Toastr::error('Operation Failed', 'Failed');
-           return redirect()->back();
+        } catch (\Exception $e) {
+            Toastr::error('Operation Failed', 'Failed');
+            return redirect()->back();
         }
     }
 
     public function destroy(Request $request, $id)
     {
-        try{
+        try {
             $tables = \App\tableList::getTableList('type_id', $id);
             try {
-                if ($tables==null) {
+                if ($tables == null) {
                     if (checkAdmin()) {
                         SmLeaveType::destroy($id);
-                    }else{
-                        SmLeaveType::where('id',$id)->where('school_id',Auth::user()->school_id)->delete();
+                    } else {
+                        SmLeaveType::where('id', $id)->where('school_id', Auth::user()->school_id)->delete();
                     }
 
                     Toastr::success('Operation successful', 'Success');
                     return redirect()->back();
-                }else{
+                } else {
                     $msg = 'This data already used in  : ' . $tables . ' Please remove those data first';
                     Toastr::error($msg, 'Failed');
                     return redirect()->back();
                 }
-
             } catch (\Illuminate\Database\QueryException $e) {
                 $msg = 'This data already used in  : ' . $tables . ' Please remove those data first';
                 Toastr::error($msg, 'Failed');

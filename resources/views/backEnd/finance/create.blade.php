@@ -81,7 +81,7 @@
                                     <label class="primary_input_label" for="">@lang('common.posting_date')
                                         <span class="text-danger"> *</span></label>
                                     <input class="primary_input_field  inputs" type="datetime-local" disabled
-                                        name="posting_date" id="posting_date" />
+                                        name="posting_date" id="posting_date"  value="{{ date('Y-m-d\TH:i') }}" />
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="checkPostingDate"
                                             name="">
