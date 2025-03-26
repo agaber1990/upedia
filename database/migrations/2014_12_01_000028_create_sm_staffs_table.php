@@ -90,6 +90,8 @@ class CreateSmStaffsTable extends Migration
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
             
             $table->integer('is_saas')->nullable()->default(0)->unsigned();
+            $table->integer('role_type')->nullable();
+            $table->integer('hourly_rate')->nullable();
         });
 
 

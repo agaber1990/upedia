@@ -8,7 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class TrackSession extends Model
 {
     use HasFactory;
-    protected $fillable = ['track_id', 'level_id', 'session_number', 'session_name_en', 'session_name_ar',  'session_ref'];
+    protected $fillable = [
+        'track_id',
+        'level_id',
+        'session_name_en',
+        'session_name_ar',
+        'session_number',
+        'session_ref'
+    ];
 
     public function track()
     {

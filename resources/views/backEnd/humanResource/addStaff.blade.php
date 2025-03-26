@@ -1321,12 +1321,17 @@
                 return $(this).text().trim().toLowerCase() === "teacher";
             }).val();
 
-            $('#department_id').change(function() {
+            $(document).on('change', '#department_id', function() {
                 var selectedValue = $(this).val();
+                console.log("Selected Value:", selectedValue);
+                console.log("Teacher Department ID:", teacherDepartmentId);
+
 
                 if (selectedValue == teacherDepartmentId) {
                     $('#slots_tab, #specilization_tab').removeClass('d-none');
+                    console.log("Showing elements...");
                 } else {
+                    console.log("Hiding elements...");
                     $('#slots_tab, #specilization_tab').addClass('d-none');
                 }
             });
@@ -1613,8 +1618,8 @@
             }
         }
 
-         // Trigger the function on page load
-         window.onload = function() {
+        // Trigger the function on page load
+        window.onload = function() {
             var roleTypeDropdown = document.getElementById("role_type");
             if (roleTypeDropdown) {
                 getRoleTypeVal(roleTypeDropdown); // Check the pre-selected value and update the label

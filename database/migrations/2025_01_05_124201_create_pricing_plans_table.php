@@ -12,11 +12,10 @@ return new class extends Migration {
     {
         Schema::create('pricing_plans', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('name');
-
             $table->unsignedBigInteger('types')->nullable()->default(0);
             $table->unsignedBigInteger('pricing_plan')->nullable()->default(0);
+            $table->timestamps();
 
         });
     }

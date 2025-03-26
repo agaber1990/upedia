@@ -11,7 +11,10 @@ class TrackType extends Model
 
     protected $table = 'track_types';
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'count_of_students'
+    ];
 
     public function track_pricing_plans()
     {

@@ -29,21 +29,24 @@ class CreateSmHumanDepartmentsTable extends Migration
          $table->integer('school_id')->nullable()->default(1)->unsigned();
          $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
 
-        //  $table->integer('academic_id')->nullable()->default(1)->unsigned();
-        //  $table->foreign('academic_id')->references('id')->on('sm_academic_years')->onDelete('cascade');
-            $table->integer('is_saas')->nullable()->default(0)->unsigned();
+         //  $table->integer('academic_id')->nullable()->default(1)->unsigned();
+         //  $table->foreign('academic_id')->references('id')->on('sm_academic_years')->onDelete('cascade');
+         $table->integer('is_saas')->nullable()->default(0)->unsigned();
       });
 
 
       DB::table('sm_human_departments')->insert([
          [
             'name' => 'Admin',
-            'created_at' => date('Y-m-d h:i:s')
-         ]
+            'created_at' => date('Y-m-d h:i:s'),
+            'updated_at' => date('Y-m-d h:i:s')
+         ],
+         [
+            'name' => 'Teacher',
+            'created_at' => date('Y-m-d h:i:s'),
+            'updated_at' => date('Y-m-d h:i:s')
+         ],
       ]);
-
-
-
    }
 
    /**
