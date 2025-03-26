@@ -175,6 +175,7 @@ class DatabaseSeeder extends Seeder
             PricingPlanTypeTableSeeder::class,
             DiscountPlanTableSeeder::class,
             RoleTypeSeeder::class,
+            TimeSlotSeeder::class,
             PermissionsTableSeeder::class,
         ]);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
