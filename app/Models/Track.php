@@ -19,9 +19,6 @@ class Track extends Model
         'schedule',
         'valid_for',
     ];
-    protected $casts = [
-        'valid_for' => 'array',
-    ];
 
     public function levels()
     {

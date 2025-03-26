@@ -10,6 +10,7 @@ class PricingPlanType extends Model
     use HasFactory;
     protected $table = 'pricing_plan_types';
 
-    protected $fillable = ['name'];
-
+    protected $fillable = [
+        'name'
+    ];
 }

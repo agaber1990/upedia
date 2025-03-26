@@ -37,6 +37,7 @@ class TracksTableSeeder extends Seeder
                 'level_number' => $levels->random()->id,
                 'session' => random_int(1, 8),
                 'schedule' => ($i % 2 == 0) ? 'once' : 'twice',
+                // 'valid_for' => json_encode($track_types->random()->id),
                 'valid_for' => json_encode($track_types->random(rand(1, 3))->pluck('id')->toArray()),
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -90,8 +90,7 @@ class TrackController extends Controller
         $track = Track::find($id);
         $levels = Level::all();
         $pricing_plan_types = PricingPlanType::all();
-        // $tracktypes = TrackType::whereIn("id",  json_decode($track->valid_for))->get();
-        $tracktypes = TrackType::whereIn("name", $track->valid_for)->get();
+        $tracktypes = TrackType::whereIn("id",  json_decode($track->valid_for))->get();
         $discount_plans = DiscountPlan::all();
         $track_pricing_plans = TrackPricingPlan::where('track_id', $track->id)->get();
 
