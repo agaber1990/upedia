@@ -96,7 +96,7 @@
                                             data-toggle="tab">@lang('hr.custom_field')</a>
                                     </li>
 
-                                   
+
                                     <li class="nav-item">
                                         <a class="nav-link" href="#work_experience" role="tab"
                                             data-toggle="tab">@lang('hr.work_experience')</a>
@@ -607,7 +607,7 @@
                                                             </div>
                                                             <!-- <div class="col-md-6">
 
-                                                                                                                                                                    </div> -->
+                                                                                                                                                                            </div> -->
                                                             @if (in_array('current_address', $has_permission))
                                                                 <div class="col-lg-6 mb-20">
                                                                     <div class="primary_input">
@@ -1555,12 +1555,12 @@
                                                                         <option>Practice Sessions</option>
                                                                     </select>
                                                                 </div>
-                                                                <div class="col-lg-6 col-xl-3 ">
-                                                                    <div class="primary_input">
-                                                                        <label class="primary_input_label"
-                                                                            for="">@lang('hr.date') *</label>
-                                                                            <input class="primary_input_field" type="date">
-                                                                    </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-xl-3 ">
+                                                                <div class="primary_input">
+                                                                    <label class="primary_input_label"
+                                                                        for="">@lang('hr.date') *</label>
+                                                                    <input class="primary_input_field" type="date">
                                                                 </div>
                                                             </div>
                                                         </div>
