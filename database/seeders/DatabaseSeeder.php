@@ -163,7 +163,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             LevelsTableSeeder::class,
-            CategoriesTableSeeder::class,
+            CategorySeeder::class,
             TrackTypesTableSeeder::class,
             TracksTableSeeder::class,
             TrackLevelsTableSeeder::class,

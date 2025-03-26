@@ -17,6 +17,7 @@ return [
     'add_staff' => 'Add Staff',
     'select_year' => 'Select Year',
     'search_by_staff_id' => 'Search By Staff Id',
+    'schedules' => 'schedules',
     'staff' => 'Staff',
     'staff_id' => 'Staff ID',
     'select_role' => 'Select Role',
