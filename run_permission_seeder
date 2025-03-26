@@ -1,1 +1,1 @@
-php artisan db:seed --class=Database\\Seeds\\PermissionsTableSeeder
+php artisan db:seed --class="PermissionsTableSeeder"
