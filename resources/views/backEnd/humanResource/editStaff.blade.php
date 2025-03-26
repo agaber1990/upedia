@@ -96,10 +96,7 @@
                                             data-toggle="tab">@lang('hr.custom_field')</a>
                                     </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#activities" role="tab"
-                                            data-toggle="tab">@lang('hr.activities')</a>
-                                    </li>
+                                   
                                     <li class="nav-item">
                                         <a class="nav-link" href="#work_experience" role="tab"
                                             data-toggle="tab">@lang('hr.work_experience')</a>
@@ -108,7 +105,10 @@
                                         <a class="nav-link" href="#education" role="tab"
                                             data-toggle="tab">@lang('hr.educations')</a>
                                     </li>
-
+                                    <li class="nav-item">
+                                        <a class="nav-link d-none" id="activities_tab" href="#activities" role="tab"
+                                            data-toggle="tab">@lang('hr.activities')</a>
+                                    </li>
                                     <li class="nav-item">
                                         <a class="nav-link d-none" id="slots_tab" href="#slots" role="tab"
                                             data-toggle="tab">@lang('hr.slots')</a>
@@ -727,12 +727,12 @@
                                                                 $groupedSlots = $slots_emp->groupBy('slot_day');
                                                             @endphp
                                                             @foreach ($groupedSlots as $day => $slots)
-                                                                <div class="col-md-2 mb-4">
+                                                                <div class="col mb-4">
                                                                     <h5 class="mb-3">{{ $day }} <i
                                                                             class="fa fa-clock"></i></h5>
                                                                     <div class="time-slots">
                                                                         @foreach ($slots as $slot)
-                                                                            <div class="form-check mb-2">
+                                                                            <div class="form-check">
                                                                                 <input class="form-check-input"
                                                                                     type="checkbox"
                                                                                     name="selected_slots[]"
@@ -1555,6 +1555,13 @@
                                                                         <option>Practice Sessions</option>
                                                                     </select>
                                                                 </div>
+                                                                <div class="col-lg-6 col-xl-3 ">
+                                                                    <div class="primary_input">
+                                                                        <label class="primary_input_label"
+                                                                            for="">@lang('hr.date') *</label>
+                                                                            <input class="primary_input_field" type="date">
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1613,9 +1620,9 @@
                 var selectedValue = $("#department_id").val();
 
                 if (selectedValue == teacherDepartmentId) {
-                    $('#slots_tab, #specilization_tab').removeClass('d-none');
+                    $('#slots_tab, #specilization_tab ,#activities_tab').removeClass('d-none');
                 } else {
-                    $('#slots_tab, #specilization_tab').addClass('d-none');
+                    $('#slots_tab, #specilization_tab ,#activities_tab').addClass('d-none');
                 }
             }
 

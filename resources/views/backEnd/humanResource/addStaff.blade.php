@@ -81,16 +81,6 @@
                                 <a class="nav-link" href="#document_info" role="tab"
                                     data-toggle="tab">@lang('hr.document_info')</a>
                             </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#custom_field" role="tab"
-                                    data-toggle="tab">@lang('hr.custom_field')</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#activities" role="tab"
-                                    data-toggle="tab">@lang('hr.activities')</a>
-                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#educations" role="tab"
                                     data-toggle="tab">@lang('hr.educations')</a>
@@ -98,6 +88,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#work_experience" role="tab"
                                     data-toggle="tab">@lang('hr.work_experience')</a>
+                            </li>
+                            <li class="nav-item d-none" id="activities_tab">
+                                <a class="nav-link" href="#activities" role="tab"
+                                    data-toggle="tab">@lang('hr.activities')</a>
                             </li>
 
                             <li class="nav-item d-none" id="slots_tab">
@@ -884,13 +878,13 @@
                                                             $groupedSlots = $slots_emp->groupBy('slot_day');
                                                         @endphp
                                                         @foreach ($groupedSlots as $day => $slots)
-                                                            <div class="col-md-2 mb-4">
+                                                            <div class="col mb-4">
                                                                 <h5 class="mb-3">{{ $day }} <i
                                                                         class="fa fa-clock"></i>
                                                                 </h5>
                                                                 <div class="time-slots">
                                                                     @foreach ($slots as $slot)
-                                                                        <div class="form-check mb-2">
+                                                                        <div class="form-check">
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" name="selected_slots[]"
                                                                                 value="{{ $slot->id }}"
@@ -1052,31 +1046,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div role="tabpanel" class="tab-pane fade" id="custom_field">
-                                        <div class="row pt-4 row-gap-24">
-                                            <div class="col-lg-12 p-0">
-                                                <div class="form-section">
-                                                    @if (isset($custom_fields) && $custom_fields->count())
-                                                        {{-- Custom Field Start --}}
-                                                        <div class="row mt-40">
-                                                            <div class="col-lg-12">
-                                                                <div class="main-title">
-                                                                    <h4>@lang('hr.custom_field')</h4>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <hr>
-                                                            </div>
-                                                        </div>
-                                                        @include('backEnd.studentInformation._custom_field')
-                                                        {{-- Custom Field End --}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+
                                     <div role="tabpanel" class="tab-pane fade" id="specilization">
                                         <div class="row pt-4 row-gap-24">
                                             <div class="col-lg-12 p-0">
@@ -1183,6 +1154,13 @@
                                                                     <option>Cover Up Sessions</option>
                                                                     <option>Practice Sessions</option>
                                                                 </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 col-xl-3 ">
+                                                            <div class="primary_input">
+                                                                <label class="primary_input_label"
+                                                                    for="">@lang('hr.date') *</label>
+                                                                    <input class="primary_input_field" type="date">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1312,9 +1290,6 @@
     <script>
         var $locale = '{{ app()->getLocale() }}';
 
-
-
-
         $(document).ready(function() {
 
             var teacherDepartmentId = $("#department_id option").filter(function() {
@@ -1328,14 +1303,13 @@
 
 
                 if (selectedValue == teacherDepartmentId) {
-                    $('#slots_tab, #specilization_tab').removeClass('d-none');
+                    $('#slots_tab, #specilization_tab, #activities_tab').removeClass('d-none');
                     console.log("Showing elements...");
                 } else {
                     console.log("Hiding elements...");
-                    $('#slots_tab, #specilization_tab').addClass('d-none');
+                    $('#slots_tab, #specilization_tab ,#activities_tab').addClass('d-none');
                 }
             });
-
 
 
             $('#addMoreEducationBtn').on('click', function(e) {
