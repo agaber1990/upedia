@@ -149,18 +149,12 @@
                                 <div id="slotContainer">
 
                                 </div>
-
                             </div>
                             <div class="col-md-12 mb-20">
                                 <div id="submitAssignStaff">
-
                                 </div>
-
                             </div>
                         </div>
-
-
-
                     </div>
                 </div>
             </div>
@@ -231,7 +225,254 @@
 
     <script>
         var $locale = '{{ app()->getLocale() }}';
-    $(document).ready(function() {
+        $(document).ready(function() {
+
+
+
+            $('#scheduled').on('change', function() {
+                var schedule = $(this).val();
+                var slotContainer = $('#slotContainer');
+                // slotContainer.empty(); // تفريغ الحاوية
+
+                if (schedule === 'once') {
+                    slotContainer.html(`
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('common.select_day')</label>
+                                <select class="form-control" name="day_1" id="day_1">
+                                    <option selected value="">@lang('common.select_day')</option>
+                                    <option value="Sunday">@lang('common.sunday')</option>
+                                    <option value="Monday">@lang('common.monday')</option>
+                                    <option value="Tuesday">@lang('common.tuesday')</option>
+                                    <option value="Wednesday">@lang('common.wednesday')</option>
+                                    <option value="Thursday">@lang('common.thursday')</option>
+                                    <option value="Friday">@lang('common.friday')</option>
+                                    <option value="Saturday">@lang('common.saturday')</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('academics.start_time')</label>
+                                    <select class="form-control" name="start_time_1" id="start_time_1">
+                                        <option value="">@lang('common.select_time')</option>
+                                        <option value="00:00">12:00 AM</option>
+                                        <option value="01:00">1:00 AM</option>
+                                        <option value="02:00">2:00 AM</option>
+                                        <option value="03:00">3:00 AM</option>
+                                        <option value="04:00">4:00 AM</option>
+                                        <option value="05:00">5:00 AM</option>
+                                        <option value="06:00">6:00 AM</option>
+                                        <option value="07:00">7:00 AM</option>
+                                        <option value="08:00">8:00 AM</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                        <option value="18:00">6:00 PM</option>
+                                        <option value="19:00">7:00 PM</option>
+                                        <option value="20:00">8:00 PM</option>
+                                        <option value="21:00">9:00 PM</option>
+                                        <option value="22:00">10:00 PM</option>
+                                        <option value="23:00">11:00 PM</option>
+                                    </select>
+                                </div>
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('academics.end_time')</label>
+                                <select class="form-control" name="end_time_1" id="end_time_1">
+                                    <option value="">@lang('common.select_time')</option>
+                                    <option value="00:00">12:00 AM</option>
+                                    <option value="01:00">1:00 AM</option>
+                                    <option value="02:00">2:00 AM</option>
+                                        <option value="03:00">3:00 AM</option>
+                                        <option value="04:00">4:00 AM</option>
+                                        <option value="05:00">5:00 AM</option>
+                                        <option value="06:00">6:00 AM</option>
+                                        <option value="07:00">7:00 AM</option>
+                                        <option value="08:00">8:00 AM</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                        <option value="18:00">6:00 PM</option>
+                                        <option value="19:00">7:00 PM</option>
+                                        <option value="20:00">8:00 PM</option>
+                                        <option value="21:00">9:00 PM</option>
+                                        <option value="22:00">10:00 PM</option>
+                                        <option value="23:00">11:00 PM</option>
+                                    </select>   
+                            </div>
+                        </div>
+                    `);
+                } else if (schedule === 'twice') {
+                    slotContainer.html(`
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('common.select_day')</label>
+                                <select class="form-control" name="day_1" id="day_1">
+                                    <option value="">@lang('common.select_day')</option>
+                                    <option value="Sunday">@lang('common.sunday')</option>
+                                    <option value="Monday">@lang('common.monday')</option>
+                                    <option value="Tuesday">@lang('common.tuesday')</option>
+                                    <option value="Wednesday">@lang('common.wednesday')</option>
+                                    <option value="Thursday">@lang('common.thursday')</option>
+                                    <option value="Friday">@lang('common.friday')</option>
+                                    <option value="Saturday">@lang('common.saturday')</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('academics.start_time')</label>
+                                    <select class="form-control" name="start_time_1" id="start_time_1">
+                                        <option value="">@lang('common.select_time')</option>
+                                        <option value="00:00">12:00 AM</option>
+                                        <option value="01:00">1:00 AM</option>
+                                        <option value="02:00">2:00 AM</option>
+                                        <option value="03:00">3:00 AM</option>
+                                        <option value="04:00">4:00 AM</option>
+                                        <option value="05:00">5:00 AM</option>
+                                        <option value="06:00">6:00 AM</option>
+                                        <option value="07:00">7:00 AM</option>
+                                        <option value="08:00">8:00 AM</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                        <option value="18:00">6:00 PM</option>
+                                        <option value="19:00">7:00 PM</option>
+                                        <option value="20:00">8:00 PM</option>
+                                        <option value="21:00">9:00 PM</option>
+                                        <option value="22:00">10:00 PM</option>
+                                        <option value="23:00">11:00 PM</option>
+                                    </select> 
+                            </div>
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('academics.end_time')</label>
+                                    <select class="form-control" name="end_time_1" id="end_time_1">
+                                        <option value="">@lang('common.select_time')</option>
+                                        <option value="00:00">12:00 AM</option>
+                                        <option value="01:00">1:00 AM</option>
+                                        <option value="02:00">2:00 AM</option>
+                                        <option value="03:00">3:00 AM</option>
+                                        <option value="04:00">4:00 AM</option>
+                                        <option value="05:00">5:00 AM</option>
+                                        <option value="06:00">6:00 AM</option>
+                                        <option value="07:00">7:00 AM</option>
+                                        <option value="08:00">8:00 AM</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                        <option value="18:00">6:00 PM</option>
+                                        <option value="19:00">7:00 PM</option>
+                                        <option value="20:00">8:00 PM</option>
+                                        <option value="21:00">9:00 PM</option>
+                                        <option value="22:00">10:00 PM</option>
+                                        <option value="23:00">11:00 PM</option>
+                                    </select> 
+                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('common.select_day')</label>
+                                <select class="form-control" name="day_2" id="day_2">
+                                    <option value="">@lang('common.select_day')</option>
+                                    <option value="Sunday">@lang('common.sunday')</option>
+                                    <option value="Monday">@lang('common.monday')</option>
+                                    <option value="Tuesday">@lang('common.tuesday')</option>
+                                    <option value="Wednesday">@lang('common.wednesday')</option>
+                                    <option value="Thursday">@lang('common.thursday')</option>
+                                    <option value="Friday">@lang('common.friday')</option>
+                                    <option value="Saturday">@lang('common.saturday')</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('academics.start_time')</label>
+                                    <select class="form-control" name="start_time_2" id="start_time_2">
+                                        <option value="">@lang('common.select_time')</option>
+                                        <option value="00:00">12:00 AM</option>
+                                        <option value="01:00">1:00 AM</option>
+                                        <option value="02:00">2:00 AM</option>
+                                        <option value="03:00">3:00 AM</option>
+                                        <option value="04:00">4:00 AM</option>
+                                        <option value="05:00">5:00 AM</option>
+                                        <option value="06:00">6:00 AM</option>
+                                        <option value="07:00">7:00 AM</option>
+                                        <option value="08:00">8:00 AM</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                        <option value="18:00">6:00 PM</option>
+                                        <option value="19:00">7:00 PM</option>
+                                        <option value="20:00">8:00 PM</option>
+                                        <option value="21:00">9:00 PM</option>
+                                        <option value="22:00">10:00 PM</option>
+                                        <option value="23:00">11:00 PM</option>
+                                    </select>                               
+                            </div>
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('academics.end_time')</label>
+                                    <select class="form-control" name="end_time_1" id="end_time_1">
+                                        <option value="">@lang('common.select_time')</option>
+                                        <option value="00:00">12:00 AM</option>
+                                        <option value="01:00">1:00 AM</option>
+                                        <option value="02:00">2:00 AM</option>
+                                        <option value="03:00">3:00 AM</option>
+                                        <option value="04:00">4:00 AM</option>
+                                        <option value="05:00">5:00 AM</option>
+                                        <option value="06:00">6:00 AM</option>
+                                        <option value="07:00">7:00 AM</option>
+                                        <option value="08:00">8:00 AM</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                        <option value="18:00">6:00 PM</option>
+                                        <option value="19:00">7:00 PM</option>
+                                        <option value="20:00">8:00 PM</option>
+                                        <option value="21:00">9:00 PM</option>
+                                        <option value="22:00">10:00 PM</option>
+                                        <option value="23:00">11:00 PM</option>
+                                    </select>                                 
+                                
+                            </div>
+                        </div>
+                    `);
+                }
+            });
+
+
+
+
+
 
             // Listen for changes on the category dropdown
             $('#cat_id').on('change', function() {
@@ -262,11 +503,13 @@
 
                                 trackSelect.append(
                                     '<option value="' + track.id +
-                                    '" data-level="' + track.level_number + '">' +
+                                    '" data-level="' + track
+                                    .level_number + '">' +
                                     optionText + '</option>'
                                 );
                             });
-                            trackTypeSelect.append("<option>Select Track Type</option>")
+                            trackTypeSelect.append(
+                                "<option>Select Track Type</option>")
 
                             data.valid_for.forEach(function(validFor) {
                                 trackTypeSelect.append(
@@ -298,7 +541,8 @@
                         track_id: $(this).val(),
                     },
                     success: function(response) {
-                        console.log(response); // Log the response to check its structure
+                        console.log(
+                            response); // Log the response to check its structure
 
                         // Populate session options
                         $('#session').empty(); // Clear any previous session options
@@ -317,18 +561,22 @@
                         // Add the available schedules based on the response
                         var schedules = ["once", "twice"];
                         $.each(schedules, function(index, schedule) {
-                            var selected = (schedule === response.track.schedule) ?
-                                'selected' :
-                                ''; // Check if this schedule matches the response
-                            $('#scheduled').append('<option value="' + schedule + '" ' +
-                                selected + '>' + schedule + '</option>');
+                            // var selected = (schedule === response.track
+                            //         .schedule) ?
+                            //     'selected' :
+                            ''; // Check if this schedule matches the response
+                            $('#scheduled').append('<option value="' +
+                                schedule + '" ' +
+                                // selected + 
+                                '>' + schedule + '</option>');
                         });
 
                         // Clear the previous staff options
                         $('#staff_id').empty();
 
                         // Check if the response contains staff data
-                        if (response && response.staff && response.staff.length > 0) {
+                        if (response && response.staff && response.staff.length >
+                            0) {
                             console.log(response.track); // Log the track details
 
                             // Add an empty option for staff selection
@@ -339,12 +587,14 @@
                             // Loop through the staff data and append each staff as an option
                             $.each(response.staff, function(index, staff) {
                                 console.log(
-                                    staff); // Log each staff to check its properties
+                                    staff
+                                ); // Log each staff to check its properties
                                 var staffName = staff
                                     .staff_name; // Access 'staff_name' from the staff object
                                 var staffId = staff
                                     .staff_id; // Access 'staff_id' from the staff object
-                                $('#staff_id').append('<option value="' + staffId +
+                                $('#staff_id').append('<option value="' +
+                                    staffId +
                                     '">' + staffName + '</option>');
                             });
                         } else {
@@ -364,58 +614,62 @@
             });
 
             $('#staff_id').on('change', function() {
-                    $.ajax({
-                        url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
-                        method: 'GET',
-                        data: {
-                            staff_id: $(this).val(),
-                        },
-                        success: function(response) {
+                $.ajax({
+                    url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
+                    method: 'GET',
+                    data: {
+                        staff_id: $(this).val(),
+                    },
+                    success: function(response) {
 
 
-                            // Check if slots exist in the response
-                            if (response.slots && response.slots.length > 0) {
-                                // Group slots by day
-                                const days = [...new Set(response.slots.map(slot => slot
-                                    .slot_day))]; // Get unique days
-                                const slotsByDay = {};
-                                days.forEach(day => {
-                                    slotsByDay[day] = response.slots.filter(slot => slot
-                                        .slot_day === day);
+                        // Check if slots exist in the response
+                        if (response.slots && response.slots.length > 0) {
+                            // Group slots by day
+                            const days = [...new Set(response.slots.map(slot => slot
+                                .slot_day))]; // Get unique days
+                            const slotsByDay = {};
+                            days.forEach(day => {
+                                slotsByDay[day] = response.slots.filter(
+                                    slot => slot
+                                    .slot_day === day);
+                            });
+
+                            // Get unique time slots and convert to AM/PM
+                            const timeSlots = [...new Set(response.slots.map(slot =>
+                                    `${slot.slot_start} - ${slot.slot_end}`
+                                ))]
+                                .map(time => {
+                                    const [start, end] = time.split(" - ");
+                                    return `${convertToAmPm(start)} - ${convertToAmPm(end)}`;
                                 });
+                            // Create the Bootstrap layout dynamically
+                            let scheduleHTML =
+                                '<hr><div class=""><div class="row">';
 
-                                // Get unique time slots and convert to AM/PM
-                                const timeSlots = [...new Set(response.slots.map(slot =>
-                                        `${slot.slot_start} - ${slot.slot_end}`))]
-                                    .map(time => {
-                                        const [start, end] = time.split(" - ");
-                                        return `${convertToAmPm(start)} - ${convertToAmPm(end)}`;
-                                    });
-                                // Create the Bootstrap layout dynamically
-                                let scheduleHTML =
-                                    '<hr><div class="container-fluid"><div class="row">';
-
-                                days.forEach((day, index) => {
-                                    // Add a column for each day
-                                    scheduleHTML += `
-                                            <div class="col-md-2 mb-4">
+                            days.forEach((day, index) => {
+                                // Add a column for each day
+                                scheduleHTML += `
+                                            <div class="col mb-4">
                                                 <h5 class="mb-3">${day}</h5>
                                                 <div class="time-slots">
                                         `;
 
-                                    // Loop through time slots
-                                    timeSlots.forEach(time => {
-                                        const originalTime = time
-                                            .split(" - ")
-                                            .map(t => convertTo24Hour(t))
-                                            .join(" - ");
+                                // Loop through time slots
+                                timeSlots.forEach(time => {
+                                    const originalTime = time
+                                        .split(" - ")
+                                        .map(t => convertTo24Hour(
+                                            t))
+                                        .join(" - ");
 
-                                        const slot = slotsByDay[day]?.find(
+                                    const slot = slotsByDay[day]
+                                        ?.find(
                                             s =>
                                             `${s.slot_start} - ${s.slot_end}` ===
                                             originalTime
                                         );
-                                        scheduleHTML += `
+                                    scheduleHTML += `
                                             <div class="form-check mb-2" style="background-color: ${slot && slot.status !== "scheduled" ? "#fff4cb" : "transparent"};
                                             color: ${slot && slot.status !== "scheduled" ? "#000" : "#444"};">
                                                 <input 
@@ -429,41 +683,43 @@
                                             </div>
                                         `;
 
-                                    });
+                                });
 
-                                    // Close time-slots and column
-                                    scheduleHTML += `
+                                // Close time-slots and column
+                                scheduleHTML += `
                                                 </div> <!-- End of time-slots -->
                                             </div> <!-- End of col-md-3 -->
                                         `;
 
-                                    // Close and start a new row after every 4 columns
-                                    if ((index + 1) % 6 === 0 && index !== days.length -
-                                        1) {
-                                        scheduleHTML += '</div><div class="row">';
-                                    }
-                                });
+                                // Close and start a new row after every 4 columns
+                                if ((index + 1) % 6 === 0 && index !== days
+                                    .length -
+                                    1) {
+                                    scheduleHTML +=
+                                        '</div><div class="row">';
+                                }
+                            });
 
-                                // Close the last row and container
-                                scheduleHTML += '</div></div><hr>';
+                            // Close the last row and container
+                            scheduleHTML += '</div></div><hr>';
 
-                                // Append the schedule to the DOM
-                                $("#slotContainer").html(scheduleHTML);
-                                $("#submitAssignStaff").html(
-                                    `<button class="btn btn-primary" onclick="submitAssignedForm()">Submit</button>`
-                                );
+                            // Append the schedule to the DOM
+                            $("#slotContainer").html(scheduleHTML);
+                            $("#submitAssignStaff").html(
+                                `<button class="btn btn-primary" onclick="submitAssignedForm()">Submit</button>`
+                            );
 
-                            } else {
-                                console.warn("No slots found for the selected staff.");
-                            }
-                        },
-                        error: function() {
-                            alert('Failed to fetch staff data.');
+                        } else {
+                            console.warn("No slots found for the selected staff.");
                         }
-                    });
+                    },
+                    error: function() {
+                        alert('Failed to fetch staff data.');
+                    }
+                });
             });
 
-    });
+        });
     </script>
 
     <script>
