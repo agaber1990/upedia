@@ -456,7 +456,7 @@ return [
     "restore" => "Restore",
     "select_files" => "Select Files",
     "Operation Failed" => "Operation Failed",
-    "delete forever" => "Delete Forever",
+    "delete_forever" => "Delete Forever",
     "export" => "Export",
     "import" => "Import",
     "VIEW_AS_Staff" => "VIEW AS STAFF",
@@ -770,6 +770,6 @@ return [
     "assignment" => "Assignment",
     "lesson" => "Lesson",
     "quiz" => "Quiz",
-
+    'error_occurred' => 'An error occurred while processing your request',
 ]
 ?>
