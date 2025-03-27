@@ -23,298 +23,162 @@
 
     <section class="admin-visitor-area up_admin_visitor up_st_admin_visitor pl_22">
         <div class="container-fluid p-0">
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="white-box">
-
                         <div class="row">
-                            <div class="col-md-6 ">
+                            <div class="col-md-6 mb-20">
                                 <div class="primary_input mb-2">
-                                    <label class="primary_input_label" for="">@lang('common.course_name_en')
-                                        <span class="text-danger"> *</span></label>
-                                    <input class="primary_input_field form-control " name="course_name_en"
-                                        id="course_name_en" />
+                                    <label class="primary_input_label" for="">@lang('common.course_name_en') <span class="text-danger"> *</span></label>
+                                    <input class="primary_input_field form-control" name="course_name_en" id="course_name_en" />
                                 </div>
                             </div>
-                            <div class="col-md-6 ">
+                            <div class="col-md-6 mb-20">
                                 <div class="primary_input mb-2">
-                                    <label class="primary_input_label" for="">@lang('common.course_name_ar')
-                                        <span class="text-danger"> *</span></label>
-                                    <input dir="rtl" class="primary_input_field form-control " name="course_name_ar"
-                                        id="course_name_ar" />
+                                    <label class="primary_input_label" for="">@lang('common.course_name_ar') <span class="text-danger"> *</span></label>
+                                    <input dir="rtl" class="primary_input_field form-control" name="course_name_ar" id="course_name_ar" />
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-xl-3 ">
+                            <div class="col-md-3 mb-20">
                                 <div class="primary_input">
-                                    <label class="primary_input_label" for="">@lang('common.categories')
-                                    </label>
-                                    <select
-                                        class="primary_select  form-control {{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
-                                        name="cat_id" id="cat_id">
-                                        <option data-display="@lang('common.categories') *" value="">@lang('common.categories')
-                                            *</option>
+                                    <label class="primary_input_label" for="">@lang('common.categories')</label>
+                                    <select class="primary_select form-control {{ $errors->has('cat_id') ? ' is-invalid' : '' }}" name="cat_id" id="cat_id">
+                                        <option data-display="@lang('common.categories') *" value="">@lang('common.categories') *</option>
                                         @foreach ($categories as $item)
-                                            <option value="{{ $item->id }}">
-                                                {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}
-                                            </option>
+                                            <option value="{{ $item->id }}">{{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}</option>
                                         @endforeach
                                     </select>
-
                                     @if ($errors->has('cat_id'))
-                                        <span class="text-danger invalid-select" role="alert">
-                                            {{ $errors->first('cat_id') }}
-                                        </span>
+                                        <span class="text-danger invalid-select" role="alert">{{ $errors->first('cat_id') }}</span>
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-xl-3 ">
+                            <div class="col-md-3 mb-20">
                                 <div class="primary_input">
-                                    <label class="primary_input_label" for="">@lang('academics.track_types')
-                                    </label>
-                                    <select
-                                        class="primary_select  form-control{{ $errors->has('track_type_id') ? ' is-invalid' : '' }}"
-                                        name="track_type_id[]" id="track_type_id">
-
-
-                                    </select>
-
+                                    <label class="primary_input_label" for="">@lang('academics.track_types')</label>
+                                    <select class="primary_select form-control{{ $errors->has('track_type_id') ? ' is-invalid' : '' }}" name="track_type_id" id="track_type_id"></select>
                                     @if ($errors->has('track_type_id'))
-                                        <span class="text-danger invalid-select" role="alert">
-                                            {{ $errors->first('track_type_id') }}
-                                        </span>
+                                        <span class="text-danger invalid-select" role="alert">{{ $errors->first('track_type_id') }}</span>
                                     @endif
                                 </div>
                             </div>
-
-                            <div class="col-lg-6 col-xl-3">
+                            <div class="col-md-3 mb-20">
                                 <div class="primary_input">
-                                    <label class="primary_input_label" for="">
-                                        @lang('academics.tracks')
-                                    </label>
-                                    <select
-                                        class="primary_select form-control {{ $errors->has('track_id') ? 'is-invalid' : '' }}"
-                                        name="track_id[]" id="track_id">
-
-                                    </select>
-
+                                    <label class="primary_input_label" for="">@lang('academics.tracks')</label>
+                                    <select class="primary_select form-control {{ $errors->has('track_id') ? 'is-invalid' : '' }}" name="track_id" id="track_id"></select>
                                     @if ($errors->has('track_id'))
-                                        <span class="text-danger invalid-select" role="alert">
-                                            {{ $errors->first('track_id') }}
-                                        </span>
+                                        <span class="text-danger invalid-select" role="alert">{{ $errors->first('track_id') }}</span>
                                     @endif
                                 </div>
                             </div>
-
-                            <div class="col-lg-6 col-xl-3 mb-20">
+                            <div class="col-md-3 mb-20">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="session">@lang('academics.session')</label>
-                                    <select class="form-control session staff_id" name="session" id="session">
-                                    </select>
+                                    <select class="form-control" name="session" id="session"></select>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-xl-3 mb-20">
-                                <div class="primary_input">
-                                    <label class="primary_input_label" for="scheduled">@lang('academics.schedule')</label>
-                                    <select class="form-control scheduled staff_id" name="scheduled" id="scheduled">
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-3 mb-20">
+                          
+                            <div class="col-md-4 mb-20">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="start_date">@lang('academics.start_date')</label>
-                                    <input type="date" min="{{ date('Y-m-d') }}" class="form-control staff_id"
-                                        name="start_date" id="start_date">
+                                    <input type="date" min="{{ date('Y-m-d') }}" class="form-control" name="start_date" id="start_date">
                                 </div>
                             </div>
-
-                            <div class="col-lg-6 col-xl-3 mb-20">
+                            <div class="col-md-4 mb-20">
                                 <div class="primary_input">
                                     <label class="primary_input_label" for="end_date">@lang('academics.end_date')</label>
-                                    <input type="date" min="{{ date('Y-m-d') }}" class="form-control staff_id"
-                                        id="end_date" disabled>
+                                    <input type="date" min="{{ date('Y-m-d') }}" class="form-control" id="end_date" disabled>
                                 </div>
                             </div>
-
-                            <div class="col-lg-6 col-xl-3 mb-20">
+                            <div class="col-md-4 mb-20">
                                 <div class="primary_input">
-                                    <label class="primary_input_label" for="staff_id">@lang('hr.staff')</label>
-                                    <select class="form-control staff_id" name="staff_id" id="staff_id">
-
-                                    </select>
+                                    <label class="primary_input_label" for="scheduled">@lang('academics.schedule')</label>
+                                    <select class="form-control" name="scheduled" id="scheduled"></select>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-20">
-                                <div id="slotContainer">
-
-                                </div>
+                                <div id="slotContainer"></div>
                             </div>
                             <div class="col-md-12 mb-20">
-                                <div id="submitAssignStaff">
-                                </div>
+                                <div id="submitAssignStaff"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 @endsection
-<style>
-    .list-inline .badge {
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    /* Scheduled events */
-    .fc-daygrid-event.event-scheduled {
-        background-color: #4CAF50;
-        /* Green */
-        border-color: #4CAF50;
-    }
-
-    /* Started events */
-    .fc-daygrid-event.event-started {
-        background-color: #FF9800;
-        /* Orange */
-        border-color: #FF9800;
-    }
-
-    /* Ended events */
-    .fc-daygrid-event.event-ended {
-        background-color: #F44336;
-        /* Red */
-        border-color: #F44336;
-    }
-
-    /* Available events */
-    .fc-daygrid-event.event-available {
-        background-color: #2196F3;
-        /* Blue */
-        border-color: #2196F3;
-    }
-
-    /* For events when hovering over */
-    .fc-daygrid-event.event-scheduled:hover,
-    .fc-daygrid-event.event-started:hover,
-    .fc-daygrid-event.event-ended:hover,
-    .fc-daygrid-event.event-available:hover {
-        opacity: 0.8;
-        /* Slightly transparent when hovered */
-    }
-
-    .staff_id {
-        font-size: 12px !important;
-        min-height: 45px;
-        color: #415094 !important;
-        border: 1px solid #d4d4d4 !important;
-    }
-
-    .fc-event-title-container {
-        color: #000 !important
-    }
-</style>
-
-
-
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         var $locale = '{{ app()->getLocale() }}';
         $(document).ready(function() {
+            // Populate fields based on category selection
+            $('#cat_id').on('change', function() {
+                var catId = $(this).val();
+                const trackSelect = $('#track_id');
+                const trackTypeSelect = $('#track_type_id');
 
+                if (catId) {
+                    $.ajax({
+                        url: '/tracks-by-category/' + catId,
+                        type: 'GET',
+                        success: function(data) {
+                            trackSelect.empty().append("<option>Select Track</option>");
+                            trackTypeSelect.empty().append("<option>Select Track Type</option>");
 
+                            data.tracks.forEach(function(track) {
+                                var optionText = ($locale === 'en') ? track.track_name_en : track.track_name_ar;
+                                trackSelect.append('<option value="' + track.id + '" data-level="' + track.level_number + '">' + optionText + '</option>');
+                            });
 
+                            data.valid_for.forEach(function(validFor) {
+                                trackTypeSelect.append(`<option value="${validFor.id}">${validFor.name}</option>`);
+                            });
+
+                            trackSelect.niceSelect('update');
+                            trackTypeSelect.niceSelect('update');
+                        },
+                        error: function() {
+                            alert('Failed to fetch tracks. Please try again.');
+                        }
+                    });
+                } else {
+                    trackSelect.empty();
+                }
+            });
+
+            // Populate session and schedule based on track selection
+            $('#track_id').on('change', function() {
+                $.ajax({
+                    url: '{{ route('getStaffByTrack') }}',
+                    method: 'GET',
+                    data: { track_id: $(this).val() },
+                    success: function(response) {
+                        $('#session').empty().append(`<option value="${response.track.session}">${response.track.session}</option>`);
+                        $('#scheduled').empty().append('<option value="">@lang('academics.select_schedule') *</option>');
+                        var schedules = ["once", "twice"];
+                        $.each(schedules, function(index, schedule) {
+                            $('#scheduled').append('<option value="' + schedule + '">' + schedule + '</option>');
+                        });
+                    },
+                    error: function() {
+                        alert('Failed to fetch track data.');
+                    }
+                });
+            });
+
+            // Show day field based on schedule selection
             $('#scheduled').on('change', function() {
                 var schedule = $(this).val();
                 var slotContainer = $('#slotContainer');
-                // slotContainer.empty(); // تفريغ الحاوية
+                slotContainer.empty();
 
                 if (schedule === 'once') {
                     slotContainer.html(`
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label class="primary_input_label">@lang('common.select_day')</label>
-                                <select class="form-control" name="day_1" id="day_1">
-                                    <option selected value="">@lang('common.select_day')</option>
-                                    <option value="Sunday">@lang('common.sunday')</option>
-                                    <option value="Monday">@lang('common.monday')</option>
-                                    <option value="Tuesday">@lang('common.tuesday')</option>
-                                    <option value="Wednesday">@lang('common.wednesday')</option>
-                                    <option value="Thursday">@lang('common.thursday')</option>
-                                    <option value="Friday">@lang('common.friday')</option>
-                                    <option value="Saturday">@lang('common.saturday')</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="primary_input_label">@lang('academics.start_time')</label>
-                                    <select class="form-control" name="start_time_1" id="start_time_1">
-                                        <option value="">@lang('common.select_time')</option>
-                                        <option value="00:00">12:00 AM</option>
-                                        <option value="01:00">1:00 AM</option>
-                                        <option value="02:00">2:00 AM</option>
-                                        <option value="03:00">3:00 AM</option>
-                                        <option value="04:00">4:00 AM</option>
-                                        <option value="05:00">5:00 AM</option>
-                                        <option value="06:00">6:00 AM</option>
-                                        <option value="07:00">7:00 AM</option>
-                                        <option value="08:00">8:00 AM</option>
-                                        <option value="09:00">9:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="12:00">12:00 PM</option>
-                                        <option value="13:00">1:00 PM</option>
-                                        <option value="14:00">2:00 PM</option>
-                                        <option value="15:00">3:00 PM</option>
-                                        <option value="16:00">4:00 PM</option>
-                                        <option value="17:00">5:00 PM</option>
-                                        <option value="18:00">6:00 PM</option>
-                                        <option value="19:00">7:00 PM</option>
-                                        <option value="20:00">8:00 PM</option>
-                                        <option value="21:00">9:00 PM</option>
-                                        <option value="22:00">10:00 PM</option>
-                                        <option value="23:00">11:00 PM</option>
-                                    </select>
-                                </div>
-                            <div class="col-md-4">
-                                <label class="primary_input_label">@lang('academics.end_time')</label>
-                                <select class="form-control" name="end_time_1" id="end_time_1">
-                                    <option value="">@lang('common.select_time')</option>
-                                    <option value="00:00">12:00 AM</option>
-                                    <option value="01:00">1:00 AM</option>
-                                    <option value="02:00">2:00 AM</option>
-                                        <option value="03:00">3:00 AM</option>
-                                        <option value="04:00">4:00 AM</option>
-                                        <option value="05:00">5:00 AM</option>
-                                        <option value="06:00">6:00 AM</option>
-                                        <option value="07:00">7:00 AM</option>
-                                        <option value="08:00">8:00 AM</option>
-                                        <option value="09:00">9:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="12:00">12:00 PM</option>
-                                        <option value="13:00">1:00 PM</option>
-                                        <option value="14:00">2:00 PM</option>
-                                        <option value="15:00">3:00 PM</option>
-                                        <option value="16:00">4:00 PM</option>
-                                        <option value="17:00">5:00 PM</option>
-                                        <option value="18:00">6:00 PM</option>
-                                        <option value="19:00">7:00 PM</option>
-                                        <option value="20:00">8:00 PM</option>
-                                        <option value="21:00">9:00 PM</option>
-                                        <option value="22:00">10:00 PM</option>
-                                        <option value="23:00">11:00 PM</option>
-                                    </select>   
-                            </div>
-                        </div>
-                    `);
-                } else if (schedule === 'twice') {
-                    slotContainer.html(`
-                        <div class="row mb-3">
+                        <div class="row" id="once_schedule">
                             <div class="col-md-4">
                                 <label class="primary_input_label">@lang('common.select_day')</label>
                                 <select class="form-control" name="day_1" id="day_1">
@@ -328,68 +192,32 @@
                                     <option value="Saturday">@lang('common.saturday')</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
-                                <label class="primary_input_label">@lang('academics.start_time')</label>
-                                    <select class="form-control" name="start_time_1" id="start_time_1">
-                                        <option value="">@lang('common.select_time')</option>
-                                        <option value="00:00">12:00 AM</option>
-                                        <option value="01:00">1:00 AM</option>
-                                        <option value="02:00">2:00 AM</option>
-                                        <option value="03:00">3:00 AM</option>
-                                        <option value="04:00">4:00 AM</option>
-                                        <option value="05:00">5:00 AM</option>
-                                        <option value="06:00">6:00 AM</option>
-                                        <option value="07:00">7:00 AM</option>
-                                        <option value="08:00">8:00 AM</option>
-                                        <option value="09:00">9:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="12:00">12:00 PM</option>
-                                        <option value="13:00">1:00 PM</option>
-                                        <option value="14:00">2:00 PM</option>
-                                        <option value="15:00">3:00 PM</option>
-                                        <option value="16:00">4:00 PM</option>
-                                        <option value="17:00">5:00 PM</option>
-                                        <option value="18:00">6:00 PM</option>
-                                        <option value="19:00">7:00 PM</option>
-                                        <option value="20:00">8:00 PM</option>
-                                        <option value="21:00">9:00 PM</option>
-                                        <option value="22:00">10:00 PM</option>
-                                        <option value="23:00">11:00 PM</option>
-                                    </select> 
-                            </div>
-                            <div class="col-md-4">
-                                <label class="primary_input_label">@lang('academics.end_time')</label>
-                                    <select class="form-control" name="end_time_1" id="end_time_1">
-                                        <option value="">@lang('common.select_time')</option>
-                                        <option value="00:00">12:00 AM</option>
-                                        <option value="01:00">1:00 AM</option>
-                                        <option value="02:00">2:00 AM</option>
-                                        <option value="03:00">3:00 AM</option>
-                                        <option value="04:00">4:00 AM</option>
-                                        <option value="05:00">5:00 AM</option>
-                                        <option value="06:00">6:00 AM</option>
-                                        <option value="07:00">7:00 AM</option>
-                                        <option value="08:00">8:00 AM</option>
-                                        <option value="09:00">9:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="12:00">12:00 PM</option>
-                                        <option value="13:00">1:00 PM</option>
-                                        <option value="14:00">2:00 PM</option>
-                                        <option value="15:00">3:00 PM</option>
-                                        <option value="16:00">4:00 PM</option>
-                                        <option value="17:00">5:00 PM</option>
-                                        <option value="18:00">6:00 PM</option>
-                                        <option value="19:00">7:00 PM</option>
-                                        <option value="20:00">8:00 PM</option>
-                                        <option value="21:00">9:00 PM</option>
-                                        <option value="22:00">10:00 PM</option>
-                                        <option value="23:00">11:00 PM</option>
-                                    </select> 
-                                </div>
+                            <div class="col-md-4" id="start_time_container_1"></div>
+                            <div class="col-md-4" id="end_time_container_1"></div>
                         </div>
-                        <div class="row">
+                        <div id="teachers_table_1" class="mt-3"></div>
+                    `);
+                } else if (schedule === 'twice') {
+                    slotContainer.html(`
+                        <div class="row mb-3" id="twice_schedule_1">
+                            <div class="col-md-4">
+                                <label class="primary_input_label">@lang('common.select_day')</label>
+                                <select class="form-control" name="day_1" id="day_1">
+                                    <option value="">@lang('common.select_day')</option>
+                                    <option value="Sunday">@lang('common.sunday')</option>
+                                    <option value="Monday">@lang('common.monday')</option>
+                                    <option value="Tuesday">@lang('common.tuesday')</option>
+                                    <option value="Wednesday">@lang('common.wednesday')</option>
+                                    <option value="Thursday">@lang('common.thursday')</option>
+                                    <option value="Friday">@lang('common.friday')</option>
+                                    <option value="Saturday">@lang('common.saturday')</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4" id="start_time_container_1"></div>
+                            <div class="col-md-4" id="end_time_container_1"></div>
+                        </div>
+                        <div id="teachers_table_1" class="mt-3"></div>
+                        <div class="row" id="twice_schedule_2">
                             <div class="col-md-4">
                                 <label class="primary_input_label">@lang('common.select_day')</label>
                                 <select class="form-control" name="day_2" id="day_2">
@@ -403,448 +231,297 @@
                                     <option value="Saturday">@lang('common.saturday')</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
-                                <label class="primary_input_label">@lang('academics.start_time')</label>
-                                    <select class="form-control" name="start_time_2" id="start_time_2">
-                                        <option value="">@lang('common.select_time')</option>
-                                        <option value="00:00">12:00 AM</option>
-                                        <option value="01:00">1:00 AM</option>
-                                        <option value="02:00">2:00 AM</option>
-                                        <option value="03:00">3:00 AM</option>
-                                        <option value="04:00">4:00 AM</option>
-                                        <option value="05:00">5:00 AM</option>
-                                        <option value="06:00">6:00 AM</option>
-                                        <option value="07:00">7:00 AM</option>
-                                        <option value="08:00">8:00 AM</option>
-                                        <option value="09:00">9:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="12:00">12:00 PM</option>
-                                        <option value="13:00">1:00 PM</option>
-                                        <option value="14:00">2:00 PM</option>
-                                        <option value="15:00">3:00 PM</option>
-                                        <option value="16:00">4:00 PM</option>
-                                        <option value="17:00">5:00 PM</option>
-                                        <option value="18:00">6:00 PM</option>
-                                        <option value="19:00">7:00 PM</option>
-                                        <option value="20:00">8:00 PM</option>
-                                        <option value="21:00">9:00 PM</option>
-                                        <option value="22:00">10:00 PM</option>
-                                        <option value="23:00">11:00 PM</option>
-                                    </select>                               
-                            </div>
-                            <div class="col-md-4">
-                                <label class="primary_input_label">@lang('academics.end_time')</label>
-                                    <select class="form-control" name="end_time_1" id="end_time_1">
-                                        <option value="">@lang('common.select_time')</option>
-                                        <option value="00:00">12:00 AM</option>
-                                        <option value="01:00">1:00 AM</option>
-                                        <option value="02:00">2:00 AM</option>
-                                        <option value="03:00">3:00 AM</option>
-                                        <option value="04:00">4:00 AM</option>
-                                        <option value="05:00">5:00 AM</option>
-                                        <option value="06:00">6:00 AM</option>
-                                        <option value="07:00">7:00 AM</option>
-                                        <option value="08:00">8:00 AM</option>
-                                        <option value="09:00">9:00 AM</option>
-                                        <option value="10:00">10:00 AM</option>
-                                        <option value="11:00">11:00 AM</option>
-                                        <option value="12:00">12:00 PM</option>
-                                        <option value="13:00">1:00 PM</option>
-                                        <option value="14:00">2:00 PM</option>
-                                        <option value="15:00">3:00 PM</option>
-                                        <option value="16:00">4:00 PM</option>
-                                        <option value="17:00">5:00 PM</option>
-                                        <option value="18:00">6:00 PM</option>
-                                        <option value="19:00">7:00 PM</option>
-                                        <option value="20:00">8:00 PM</option>
-                                        <option value="21:00">9:00 PM</option>
-                                        <option value="22:00">10:00 PM</option>
-                                        <option value="23:00">11:00 PM</option>
-                                    </select>                                 
-                                
-                            </div>
+                            <div class="col-md-4" id="start_time_container_2"></div>
+                            <div class="col-md-4" id="end_time_container_2"></div>
                         </div>
+                        <div id="teachers_table_2" class="mt-3"></div>
                     `);
                 }
+                calculateEndDate();
             });
 
-
-
-
-
-
-            // Listen for changes on the category dropdown
-            $('#cat_id').on('change', function() {
-                $('#checkbox-container').addClass('d-none');
-
-                var catId = $(this).val(); // Get selected category ID
-                const trackSelect = $('#track_id');
-                const trackTypeSelect = $('#track_type_id');
-
-                if (catId) {
-                    // Make AJAX request to fetch tracks
-                    $.ajax({
-                        url: '/tracks-by-category/' + catId,
-                        type: 'GET',
-                        success: function(data) {
-                            console.log(data);
-
-                            // Clear the tracks dropdown
-                            trackSelect.empty();
-                            trackTypeSelect.empty();
-                            trackSelect.append("<option>Select Track</option>")
-
-                            // Populate the dropdown with the fetched tracks
-                            data.tracks.forEach(function(track) {
-                                var optionText = ($locale === 'en') ?
-                                    track.track_name_en :
-                                    track.track_name_ar;
-
-                                trackSelect.append(
-                                    '<option value="' + track.id +
-                                    '" data-level="' + track
-                                    .level_number + '">' +
-                                    optionText + '</option>'
-                                );
-                            });
-                            trackTypeSelect.append(
-                                "<option>Select Track Type</option>")
-
-                            data.valid_for.forEach(function(validFor) {
-                                trackTypeSelect.append(
-                                    `<option value="${validFor.id}">${validFor.name}</option>`
-                                );
-                            });
-                            trackSelect.niceSelect('update');
-                            trackTypeSelect.niceSelect('update');
-
-                        },
-                        error: function() {
-                            alert('Failed to fetch tracks. Please try again.');
-                        }
-                    });
+            // Show start time after selecting day
+            $(document).on('change', '#day_1', function() {
+                var day = $(this).val();
+                if (day) {
+                    $('#start_time_container_1').html(`
+                        <label class="primary_input_label">@lang('academics.start_time')</label>
+                        <select class="form-control" name="start_time_1" id="start_time_1">
+                            <option value="">@lang('common.select_time')</option>
+                            ${generateTimeOptions()}
+                        </select>
+                    `);
                 } else {
-                    // Clear the tracks dropdown if no category is selected
-                    $('#track_id').empty();
+                    $('#start_time_container_1').empty();
+                    $('#end_time_container_1').empty();
+                    $('#teachers_table_1').empty();
                 }
             });
 
-            $('#track_id').on('change', function() {
-
-
-                // Make an AJAX request to fetch the filtered staff data
-                $.ajax({
-                    url: '{{ route('getStaffByTrack') }}', // The route you will create in your routes/web.php
-                    method: 'GET',
-                    data: {
-                        track_id: $(this).val(),
-                    },
-                    success: function(response) {
-                        console.log(
-                            response); // Log the response to check its structure
-
-                        // Populate session options
-                        $('#session').empty(); // Clear any previous session options
-                        $('#session').append(
-                            `<option value="${response.track.session}">${response.track.session}</option>`
-                        );
-
-
-
-                        // Populate schedule options (once or twice)
-                        $('#scheduled').empty(); // Clear previous schedule options
-                        $('#scheduled').append(
-                            '<option value="">@lang('academics.select_schedule') *</option>'
-                        );
-
-                        // Add the available schedules based on the response
-                        var schedules = ["once", "twice"];
-                        $.each(schedules, function(index, schedule) {
-                            // var selected = (schedule === response.track
-                            //         .schedule) ?
-                            //     'selected' :
-                            ''; // Check if this schedule matches the response
-                            $('#scheduled').append('<option value="' +
-                                schedule + '" ' +
-                                // selected + 
-                                '>' + schedule + '</option>');
-                        });
-
-                        // Clear the previous staff options
-                        $('#staff_id').empty();
-
-                        // Check if the response contains staff data
-                        if (response && response.staff && response.staff.length >
-                            0) {
-                            console.log(response.track); // Log the track details
-
-                            // Add an empty option for staff selection
-                            $('#staff_id').append(
-                                '<option data-display="@lang('hr.select_staff') *" value="">@lang('hr.select_staff') *</option>'
-                            );
-
-                            // Loop through the staff data and append each staff as an option
-                            $.each(response.staff, function(index, staff) {
-                                console.log(
-                                    staff
-                                ); // Log each staff to check its properties
-                                var staffName = staff
-                                    .staff_name; // Access 'staff_name' from the staff object
-                                var staffId = staff
-                                    .staff_id; // Access 'staff_id' from the staff object
-                                $('#staff_id').append('<option value="' +
-                                    staffId +
-                                    '">' + staffName + '</option>');
-                            });
-                        } else {
-                            // If no staff found, add a default option
-                            $('#staff_id').append(
-                                '<option value="">@lang('academics.no_staff_found')</option>'
-                            );
-                        }
-                    },
-
-
-                    error: function() {
-                        // Handle error
-                        alert('Failed to fetch staff data.');
-                    }
-                });
+            $(document).on('change', '#day_2', function() {
+                var day = $(this).val();
+                if (day) {
+                    $('#start_time_container_2').html(`
+                        <label class="primary_input_label">@lang('academics.start_time')</label>
+                        <select class="form-control" name="start_time_2" id="start_time_2">
+                            <option value="">@lang('common.select_time')</option>
+                            ${generateTimeOptions()}
+                        </select>
+                    `);
+                } else {
+                    $('#start_time_container_2').empty();
+                    $('#end_time_container_2').empty();
+                    $('#teachers_table_2').empty();
+                }
             });
 
-            $('#staff_id').on('change', function() {
+            // Show end time after selecting start time
+            $(document).on('change', '#start_time_1', function() {
+                var startTime = $(this).val();
+                if (startTime) {
+                    $('#end_time_container_1').html(`
+                        <label class="primary_input_label">@lang('academics.end_time')</label>
+                        <select class="form-control" name="end_time_1" id="end_time_1">
+                            <option value="">@lang('common.select_time')</option>
+                            ${generateEndTimeOptions(startTime)}
+                        </select>
+                    `);
+                } else {
+                    $('#end_time_container_1').empty();
+                    $('#teachers_table_1').empty();
+                }
+            });
+
+            $(document).on('change', '#start_time_2', function() {
+                var startTime = $(this).val();
+                if (startTime) {
+                    $('#end_time_container_2').html(`
+                        <label class="primary_input_label">@lang('academics.end_time')</label>
+                        <select class="form-control" name="end_time_2" id="end_time_2">
+                            <option value="">@lang('common.select_time')</option>
+                            ${generateEndTimeOptions(startTime)}
+                        </select>
+                    `);
+                } else {
+                    $('#end_time_container_2').empty();
+                    $('#teachers_table_2').empty();
+                }
+            });
+
+            // Generate time options for start time
+            function generateTimeOptions() {
+                let options = '';
+                for (let hour = 0; hour < 24; hour++) {
+                    let displayHour = (hour % 12 === 0) ? 12 : hour % 12;
+                    let period = (hour < 12) ? 'AM' : 'PM';
+                    let value = `${hour.toString().padStart(2, '0')}:00`;
+                    options += `<option value="${value}">${displayHour}:00 ${period}</option>`;
+                }
+                return options;
+            }
+
+            // Generate end time options based on start time
+            function generateEndTimeOptions(startTime) {
+                let startHour = parseInt(startTime.split(':')[0]);
+                let options = '';
+                for (let hour = startHour + 1; hour < 24; hour++) {
+                    let displayHour = (hour % 12 === 0) ? 12 : hour % 12;
+                    let period = (hour < 12) ? 'AM' : 'PM';
+                    let value = `${hour.toString().padStart(2, '0')}:00`;
+                    options += `<option value="${value}">${displayHour}:00 ${period}</option>`;
+                }
+                return options;
+            }
+
+            // Fetch available teachers and generate table
+            function fetchAvailableTeachers(day, startTime, endTime, tableId, slotNum) {
+                if (!day || !startTime || !endTime || !$('#start_date').val() || !$('#session').val()) return;
+
                 $.ajax({
-                    url: '{{ route('getSlotsByStaff') }}', // The route you created in your routes/web.php
+                    url: '{{ route('getTeachersByTime') }}',
                     method: 'GET',
                     data: {
-                        staff_id: $(this).val(),
+                        day: day,
+                        start_time: startTime,
+                        end_time: endTime,
+                        track_id: $('#track_id').val()
                     },
                     success: function(response) {
+                        let sessionCount = parseInt($('#session').val());
+                        let startDate = new Date($('#start_date').val());
+                        let daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                        let dayIndex = daysOfWeek.indexOf(day);
+                        let tableHtml = `
+                            <h5>@lang('hr.available_teachers')</h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>@lang('hr.teacher_name')</th>
+                                        <th>@lang('common.day') / @lang('common.date')</th>
+                                        <th>@lang('common.available_times')</th>
+                                        <th>@lang('common.select')</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
 
+                        if (response.teachers && response.teachers.length > 0) {
+                            response.teachers.forEach(function(teacher) {
+                                let dates = [];
+                                let currentDate = new Date(startDate);
+                                let weeks = $('#scheduled').val() === 'once' ? sessionCount : Math.ceil(sessionCount / 2);
 
-                        // Check if slots exist in the response
-                        if (response.slots && response.slots.length > 0) {
-                            // Group slots by day
-                            const days = [...new Set(response.slots.map(slot => slot
-                                .slot_day))]; // Get unique days
-                            const slotsByDay = {};
-                            days.forEach(day => {
-                                slotsByDay[day] = response.slots.filter(
-                                    slot => slot
-                                    .slot_day === day);
-                            });
+                                for (let i = 0; i < weeks; i++) {
+                                    while (currentDate.getDay() !== dayIndex) {
+                                        currentDate.setDate(currentDate.getDate() + 1);
+                                    }
+                                    dates.push(currentDate.toISOString().split('T')[0]);
+                                    currentDate.setDate(currentDate.getDate() + 7);
+                                }
 
-                            // Get unique time slots and convert to AM/PM
-                            const timeSlots = [...new Set(response.slots.map(slot =>
-                                    `${slot.slot_start} - ${slot.slot_end}`
-                                ))]
-                                .map(time => {
-                                    const [start, end] = time.split(" - ");
-                                    return `${convertToAmPm(start)} - ${convertToAmPm(end)}`;
-                                });
-                            // Create the Bootstrap layout dynamically
-                            let scheduleHTML =
-                                '<hr><div class=""><div class="row">';
-
-                            days.forEach((day, index) => {
-                                // Add a column for each day
-                                scheduleHTML += `
-                                            <div class="col mb-4">
-                                                <h5 class="mb-3">${day}</h5>
-                                                <div class="time-slots">
-                                        `;
-
-                                // Loop through time slots
-                                timeSlots.forEach(time => {
-                                    const originalTime = time
-                                        .split(" - ")
-                                        .map(t => convertTo24Hour(
-                                            t))
-                                        .join(" - ");
-
-                                    const slot = slotsByDay[day]
-                                        ?.find(
-                                            s =>
-                                            `${s.slot_start} - ${s.slot_end}` ===
-                                            originalTime
-                                        );
-                                    scheduleHTML += `
-                                            <div class="form-check mb-2" style="background-color: ${slot && slot.status !== "scheduled" ? "#fff4cb" : "transparent"};
-                                            color: ${slot && slot.status !== "scheduled" ? "#000" : "#444"};">
-                                                <input 
-                                                    class="form-check-input" 
-                                                    type="checkbox" 
-                                                    name="slot[${day}][]" 
-                                                    data-slot-id="${slot ? slot.id : ''}" 
-                                                    ${slot ? (slot.status === "scheduled" ? "disabled" : "") : "disabled"}
-                                                >
-                                                <label class="form-check-label">${time}</label>
-                                            </div>
-                                        `;
-
-                                });
-
-                                // Close time-slots and column
-                                scheduleHTML += `
-                                                </div> <!-- End of time-slots -->
-                                            </div> <!-- End of col-md-3 -->
-                                        `;
-
-                                // Close and start a new row after every 4 columns
-                                if ((index + 1) % 6 === 0 && index !== days
-                                    .length -
-                                    1) {
-                                    scheduleHTML +=
-                                        '</div><div class="row">';
+                                tableHtml += `
+                                    <tr>
+                                        <td rowspan="${dates.length}">${teacher.staff_name}</td>
+                                        <td>${day} (${dates[0]})</td>
+                                        <td>${teacher.available_times.map(time => `${time.start} - ${time.end}`).join(', ')}</td>
+                                        <td rowspan="${dates.length}"><input type="radio" name="selected_teacher_${slotNum}" value="${teacher.staff_id}"></td>
+                                    </tr>
+                                `;
+                                for (let i = 1; i < dates.length; i++) {
+                                    tableHtml += `
+                                        <tr>
+                                            <td>${day} (${dates[i]})</td>
+                                            <td>${teacher.available_times.map(time => `${time.start} - ${time.end}`).join(', ')}</td>
+                                        </tr>
+                                    `;
                                 }
                             });
-
-                            // Close the last row and container
-                            scheduleHTML += '</div></div><hr>';
-
-                            // Append the schedule to the DOM
-                            $("#slotContainer").html(scheduleHTML);
-                            $("#submitAssignStaff").html(
-                                `<button class="btn btn-primary" onclick="submitAssignedForm()">Submit</button>`
-                            );
-
                         } else {
-                            console.warn("No slots found for the selected staff.");
+                            tableHtml += `
+                                <tr>
+                                    <td colspan="4">@lang('academics.no_teachers_available')</td>
+                                </tr>
+                            `;
                         }
+
+                        tableHtml += `
+                                </tbody>
+                            </table>
+                        `;
+                        $(`#${tableId}`).html(tableHtml);
                     },
                     error: function() {
-                        alert('Failed to fetch staff data.');
+                        alert('Failed to fetch available teachers.');
                     }
                 });
-            });
-
-        });
-    </script>
-
-    <script>
-        // Helper function to convert time to AM/PM format
-        function convertToAmPm(time) {
-            const [hour, minute, second] = time.split(":").map(Number);
-            const ampm = hour >= 12 ? "PM" : "AM";
-            const formattedHour = hour % 12 || 12; // Convert 0 to 12 for 12-hour format
-            return `${formattedHour}:${minute.toString().padStart(2, "0")} ${ampm}`;
-        }
-
-        // Helper function to convert time from AM/PM to 24-hour format
-        function convertTo24Hour(time) {
-            const [hourPart, minutePart] = time.split(":");
-            const [minute, ampm] = minutePart.split(" ");
-            let hour = parseInt(hourPart, 10);
-            if (ampm === "PM" && hour !== 12) hour += 12;
-            if (ampm === "AM" && hour === 12) hour = 0;
-            return `${hour.toString().padStart(2, "0")}:${minute}:00`;
-        }
-
-        // Function to calculate the end date based on the selected session and schedule
-        function calculateEndDate() {
-            // Get the selected start date, session, and schedule
-            var startDate = $('#start_date').val();
-            var sessionCount = $('#session').val();
-            var schedule = $('#scheduled').val();
-            console.log(sessionCount, schedule, startDate);
-
-            // If any required field is missing, disable the end date field and return
-            if (!startDate || !sessionCount || !schedule) {
-                $('#end_date').prop('disabled', true);
-                return;
             }
 
-            // Convert the start date to a JavaScript Date object
-            var start = new Date(startDate);
+            // Event listener for end time selection
+            $(document).on('change', '#end_time_1', function() {
+                var day = $('#day_1').val();
+                var startTime = $('#start_time_1').val();
+                var endTime = $(this).val();
+                fetchAvailableTeachers(day, startTime, endTime, 'teachers_table_1', 1);
+            });
 
-            // Calculate the end date based on the schedule
-            var endDate = new Date(start);
+            $(document).on('change', '#end_time_2', function() {
+                var day = $('#day_2').val();
+                var startTime = $('#start_time_2').val();
+                var endTime = $(this).val();
+                fetchAvailableTeachers(day, startTime, endTime, 'teachers_table_2', 2);
+            });
 
-            if (schedule === "once") {
-                // If "once" (sessions are once a week), add (sessionCount - 1) weeks
-                endDate.setDate(start.getDate() + (sessionCount - 1) * 7); // 7 days per week
-            } else if (schedule === "twice") {
-                // If "twice" (sessions are twice a week), calculate based on 2 sessions per week
-                var weeksRequired = Math.ceil(sessionCount / 2); // Calculate the number of weeks needed
-                console.log(weeksRequired);
+            // Calculate end date
+            function calculateEndDate() {
+                var startDate = $('#start_date').val();
+                var sessionCount = $('#session').val();
+                var schedule = $('#scheduled').val();
 
-                endDate.setDate(start.getDate() + (weeksRequired - 1) * 7); // Add weeks to the start date
+                if (!startDate || !sessionCount || !schedule) {
+                    $('#end_date').prop('disabled', true);
+                    return;
+                }
+
+                var start = new Date(startDate);
+                var endDate = new Date(start);
+
+                if (schedule === "once") {
+                    endDate.setDate(start.getDate() + (sessionCount - 1) * 7);
+                } else if (schedule === "twice") {
+                    var weeksRequired = Math.ceil(sessionCount / 2);
+                    endDate.setDate(start.getDate() + (weeksRequired - 1) * 7);
+                }
+
+                $('#end_date').val(endDate.toISOString().split('T')[0]);
+                $('#end_date').prop('disabled', false);
             }
 
-            // Set the calculated end date and enable the input field
-            $('#end_date').val(endDate.toISOString().split('T')[0]); // Format the date as YYYY-MM-DD
-        }
-        // Event listeners for changes to the start date, session, and schedule
-        $('#start_date, #scheduled').on('change', function() {
-            calculateEndDate(); // Call the function to calculate the end date
+            $('#start_date, #scheduled').on('change', function() {
+                calculateEndDate();
+            });
+
+            // Submit form with selected teachers
+            function submitAssignedForm() {
+                let formData = {
+                    course_name_en: $('#course_name_en').val(),
+                    course_name_ar: $('#course_name_ar').val(),
+                    cat_id: $('#cat_id').val(),
+                    track_type_id: $('#track_type_id').val(),
+                    track_id: $('#track_id').val(),
+                    session: $('#session').val(),
+                    schedule: $('#scheduled').val(),
+                    start_date: $('#start_date').val(),
+                    end_date: $('#end_date').val(),
+                    _token: '{{ csrf_token() }}'
+                };
+
+                if ($('#scheduled').val() === 'once') {
+                    formData.day_1 = $('#day_1').val();
+                    formData.start_time_1 = $('#start_time_1').val();
+                    formData.end_time_1 = $('#end_time_1').val();
+                    formData.staff_id_1 = $('input[name="selected_teacher_1"]:checked').val();
+                } else if ($('#scheduled').val() === 'twice') {
+                    formData.day_1 = $('#day_1').val();
+                    formData.start_time_1 = $('#start_time_1').val();
+                    formData.end_time_1 = $('#end_time_1').val();
+                    formData.staff_id_1 = $('input[name="selected_teacher_1"]:checked').val();
+                    formData.day_2 = $('#day_2').val();
+                    formData.start_time_2 = $('#start_time_2').val();
+                    formData.end_time_2 = $('#end_time_2').val();
+                    formData.staff_id_2 = $('input[name="selected_teacher_2"]:checked').val();
+                }
+
+                $.ajax({
+                    url: '{{ route('scheduleStaffEvent') }}',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Schedule saved successfully!",
+                            icon: "success"
+                        });
+                        $('#course_name_en').val('');
+                        $('#course_name_ar').val('');
+                        $('#slotContainer').empty();
+                        $('#session').empty();
+                        $('#scheduled').empty();
+                        $('#start_date').val('');
+                        $('#end_date').val('');
+                        $("#submitAssignStaff").empty();
+                    },
+                    error: function(error) {
+                        alert('Error saving event: ' + error.responseText);
+                    }
+                });
+            }
+
+            // Add submit button after schedule selection
+            $('#scheduled').on('change', function() {
+                if ($(this).val()) {
+                    $("#submitAssignStaff").html(`<button class="btn btn-primary" onclick="submitAssignedForm()">Submit</button>`);
+                }
+            });
         });
-
-        function submitAssignedForm() {
-            let course_name_en = $('#course_name_en').val();
-            let course_name_ar = $('#course_name_ar').val();
-            let cat_id = $('#cat_id').val();
-            let track_type_id = $('#track_type_id').val();
-            let track_id = $('#track_id').val();
-            let session = $('#session').val();
-            let schedule = $('#scheduled').val();
-            let start_date = $('#start_date').val();
-            let end_date = $('#end_date').val();
-            let staff_id = $('#staff_id').val();
-
-            // Fetch the selected slots (checkboxes with name like 'slot[day][]')
-            let selectedSlots = [];
-            $('input[name^="slot"]').each(function() {
-                if ($(this).is(':checked')) {
-                    selectedSlots.push($(this).data('slot-id'));
-                }
-            });
-
-            // Log or use the selectedSlots array (this will contain all checked slot IDs)
-            console.log('Selected Slots:', selectedSlots);
-
-            // Prepare form data
-            let formData = {
-                course_name_en: course_name_en,
-                course_name_ar: course_name_ar,
-                cat_id: cat_id,
-                track_type_id: track_type_id,
-                track_id: track_id,
-                session: session,
-                schedule: schedule,
-                start_date: start_date,
-                end_date: end_date,
-                staff_id: staff_id,
-                selected_slots: selectedSlots, // Include the selected slots
-                _token: '{{ csrf_token() }}' // CSRF token from meta tag
-            };
-
-            // AJAX request to save event to the database
-            $.ajax({
-                url: '{{ route('scheduleStaffEvent') }}', // Your backend route for saving the event
-                method: 'POST', // Use POST method to submit form data
-                data: formData, // Send form data including the CSRF token
-                success: function(response) {
-                    Swal.fire({
-                        title: "Good job!",
-                        text: "You clicked the button!",
-                        icon: "success"
-                    });
-                    $('#course_name_en').val('');
-                    $('#course_name_ar').val('');
-                    $("#slotContainer").html('');
-                    $('#session').html('');
-                    $('#session').html('');
-                    $('#scheduled').html('');
-                    $('#start_date').val('');
-                    $('#end_date').val('');
-                    $('#staff_id').html('');
-                    $("#submitAssignStaff").html('');
-                },
-                error: function(error) {
-                    alert('Error saving event: ' + error.message);
-                }
-            });
-        }
     </script>
 @endpush

@@ -975,7 +975,7 @@ Route::get('/reg', function () {});
         Route::get('calendar_staff/getSlotsByStaff', 'Admin\Hr\CalendarStaffController@getSlotsByStaff')->name('getSlotsByStaff');
         Route::get('calendar_staff/getSlotsByStaffReport', 'Admin\Hr\CalendarStaffController@getSlotsByStaffReport')->name('getSlotsByStaffReport');
         Route::post('calendar_staff/schedule-staff-event', 'Admin\Hr\CalendarStaffController@scheduleStaffEvent')->name('scheduleStaffEvent');
-
+        Route::get('/get-teachers-by-time', 'Admin\Hr\CalendarStaffController@getTeachersByTime')->name('getTeachersByTime');
 
 
 

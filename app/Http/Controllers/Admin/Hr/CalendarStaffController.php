@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin\Hr;
+
 use App\Http\Controllers\Controller;
 
 use App\ApiBaseMethod;
@@ -248,29 +249,29 @@ class CalendarStaffController extends Controller
 
     public function scheduleStaffEvent(Request $request)
     {
-      
-    
+
+
         $schedule = null;
         if (isset($request->staff_scheduled_id)) {
             $schedule = StaffScheduled::find($request->staff_scheduled_id);
         }
         // Check if a record with the same staff_id, track_id, session, schedule, start_date, and end_date already exists
-    
+
         if ($schedule) {
-              // Validate incoming data
-        $validated = $request->validate([
-            'course_name_en' => 'required|string',
-            'course_name_ar' => 'required|string',
-            'selected_slots' => 'required|array',
-            'cat_id' => 'required|exists:categories,id',
-            'staff_id' => 'required|exists:sm_staffs,id',
-            'track_id' => 'required|integer',
-            'track_type_id' => 'required|integer',
-            'session' => 'required|integer',
-            'schedule' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-        ]);
+            // Validate incoming data
+            $validated = $request->validate([
+                'course_name_en' => 'required|string',
+                'course_name_ar' => 'required|string',
+                'selected_slots' => 'required|array',
+                'cat_id' => 'required|exists:categories,id',
+                'staff_id' => 'required|exists:sm_staffs,id',
+                'track_id' => 'required|integer',
+                'track_type_id' => 'required|integer',
+                'session' => 'required|integer',
+                'schedule' => 'required|string',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
+            ]);
             // Update the existing record
             $schedule->update([
                 'course_name_en' => $validated['course_name_en'],
@@ -287,23 +288,23 @@ class CalendarStaffController extends Controller
                 'end_date' => $validated['end_date'],
 
             ]);
-    
+
             $message = "Staff Scheduled event updated successfully.";
         } else {
-              // Validate incoming data
-        $validated = $request->validate([
-            'course_name_en' => 'required|string',
-            'course_name_ar' => 'required|string',
-            'selected_slots' => 'required|array',
-            'cat_id' => 'required|exists:categories,id',
-            'staff_id' => 'required|exists:sm_staffs,id',
-            'track_id' => 'required|integer',
-            'track_type_id' => 'required|integer',
-            'session' => 'required|integer',
-            'schedule' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-        ]);
+            // Validate incoming data
+            $validated = $request->validate([
+                'course_name_en' => 'required|string',
+                'course_name_ar' => 'required|string',
+                'selected_slots' => 'required|array',
+                'cat_id' => 'required|exists:categories,id',
+                'staff_id' => 'required|exists:sm_staffs,id',
+                'track_id' => 'required|integer',
+                'track_type_id' => 'required|integer',
+                'session' => 'required|integer',
+                'schedule' => 'required|string',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
+            ]);
             // Create a new record
             StaffScheduled::create([
                 'course_name_en' => $validated['course_name_en'],
@@ -319,10 +320,10 @@ class CalendarStaffController extends Controller
                 'start_date' => $validated['start_date'],
                 'end_date' => $validated['end_date'],
             ]);
-    
+
             $message = "Staff Scheduled event created successfully.";
         }
-    
+
         // Return a response with success
         return response()->json([
             'success' => $message,
@@ -372,5 +373,75 @@ class CalendarStaffController extends Controller
             Toastr::error('Operation Failed', 'Failed');
             return redirect()->back();
         }
+    }
+
+
+    public function getTeachersByTime(Request $request)
+    {
+        $day = $request->input('day');
+        $startTime = $request->input('start_time');
+        $endTime = $request->input('end_time');
+        $trackId = $request->input('track_id');
+
+
+        $foundDays = SlotEmp::where('slot_day', $day)
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->where(function ($q) use ($startTime, $endTime) {
+                    $q->where('slot_start', '<=', $endTime)
+                        ->where('slot_end', '>=', $startTime);
+                });
+            })
+            ->select('id', 'slot_day', 'slot_start', 'slot_end')
+            ->get();
+
+        $slotIds = $foundDays->pluck('id')->toArray();
+
+        $staffSlot = StaffSlot::whereIn('slot_id', $slotIds)->get();
+
+        $teachers = SmStaff::where('id', $staffSlot->pluck('staff_id'))->get();
+
+        dd($teachers);
+
+
+
+
+
+
+        $teachers = TrackAssignedStaff::where('track_id', $trackId)
+            ->with(['staff:id,full_name'])
+            ->whereDoesntHave('scheduled', function ($query) use ($day, $startTime, $endTime) {
+                $query->where('day_1', $day)
+                    ->where(function ($q) use ($startTime, $endTime) {
+                        $q->whereBetween('start_time_1', [$startTime, $endTime])
+                            ->orWhereBetween('end_time_1', [$startTime, $endTime])
+                            ->orWhereRaw('? BETWEEN start_time_1 AND end_time_1', [$startTime])
+                            ->orWhereRaw('? BETWEEN start_time_1 AND end_time_1', [$endTime]);
+                    });
+            })
+            ->get();
+
+        $teachers = $teachers->map(function ($teacher) use ($day) {
+            $slots = StaffSlot::where('staff_id', $teacher->staff_id)
+                ->whereHas('slot', function ($query) use ($day) {
+                    $query->where('slot_day', $day);
+                })
+                ->with(['slot:id,slot_start,slot_end'])
+                ->get();
+
+            $availableTimes = $slots->map(function ($slot) {
+                return [
+                    'start' => $slot->slot->slot_start,
+                    'end' => $slot->slot->slot_end
+                ];
+            })->toArray();
+
+            return [
+                'staff_id' => $teacher->staff_id,
+                'staff_name' => $teacher->staff->full_name,
+                'available_times' => $availableTimes
+            ];
+        });
+
+        return response()->json(['teachers' => $teachers]);
     }
 }
