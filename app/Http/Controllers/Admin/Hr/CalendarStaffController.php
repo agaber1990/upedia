@@ -376,71 +376,107 @@ class CalendarStaffController extends Controller
     }
 
 
+    // public function getTeachersByTime(Request $request)
+    // {
+    //     $day = $request->input('day');
+    //     $startTime = $request->input('start_time');
+    //     $endTime = $request->input('end_time');
+    //     $trackId = $request->input('track_id');
+
+
+    //     $foundDays = SlotEmp::where('slot_day', $day)
+    //         ->where(function ($query) use ($startTime, $endTime) {
+    //             $query->where(function ($q) use ($startTime, $endTime) {
+    //                 $q->where('slot_start', '<=', $endTime)
+    //                     ->where('slot_end', '>=', $startTime);
+    //             });
+    //         })
+    //         ->select('id', 'slot_day', 'slot_start', 'slot_end')
+    //         ->get();
+
+    //     $slotIds = $foundDays->pluck('id')->toArray();
+
+    //     $staffSlots = StaffSlot::whereIn('slot_id', $slotIds)->get();
+
+    //     $staffIds = $staffSlots->pluck('staff_id')->toArray();
+
+    //     $teachers = SmStaff::whereIn('id', $staffIds)->with('slots.slotEmp')->select('id','full_name')->get();
+
+
+    //     // dd($teachers);
+
+
+
+
+    //          return response()->json(['teachers' => $teachers]);
+    // }
+
+
+
     public function getTeachersByTime(Request $request)
     {
         $day = $request->input('day');
         $startTime = $request->input('start_time');
         $endTime = $request->input('end_time');
         $trackId = $request->input('track_id');
-
-
+        // Find slots that match the day and overlap with the given time range
         $foundDays = SlotEmp::where('slot_day', $day)
             ->where(function ($query) use ($startTime, $endTime) {
                 $query->where(function ($q) use ($startTime, $endTime) {
-                    $q->where('slot_start', '<=', $endTime)
+                    $q->where('slot_start', '<', $endTime)
                         ->where('slot_end', '>=', $startTime);
                 });
             })
             ->select('id', 'slot_day', 'slot_start', 'slot_end')
             ->get();
+        // \Log::info("Received Inputs: Day: $day, Start: $startTime, End: $endTime, Track: $trackId");
+        // \Log::info("Found Slots in Range: " . $foundDays->toJson());
 
         $slotIds = $foundDays->pluck('id')->toArray();
 
-        $staffSlot = StaffSlot::whereIn('slot_id', $slotIds)->get();
+        // Find staff associated with these slots
+        $staffSlots = StaffSlot::whereIn('slot_id', $slotIds)->get();
+        $staffIds = $staffSlots->pluck('staff_id')->toArray();
+        // \Log::info("staffIds:", $staffIds);
 
-        $teachers = SmStaff::where('id', $staffSlot->pluck('staff_id'))->get();
-
-        dd($teachers);
-
-
-
-
-
-
-        $teachers = TrackAssignedStaff::where('track_id', $trackId)
-            ->with(['staff:id,full_name'])
-            ->whereDoesntHave('scheduled', function ($query) use ($day, $startTime, $endTime) {
-                $query->where('day_1', $day)
-                    ->where(function ($q) use ($startTime, $endTime) {
-                        $q->whereBetween('start_time_1', [$startTime, $endTime])
-                            ->orWhereBetween('end_time_1', [$startTime, $endTime])
-                            ->orWhereRaw('? BETWEEN start_time_1 AND end_time_1', [$startTime])
-                            ->orWhereRaw('? BETWEEN start_time_1 AND end_time_1', [$endTime]);
-                    });
-            })
+        $teachers = SmStaff::whereIn('id', $staffIds)
+            ->with(['slots' => function ($query) use ($slotIds) {
+                $query->whereIn('slot_id', $slotIds);
+            }, 'slots.slotEmp'])
+            ->select('id', 'full_name')
             ->get();
 
-        $teachers = $teachers->map(function ($teacher) use ($day) {
-            $slots = StaffSlot::where('staff_id', $teacher->staff_id)
-                ->whereHas('slot', function ($query) use ($day) {
-                    $query->where('slot_day', $day);
-                })
-                ->with(['slot:id,slot_start,slot_end'])
-                ->get();
 
-            $availableTimes = $slots->map(function ($slot) {
-                return [
-                    'start' => $slot->slot->slot_start,
-                    'end' => $slot->slot->slot_end
-                ];
-            })->toArray();
+        // \Log::info("teachers: " . json_encode($teachers));
 
-            return [
-                'staff_id' => $teacher->staff_id,
-                'staff_name' => $teacher->staff->full_name,
-                'available_times' => $availableTimes
-            ];
-        });
+
+
+
+
+        // Add availability status for each slot
+        // $teachers->each(function ($teacher) use ($day) {
+        //     $teacher->slots->each(function ($slot) use ($teacher, $day) {
+        //         // Only process slots for the selected day
+        //         if ($slot->slotEmp->slot_day == $day) {
+        //             // Check if the slot is scheduled in StaffScheduled
+        //             $staffScheduled = StaffScheduled::where('staff_id', $teacher->id)
+        //                 ->whereJsonContains('slot_id', (string)$slot->slot_id)
+        //                 ->first();
+
+        //             // if ($staffScheduled) {
+        //             //     $slot->status = $staffScheduled->status; // e.g., 'scheduled'
+        //             // } else {
+        //             //     $slot->status = 'available'; // Default to available if not scheduled
+        //             // }
+        //         }
+        //     });
+
+        //     // Filter slots to only include those for the selected day
+        //     $teacher->slots = $teacher->slots->filter(function ($slot) use ($day) {
+        //         return $slot->slotEmp->slot_day === $day;
+        //     })->values();
+        // });
+
 
         return response()->json(['teachers' => $teachers]);
     }

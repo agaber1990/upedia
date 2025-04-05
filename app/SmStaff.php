@@ -25,14 +25,14 @@ class SmStaff extends Model
         return $this->hasMany(StaffWorkExperience::class);
     }
 
-
+ 
     public function emp_type_id()
     {
         return $this->belongsTo(TrackType::class, 'pricing_plan');
     }
     public function slots()
     {
-        return $this->hasMany(StaffSlot::class);
+        return $this->hasMany(StaffSlot::class,'staff_id');
     }
     protected static function boot()
     {

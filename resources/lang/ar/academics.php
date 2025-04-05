@@ -12,6 +12,7 @@ return [
     'assign_class_teacher' => 'Assign Class Teacher',
     'next_follow_up_date' => 'Next Follow Up Date',
     'assigned' => 'Assigned',
+    'no_teachers_available' => 'No Teachers Available',
     'number_of_child' => 'Number Of child',
     'subjects' => 'Subjects',
     'teacher' => 'Teacher',
