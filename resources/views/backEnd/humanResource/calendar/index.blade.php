@@ -19,6 +19,6 @@
     </section>
 
     @include('backEnd.humanResource.calendar.calendar_form')
-    @include('backEnd.humanResource.calendar.calendar_slots')
+    @include('backEnd.humanResource.calendar.calendar_slots.index')
     @include('backEnd.humanResource.calendar.calendar_submit')
 @endsection

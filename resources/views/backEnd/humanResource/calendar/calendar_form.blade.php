@@ -2,7 +2,7 @@
     <div class="container-fluid p-0">
         <div class="row">
             <div class="col-md-12">
-                <div class="white-box">
+                <div class="">
                     <div class="row">
                         <div class="col-md-6 mb-20">
                             <div class="primary_input mb-2">
