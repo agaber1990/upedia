@@ -171,8 +171,7 @@
 
 @push('scripts')
 
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     var $locale = '{{ app()->getLocale() }}';
     $(document).ready(function() {
@@ -256,6 +255,22 @@
                         <div class="col-md-4" id="start_time_container_1"></div>
                         <div class="col-md-4" id="end_time_container_1"></div>
                     </div>
+
+                    <div class="row mt-4">
+                        <div class="col-2">
+                            <h5>@lang('academics.available_teachers')</h5>
+                        </div>
+                        <div class="col-1">
+                            <i class="fas fa-circle" style="color: #FFD43B;"></i> @lang('academics.available')
+                        </div>
+                        <div class="col-1">
+                            <i class="fas fa-circle" style="color: #f6c49c;"></i> @lang('academics.paid')
+                        </div>
+                        <div class="col-1">
+                            <i class="fas fa-circle" style="color: #ff3c3c;"></i> @lang('academics.unpaid')
+                        </div>
+                    </div>
+
                     <div id="teachers_table" class="mt-3"></div>
                 `);
             } else if (schedule === 'twice') {
@@ -293,6 +308,20 @@
                         </div>
                         <div class="col-md-4" id="start_time_container_2"></div>
                         <div class="col-md-4" id="end_time_container_2"></div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-2">
+                            <h5>@lang('academics.available_teachers')</h5>
+                        </div>
+                        <div class="col-1">
+                            <i class="fas fa-circle" style="color: #FFD43B;"></i> @lang('academics.available')
+                        </div>
+                        <div class="col-1">
+                            <i class="fas fa-circle" style="color: #f6c49c;"></i> @lang('academics.paid')
+                        </div>
+                        <div class="col-1">
+                            <i class="fas fa-circle" style="color: #ff3c3c;"></i> @lang('academics.unpaid')
+                        </div>
                     </div>
                     <div id="teachers_table" class="mt-3 table-container"></div>
                 `);
@@ -393,177 +422,236 @@
 
         // Fetch available teachers and generate a unified table
     
+    
         function fetchAvailableTeachers() {
-    var schedule = $('#scheduled').val();
-    var day1 = $('#day_1').val();
-    var startTime1 = $('#start_time_1').val();
-    var endTime1 = $('#end_time_1').val();
-    var day2 = $('#day_2').val();
-    var startTime2 = $('#start_time_2').val();
-    var endTime2 = $('#end_time_2').val();
-    var startDate = $('#start_date').val();
-    var endDate = $('#end_date').val();
-    var sessionCount = parseInt($('#session').val());
+            var schedule = $('#scheduled').val();
+            var day1 = $('#day_1').val();
+            var startTime1 = $('#start_time_1').val();
+            var endTime1 = $('#end_time_1').val();
+            var day2 = $('#day_2').val();
+            var startTime2 = $('#start_time_2').val();
+            var endTime2 = $('#end_time_2').val();
+            var startDate = $('#start_date').val();
+            var endDate = $('#end_date').val();
+            var sessionCount = parseInt($('#session').val());
 
-    console.log('Schedule:', schedule);
-    console.log('Day 1:', day1, 'Start Time 1:', startTime1, 'End Time 1:', endTime1);
-    console.log('Day 2:', day2, 'Start Time 2:', startTime2, 'End Time 2:', endTime2);
-    console.log('Start Date:', startDate, 'End Date:', endDate, 'Session Count:', sessionCount);
+            console.log('Schedule:', schedule);
+            console.log('Day 1:', day1, 'Start Time 1:', startTime1, 'End Time 1:', endTime1);
+            console.log('Day 2:', day2, 'Start Time 2:', startTime2, 'End Time 2:', endTime2);
+            console.log('Start Date:', startDate, 'End Date:', endDate, 'Session Count:', sessionCount);
 
-    if (!startDate || !sessionCount || !schedule) {
-        console.log('Missing required fields');
-        return;
-    }
-
-    var days = [];
-    if (schedule === 'once' && day1 && startTime1 && endTime1) {
-        days.push({ day: day1, startTime: startTime1, endTime: endTime1 });
-    } else if (schedule === 'twice' && day1 && startTime1 && endTime1 && day2 && startTime2 && endTime2) {
-        days.push({ day: day1, startTime: startTime1, endTime: endTime1 });
-        days.push({ day: day2, startTime: startTime2, endTime: endTime2 });
-    } else {
-        console.log('Incomplete schedule data');
-        return;
-    }
-
-    console.log('Days to fetch:', days);
-
-    var allTeachers = {};
-    var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    var promises = days.map(function(slot) {
-        console.log('Fetching teachers for:', slot);
-        return $.ajax({
-            url: '{{ route('getTeachersByTime') }}',
-            method: 'GET',
-            data: {
-                day: slot.day,
-                start_time: slot.startTime,
-                end_time: slot.endTime,
-                track_id: $('#track_id').val()
-            },
-            success: function(response) {
-                console.log('Response for', slot.day, ':', response);
-                if (response.teachers) {
-                    response.teachers.forEach(function(teacher) {
-                        if (!allTeachers[teacher.id]) {
-                            allTeachers[teacher.id] = { full_name: teacher.full_name, slots: {} };
-                        }
-                        allTeachers[teacher.id].slots[slot.day] = teacher.slots || [];
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                console.log('Error fetching teachers for', slot.day, ':', error);
+            if (!startDate || !sessionCount || !schedule) {
+                console.log('Missing required fields');
+                return;
             }
-        });
-    });
 
-    $.when.apply($, promises).then(function() {
-        console.log('All teachers data:', allTeachers);
+            var days = [];
+            if (schedule === 'once' && day1 && startTime1 && endTime1) {
+                days.push({ day: day1, startTime: startTime1, endTime: endTime1 });
+            } else if (schedule === 'twice' && day1 && startTime1 && endTime1 && day2 && startTime2 && endTime2) {
+                days.push({ day: day1, startTime: startTime1, endTime: endTime1 });
+                days.push({ day: day2, startTime: startTime2, endTime: endTime2 });
+            } else {
+                console.log('Incomplete schedule data');
+                return;
+            }
 
-        var allDates = [];
-        days.forEach(function(slot) {
-            let dayIndex = daysOfWeek.indexOf(slot.day);
-            let currentDate = new Date(startDate);
-            while (currentDate <= new Date(endDate)) {
-                if (currentDate.getDay() === dayIndex) {
-                    allDates.push({
-                        date: new Date(currentDate).toISOString().split('T')[0],
+            console.log('Days to fetch:', days);
+
+            var allTeachers = {};
+            var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            var promises = days.map(function(slot, index) {
+                console.log('Fetching teachers for:', slot);
+                return $.ajax({
+                    url: '{{ route('getTeachersByTime') }}',
+                    method: 'GET',
+                    data: {
                         day: slot.day,
-                        startTime: slot.startTime,
-                        endTime: slot.endTime
-                    });
-                }
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-        });
-
-        allDates.sort((a, b) => new Date(a.date) - new Date(b.date));
-        console.log('Sorted dates:', allDates);
-
-        let tableHtml = `
-            <div class=row>
-
-                <div class="col-2 h5">@lang('academics.available_teachers')</div>
-                <div class="col-1"><i class="fa-solid fa-circle" style="color: #f6c49c;"></i> @lang('academics.paid')</div>
-                <div class="col-1"><i class="fa-solid fa-circle" style="color: #ff3c3c;"></i> @lang('academics.has_conflict')</div>
-                <div class="col-1"><i class="fa-solid fa-circle" style="color: #FFD43B;"></i> @lang('academics.reserved')</div>
-
-
-            </div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr class="bg-dark text-white">
-                        <th class="text-white">@lang('hr.teacher_name')</th>
-                        ${allDates.map(item => `
-                            <th class="text-white">${item.day}, ${item.date}</th>
-                        `).join('')}
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        if (Object.keys(allTeachers).length > 0) {
-            for (let teacherId in allTeachers) {
-                let teacher = allTeachers[teacherId];
-                tableHtml += `
-                    <tr>
-                        <td>${teacher.full_name}</td>
-                        ${allDates.map(item => {
-                            let teacherSlots = teacher.slots[item.day] || [];
-                            function toMinutes(timeStr) {
-                                let [h, m] = timeStr.split(':').map(Number);
-                                return h * 60 + m;
-                            }
-                            let relevantSlots = teacherSlots.filter(slotItem => {
-                                let slotStart = toMinutes(slotItem.slot_emp.slot_start);
-                                let slotEnd = toMinutes(slotItem.slot_emp.slot_end);
-                                let userStart = toMinutes(item.startTime);
-                                let userEnd = toMinutes(item.endTime);
-                                return slotItem.slot_emp.slot_day === item.day &&
-                                    slotStart >= userStart && slotEnd <= userEnd;
+                        start_time: slot.startTime,
+                        end_time: slot.endTime,
+                        track_id: $('#track_id').val(),
+                        schedule: schedule
+                    },
+                    success: function(response) {
+                        console.log('Response for', slot.day, ':', response);
+                        if (response.teachers && response.teachers.length > 0) {
+                            response.teachers.forEach(function(teacher) {
+                                if (!allTeachers[teacher.id]) {
+                                    allTeachers[teacher.id] = { full_name: teacher.full_name, slots: {} };
+                                }
+                                allTeachers[teacher.id].slots[slot.day] = teacher.slots || [];
                             });
+                        } else {
+                            allTeachers['no_teachers_' + index] = {
+                                full_name: `No teachers available for ${slot.day} (${slot.startTime} - ${slot.endTime})`,
+                                slots: { [slot.day]: [] }
+                            };
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error fetching teachers for', slot.day, ':', error);
+                    }
+                });
+            });
 
-                            let cellContent = relevantSlots.length > 0
-                                ? relevantSlots.map(slotItem => {
-                                    let availability = checkTeacherAvailability(slotItem, item.date);
-                                    let cellStyle = '';
-                                    let slotText = formatTimeSlot(slotItem.slot_emp.slot_start, slotItem.slot_emp.slot_end);
+            $.when.apply($, promises).then(function() {
+                console.log('All teachers data:', allTeachers);
 
-                                    if (availability.status === 'scheduled') {
-                                        cellStyle = 'background-color: #fc3b3c; color: white;';
-                                    } else if (availability.status === 'has_conflict') {
-                                        cellStyle = 'background-color: #fdc59a; color: white;';
-                                    } else if (availability.status === 'available') {
-                                        cellStyle = 'background-color: #eee21f;';
-                                    }
+                // Filter teachers to ensure they have slots for ALL selected days
+                var filteredTeachers = {};
+                if (schedule === 'twice') {
+                    for (let teacherId in allTeachers) {
+                        if (teacherId.startsWith('no_teachers_')) continue;
 
-                                    return `<div style="${cellStyle}">${slotText}</div>`;
-                                }).join('')
-                                : '<div>No slots available</div>';
+                        let teacher = allTeachers[teacherId];
+                        let hasAllDays = days.every(function(slot) {
+                            let teacherSlots = teacher.slots[slot.day] || [];
+                            return teacherSlots.length > 0; // The Backend already ensures coverage
+                        });
 
-                            return `<td>${cellContent}</td>`;
-                        }).join('')}
-                    </tr>
+                        if (hasAllDays) {
+                            filteredTeachers[teacherId] = teacher;
+                        }
+                    }
+                } else {
+                    // For 'once', no need to filter for all days since it's only one day
+                    for (let teacherId in allTeachers) {
+                        if (teacherId.startsWith('no_teachers_')) continue;
+                        filteredTeachers[teacherId] = allTeachers[teacherId];
+                    }
+                }
+
+                console.log('Filtered teachers:', filteredTeachers);
+
+                let hasNoTeachers = Object.keys(allTeachers).some(key => key.startsWith('no_teachers_'));
+
+                // Calculate dates for the table
+                var sessionsPerWeek = schedule === "once" ? 1 : 2;
+                var weeksRequired = Math.ceil(sessionCount / sessionsPerWeek);
+
+                var allDates = [];
+                var currentDate = new Date(startDate);
+                var end = new Date(endDate);
+                var sessionCounter = 0;
+
+                while (currentDate <= end && sessionCounter < sessionCount) {
+                    var dayIndex = daysOfWeek.indexOf(days[0].day); // day_1
+                    if (currentDate.getDay() === dayIndex) {
+                        allDates.push({
+                            date: new Date(currentDate).toISOString().split('T')[0],
+                            day: days[0].day,
+                            startTime: days[0].startTime,
+                            endTime: days[0].endTime
+                        });
+                        sessionCounter++;
+                    }
+
+                    if (schedule === 'twice') {
+                        dayIndex = daysOfWeek.indexOf(days[1].day); // day_2
+                        if (currentDate.getDay() === dayIndex) {
+                            allDates.push({
+                                date: new Date(currentDate).toISOString().split('T')[0],
+                                day: days[1].day,
+                                startTime: days[1].startTime,
+                                endTime: days[1].endTime
+                            });
+                            sessionCounter++;
+                        }
+                    }
+
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                allDates.sort((a, b) => new Date(a.date) - new Date(b.date));
+                console.log('Sorted dates:', allDates);
+
+                let tableHtml = `
+                    
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                            <tr class="bg-dark text-white">
+                                <th class="text-white">@lang('common.select')</th>
+                                <th class="text-white">@lang('hr.teacher_name')</th>
+                                ${allDates.map(item => `
+                                    <th class="text-white">${item.day}, ${item.date}</th>
+                                `).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
                 `;
-            }
-        } else {
-            tableHtml += `
-                <tr>
-                    <td colspan="${allDates.length + 1}">@lang('academics.no_teachers_available')</td>
-                </tr>
-            `;
-        }
 
-        tableHtml += `
-                </tbody>
-            </table>
-        `;
-        $('#teachers_table').html(tableHtml);
-    }).fail(function() {
-        alert('Failed to fetch available teachers.');
-    });
-}
+                if (Object.keys(filteredTeachers).length > 0) {
+                    for (let teacherId in filteredTeachers) {
+                        let teacher = filteredTeachers[teacherId];
+                        tableHtml += `
+                            <tr>
+                                <td>
+                                    <input type="radio" name="selected_teacher" value="${teacherId}" class="select-teacher">
+                                </td>
+                                <td>${teacher.full_name}</td>
+                                ${allDates.map(item => {
+                                    let teacherSlots = teacher.slots[item.day] || [];
+                                    function toMinutes(timeStr) {
+                                        let [h, m] = timeStr.split(':').map(Number);
+                                        return h * 60 + m;
+                                    }
+                                    let relevantSlots = teacherSlots.filter(slotItem => {
+                                        let slotStart = toMinutes(slotItem.slot_emp.slot_start);
+                                        let slotEnd = toMinutes(slotItem.slot_emp.slot_end);
+                                        let userStart = toMinutes(item.startTime);
+                                        let userEnd = toMinutes(item.endTime);
+                                        return slotItem.slot_emp.slot_day === item.day &&
+                                            slotStart >= userStart && slotEnd <= userEnd;
+                                    });
+
+                                    let cellContent = relevantSlots.length > 0
+                                        ? relevantSlots.map(slotItem => {
+                                            let availability = checkTeacherAvailability(slotItem, item.date);
+                                            let cellStyle = '';
+                                            let slotText = formatTimeSlot(slotItem.slot_emp.slot_start, slotItem.slot_emp.slot_end);
+
+                                            if (availability.status === 'scheduled') {
+                                                cellStyle = 'background-color: #fc3b3c; color: white;';
+                                            } else if (availability.status === 'unpaid') {
+                                                cellStyle = 'background-color: #fdc59a; color: white;';
+                                            } else if (availability.status === 'available') {
+                                                cellStyle = 'background-color: #eee21f;';
+                                            }
+
+                                            return `<div style="${cellStyle}" data-slot-id="${slotItem.slot_id}" data-date="${item.date}">${slotText}</div>`;
+                                        }).join('')
+                                        : '<div>No slots available</div>';
+
+                                    return `<td>${cellContent}</td>`;
+                                }).join('')}
+                            </tr>
+                        `;
+                    }
+                } else {
+                    tableHtml += `
+                        <tr>
+                            <td colspan="${allDates.length + 2}">
+                                @lang('academics.no_teachers_available')
+                                ${hasNoTeachers ? '<br><small>' + Object.values(allTeachers)
+                                    .filter(teacher => teacher.full_name.includes('No teachers available'))
+                                    .map(teacher => teacher.full_name)
+                                    .join('<br>') + '</small>' : ''}
+                            </td>
+                        </tr>
+                    `;
+                }
+
+                tableHtml += `
+                        </tbody>
+                    </table>
+                `;
+                $('#teachers_table').html(tableHtml);
+            }).fail(function() {
+                alert('Failed to fetch available teachers.');
+            });
+        }
+   
+
         // Function to format time slots (e.g., "16:00:00" to "4:00 PM")
         function formatTimeSlot(start, end) {
             let startHour = parseInt(start.split(':')[0]);
@@ -586,9 +674,10 @@
         });
 
         // Calculate end date
+
         function calculateEndDate() {
             var startDate = $('#start_date').val();
-            var sessionCount = $('#session').val();
+            var sessionCount = parseInt($('#session').val());
             var schedule = $('#scheduled').val();
 
             if (!startDate || !sessionCount || !schedule) {
@@ -599,12 +688,15 @@
             var start = new Date(startDate);
             var endDate = new Date(start);
 
-            if (schedule === "once") {
-                endDate.setDate(start.getDate() + (sessionCount - 1) * 7);
-            } else if (schedule === "twice") {
-                var weeksRequired = Math.ceil(sessionCount / 2);
-                endDate.setDate(start.getDate() + (weeksRequired - 1) * 7);
-            }
+            var sessionsPerWeek = schedule === "once" ? 1 : 2;
+            var weeksRequired = Math.ceil(sessionCount / sessionsPerWeek);
+
+            endDate.setDate(start.getDate() + (weeksRequired * 7) - 1);
+
+
+            var dayOfWeek = endDate.getDay();
+            var daysToSaturday = 6 - dayOfWeek; 
+            endDate.setDate(endDate.getDate() + daysToSaturday);
 
             $('#end_date').val(endDate.toISOString().split('T')[0]);
             $('#end_date').prop('disabled', false);
@@ -629,21 +721,50 @@
                 _token: '{{ csrf_token() }}'
             };
 
-            if ($('#scheduled').val() === 'once') {
-                formData.day_1 = $('#day_1').val();
-                formData.start_time_1 = $('#start_time_1').val();
-                formData.end_time_1 = $('#end_time_1').val();
-                formData.staff_id_1 = $('input[name="selected_teacher_1"]:checked').val();
-            } else if ($('#scheduled').val() === 'twice') {
-                formData.day_1 = $('#day_1').val();
-                formData.start_time_1 = $('#start_time_1').val();
-                formData.end_time_1 = $('#end_time_1').val();
-                formData.staff_id_1 = $('input[name="selected_teacher_1"]:checked').val();
-                formData.day_2 = $('#day_2').val();
-                formData.start_time_2 = $('#start_time_2').val();
-                formData.end_time_2 = $('#end_time_2').val();
-                formData.staff_id_2 = $('input[name="selected_teacher_2"]:checked').val();
+            let selectedTeacher = $('input[name="selected_teacher"]:checked').val();
+            if (!selectedTeacher) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Please select a teacher!",
+                    icon: "error"
+                });
+                return;
             }
+            formData.staff_id = selectedTeacher;
+
+            let selectedSlots = [];
+            let selectedDates = [];
+            $(`input[name="selected_teacher"]:checked`).closest('tr').find('td div[data-slot-id]').each(function() {
+                let slotId = $(this).data('slot-id');
+                let slotDate = $(this).data('date');
+                let slotStatus = $(this).css('background-color');
+                let status = '';
+                if (slotStatus === 'rgb(238, 226, 31)') {
+                    status = 'available';
+                } else if (slotStatus === 'rgb(252, 59, 60)') { 
+                    status = 'scheduled';
+                } else if (slotStatus === 'rgb(253, 197, 154)') {
+                    status = 'unpaid';
+                }
+                if (slotId && status === 'available') {
+                    selectedSlots.push(slotId);
+                    selectedDates.push(slotDate);
+                }
+            });
+
+            selectedSlots = [...new Set(selectedSlots)];
+
+            if (selectedSlots.length === 0) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "No available slots found for the selected teacher!",
+                    icon: "error"
+                });
+                return;
+            }
+
+            formData.selected_slots = selectedSlots;
+            formData.selected_dates = selectedDates;
 
             $.ajax({
                 url: '{{ route('scheduleStaffEvent') }}',
@@ -665,16 +786,26 @@
                     $("#submitAssignStaff").empty();
                 },
                 error: function(error) {
-                    alert('Error saving event: ' + error.responseText);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Error saving event: " + (error.responseJSON?.message || "Unknown error"),
+                        icon: "error"
+                    });
                 }
             });
         }
 
         // Add submit button after schedule selection
         $('#scheduled').on('change', function() {
+            
             if ($(this).val()) {
                 $("#submitAssignStaff").html(`<button class="btn btn-primary" onclick="submitAssignedForm()">Submit</button>`);
+                $("#submitAssignStaff").html(`<button class="btn btn-primary" id="submitButton">Submit</button>`);
             }
+        });
+
+        $(document).on('click', '#submitButton', function() {
+            submitAssignedForm();
         });
     });
 </script>
