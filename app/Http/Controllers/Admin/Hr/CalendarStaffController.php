@@ -268,36 +268,56 @@ class CalendarStaffController extends Controller
 
         $staffId = $validated['staff_id'];
         $selectedSlots = $validated['selected_slots'];
+        $newStartDate = $validated['start_date'];
+        $newEndDate = $validated['end_date'];
 
-        // إزالة التكرارات من selected_slots
+        // Remove duplicates from selected_slots
         $selectedSlots = array_unique($selectedSlots);
 
-        // Check the availability of each slot for the staff
-        $availableSlots = [];
-        foreach ($selectedSlots as $slotId) {
-            $staffScheduled = StaffScheduled::where('staff_id', $staffId)
-                ->whereJsonContains('slot_id', (string)$slotId)
-                ->first();
+        // Check for overlapping schedules for the same teacher and slots
+        $existingSchedules = StaffScheduled::where('staff_id', $staffId)
+            ->where('status', 'scheduled')
+            ->get();
 
-            if (!$staffScheduled || $staffScheduled->status === 'available') {
-                $availableSlots[] = $slotId;
+        $hasOverlap = false;
+        $overlappingSchedule = null;
+
+        foreach ($selectedSlots as $slotId) {
+            foreach ($existingSchedules as $existingSchedule) {
+                // Check if the slot is part of the existing schedule
+                $scheduledSlots = json_decode($existingSchedule->slot_id, true);
+                if (in_array($slotId, $scheduledSlots)) {
+                    // Check for date overlap
+                    $existingStartDate = $existingSchedule->start_date;
+                    $existingEndDate = $existingSchedule->end_date;
+
+                    // Check if the new date range overlaps with the existing date range
+                    // Two ranges overlap if: (StartA <= EndB) and (EndA >= StartB)
+                    if ($newStartDate <= $existingEndDate && $newEndDate >= $existingStartDate) {
+                        $hasOverlap = true;
+                        $overlappingSchedule = $existingSchedule;
+                        break 2; // Break out of both loops
+                    }
+                }
             }
         }
 
-        // If no available slots after filtering, return an error
-        if (empty($availableSlots)) {
+        // If there's an overlap, return an error
+        if ($hasOverlap) {
             return response()->json([
-                'error' => 'No available slots found for the selected teacher.'
+                'error' => 'The selected dates overlap with an existing schedule for this teacher.',
+                'existing_start_date' => $overlappingSchedule->start_date,
+                'existing_end_date' => $overlappingSchedule->end_date,
             ], 400);
         }
 
-        // Proceed with saving the schedule
+        // If no overlap, proceed with saving the schedule
         if ($schedule) {
             // Update the existing record
             $schedule->update([
                 'course_name_en' => $validated['course_name_en'],
                 'course_name_ar' => $validated['course_name_ar'],
-                'slot_id' => json_encode($availableSlots), // Save only available slots
+                'slot_id' => json_encode($selectedSlots),
                 'cat_id' => $validated['cat_id'],
                 'staff_id' => $validated['staff_id'],
                 'track_type_id' => $validated['track_type_id'],
@@ -315,7 +335,7 @@ class CalendarStaffController extends Controller
             StaffScheduled::create([
                 'course_name_en' => $validated['course_name_en'],
                 'course_name_ar' => $validated['course_name_ar'],
-                'slot_id' => json_encode($availableSlots), // Save only available slots
+                'slot_id' => json_encode($selectedSlots),
                 'cat_id' => $validated['cat_id'],
                 'staff_id' => $validated['staff_id'],
                 'track_type_id' => $validated['track_type_id'],
@@ -561,15 +581,27 @@ class CalendarStaffController extends Controller
                 // Check if the slot is scheduled in StaffScheduled
                 $staffScheduled = StaffScheduled::where('staff_id', $teacher->id)
                     ->whereJsonContains('slot_id', (string)$slot->slot_id)
-                    ->first();
+                    ->select('status', 'start_date', 'end_date')
+                    ->get(); // Use get() to fetch all schedules, not just the first one
 
-                if ($staffScheduled) {
-                    $slot->status = $staffScheduled->status; // e.g., 'scheduled'
+                if ($staffScheduled->isNotEmpty()) {
+                    // If there are scheduled periods, collect all periods
+                    $scheduledPeriods = $staffScheduled->map(function ($schedule) {
+                        return [
+                            'status' => $schedule->status,
+                            'start_date' => $schedule->start_date,
+                            'end_date' => $schedule->end_date,
+                        ];
+                    })->toArray();
+
+                    $slot->status = 'scheduled'; // Mark as scheduled if there are any schedules
+                    $slot->scheduled_periods = $scheduledPeriods; // Add all scheduled periods
                 } else {
                     $slot->status = 'available'; // Default to available if not scheduled
+                    $slot->scheduled_periods = []; // No scheduled periods
                 }
 
-                Log::info("Step 21 - Slot status for teacher ID: {$teacher->id}, Slot ID: {$slot->id}, Status: {$slot->status}");
+                Log::info("Step 21 - Slot status for teacher ID: {$teacher->id}, Slot ID: {$slot->id}, Status: {$slot->status}, Scheduled Periods: " . json_encode($slot->scheduled_periods));
             });
         });
 

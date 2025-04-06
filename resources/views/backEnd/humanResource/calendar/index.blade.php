@@ -422,7 +422,6 @@
 
         // Fetch available teachers and generate a unified table
     
-    
         function fetchAvailableTeachers() {
             var schedule = $('#scheduled').val();
             var day1 = $('#day_1').val();
@@ -514,7 +513,6 @@
                         }
                     }
                 } else {
-                    // For 'once', no need to filter for all days since it's only one day
                     for (let teacherId in allTeachers) {
                         if (teacherId.startsWith('no_teachers_')) continue;
                         filteredTeachers[teacherId] = allTeachers[teacherId];
@@ -566,7 +564,6 @@
                 console.log('Sorted dates:', allDates);
 
                 let tableHtml = `
-                    
                     <table class="table table-bordered table-responsive">
                         <thead>
                             <tr class="bg-dark text-white">
@@ -650,7 +647,6 @@
                 alert('Failed to fetch available teachers.');
             });
         }
-   
 
         // Function to format time slots (e.g., "16:00:00" to "4:00 PM")
         function formatTimeSlot(start, end) {
@@ -663,10 +659,33 @@
             return `${displayStartHour}:00 ${startPeriod} - ${displayEndHour}:00 ${endPeriod}`;
         }
 
-        // Function to check teacher availability based on backend data
+       // Function to check teacher availability based on backend data and date
+
         function checkTeacherAvailability(slot, date) {
-            return { status: slot.status || 'available' };
+            let slotStatus = slot.status || 'available';
+            let scheduledPeriods = slot.scheduled_periods || [];
+
+            // If the slot is not scheduled, it's available
+            if (slotStatus !== 'scheduled') {
+                return { status: 'available' };
+            }
+
+            // If there are no scheduled periods, assume it's available
+            if (scheduledPeriods.length === 0) {
+                return { status: 'available' };
+            }
+
+            // Compare the date with each scheduled period
+            let currentDate = new Date(date);
+            let isScheduled = scheduledPeriods.some(period => {
+                let startDate = new Date(period.start_date);
+                let endDate = new Date(period.end_date);
+                return currentDate >= startDate && currentDate <= endDate;
+            });
+
+            return { status: isScheduled ? 'scheduled' : 'available' };
         }
+
 
         // Event listener for end time selection
         $(document).on('change', '#end_time_1, #end_time_2', function() {
@@ -706,6 +725,8 @@
             calculateEndDate();
         });
 
+        
+
         // Submit form with selected teachers
         function submitAssignedForm() {
             let formData = {
@@ -739,11 +760,11 @@
                 let slotDate = $(this).data('date');
                 let slotStatus = $(this).css('background-color');
                 let status = '';
-                if (slotStatus === 'rgb(238, 226, 31)') {
+                if (slotStatus === 'rgb(238, 226, 31)') { // Available (yellow)
                     status = 'available';
-                } else if (slotStatus === 'rgb(252, 59, 60)') { 
+                } else if (slotStatus === 'rgb(252, 59, 60)') { // Scheduled (red)
                     status = 'scheduled';
-                } else if (slotStatus === 'rgb(253, 197, 154)') {
+                } else if (slotStatus === 'rgb(253, 197, 154)') { // Unpaid (orange)
                     status = 'unpaid';
                 }
                 if (slotId && status === 'available') {
@@ -757,7 +778,7 @@
             if (selectedSlots.length === 0) {
                 Swal.fire({
                     title: "Error!",
-                    text: "No available slots found for the selected teacher!",
+                    text: "No available slots found for the selected teacher! Please choose a different time slot.",
                     icon: "error"
                 });
                 return;
@@ -786,11 +807,25 @@
                     $("#submitAssignStaff").empty();
                 },
                 error: function(error) {
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Error saving event: " + (error.responseJSON?.message || "Unknown error"),
-                        icon: "error"
-                    });
+                    if (error.responseJSON && error.responseJSON.error) {
+                        let errorMessage = error.responseJSON.error;
+                        if (errorMessage.includes('dates overlap')) {
+                            errorMessage += `\nExisting schedule: ${error.responseJSON.existing_start_date} to ${error.responseJSON.existing_end_date}. Please choose different dates.`;
+                        } else if (errorMessage.includes('time slot')) {
+                            errorMessage += " Please choose a different time slot.";
+                        }
+                        Swal.fire({
+                            title: "Error!",
+                            text: errorMessage,
+                            icon: "error"
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Error saving event: " + (error.responseJSON?.message || "Unknown error"),
+                            icon: "error"
+                        });
+                    }
                 }
             });
         }
