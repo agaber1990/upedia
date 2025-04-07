@@ -105,7 +105,7 @@
                         if (response.teachers && response.teachers.length > 0) {
                             response.teachers.forEach(function(teacher) {
                                 if (!allTeachers[teacher.id]) {
-                                    allTeachers[teacher.id] = { full_name: teacher.full_name,total_slots: teacher.total_slots, slots: {} };
+                                    allTeachers[teacher.id] = { full_name: teacher.full_name,total_slots: teacher.total_slots,reservedSlot: teacher.reservedSlot, slots: {} };
                                 }
                                 allTeachers[teacher.id].slots[slot.day] = teacher.slots || [];
                             });
