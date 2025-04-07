@@ -105,7 +105,7 @@
                         if (response.teachers && response.teachers.length > 0) {
                             response.teachers.forEach(function(teacher) {
                                 if (!allTeachers[teacher.id]) {
-                                    allTeachers[teacher.id] = { full_name: teacher.full_name, slots: {} };
+                                    allTeachers[teacher.id] = { full_name: teacher.full_name,total_slots: teacher.total_slots, slots: {} };
                                 }
                                 allTeachers[teacher.id].slots[slot.day] = teacher.slots || [];
                             });
@@ -191,15 +191,17 @@
 
                 allDates.sort((a, b) => new Date(a.date) - new Date(b.date));
                 console.log('Sorted dates:', allDates);
-
                 let tableHtml = `
-                    <table class="table table-bordered table-responsive">
+                    <table class="table table-bordered table-responsive text-center">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <th class="text-white">@lang('common.select')</th>
                                 <th class="text-white">@lang('hr.teacher_name')</th>
                                 ${allDates.map(item => `
-                                    <th class="text-white">${item.day}, ${item.date}</th>
+                                    <th class="text-white">
+                                        <div>${item.day}</div>
+                                        <div>${item.date}</div>
+                                    </th>
                                 `).join('')}
                             </tr>
                         </thead>
@@ -207,14 +209,35 @@
                 `;
 
                 if (Object.keys(filteredTeachers).length > 0) {
+                    console.log('filteredTeachers', filteredTeachers); 
                     for (let teacherId in filteredTeachers) {
                         let teacher = filteredTeachers[teacherId];
+                        console.log('teacher',teacher);
+                        console.log('teacher.total_slots', teacher.total_slots); 
+                        let totalSlots =teacher.total_slots.length ||0; 
+                        console.log('totalSlots',totalSlots);
+
+                        // Determine the color class based on the percentage
+                        let percentageClass = '';
+                        if (totalSlots <= 25) {
+                            percentageClass = 'font-weight: bold; padding: 5px; border-radius: 5px; color: white; background-color: #28a745 !important;';
+                        } else if (totalSlots <= 50) {
+                            percentageClass = 'font-weight: bold; padding: 5px; border-radius: 5px; color: white; background-color: #ffc107 !important;';
+                        } else if (totalSlots <= 75) {
+                            percentageClass = 'font-weight: bold; padding: 5px; border-radius: 5px; color: white; background-color: #fd7e14 !important;';
+                        } else {
+                            percentageClass = 'font-weight: bold; padding: 5px; border-radius: 5px; color: white; background-color: #dc3545 !important;';
+                        }
+
                         tableHtml += `
                             <tr>
                                 <td>
                                     <input type="radio" name="selected_teacher" value="${teacherId}" class="select-teacher">
                                 </td>
-                                <td>${teacher.full_name}</td>
+                                <td class="text-center">
+                                    <div>${teacher.full_name}</div>
+                                    <div style="${percentageClass}">${totalSlots}%</div>
+                                </td>
                                 ${allDates.map(item => {
                                     let teacherSlots = teacher.slots[item.day] || [];
                                     function toMinutes(timeStr) {
@@ -237,11 +260,11 @@
                                             let slotText = formatTimeSlot(slotItem.slot_emp.slot_start, slotItem.slot_emp.slot_end);
 
                                             if (availability.status === 'scheduled') {
-                                                cellStyle = 'background-color: #fc3b3c; color: white;';
+                                                cellStyle = 'padding:6px; margin:5px; border-radius:10px; background-color: #fc3b3c; color: white;';
                                             } else if (availability.status === 'unpaid') {
-                                                cellStyle = 'background-color: #fdc59a; color: white;';
+                                                cellStyle = 'padding:6px; margin:5px; border-radius:10px; background-color: #fdc59a; color: white;';
                                             } else if (availability.status === 'available') {
-                                                cellStyle = 'background-color: #eee21f;';
+                                                cellStyle = 'padding:6px; margin:5px; border-radius:10px; background-color: #eee21f;';
                                             }
 
                                             return `<div style="${cellStyle}" data-slot-id="${slotItem.slot_id}" data-date="${item.date}">${slotText}</div>`;
@@ -256,7 +279,7 @@
                 } else {
                     tableHtml += `
                         <tr>
-                            <td colspan="${allDates.length + 2}">
+                            <td colspan="${allDates.length + 3}">
                                 @lang('academics.no_teachers_available')
                                 ${hasNoTeachers ? '<br><small>' + Object.values(allTeachers)
                                     .filter(teacher => teacher.full_name.includes('No teachers available'))

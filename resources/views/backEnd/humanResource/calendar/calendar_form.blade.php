@@ -79,7 +79,7 @@
                         <div class="col-md-4 mb-20">
                             <div class="primary_input">
                                 <label class="primary_input_label" for="end_date">@lang('academics.end_date')</label>
-                                <input type="date" min="{{ date('Y-m-d') }}" class="form-control" id="end_date"
+                                <input type="date" min="{{ date('Y-m-d') }}" class="form-control" id="end_date" readonly
                                     disabled>
                             </div>
                         </div>

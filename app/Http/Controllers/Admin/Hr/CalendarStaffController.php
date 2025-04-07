@@ -567,8 +567,20 @@ class CalendarStaffController extends Controller
         // Log the filtered teachers
         Log::info("Step 20 - Filtered Teachers: " . $filteredTeachers->toJson());
 
-        // Add availability status for each slot
+        // Add availability status for each slot and total_slots for each teacher
         $filteredTeachers->each(function ($teacher) use ($day, $startTime, $endTime) {
+            // Calculate total slots for the teacher
+            $totalSlots = StaffSlot::where('staff_id', $teacher->id)->with('slotEmp')->get();
+
+            $totalSlots = StaffSlot::where('staff_id', $teacher->id)->select('id', 'slot_id')->with(['slotEmp' => function ($query) {
+                $query->select('id', 'slot_day', 'slot_start', 'slot_end');
+            }])->get();
+            $reservedSlot = StaffScheduled::where('staff_id', $teacher->id)->select('id', 'cat_id', 'slot_id', 'status', 'track_type_id', 'track_id', 'status', 'session', 'schedule', 'start_date', 'end_date')->get();
+
+
+            $teacher->total_slots = $totalSlots; // Add total_slots to the teacher object
+            $teacher->reservedSlot = $reservedSlot;
+
             $teacher->slots = $teacher->slots->filter(function ($slot) use ($day, $startTime, $endTime) {
                 $slotStart = date('H:i', strtotime($slot->slotEmp->slot_start));
                 $slotEnd = date('H:i', strtotime($slot->slotEmp->slot_end));

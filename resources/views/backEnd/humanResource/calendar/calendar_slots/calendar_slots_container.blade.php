@@ -39,7 +39,7 @@
                             <i class="fas fa-circle" style="color: #FFD43B;"></i> @lang('academics.available')
                         </div>
                         <div class="col-1">
-                            <i class="fas fa-circle" style="color: #f6c49c;"></i> @lang('academics.paid')
+                            <i class="fas fa-circle" style="color: #08ca6f;"></i> @lang('academics.paid')
                         </div>
                         <div class="col-1">
                             <i class="fas fa-circle" style="color: #ff3c3c;"></i> @lang('academics.unpaid')
@@ -92,7 +92,7 @@
                             <i class="fas fa-circle" style="color: #FFD43B;"></i> @lang('academics.available')
                         </div>
                         <div class="col-1">
-                            <i class="fas fa-circle" style="color: #f6c49c;"></i> @lang('academics.paid')
+                            <i class="fas fa-circle" style="color: #08ca6f;"></i> @lang('academics.paid')
                         </div>
                         <div class="col-1">
                             <i class="fas fa-circle" style="color: #ff3c3c;"></i> @lang('academics.unpaid')
