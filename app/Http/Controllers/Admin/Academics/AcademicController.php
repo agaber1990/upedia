@@ -12,7 +12,7 @@ use App\SmFeesPayment;
 use App\SmClassRoutine;
 use App\SmAssignSubject;
 use Illuminate\Http\Request;
-use App\SmAssignClassTeacher;
+use App\SmAssignClassTeacher; 
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
