@@ -17,7 +17,7 @@
     <a href="#subMenuAdministrator" data-toggle="collapse" aria-expanded="false"
         class="dropdown-toggle">
         <span class="flaticon-analytics"></span>
-        @lang('common.institution')
+        @lang('common.institution') 
         
     </a>
     <ul class="collapse list-unstyled" id="subMenuAdministrator">
