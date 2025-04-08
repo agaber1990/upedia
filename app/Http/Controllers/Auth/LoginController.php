@@ -335,8 +335,6 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-
-        // dd($request->all());
         $credentials = $request->only('email', 'password');
 
         $users = User::where('email', $request->email)->get(['id', 'email', 'password', 'role_id', 'school_id']);
