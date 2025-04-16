@@ -26,7 +26,7 @@ class CreateSidebarsTable extends Migration
             $table->integer('parent')->nullable();
             $table->integer('parent_route')->nullable();
             $table->integer('level')->nullable()->comment('1=paren, 2=child, 3=sub-child');
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->tinyInteger('is_saas')->default(0);
             $table->integer('ignore')->default(0);

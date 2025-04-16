@@ -58,7 +58,7 @@ class CreateStaffImportBulkTemporariesTable extends Migration
             $table->string('department')->nullable();
             $table->string('designation')->nullable();
             $table->integer('gender_id')->nullable(); 
-            $table->integer('user_id')->nullable()->unsigned()->default(1);
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned()->default(1);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('parent_id')->nullable();
             $table->timestamps();

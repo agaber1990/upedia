@@ -7,14 +7,14 @@ use App\Models\TrackLevel;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class TrackSessionLevelsTableSeeder extends Seeder
+class TrackLevelSessionsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('track_session_levels')->truncate();
+        DB::table('track_level_sessions')->truncate();
         $tracks = Track::all();
         $levels = TrackLevel::all();
         if ($tracks->isEmpty() || $levels->isEmpty()) {
@@ -24,7 +24,7 @@ class TrackSessionLevelsTableSeeder extends Seeder
         for ($i = 1; $i <= 5; $i++) {
             $level = $levels->random();
             $track_id = $level->track_id;
-            $trackSessionLevels[] = [
+            $TrackLevelSessions[] = [
                 'track_id' => $track_id, 
                 'level_id' => $level->id,
                 'name_en' => 'Track Session Level English ' . $i,
@@ -37,6 +37,6 @@ class TrackSessionLevelsTableSeeder extends Seeder
             ];
         }
 
-        DB::table('track_session_levels')->insert($trackSessionLevels);
+        DB::table('track_level_sessions')->insert($TrackLevelSessions);
     }
 }

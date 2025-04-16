@@ -15,7 +15,7 @@ class CreateUserOtpCodesTable extends Migration
     {
         Schema::create('user_otp_codes', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned();
             $table->string('otp_code');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->string("expired_time", 200)->nullable();

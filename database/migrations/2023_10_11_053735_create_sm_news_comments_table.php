@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('news_id')->nullable()->unsigned();
             $table->foreign('news_id')->references('id')->on('sm_news')->onDelete('cascade');
 
-            $table->integer('user_id') ->nullable()->unsigned();
+            $table->unsignedBigInteger('user_id') ->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('parent_id')->nullable();

@@ -23,7 +23,7 @@ class CreateSmProductPurchasesTable extends Migration
             $table->string('package', 10, 2)->nullable();
             $table->timestamps();
 
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('staff_id')->nullable()->unsigned();

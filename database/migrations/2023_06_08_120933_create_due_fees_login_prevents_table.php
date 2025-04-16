@@ -15,7 +15,7 @@ return new class extends Migration
         
         Schema::create('due_fees_login_prevents', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable()->nullable()->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('role_id')->nullable()->unsigned();
             $table->foreign('role_id')->references('id')->on('infix_roles')->onDelete('cascade');

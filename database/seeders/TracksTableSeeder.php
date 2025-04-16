@@ -31,9 +31,9 @@ class TracksTableSeeder extends Seeder
 
         for ($i = 1; $i <= 5; $i++) {
             $tracks[] = [
-                'cat_id' => $categories->random()->id,
-                'track_name_en' => 'Track English ' . $i,
-                'track_name_ar' => 'Track Arabic ' . $i,
+                'category_id' => $categories->random()->id,
+                'name_en' => 'Track English ' . $i,
+                'name_ar' => 'Track Arabic ' . $i,
                 'level_number' => $levels->random()->id,
                 'session' => random_int(1, 8),
                 'schedule' => ($i % 2 == 0) ? 'once' : 'twice',

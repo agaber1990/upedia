@@ -12,7 +12,7 @@ class StaffScheduled extends Model
 
     // Add all fields that can be mass-assigned
     protected $fillable = [
-        'cat_id',
+        'category_id',
         'course_name_en',
         'course_name_ar',
         'slot_id',
@@ -28,7 +28,7 @@ class StaffScheduled extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'cat_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function staff()

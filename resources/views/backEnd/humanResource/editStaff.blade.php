@@ -1166,19 +1166,19 @@
                                                         <div class="row">
                                                             <!-- Category -->
                                                             <div class="col-lg-4 mb-3">
-                                                                <label for="cat_id"
+                                                                <label for="category_id"
                                                                     class="form-label">@lang('common.categories')</label>
-                                                                <select name="cat_id" id="cat_id"
-                                                                    class="primary_select form-select @error('cat_id') is-invalid @enderror">
+                                                                <select name="category_id" id="category_id"
+                                                                    class="primary_select form-select @error('category_id') is-invalid @enderror">
                                                                     <option value="">@lang('Select Category')</option>
                                                                     @foreach ($categories as $category)
                                                                         <option value="{{ $category->id }}"
-                                                                            {{ old('cat_id', $track_assigned_staff->first()->cat_id ?? null) == $category->id ? 'selected' : '' }}>
+                                                                            {{ old('category_id', $track_assigned_staff->first()->category_id ?? null) == $category->id ? 'selected' : '' }}>
                                                                             {{ app()->getLocale() == 'en' ? $category->name_en : $category->name_ar }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
-                                                                @error('cat_id')
+                                                                @error('category_id')
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
@@ -1238,7 +1238,7 @@
                                                                         <option value="{{ $item->id }}"
                                                                             {{ in_array($item->id, $assignedTrackIds) ? 'selected' : '' }}
                                                                             data-level="{{ $item->level_number }}">
-                                                                            {{ app()->getLocale() == 'en' ? $item->track_name_en : $item->track_name_ar }}
+                                                                            {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
@@ -1271,7 +1271,7 @@
                                                                             <div class="col-md-12">
                                                                                 <h6 class="">
                                                                                     @if ($track)
-                                                                                        {{ app()->getLocale() == 'en' ? $track->track_name_en : $track->track_name_ar }}
+                                                                                        {{ app()->getLocale() == 'en' ? $track->name_en : $track->name_ar }}
                                                                                     @else
                                                                                         @lang('academics.track_not_found')
                                                                                     @endif
@@ -1731,7 +1731,7 @@
 
 
 
-            $('#cat_id').on('change', function() {
+            $('#category_id').on('change', function() {
                 $('#checkbox-container').addClass('d-none');
 
                 var catId = $(this).val(); // Get selected category ID
@@ -1751,8 +1751,8 @@
                             // Populate the dropdown with the fetched tracks
                             data.tracks.forEach(function(track) {
                                 var optionText = (window.locale === 'en') ?
-                                    track.track_name_en :
-                                    track.track_name_ar;
+                                    track.name_en :
+                                    track.name_ar;
 
                                 trackSelect.append(
                                     '<option value="' + track.id +

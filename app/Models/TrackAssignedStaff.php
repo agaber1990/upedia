@@ -17,7 +17,7 @@ class TrackAssignedStaff extends Model
      */
     protected $fillable = [
         'staff_id',
-        'cat_id',
+        'category_id',
         'track_type_id',
         'track_id',
         'levels',
@@ -47,7 +47,7 @@ class TrackAssignedStaff extends Model
      */
     public function category()
     {
-        return $this->belongsTo(Category::class, 'cat_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     /**

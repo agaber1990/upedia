@@ -22,7 +22,7 @@ class CreateSmLeaveDefinesTable extends Migration
             $table->integer('role_id')->nullable()->unsigned();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
 
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('type_id')->nullable()->unsigned();

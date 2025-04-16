@@ -20,7 +20,7 @@ class CreateSmUserLogsTable extends Migration
             $table->timestamps();
 
 
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('role_id')->nullable()->unsigned();

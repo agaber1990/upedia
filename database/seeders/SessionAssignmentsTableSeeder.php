@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Track;
 use App\Models\TrackLevel;
-use App\Models\TrackSessionLevel;
+use App\Models\TrackLevelSession;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +17,7 @@ class SessionAssignmentsTableSeeder extends Seeder
     {
         DB::table('session_assignments')->truncate();
         $levels = TrackLevel::all();
-        $sessions = TrackSessionLevel::all();
+        $sessions = TrackLevelSession::all();
         if ($levels->isEmpty() || $sessions->isEmpty()) {
             throw new \Exception('no data founds in the tables');
         }

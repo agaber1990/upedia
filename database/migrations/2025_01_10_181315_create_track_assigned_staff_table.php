@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('track_assigned_staff', function (Blueprint $table) {
             $table->id();
             $table->integer('staff_id');
-            $table->integer('cat_id');
+            $table->integer('category_id');
             $table->string('track_type_id');
             $table->integer('track_id');
             $table->string('levels')->nullable();

@@ -1015,10 +1015,10 @@ Route::get('/reg', function () {});
         Route::delete('track_levels/{id}', 'Admin\Academics\TrackLevelController@destroy')->name('track_level_delete');
    
         // track levels sessions Routes
-        Route::get('track_levels/{track_id}/levels/{level_id}', 'Admin\Academics\TrackSessionLevelController@index')->name('track_levels_sessions');
-        Route::post('track_levels_sessions', 'Admin\Academics\TrackSessionLevelController@store')->name('track_levels_sessions_store');
-        Route::put('track_levels_sessions', 'Admin\Academics\TrackSessionLevelController@update')->name('track_levels_sessions_update');
-        Route::delete('track_levels_sessions/{id}', 'Admin\Academics\TrackSessionLevelController@destroy')->name('track_levels_sessions_delete');
+        Route::get('track_levels/{track_id}/levels/{level_id}', 'Admin\Academics\TrackLevelSessionController@index')->name('track_levels_sessions');
+        Route::post('track_levels_sessions', 'Admin\Academics\TrackLevelSessionController@store')->name('track_levels_sessions_store');
+        Route::put('track_levels_sessions', 'Admin\Academics\TrackLevelSessionController@update')->name('track_levels_sessions_update');
+        Route::delete('track_levels_sessions/{id}', 'Admin\Academics\TrackLevelSessionController@destroy')->name('track_levels_sessions_delete');
         
         // track levels sessions lessons Routes
         Route::post('track_levels_sessions_lessons', 'Admin\Academics\SessionLessonController@store')->name('track_levels_sessions_lessons');
@@ -1591,7 +1591,7 @@ Route::get('/reg', function () {});
         Route::get('delete-staff-timeline-view/{id}', 'Admin\Hr\SmStaffController@deleteStaffTimelineView')->name('delete-staff-timeline-view');
         Route::get('delete-staff-timeline/{id}', 'Admin\Hr\SmStaffController@deleteStaffTimeline')->name('delete-staff-timeline');
 
-        Route::get('/tracks-by-category/{cat_id}', 'Admin\Hr\SmStaffController@getTracksByCategory')->name('getTracksByCategory');
+        Route::get('/tracks-by-category/{category_id}', 'Admin\Hr\SmStaffController@getTracksByCategory')->name('getTracksByCategory');
 
         //Staff Attendance
         Route::get('staff-attendance', ['as' => 'staff_attendance', 'uses' => 'Admin\Hr\SmStaffAttendanceController@staffAttendance'])->middleware('userRolePermission:staff_attendance');

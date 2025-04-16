@@ -56,21 +56,21 @@
                                         <label class="primary_input_label" for="">@lang('common.categories')
                                         </label>
                                         <select
-                                            class="primary_select  form-control {{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
-                                            name="cat_id" id="cat_id">
+                                            class="primary_select  form-control {{ $errors->has('category_id') ? ' is-invalid' : '' }}"
+                                            name="category_id" id="category_id">
                                             <option data-display="@lang('common.categories') *" value="">@lang('common.categories')
                                                 *</option>
                                             @foreach ($categories as $item)
                                                 <option value="{{ $item->id }}"
-                                                    {{ old('cat_id', isset($track) ? $track->id : '') == $item->id ? 'selected' : '' }}>
+                                                    {{ old('category_id', isset($track) ? $track->id : '') == $item->id ? 'selected' : '' }}>
                                                     {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}
                                                 </option>
                                             @endforeach
                                         </select>
 
-                                        @if ($errors->has('cat_id'))
+                                        @if ($errors->has('category_id'))
                                             <span class="text-danger invalid-select" role="alert">
-                                                {{ $errors->first('cat_id') }}
+                                                {{ $errors->first('category_id') }}
                                             </span>
                                         @endif
                                     </div>
@@ -79,13 +79,13 @@
                             <div class="row mt-25">
                                 <div class="col-lg-12">
                                     <div class="primary_input">
-                                        <label for="track_name_en">@lang('academics.track_name_en') <span class="text-danger">
+                                        <label for="name_en">@lang('academics.name_en') <span class="text-danger">
                                                 *</span></label>
                                         <input
-                                            class="primary_input_field form-control {{ $errors->has('track_name_en') ? 'is-invalid' : '' }}"
-                                            type="text" id="track_name_en" name="track_name_en"
-                                            value="{{ old('track_name_en', isset($track) ? $track->track_name_en : '') }}">
-                                        @error('track_name_en')
+                                            class="primary_input_field form-control {{ $errors->has('name_en') ? 'is-invalid' : '' }}"
+                                            type="text" id="name_en" name="name_en"
+                                            value="{{ old('name_en', isset($track) ? $track->name_en : '') }}">
+                                        @error('name_en')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -96,13 +96,13 @@
                             <div class="row mt-25">
                                 <div class="col-lg-12">
                                     <div class="primary_input">
-                                        <label for="track_name_ar">@lang('academics.track_name_ar') <span class="text-danger">
+                                        <label for="name_ar">@lang('academics.name_ar') <span class="text-danger">
                                                 *</span></label>
                                         <input
-                                            class="primary_input_field form-control {{ $errors->has('track_name_ar') ? 'is-invalid' : '' }}"
-                                            type="text" id="track_name_ar" name="track_name_ar"
-                                            value="{{ old('track_name_ar', isset($track) ? $track->track_name_ar : '') }}">
-                                        @error('track_name_ar')
+                                            class="primary_input_field form-control {{ $errors->has('name_ar') ? 'is-invalid' : '' }}"
+                                            type="text" id="name_ar" name="name_ar"
+                                            value="{{ old('name_ar', isset($track) ? $track->name_ar : '') }}">
+                                        @error('name_ar')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -225,7 +225,7 @@
                             <table id="table_id" class="table Crm_table_active3">
                                 <thead>
                                     <tr>
-                                        <th>@lang('academics.track_name_en')</th>
+                                        <th>@lang('academics.name_en')</th>
                                         <th>@lang('academics.level_number')</th>
                                         <th>@lang('academics.schedule')</th>
                                         <th>@lang('academics.action')</th>
@@ -234,7 +234,7 @@
                                 <tbody>
                                     @foreach ($tracks as $track)
                                         <tr>
-                                            <td>{{ $track->track_name_en }}</td>
+                                            <td>{{ $track->name_en }}</td>
                                             <td>{{ $track->level_number }}</td>
                                             <td>{{ $track->schedule }}</td>
                                             <td>

@@ -107,9 +107,9 @@ class CalendarStaffController extends Controller
         // Include the track details in the response
         return response()->json([
             'track' => [
-                'cat_id' => $track->cat_id,
-                'track_name_en' => $track->track_name_en, // Assuming the track has a "name" field
-                'track_name_ar' => $track->track_name_ar ?? null, // Optional description field
+                'category_id' => $track->category_id,
+                'name_en' => $track->name_en, // Assuming the track has a "name" field
+                'name_ar' => $track->name_ar ?? null, // Optional description field
                 'level_number' => $track->level_number ?? null, // Optional description field
                 'length' => $track->length ?? null, // Optional description field
                 'session' => $track->session ?? null, // Optional description field
@@ -256,7 +256,7 @@ class CalendarStaffController extends Controller
             'course_name_en' => 'required|string',
             'course_name_ar' => 'required|string',
             'selected_slots' => 'required|array',
-            'cat_id' => 'required|exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
             'staff_id' => 'required|exists:sm_staffs,id',
             'track_id' => 'required|integer',
             'track_type_id' => 'required|integer',
@@ -318,7 +318,7 @@ class CalendarStaffController extends Controller
                 'course_name_en' => $validated['course_name_en'],
                 'course_name_ar' => $validated['course_name_ar'],
                 'slot_id' => json_encode($selectedSlots),
-                'cat_id' => $validated['cat_id'],
+                'category_id' => $validated['category_id'],
                 'staff_id' => $validated['staff_id'],
                 'track_type_id' => $validated['track_type_id'],
                 'track_id' => $validated['track_id'],
@@ -336,7 +336,7 @@ class CalendarStaffController extends Controller
                 'course_name_en' => $validated['course_name_en'],
                 'course_name_ar' => $validated['course_name_ar'],
                 'slot_id' => json_encode($selectedSlots),
-                'cat_id' => $validated['cat_id'],
+                'category_id' => $validated['category_id'],
                 'staff_id' => $validated['staff_id'],
                 'track_type_id' => $validated['track_type_id'],
                 'track_id' => $validated['track_id'],
@@ -575,7 +575,7 @@ class CalendarStaffController extends Controller
             $totalSlots = StaffSlot::where('staff_id', $teacher->id)->select('id', 'slot_id')->with(['slotEmp' => function ($query) {
                 $query->select('id', 'slot_day', 'slot_start', 'slot_end');
             }])->get();
-            $reservedSlot = StaffScheduled::where('staff_id', $teacher->id)->select('id', 'cat_id', 'slot_id', 'status', 'track_type_id', 'track_id', 'status', 'session', 'schedule', 'start_date', 'end_date')->get();
+            $reservedSlot = StaffScheduled::where('staff_id', $teacher->id)->select('id', 'category_id', 'slot_id', 'status', 'track_type_id', 'track_id', 'status', 'session', 'schedule', 'start_date', 'end_date')->get();
 
 
             $teacher->total_slots = $totalSlots; // Add total_slots to the teacher object

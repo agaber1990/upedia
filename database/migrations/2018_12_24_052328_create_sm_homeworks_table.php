@@ -24,7 +24,7 @@ class CreateSmHomeworksTable extends Migration
             $table->tinyInteger('active_status')->default(1);
             $table->timestamps();
 
-            $table->integer('evaluated_by')->nullable()->unsigned();
+            $table->unsignedBigInteger('evaluated_by')->nullable()->unsigned();
             $table->foreign('evaluated_by')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('class_id')->nullable()->unsigned();

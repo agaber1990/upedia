@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('track_session_levels', function (Blueprint $table) {
+        Schema::create('track_level_sessions', function (Blueprint $table) {
             $table->id();
             $table->integer('track_id');
             $table->integer('level_id');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('track_session_levels');
+        Schema::dropIfExists('track_level_sessions');
     }
 };

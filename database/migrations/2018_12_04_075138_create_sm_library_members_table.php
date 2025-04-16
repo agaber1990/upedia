@@ -23,7 +23,7 @@ class CreateSmLibraryMembersTable extends Migration
             $table->integer('member_type')->nullable()->unsigned();
             $table->foreign('member_type')->references('id')->on('roles')->onDelete('cascade');
 
-            $table->integer('student_staff_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('student_staff_id')->nullable()->unsigned();
             $table->foreign('student_staff_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('created_by')->nullable()->default(1)->unsigned();

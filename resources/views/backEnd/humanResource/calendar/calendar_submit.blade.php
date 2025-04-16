@@ -37,7 +37,7 @@
                 let formData = {
                     course_name_en: $('#course_name_en').val(),
                     course_name_ar: $('#course_name_ar').val(),
-                    cat_id: $('#cat_id').val(),
+                    category_id: $('#category_id').val(),
                     track_type_id: $('#track_type_id').val(),
                     track_id: $('#track_id').val(),
                     session: $('#session').val(),

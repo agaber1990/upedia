@@ -11,9 +11,9 @@ class Track extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cat_id',
-        'track_name_en',
-        'track_name_ar',
+        'category_id',
+        'name_en',
+        'name_ar',
         'level_number',
         'session',
         'schedule',

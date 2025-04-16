@@ -36,7 +36,7 @@ class CreateSmParentsTable extends Migration
             $table->timestamps();
 
 
-            $table->integer('user_id')->nullable()->default(1)->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->default(1)->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('school_id')->nullable()->default(1)->unsigned();

@@ -86,7 +86,7 @@
                                                 <div class="col">
                                                     <h4>@lang('academics.track'):</h4>
                                                     <p class="text-dark">
-                                                        {{ $element->track->track_name_en }}
+                                                        {{ $element->track->name_en }}
                                                     </p>
                                                 </div>
                                                 <div class="col">

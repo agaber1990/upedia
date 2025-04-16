@@ -29,7 +29,7 @@ class CreateSmLeaveRequestsTable extends Migration
             $table->integer('leave_define_id')->nullable()->unsigned();
             $table->foreign('leave_define_id')->references('id')->on('sm_leave_defines')->onDelete('cascade');
 
-            $table->integer('staff_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('staff_id')->nullable()->unsigned();
             $table->foreign('staff_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('role_id')->nullable()->unsigned();

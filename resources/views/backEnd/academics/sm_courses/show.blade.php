@@ -85,21 +85,21 @@
                         <div class="primary_input">
                             <label class="primary_input_label" for="">@lang('common.categories')
                             </label>
-                            <select class="primary_select  form-control {{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
-                                name="cat_id" id="cat_id">
+                            <select class="primary_select  form-control {{ $errors->has('category_id') ? ' is-invalid' : '' }}"
+                                name="category_id" id="category_id">
                                 <option data-display="@lang('common.categories') *" value="">@lang('common.categories')
                                     *</option>
                                 @foreach ($categories as $item)
                                     <option value="{{ $item->id }}"
-                                        {{ $item->id == $course->cat_id ? 'selected' : '' }}>
+                                        {{ $item->id == $course->category_id ? 'selected' : '' }}>
                                         {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}
                                     </option>
                                 @endforeach
                             </select>
 
-                            @if ($errors->has('cat_id'))
+                            @if ($errors->has('category_id'))
                                 <span class="text-danger invalid-select" role="alert">
-                                    {{ $errors->first('cat_id') }}
+                                    {{ $errors->first('category_id') }}
                                 </span>
                             @endif
                         </div>
@@ -359,7 +359,7 @@
         console.log("Course Slot IDs:", courseSlotIds);
 
         function fetchTracksAndTrackType() {
-            const catId = $('#cat_id').val();
+            const catId = $('#category_id').val();
             const trackSelect = $('#track_id');
             const trackTypeSelect = $('#track_type_id');
 
@@ -371,8 +371,8 @@
                     let trackTypeOptions = '';
 
                     data.tracks.forEach(function(track) {
-                        const optionText = ($locale === 'en') ? track.track_name_en : track
-                            .track_name_ar;
+                        const optionText = ($locale === 'en') ? track.name_en : track
+                            .name_ar;
                         const selected = (course_details.track_id === track.id) ? 'selected' : '';
                         trackOptions +=
                             `<option value="${track.id}" data-level="${track.level_number}" ${selected}>${optionText}</option>`;
@@ -416,6 +416,8 @@
                     let scheduleOptions = '';
                     schedules.forEach(function(schedule) {
                         const selected = (schedule === response.track.schedule) ? 'selected' : '';
+                    console.log('selected',selected);
+
                         scheduleOptions +=
                             `<option value="${schedule}" ${selected}>${schedule}</option>`;
                     });
@@ -573,7 +575,7 @@
         $(document).ready(function() {
 
             // Listen for changes on the category dropdown
-            $('#cat_id').on('change', function() {
+            $('#category_id').on('change', function() {
                 $('#checkbox-container').addClass('d-none');
 
                 var catId = $(this).val(); // Get selected category ID
@@ -596,8 +598,8 @@
                             // Populate the dropdown with the fetched tracks
                             data.tracks.forEach(function(track) {
                                 var optionText = ($locale === 'en') ?
-                                    track.track_name_en :
-                                    track.track_name_ar;
+                                    track.name_en :
+                                    track.name_ar;
 
                                 trackSelect.append(
                                     '<option value="' + track.id +
@@ -875,7 +877,7 @@
         function submitAssignedForm() {
             let course_name_en = $('#course_name_en').val();
             let course_name_ar = $('#course_name_ar').val();
-            let cat_id = $('#cat_id').val();
+            let category_id = $('#category_id').val();
             let track_type_id = $('#track_type_id').val();
             let track_id = $('#track_id').val();
             let session = $('#session').val();
@@ -900,7 +902,7 @@
                 staff_scheduled_id: course_details.id,
                 course_name_en: course_name_en,
                 course_name_ar: course_name_ar,
-                cat_id: cat_id,
+                category_id: category_id,
                 track_type_id: track_type_id,
                 track_id: track_id,
                 session: session,

@@ -50,10 +50,10 @@ class CreateInvoiceSettingsTable extends Migration
 
             $table->text('copy_write_msg',255)->nullable();
 
-            $table->integer('created_by')->nullable()->default(1)->unsigned();
+            $table->unsignedBigInteger('created_by')->nullable()->default(1)->unsigned();
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
 
-            $table->integer('updated_by')->nullable()->default(1)->unsigned();
+            $table->unsignedBigInteger('updated_by')->nullable()->default(1)->unsigned();
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('school_id')->nullable()->default(1)->unsigned();

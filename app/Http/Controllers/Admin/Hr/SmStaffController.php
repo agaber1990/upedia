@@ -315,7 +315,7 @@ class SmStaffController extends Controller
                             $track_type_ids = implode(',', $request->track_type_id);
                             TrackAssignedStaff::create([
                                 'staff_id' => $staff->id,
-                                'cat_id' => $request->cat_id,
+                                'category_id' => $request->category_id,
                                 'track_type_id' => $track_type_ids,
                                 'track_id' => $trackId,
                                 'levels' => $levels,
@@ -868,7 +868,7 @@ class SmStaffController extends Controller
                         if ($existingRecord) {
                             // Update existing record
                             $existingRecord->update([
-                                'cat_id' => $request->cat_id,
+                                'category_id' => $request->category_id,
                                 'track_type_id' => $track_type_ids,
                                 'levels' => $levels,
                             ]);
@@ -876,7 +876,7 @@ class SmStaffController extends Controller
                             // Create a new record
                             TrackAssignedStaff::create([
                                 'staff_id' => $request->staff_id, // Use staff_id from request
-                                'cat_id' => $request->cat_id,
+                                'category_id' => $request->category_id,
                                 'track_type_id' => $track_type_ids,
                                 'track_id' => $trackId,
                                 'levels' => $levels,
@@ -980,10 +980,10 @@ class SmStaffController extends Controller
         }
     }
 
-    public function getTracksByCategory($cat_id)
+    public function getTracksByCategory($category_id)
     {
         // Fetch tracks by category ID
-        $tracks = Track::where('cat_id', $cat_id)->get();
+        $tracks = Track::where('category_id', $category_id)->get();
 
         // Initialize an empty array to store valid_for IDs
         $validForIDs = [];

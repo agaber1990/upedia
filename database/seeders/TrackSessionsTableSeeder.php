@@ -24,7 +24,7 @@ class TrackSessionsTableSeeder extends Seeder
         for ($i = 1; $i <= 5; $i++) {
             $level = $levels->random();
             $track_id = $level->track_id;
-            $trackSessionLevels[] = [
+            $TrackLevelSessions[] = [
                 'track_id' => $track_id,
                 'level_id' => $level->id,
                 'session_name_en' => 'Track Session English ' . $i,
@@ -36,6 +36,6 @@ class TrackSessionsTableSeeder extends Seeder
             ];
         }
 
-        DB::table('track_sessions')->insert($trackSessionLevels);
+        DB::table('track_sessions')->insert($TrackLevelSessions);
     }
 }

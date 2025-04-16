@@ -24,8 +24,8 @@
                             <div class="primary_input">
                                 <label class="primary_input_label" for="">@lang('common.categories')</label>
                                 <select
-                                    class="primary_select form-control {{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
-                                    name="cat_id" id="cat_id">
+                                    class="primary_select form-control {{ $errors->has('category_id') ? ' is-invalid' : '' }}"
+                                    name="category_id" id="category_id">
                                     <option data-display="@lang('common.categories') *" value="">@lang('common.categories') *
                                     </option>
                                     @foreach ($categories as $item)
@@ -33,9 +33,9 @@
                                             {{ app()->getLocale() == 'en' ? $item->name_en : $item->name_ar }}</option>
                                     @endforeach
                                 </select>
-                                @if ($errors->has('cat_id'))
+                                @if ($errors->has('category_id'))
                                     <span class="text-danger invalid-select"
-                                        role="alert">{{ $errors->first('cat_id') }}</span>
+                                        role="alert">{{ $errors->first('category_id') }}</span>
                                 @endif
                             </div>
                         </div>
@@ -139,7 +139,7 @@
         var $locale = '{{ app()->getLocale() }}';
         $(document).ready(function() {
             // Populate fields based on category selection
-            $('#cat_id').on('change', function() {
+            $('#category_id').on('change', function() {
                 var catId = $(this).val();
                 const trackSelect = $('#track_id');
                 const trackTypeSelect = $('#track_type_id');
@@ -155,7 +155,7 @@
 
                             data.tracks.forEach(function(track) {
                                 var optionText = ($locale === 'en') ? track
-                                    .track_name_en : track.track_name_ar;
+                                    .name_en : track.name_ar;
                                 trackSelect.append('<option value="' + track.id +
                                     '" data-level="' + track.level_number + '">' +
                                     optionText + '</option>');

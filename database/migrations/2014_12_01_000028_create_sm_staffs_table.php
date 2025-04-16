@@ -65,10 +65,10 @@ class CreateSmStaffsTable extends Migration
             $table->integer('designation_id')->nullable()->unsigned()->default(1);
             $table->foreign('designation_id')->references('id')->on('sm_designations')->onDelete('set null');
 
-            $table->integer('department_id')->nullable()->unsigned()->default(1);
+            $table->unsignedBigInteger('department_id')->nullable()->unsigned()->default(1);
             $table->foreign('department_id')->references('id')->on('sm_human_departments')->onDelete('set null');
 
-            $table->integer('user_id')->nullable()->unsigned()->default(1);
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned()->default(1);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('parent_id')->nullable();

@@ -49,9 +49,9 @@ class TrackController extends Controller
     {
         try {
             $track = new Track();
-            $track->cat_id = $request->cat_id;
-            $track->track_name_en = $request->track_name_en;
-            $track->track_name_ar = $request->track_name_ar;
+            $track->category_id = $request->category_id;
+            $track->name_en = $request->name_en;
+            $track->name_ar = $request->name_ar;
             $track->level_number = $request->level_number;
             $track->session = $request->session;
             $track->schedule = $request->schedule;
@@ -122,9 +122,9 @@ class TrackController extends Controller
     {
         // Update track details
         $track = Track::find($id);
-        $track->cat_id = $request->cat_id;
-        $track->track_name_en = $request->track_name_en;
-        $track->track_name_ar = $request->track_name_ar;
+        $track->category_id = $request->category_id;
+        $track->name_en = $request->name_en;
+        $track->name_ar = $request->name_ar;
         $track->level_number = $request->level_number;
         $track->session = $request->session;
         $track->schedule = $request->schedule;

@@ -22,7 +22,7 @@ class CreateSmStudentHomeworksTable extends Migration
             $table->string('status', 200)->nullable();
             $table->timestamps();
 
-            $table->integer('evaluated_by')->nullable()->unsigned();
+            $table->unsignedBigInteger('evaluated_by')->nullable()->unsigned();
             $table->foreign('evaluated_by')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('student_id')->nullable()->unsigned();

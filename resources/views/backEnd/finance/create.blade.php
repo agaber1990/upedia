@@ -125,7 +125,7 @@
                                         @foreach ($tracks as $track)
                                             <option value="{{ $track->id }}"
                                                 data-level-number="{{ $track->level_number }}">
-                                                {{ $track->track_name_en }}
+                                                {{ $track->name_en }}
                                             </option>
                                         @endforeach
                                     </select>

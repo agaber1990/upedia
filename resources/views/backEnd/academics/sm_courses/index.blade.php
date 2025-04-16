@@ -63,7 +63,7 @@
                                                 <td>{{ $scheduled->trackType->name }}</td>
                                                 <td>{{ $scheduled->trackType->count_of_students }}</td>
                                                 <td>{{ $scheduled->staff->full_name }}</td>
-                                                <td>{{ $scheduled->track->track_name_en }}</td>
+                                                <td>{{ $scheduled->track->name_en }}</td>
                                                 <td>{{ $scheduled->track->level_number }}</td>
 
                                                 <td>

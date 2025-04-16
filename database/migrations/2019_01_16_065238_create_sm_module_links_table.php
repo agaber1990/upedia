@@ -22,10 +22,10 @@ class CreateSmModuleLinksTable extends Migration
             $table->string('name')->nullable();
             $table->string('route')->nullable();
             $table->tinyInteger('active_status')->default(1);
-            $table->integer('created_by')->nullable()->default(1)->unsigned();
+            $table->unsignedBigInteger('created_by')->nullable()->default(1)->unsigned();
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
 
-            $table->integer('updated_by')->nullable()->default(1)->unsigned();
+            $table->unsignedBigInteger('updated_by')->nullable()->default(1)->unsigned();
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('school_id')->nullable()->default(1)->unsigned();

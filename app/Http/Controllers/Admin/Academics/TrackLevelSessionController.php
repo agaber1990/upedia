@@ -8,23 +8,23 @@ use App\Models\SessionLesson;
 use App\Models\SessionQuiz;
 use App\Models\Track;
 use App\Models\TrackLevel;
-use App\Models\TrackSessionLevel;
+use App\Models\TrackLevelSession;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
 
-class TrackSessionLevelController extends Controller
+class TrackLevelSessionController extends Controller
 {
     public function index(Request $request, $track_id, $level_id)
     {
         $level = TrackLevel::where('id', $level_id)->first();
         $track = Track::where('id', $track_id)->first();
-        $menus = TrackSessionLevel::where('track_id', $track_id)->where('level_id', $level_id)->with('track', 'level')->get();
+        $menus = TrackLevelSession::where('track_id', $track_id)->where('level_id', $level_id)->with('track', 'level')->get();
         $lessons = SessionLesson::where('level_id', $level_id)->get();
         $assignments = SessionAssignment::where('level_id', $level_id)->get();
         $quiz = SessionQuiz::where('level_id', $level_id)->get();
 
-        $sessionQuiz = TrackSessionLevel::where('level_id',$level_id)->with('SessionQuizzes')->get();
+        $sessionQuiz = TrackLevelSession::where('level_id',$level_id)->with('SessionQuizzes')->get();
 
         // dd($sessionQuiz);
         return view('backEnd.academics.sessions.index', compact('track', 'menus', 'level', 'lessons', 'assignments', 'quiz', 'sessionQuiz'));
@@ -56,7 +56,7 @@ class TrackSessionLevelController extends Controller
                 }
             }
 
-            TrackSessionLevel::create([
+            TrackLevelSession::create([
                 'track_id' => $validated['track_id'],
                 'level_id' => $validated['level_id'],
                 'name_en' => $validated['name_en'],
@@ -79,7 +79,7 @@ class TrackSessionLevelController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|exists:track_session_levels,id',
+            'id' => 'required|exists:track_levle_sessions,id',
             'track_id' => 'required|exists:tracks,id',
             'level_id' => 'required|exists:levels,id',
             'name_en' => 'required|string',
@@ -90,7 +90,7 @@ class TrackSessionLevelController extends Controller
             'file.*' => 'file|mimes:pdf,doc,docx',
         ]);
 
-        $session = TrackSessionLevel::findOrFail($validated['id']);
+        $session = TrackLevelSession::findOrFail($validated['id']);
 
         if ($request->hasFile('file')) {
             if ($session->file) {
@@ -131,7 +131,7 @@ class TrackSessionLevelController extends Controller
      */
     public function destroy($id)
     {
-        $session = TrackSessionLevel::findOrFail($id);
+        $session = TrackLevelSession::findOrFail($id);
         $session->delete();
     }
 }

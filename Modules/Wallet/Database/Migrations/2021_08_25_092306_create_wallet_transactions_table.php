@@ -17,7 +17,7 @@ class CreateWalletTransactionsTable extends Migration
             $table->id();
             $table->float('amount')->nullable();
             $table->string('payment_method')->nullable();
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('bank_id')->nullable();
             $table->string('note')->nullable();

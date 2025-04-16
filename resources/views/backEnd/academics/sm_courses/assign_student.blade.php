@@ -132,7 +132,7 @@
                                 <ul>
                                     <li><strong>Category:</strong> {{ $staff_scheduleds->category->name_en }}</li>
                                     <li><strong>Staff Name:</strong> {{ $staff_scheduleds->staff->full_name }}</li>
-                                    <li><strong>Track Name:</strong> {{ $staff_scheduleds->track->track_name_en }}</li>
+                                    <li><strong>Track Name:</strong> {{ $staff_scheduleds->track->name_en }}</li>
                                     <li><strong>Track Type Name:</strong> {{ $staff_scheduleds->trackType->name }}</li>
                                     <li><strong>Status:</strong> {{ $staff_scheduleds->status }}</li>
                                     <li><strong>Session:</strong> {{ $staff_scheduleds->session }}</li>

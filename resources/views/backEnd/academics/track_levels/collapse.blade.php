@@ -60,7 +60,7 @@
                                         <div class="row">
                                             <div class="col">
                                                 <h4>@lang('academics.track'):</h4>
-                                                <p class="text-dark">{{ $element->track->track_name_en }}</p>
+                                                <p class="text-dark">{{ $element->track->name_en }}</p>
                                             </div>
 
                                             <div class="col">

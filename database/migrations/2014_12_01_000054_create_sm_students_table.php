@@ -91,7 +91,7 @@ class CreateSmStudentsTable extends Migration
             $table->integer('parent_id')->nullable()->nullable()->unsigned();
             $table->foreign('parent_id')->references('id')->on('sm_parents')->onDelete('set null');
 
-            $table->integer('user_id')->nullable()->nullable()->unsigned();
+            $table->unsignedBigInteger('user_id')->nullable()->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('role_id')->nullable()->unsigned();

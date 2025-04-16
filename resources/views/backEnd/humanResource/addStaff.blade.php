@@ -1059,8 +1059,8 @@
                                                                     for="">@lang('common.categories')
                                                                 </label>
                                                                 <select
-                                                                    class="primary_select  form-control {{ $errors->has('cat_id') ? ' is-invalid' : '' }}"
-                                                                    name="cat_id" id="cat_id">
+                                                                    class="primary_select  form-control {{ $errors->has('category_id') ? ' is-invalid' : '' }}"
+                                                                    name="category_id" id="category_id">
                                                                     <option data-display="@lang('common.categories') *"
                                                                         value="">@lang('common.categories')
                                                                         *</option>
@@ -1071,10 +1071,10 @@
                                                                     @endforeach
                                                                 </select>
 
-                                                                @if ($errors->has('cat_id'))
+                                                                @if ($errors->has('category_id'))
                                                                     <span class="text-danger invalid-select"
                                                                         role="alert">
-                                                                        {{ $errors->first('cat_id') }}
+                                                                        {{ $errors->first('category_id') }}
                                                                     </span>
                                                                 @endif
                                                             </div>
@@ -1405,7 +1405,7 @@
         $(document).ready(function() {
 
             // Listen for changes on the category dropdown
-            $('#cat_id').on('change', function() {
+            $('#category_id').on('change', function() {
                 $('#checkbox-container').addClass('d-none');
 
                 var catId = $(this).val(); // Get selected category ID
@@ -1425,8 +1425,8 @@
                             // Populate the dropdown with the fetched tracks
                             data.tracks.forEach(function(track) {
                                 var optionText = ($locale === 'en') ?
-                                    track.track_name_en :
-                                    track.track_name_ar;
+                                    track.name_en :
+                                    track.name_ar;
 
                                 trackSelect.append(
                                     '<option value="' + track.id +

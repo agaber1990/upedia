@@ -26,7 +26,7 @@ class CreateSmBookIssuesTable extends Migration
             $table->integer('book_id')->nullable()->unsigned();
             $table->foreign('book_id')->references('id')->on('sm_books')->onDelete('cascade');
 
-            $table->integer('member_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('member_id')->nullable()->unsigned();
             $table->foreign('member_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('created_by')->nullable()->default(1)->unsigned();

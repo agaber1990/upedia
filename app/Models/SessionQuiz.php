@@ -21,7 +21,7 @@ class SessionQuiz extends Model
 
     public function session()
     {
-        return $this->belongsTo(TrackSessionLevel::class, 'session_id');
+        return $this->belongsTo(TrackLevelSession::class, 'session_id');
     }
     public function level()
     {

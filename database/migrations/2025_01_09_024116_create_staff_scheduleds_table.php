@@ -13,18 +13,19 @@ return new class extends Migration
     {
         Schema::create('staff_scheduleds', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cat_id');
-            $table->json('slot_id');  // Change this from unsignedBigInteger to json type
+            // $table->json('slot_id');  // Change this from unsignedBigInteger to json type
             $table->text('course_name_en');
             $table->text('course_name_ar');
-            $table->integer('staff_id');
-            $table->integer('track_type_id');
-            $table->integer('track_id');
             $table->string('status');
             $table->integer('session');
             $table->string('schedule');
             $table->date('start_date');
             $table->date('end_date');
+            $table->integer('staff_id');
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('track_level_id');
+            $table->unsignedBigInteger('track_type_id');
+            $table->unsignedBigInteger('track_id');
             $table->timestamps();
         });
     }
