@@ -101,7 +101,7 @@ class SmCourseController extends Controller
 
         // Decode slot IDs and retrieve slot details
         $slotIds = json_decode($course->slot_id, true); // Assuming slot_id is a JSON array
-        $slots = SlotEmp::whereIn('id', $slotIds)->get();
+        $slots = SlotEmp::get();
 
         // Parse start_date and end_date
         $startDate = new \DateTime($course->start_date);
