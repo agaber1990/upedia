@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name_ar'); 
             $table->integer('level_number');
             $table->integer('session'); // Example: 1-10 sessions
-            $table->string('schedule'); // Example: 'Once per week'
+            $table->string('schedule')->nullable(); // Example: 'Once per week'
             $table->json('valid_for'); // Example: ['private', 'group']
             
             $table->timestamps();

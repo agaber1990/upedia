@@ -1594,7 +1594,7 @@ Route::get('/reg', function () {});
         Route::get('/tracks-by-category/{category_id}', 'Admin\Hr\SmStaffController@getTracksByCategory')->name('getTracksByCategory');
 
         //Staff Attendance
-        Route::get('staff-attendance', ['as' => 'staff_attendance', 'uses' => 'Admin\Hr\SmStaffAttendanceController@staffAttendance'])->middleware('userRolePermission:staff_attendance');
+        Route::get('staff-attendance', ['as' => 'staff_attendance', 'uses' => 'Admin\Hr\leave-type@staffAttendance'])->middleware('userRolePermission:staff_attendance');
         Route::post('staff-attendance', 'Admin\Hr\SmStaffAttendanceController@staffAttendanceSearch')->name('staff-attendance-search');
         Route::post('staff-attendance-store', 'Admin\Hr\SmStaffAttendanceController@staffAttendanceStore')->name('staff-attendance-store')->middleware('userRolePermission:staff-attendance-store');
         Route::post('staff-holiday-store', 'Admin\Hr\SmStaffAttendanceController@staffHolidayStore')->name('staff-holiday-store')->middleware('userRolePermission:staff-holiday-store');

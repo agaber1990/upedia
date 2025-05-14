@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('finanace_student_invoices', function (Blueprint $table) {
             $table->id(); 
-            $table->unsignedBigInteger('staff_scheduleds_id');
+            $table->unsignedBigInteger('staff_scheduleds_id')->nullable();
             $table->integer('student_id');
-            $table->integer('levels_id');
+            $table->integer('levels_id')->nullable();
             $table->string('invoice_number');
             $table->string('staff_scheduleds_status')->default('reserved');
             // Use ENUM for payment_status
