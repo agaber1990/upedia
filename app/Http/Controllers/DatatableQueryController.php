@@ -653,7 +653,7 @@ class DatatableQueryController extends Controller
                 });
             })
             ->orderColumn('role.name', function ($query, $keyword) {
-                $query->orderBy('infix_roles.name', $keyword)->orderBy('infix_roles.name', 'DESC');
+                $query->orderBy('roles.name', $keyword)->orderBy('roles.name', 'DESC');
             })
             ->addColumn('date', function ($row) {
                 $date = dateConvert(@$row->created_at);

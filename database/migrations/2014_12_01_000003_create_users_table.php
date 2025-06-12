@@ -44,7 +44,7 @@ class CreateUsersTable extends Migration
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
             
             $table->integer('role_id')->nullable()->unsigned();
-            $table->foreign('role_id')->references('id')->on('infix_roles')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->enum('is_administrator', ['yes', 'no'])->default('no');
             $table->tinyInteger('is_registered')->default(0);
             $table->text('device_token')->nullable();

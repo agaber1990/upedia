@@ -183,7 +183,7 @@ class UserForumController extends Controller
     {
         $validator = Validator::make($request->all(), [
             // 'role'              => 'required|array|min:1',
-            // 'role.*'            => 'exists:infix_roles,id',
+            // 'role.*'            => 'exists:roles,id',
             'forum_title_id'    => 'required|exists:forum_titles,id',
             'title'             => 'required|string',
             'description'       => 'required|string',
@@ -221,7 +221,7 @@ class UserForumController extends Controller
     {
         $validator = Validator::make($request->all(), [
             // 'role'              => 'required|array|min:1',
-            // 'role.*'            => 'exists:infix_roles,id',
+            // 'role.*'            => 'exists:roles,id',
             'forum_title_id'    => 'required|exists:forum_titles,id',
             'title'             => 'required|string',
             'description'       => 'required|string',

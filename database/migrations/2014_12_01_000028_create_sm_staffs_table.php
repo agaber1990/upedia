@@ -74,7 +74,7 @@ class CreateSmStaffsTable extends Migration
             $table->integer('parent_id')->nullable();
             
             $table->integer('role_id')->nullable()->unsigned()->default(1);
-            $table->foreign('role_id')->references('id')->on('infix_roles')->onDelete('set null');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
 
             $table->integer('previous_role_id')->nullable();
            

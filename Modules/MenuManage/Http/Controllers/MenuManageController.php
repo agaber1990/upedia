@@ -66,7 +66,7 @@ class MenuManageController extends Controller
         }
 
         $request->validate([
-            'role_id' => ['required', Rule::exists('infix_roles', 'id')->where(function ($query) {
+            'role_id' => ['required', Rule::exists('roles', 'id')->where(function ($query) {
                 $query->where('is_saas',0)->when((generalSetting()->with_guardian !=1), function ($query) {
                     $query->where('id', '!=', 3);
                 })->where('active_status', '=', 1)

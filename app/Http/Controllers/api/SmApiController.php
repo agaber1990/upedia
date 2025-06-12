@@ -520,7 +520,7 @@ class SmApiController extends Controller
     }
     public function systemRole(Request $request)
     {
-        $role_list = DB::table('infix_roles')
+        $role_list = DB::table('roles')
             ->where('active_status', 1)
             ->get();
 

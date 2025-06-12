@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable()->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('role_id')->nullable()->unsigned();
-            $table->foreign('role_id')->references('id')->on('infix_roles')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->integer('school_id')->default(1)->unsigned();
             $table->foreign('school_id')->references('id')->on('sm_schools')->onDelete('cascade');
             $table->integer('academic_id')->nullable()->unsigned();
