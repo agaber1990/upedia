@@ -22,8 +22,8 @@ class CreateSmStaffsTable extends Migration
             $table->string('full_name', 200)->nullable();
             $table->string('fathers_name', 100)->nullable();
             $table->string('mothers_name', 100)->nullable();
-            $table->date('date_of_birth')->nullable()->default(date('Y-m-d'));
-            $table->date('date_of_joining')->nullable()->default(date('Y-m-d'));
+            $table->date('date_of_birth')->nullable();
+            $table->date('date_of_joining')->nullable();
             $table->string('email', 50)->nullable();
             $table->string('mobile', 50)->nullable();
             $table->string('emergency_mobile', 50)->nullable();
